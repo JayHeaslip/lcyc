@@ -1,0 +1,135 @@
+class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception
+
+  # Timeout after inactivity of one hour.
+  MAX_SESSION_PERIOD = 3600
+  #MAX_SESSION_PERIOD = 10 # for testing
+
+  before_action :check_authentication, :check_authorization, :session_expiry, :breadcrumbs
+
+  # used in views
+  helper_method :logged_in?, :current_user
+
+  #helper :all # include all helpers, all the time
+  
+  def dump_session(c="")
+    logger.info "dumping session #{c}"
+    logger.info "cookie: #{cookies[:_lcyc2_session]}"
+    session.keys.each do |k|
+      logger.info "session: #{k} -> #{session[k]}"
+    end
+  end
+
+  # Accesses the current user from the session.  Set it to false if login fails
+  # so that future calls do not hit the database. current_user is initially "nil"
+  def current_user
+    @current_user ||= (login_from_session || login_from_cookie) unless @current_user == false
+  end
+
+  def current_user=(new_user)
+    logger.info "setting current user to #{new_user}"
+    session[:user] = new_user ? new_user.id : nil
+    @current_user = new_user || false
+  end
+
+  def logged_in?
+    # not nil and not false
+    !!current_user
+  end
+
+  private
+
+  def login_from_session
+    logger.info "logging in from session, sesssion[:user] = #{session[:user]}"
+    self.current_user = User.find(session[:user]) if session[:user]
+  end
+
+  def login_from_cookie
+    user = cookies[:auth_token] && User.find_by_remember_token(cookies[:auth_token])
+    if user && user.remember_token?
+      logger.info "logging in from cookie"
+      cookies[:auth_token] = { :value => user.remember_token, :expires => user.remember_token_expires_at }
+      self.current_user = user
+    else
+      logger.info "no current user"
+      false
+    end
+  end
+
+  def handle_unverified_request 
+    super # call the default behaviour which resets the session 
+    cookies.delete(:auth_token) # remove the auto login cookie so the fraudulent request is rejected. 
+  end 
+
+  def check_authentication
+    unless current_user
+      session[:original_uri] = request.fullpath
+      redirect_to login_path
+      false
+    end
+  end
+
+  def session_expiry
+    if session[:expiry_time] and session[:expiry_time] < Time.now
+      reset_session
+      session[:expired] = true
+    end
+    session[:expiry_time] = MAX_SESSION_PERIOD.seconds.from_now
+    true
+  end
+
+  def check_authorization
+    if current_user.roles.detect { |role| role.name == 'Admin' }
+      return true
+    else
+      current_user.roles.each {|r|
+        logger.info "roles: #{r.name}"
+      }
+      unless current_user.roles.detect do |role|
+               role.rights.detect do |right|
+                 right.action == action_name && right.controller == self.class.controller_path
+               end
+             end
+        
+        flash[:error] = "You are not authorized to view the page you requested."
+        redirect_to helpers.back_link(1)
+        return false
+      end
+    end
+  end
+
+  def pop_back_link
+    links = session[:breadcrumbs].split(",")
+    links.pop
+    session[:breadcrumbs] = links.join(",")
+  end
+  
+  def breadcrumbs
+    unless session[:breadcrumbs].nil?
+      url = request.path
+      logger.info "urla: #{url}"
+      if url == "/"
+        session[:breadcrumbs] = "/"
+      else
+#        crumbs = session[:breadcrumbs].split(", ")
+#        if crumbs.index(url)
+#          session[:breadcrumbs] = crumbs[0..crumbs.index(url)].join(", ")
+#        else
+          session[:breadcrumbs] = session[:breadcrumbs] + ", " + url
+#        end
+      end
+      session[:breadcrumbs].split(",").each {|u| logger.info "urlb: #{u}"}
+    end
+  end
+
+  def check_delayed_job
+    begin
+      pid = File.open("#{Rails.root}/tmp/pids/delayed_job.pid").readline.chop.to_i
+      psout = %x{ps -p #{pid}}
+    rescue
+      psout = ""
+    end
+    system("#{Rails.root}/script/delayed_job start") unless psout.include?("ruby")
+  end
+
+end

@@ -1,0 +1,27 @@
+<div class=compact>
+<h1>User</h1>
+
+<table>
+  <tr>
+    <td><b>First Name: </b>
+    <td><%= @user.firstname %>
+  <tr>
+    <td><b>Last Name: </b>
+    <td><%= @user.lastname %>
+  <tr>
+    <td><b>Email: </b>
+    <td><%= @user.email %>
+  <tr class="compact">
+    <td><b>Roles: </b>
+    <% for role in @user.roles.sort {|a,b| a.name <=> b.name} %>
+      <td><%= role.name %>
+      <tr class="compact"><td>
+    <% end %>
+</table>
+
+<p>
+<%= link_to 'Edit', edit_user_path(@user) %>
+<% if current_user.role?('Admin') %>
+  | <%= link_to 'Back', back_link(1) %>
+<% end %>
+</div>

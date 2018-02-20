@@ -1,0 +1,5 @@
+user_create:
+  name: UsersController.create
+  controller: Users
+  action: create
+

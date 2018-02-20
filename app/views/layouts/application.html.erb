@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <head>
+    <title>LCYC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tag %>
+    <link rel="shortcut icon" href="/assets/favicon.png" type="image/x-icon" />
+  </head>
+  <body>
+    <%= render 'layouts/header' %>
+    <div class='container'>
+      <div id="header">
+	<div id="logo-title">
+          <a id="logo-img" href="/" title="Home"><%= image_tag("logo8.png", :alt => "LCYC", :id => "logo") %></a>
+          <h1 id='site-name'>
+            <a href="/" title="Home">Lake Champlain Yacht Club Administration</a>
+          </h1>
+	</div>
+      </div>
+      <%= flash_messages %>
+      <div> 
+	<%= yield %>
+      </div>
+    </div>
+    <%= render 'layouts/footer' %>
+  </body>
+</html>

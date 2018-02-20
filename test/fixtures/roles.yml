@@ -1,0 +1,6 @@
+admin:
+  name: Admin
+
+member:
+  name: Member
+  rights: []

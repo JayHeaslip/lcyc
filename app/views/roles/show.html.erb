@@ -1,0 +1,7 @@
+<h1>Rights for <%= @role.name %></h1>
+
+<%=raw render_controller_tree(@controller_tree) %>
+
+
+<%= link_to 'Edit', edit_role_path(@role) %> |
+<%= link_to 'Back', roles_path %>
