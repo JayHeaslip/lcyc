@@ -6,6 +6,7 @@ class ActiveSupport::TestCase
   fixtures :all
   # Add more helper methods to be used by all tests here...
 end
+
 class ActionDispatch::IntegrationTest
   def login_as(user)
     post login_url, params: { email: user.email, password: 'password' }
@@ -15,7 +16,7 @@ class ActionDispatch::IntegrationTest
     delete logout_url
   end
 
-  def setup
-    login_as users(:one)
-  end
+  #def setup
+  #  login_as users(:one)
+  #end
 end

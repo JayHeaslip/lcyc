@@ -3,19 +3,23 @@ require 'test_helper'
 class UsersControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    login_as(users(:two))
+    @user = users(:three)
+    login_as(@user)
+    @update = {
+      firstname: 'Jim',
+      lastname:  'Dave',
+      email: 'bob@abc.com',
+      password:  'password',
+      password_confirmation:  'password'
+    }
+    
   end
   
   test "should not get index" do
     get users_url
-    assert_response :success
+    assert_redirected_to root_url
   end
     
-  test "should not list any user" do
-    get user_url(@user)
-    assert_response :success
-  end
-
   test "should list current user" do
     get user_url(@user)
     assert_response :success
@@ -27,6 +31,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
     
   test "update current user" do
+    patch user_url(@user),params: { user: @update}
+    assert_redirected_to root_url
   end
     
   test "edit current password" do

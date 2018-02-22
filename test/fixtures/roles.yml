@@ -4,3 +4,7 @@ admin:
 member:
   name: Member
   rights: []
+
+BOG:
+  name: BOG
+  rights: []

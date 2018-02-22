@@ -1,0 +1,6 @@
+  <%= render "shared/error_messages", :target => @mailing %>
+  <p><%= f.select :committee, @committees %>
+  <p><%= f.text_field :subject, :size => 50 %>
+  <p><%= f.text_field :replyto, :size => 50 %>
+  <p><%= f.text_area :body, :size => "80x20" %>
+  <p><%= f.check_box :html %>

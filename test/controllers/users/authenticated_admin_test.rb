@@ -3,8 +3,18 @@ require 'test_helper'
 class UsersControllerTest < ActionDispatch::IntegrationTest
 
   setup do
-    login_as(users(:one))
+    admin = users(:one)
+    login_as(admin)
     @user = users(:two)
+    @update = {
+      firstname: 'Jim',
+      lastname:  'Bob',
+      email: 'bob@abc.com',
+      password:  'password',
+      password_confirmation:  'password'
+    }
+    @role_ids = [roles(:BOG).id, roles(:member).id]
+    @BOG = roles(:BOG)
   end
   
   test "get index" do
@@ -23,8 +33,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
     
   test "update an user" do
-    patch user_url(@user)
-    assert_response :success
+    patch user_url(@user),params: { user: @update, role_ids: @role_ids }
+    assert_redirected_to users_url
   end
     
   test "delete an user" do
@@ -35,6 +45,10 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
     
   test "remove a role from an user" do
+    assert_difference('@BOG.users.count', -1) do
+      delete rmrole_role_user_url(@BOG,@user)
+    end
+    assert_redirected_to roles_url
   end
 
 end

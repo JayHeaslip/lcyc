@@ -79,9 +79,11 @@ class ApplicationController < ActionController::Base
   end
 
   def check_authorization
-    if current_user.roles.detect { |role| role.name == 'Admin' }
+    if current_user.role?('Admin')
+      logger.info "admin user"
       return true
     else
+      logger.info "not admin user"
       current_user.roles.each {|r|
         logger.info "roles: #{r.name}"
       }
@@ -107,18 +109,11 @@ class ApplicationController < ActionController::Base
   def breadcrumbs
     unless session[:breadcrumbs].nil?
       url = request.path
-      logger.info "urla: #{url}"
       if url == "/"
         session[:breadcrumbs] = "/"
       else
-#        crumbs = session[:breadcrumbs].split(", ")
-#        if crumbs.index(url)
-#          session[:breadcrumbs] = crumbs[0..crumbs.index(url)].join(", ")
-#        else
-          session[:breadcrumbs] = session[:breadcrumbs] + ", " + url
-#        end
+        session[:breadcrumbs] = session[:breadcrumbs] + ", " + url
       end
-      session[:breadcrumbs].split(",").each {|u| logger.info "urlb: #{u}"}
     end
   end
 

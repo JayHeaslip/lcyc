@@ -91,11 +91,10 @@ class User < ActiveRecord::Base
   private
 
   def self.authenticate(email, password)
+    return nil if email.nil?
     user = User.find_by_email(email)
-    logger.info user
     if user and user.email_confirmed and
         user.hashed_password == User.encrypted_password(password,user.salt)
-      logger.info "user confirmed"
       user
     else
       nil

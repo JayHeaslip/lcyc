@@ -1,0 +1,24 @@
+<div class="lcyc-form">
+<p><label>Committee:</label><%=h @mailing.committee %>
+<p><label>Subject:</label><%=h @mailing.subject %>
+<p><label>Reply To:</label><%=h @mailing.replyto %>
+<p><label>Body</label>
+<% if @mailing.html %>
+  <iframe src="/preview/<%= @mailing.id %>" height="600" width="650"> 
+  </iframe>
+<% else %>
+  <%= content_tag(:p, h(@mailing.body)) %>
+<% end %>
+
+<%- @mailing.attachments.each do |a| %>
+<p><label>PDF:</label> <%= link_to(a.pdf_file_name, a.pdf.url) %>
+</p>
+<%- end %>    
+<br/>
+<br/>
+<p>
+  <%= form_tag send_email_mailing_path(@mailing) do %>
+     <p><label>Test?</label><%= check_box_tag :test, :test, @test %>
+     <p><button type='submit'>Email</button> | <%= link_to 'Edit', edit_mailing_path(@mailing) %> | <%= link_to "Index", mailings_path %>
+ <% end %>
+</div>

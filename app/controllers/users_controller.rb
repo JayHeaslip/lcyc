@@ -37,7 +37,6 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id])
   end
 
   def update
@@ -56,7 +55,7 @@ class UsersController < ApplicationController
 
   def destroy
     User.find(params[:id]).destroy
-    redirect_to(users_path)
+    redirect_to users_path
   end
 
   def registration_info
@@ -127,7 +126,7 @@ class UsersController < ApplicationController
       else
         @user = User.new
         flash.now[:error] = "Email address not found."
-        render
+        render 
       end
     end
   end
@@ -143,6 +142,7 @@ class UsersController < ApplicationController
         flash[:success] = "Your password has been updated."
         redirect_to login_path
       else
+        puts @user.errors.full_messages
         render
       end
     else # get request
@@ -150,7 +150,7 @@ class UsersController < ApplicationController
         render
       else
         flash[:error] = "Not found, link may have expired."
-        redirect_to :action => "forgotpw"
+        redirect_to forgotpw_users_path
       end
     end
   end

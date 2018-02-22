@@ -30,7 +30,6 @@ module ApplicationHelper
 
   def flash_messages(opts = {})
     flash.each do |msg_type, message|
-      logger.info "Msg: #{msg_type}  #{message}"
       concat(content_tag(:div, message, class: "#{bootstrap_class_for(msg_type)}", role: "alert"))
     end
     nil

@@ -1,0 +1,24 @@
+<div id="membership-list">
+<h1>Mailings</h1>
+
+<br/>
+<%= link_to "New Mailing", new_mailing_path %>
+<br/>
+<br/>
+<table>
+<tr>
+<th>Subject
+<th>Created
+<th>Sent
+
+<%- for mailing in @mailings %>
+<tr valign="top" class="<%= cycle('list-line-odd', 'list-line-even') %>">
+  <td><%= mailing.subject %>
+  <td><%= mailing.created_at %>
+  <td><%= mailing.sent_at %>
+  <td class="list-actions">
+    <%= link_to 'Show', mailing_path(mailing) %><br/>
+    <%= link_to 'Delete', mailing, :confirm => 'Are you sure?', :method => :delete %><br/>
+<% end %>
+</table>
+

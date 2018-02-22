@@ -1,0 +1,11 @@
+<div class="lcyc-form">
+<%= tagged_form_for @mailing, :url => {:action => 'update'}, :html => {:multipart => true} do |f| %>
+  <%= render :partial => "form", :locals => { :f => f } %>
+  <%- @mailing.attachments.each do |a| %>
+     <p><label>PDF:</label> <%= link_to(a.pdf_file_name, a.pdf.url) %>
+     </p>
+  <%- end %>    
+  <p>
+  <button type='submit'>Update</button> | <%= link_to 'Back', mailing_path(@mailing) %>
+<% end %>
+</div>

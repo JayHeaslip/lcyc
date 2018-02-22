@@ -4,10 +4,10 @@ Rails.application.routes.draw do
 
   
   match 'admin/login', via: [:get, :post], as: 'login'
+  match 'rp/:hash' => 'users#rp', via: [:get, :put], as: 'rp'
   get 'admin/logout'
-  get 'confirm_email/:hash' => 'users#confirm_email', :as => :confirm_email
-  get 'rp/:hash' => 'users#rp', :as => :rp
-  get 'unsubscribe/:hash' => 'people#unsubscribe', :as => :unsubscribe
+  get 'confirm_email/:hash' => 'users#confirm_email', as: 'confirm_email'
+  get 'unsubscribe/:hash' => 'people#unsubscribe', as: 'unsubscribe'
 
   resources :users do
     collection do

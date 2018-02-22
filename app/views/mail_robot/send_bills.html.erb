@@ -1,0 +1,79 @@
+<p>Enclosed please find the Lake Champlain Yacht Club invoice for <%=  1 + Time.now.year %>.
+</p>
+<p>Please verify your current email address and update it as needed on the form below.  Changes to log data can be made online. Go to http://www.lcyc.info/club/membership/administration for instructions.  You may also send updates by email to jheaslip@comcast.net. This is only necessary if your information is different than what is in last year’s log.  Questions about mooring assignments and fees should be directed to the Harbormaster, Bob Finn (finn@cng-inc.com).
+</p>
+<p>Please return your check and the form below:
+  <ul>
+    <li>Checks should be made payable to LCYC
+    <li>Payments postmarked after December 31 are subject to a $100 late fee
+    <li>If payment is not received by February 1, <%=  1 + Time.now.year %>,  membership is terminated
+  </ul>
+</p>
+<p>Return form and payment to:
+</p>
+<p style="margin-left: 10px">
+Lake Champlain Yacht Club<br/>
+P.O. Box 411<br/>
+2790 Harbor Road<br/>
+Shelburne, VT   05482<br/><br/><br/>
+</p>
+
+<table width="590">
+  <tr>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td style="border: 1px solid black; padding: 10px">Membership:  <%= @mailingname %><br/>
+      Current email: <%= @email %><br/>
+      Membership Status: <%= @status %><br/>
+      Mooring#: <%= @mooring %><br/><br/><br/>
+      New email:_________________________________________________
+    </td>
+  </tr>
+  <tr>
+    <td style="border: 1px solid black; padding: 10px">
+      <p>I wish to resign my LCYC membership:<br/><br/><br/></p>
+      <p>Signed: </p>
+    </td>
+  </tr>
+  <tr>
+    <td style="vertical-align: top; border: 1px solid black; padding: 10px">
+      <table>
+	<tr>
+	  <th style="text-align: left">Item</th>
+	  <th>Amt Due</th>
+	</tr>
+	<tr>
+	  <td>Annual Dues</td>
+	  <td style="text-align: right"><%= @dues %></td>
+	</tr>
+	<tr>
+	  <td>Mooring Fees</td>
+	  <td style="text-align: right"><%= @fees %></td>
+	</tr>
+	<% if @initiation != 0 %>
+  	<tr>
+	  <td>Initiation</td>
+	  <td style="text-align: right"><%= number_to_currency(@initiation).rjust(10) %></td>
+	</tr>
+	<% end %>
+	<tr>
+	</tr>
+	<tr style="font-weight: bold">
+	  <td>Total Fees</td>
+	  <td style="text-align: right"><%= @total %></td>
+	</tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td style="border: 1px solid black; padding: 10px"> Mooring info:<br/>
+      <input type="checkbox" readonly> I wish to relinquish my mooring assignment until further notice.<br/>
+      <input type="checkbox" readonly> I previously relinquished, now I wish to moor a boat at LCYC:<br/>
+      <p>Type: ___________________________<br/>
+      <p>Length: _______________
+      <p>Special Requests/Comments<br/><br/><br/><br/><br/><br/>
+    </td>
+  </tr>
+</table>

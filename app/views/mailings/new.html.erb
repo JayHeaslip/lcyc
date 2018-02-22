@@ -1,0 +1,9 @@
+<div class="lcyc-form">
+<%= tagged_form_for @mailing, :url => {:action => 'create'}, :html => {:multipart => true} do |f| %>
+  <%= render :partial => "form", :locals => { :f => f } %>
+  <%= f.fields_for :attachments do |pdf_form| %>
+     <%= pdf_form.file_field :pdf, :size => 60 %>
+  <% end %>
+  <p><button type ="submit">Create</button> | <%= link_to 'Back', mailings_path %>
+<% end -%>
+</div>

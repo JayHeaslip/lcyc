@@ -1,0 +1,22 @@
+bob:  
+  MemberType: Member
+  LastName: bob
+  FirstName: bob
+  EmailAddress: bob@abc.com
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member1) %>
+
+jim:  
+  MemberType: Member
+  LastName: jim
+  FirstName: jim
+  EmailAddress: jim@abc.com
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member2) %>
+
+tom:  
+  MemberType: Member
+  LastName: tom
+  FirstName: tom
+  EmailAddress: tom@abc.com
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member2) %>
+
+  
