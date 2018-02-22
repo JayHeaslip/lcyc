@@ -8,15 +8,12 @@ class ActiveSupport::TestCase
 end
 
 class ActionDispatch::IntegrationTest
-  def login_as(user)
-    post login_url, params: { email: user.email, password: 'password' }
+  def login_as(user, password)
+    post login_url, params: { email: user.email, password: password }
   end
 
   def logout
     delete logout_url
   end
 
-  #def setup
-  #  login_as users(:one)
-  #end
 end

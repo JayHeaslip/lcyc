@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class UsersControllerTest < ActionDispatch::IntegrationTest
+class UsersControllerTest3 < ActionDispatch::IntegrationTest
 
   def setup
     @user = users(:three)

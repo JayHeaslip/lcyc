@@ -1,14 +1,14 @@
 require 'test_helper'
 
-class UsersControllerTest < ActionDispatch::IntegrationTest
+class UsersControllerTest2 < ActionDispatch::IntegrationTest
 
   setup do
-    @user = users(:three)
-    login_as(@user)
+    @user = users(:two)
+    login_as(@user,'passwor2')
     @update = {
       firstname: 'Jim',
       lastname:  'Dave',
-      email: 'bob@abc.com',
+      email: 'bob1@abc.com',
       password:  'password',
       password_confirmation:  'password'
     }
@@ -32,13 +32,19 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     
   test "update current user" do
     patch user_url(@user),params: { user: @update}
-    assert_redirected_to root_url
+    assert_redirected_to user_path(@user)
   end
     
   test "edit current password" do
+    get editpw_user_url(@user)
+    assert_response :success
   end
     
   test "update current password" do
+    post updatepw_user_url(@user), params: { old_password: 'passwor2',
+                                            password: 'password',
+                                            password_confirmation: 'password' }
+    assert_redirected_to root_url
   end
     
   test "should not delete an user" do

@@ -1,10 +1,10 @@
 require 'test_helper'
 
-class UsersControllerTest < ActionDispatch::IntegrationTest
+class UsersControllerTest1 < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)
-    login_as(admin)
+    login_as(admin, 'passwor1')
     @user = users(:two)
     @update = {
       firstname: 'Jim',

@@ -20,7 +20,8 @@ module ApplicationHelper
     if session[:breadcrumbs].nil?
       root_path
     else
-      session[:breadcrumbs].split(", ")[-1-i]
+      path = session[:breadcrumbs].split(", ")
+      path[-1-i] || root_path
     end
   end
 
