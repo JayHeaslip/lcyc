@@ -3,7 +3,7 @@ class Membership < ActiveRecord::Base
   @@current_year = Time.now.year
   @@Dues = { 'Active' => 850, 'Senior' => 283, 'Inactive' => 50, 'Associate' => 425, 'Life' => 0}
 
-  has_many :people #, :foreign_key => "MembershipID", :dependent => :destroy
+  has_many :people, :foreign_key => "MembershipID", :dependent => :destroy
   has_and_belongs_to_many :boats
   has_one :wait_list_entry, :dependent => :destroy
 

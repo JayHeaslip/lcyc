@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :roles
 
   def member
-    errors[:base] << "This email does not exist in the membership database" if self.person.nil? && !self.role?('Admin')
+    errors.messages[:email] << " does not exist in the membership database" if self.person.nil? && !self.role?('Admin')
   end
   
   # 'password' is a virtual attribute
