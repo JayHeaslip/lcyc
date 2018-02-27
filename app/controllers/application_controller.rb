@@ -10,16 +10,6 @@ class ApplicationController < ActionController::Base
   # used in views
   helper_method :logged_in?, :current_user
 
-  #helper :all # include all helpers, all the time
-  
-  def dump_session(c="")
-    logger.info "dumping session #{c}"
-    logger.info "cookie: #{cookies[:_lcyc2_session]}"
-    session.keys.each do |k|
-      logger.info "session: #{k} -> #{session[k]}"
-    end
-  end
-
   # Accesses the current user from the session.  Set it to false if login fails
   # so that future calls do not hit the database. current_user is initially "nil"
   def current_user
@@ -27,9 +17,9 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user=(new_user)
-    logger.info "setting current user to #{new_user}"
     session[:user] = new_user ? new_user.id : nil
     @current_user = new_user || false
+    logger.info "setting current user to #{@current_user.email}" if @current_user
   end
 
   def logged_in?
@@ -56,11 +46,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def handle_unverified_request 
-    super # call the default behaviour which resets the session 
-    cookies.delete(:auth_token) # remove the auto login cookie so the fraudulent request is rejected. 
-  end 
-
   def check_authentication
     unless current_user
       session[:original_uri] = request.fullpath
@@ -80,13 +65,8 @@ class ApplicationController < ActionController::Base
 
   def check_authorization
     if current_user.role?('Admin')
-      logger.info "admin user"
       return true
     else
-      logger.info "not admin user"
-      current_user.roles.each {|r|
-        logger.info "roles: #{r.name}"
-      }
       unless current_user.roles.detect do |role|
                role.rights.detect do |right|
                  right.action == action_name && right.controller == self.class.controller_path
@@ -124,7 +104,7 @@ class ApplicationController < ActionController::Base
     rescue
       psout = ""
     end
-    system("#{Rails.root}/script/delayed_job start") unless psout.include?("ruby")
+    system("#{Rails.root}/bin/delayed_job -e #{Rails.env} start") unless psout.include?("ruby")
   end
 
 end

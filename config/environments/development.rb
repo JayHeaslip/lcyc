@@ -27,9 +27,23 @@ Rails.application.configure do
   end
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.perform_caching = false
+
+  cfg = YAML::load(IO.read("#{config.root}/config/database.yml"))
+  gmailpw = cfg['gmailpw']
+
+  config.action_mailer.smtp_settings = {
+	 :address     	       => "smtp.gmail.com",
+	 :port        	       => 587,
+	 :domain      	       => 'members.lcyc.info',
+	 :user_name   	       => 'lcyc@members.lcyc.info',
+	 :password    	       => gmailpw,
+	 :authentication       => 'plain',
+         :enable_starttls_auto => true
+  }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

@@ -19,4 +19,11 @@ tom:
   EmailAddress: tom@abc.com
   MembershipID: <%= ActiveRecord::FixtureSet.identify(:member2) %>
 
+john:  
+  MemberType: Member
+  LastName: john
+  FirstName: john
+  EmailAddress: john@abc.com
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member3) %>
+
   

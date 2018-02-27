@@ -7,9 +7,11 @@ class UsersController < ApplicationController
 
   before_action :set_current_user, :only => [:show, :edit, :update, :editpw, :updatepw]
 
+  before_action :check_delayed_job, :only => [:create, :resend_email, :forgotpw]
+
   def index
     if params[:role_id]
-      @role = Role.find(params[:role_id], :include => :users)
+      @role = Role.find(params[:role_id])
       @users = @role.users.sort_by {|u| u.lastname}
     else
       @role = nil
@@ -55,7 +57,9 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
+    u = User.find(params[:id])
+    flash[:notice] = "Removed #{u.email}"
+    u.destroy
     redirect_to users_path
   end
 

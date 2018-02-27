@@ -53,6 +53,7 @@ class UsersControllerTest3 < ActionDispatch::IntegrationTest
                                        password: 'password', password_confirmation: 'password'}}
     @user = User.find_by_email('tom@abc.com')
     assert_redirected_to registration_info_user_url(@user)
+    assert_equal flash[:success], 'User was successfully created.'
   end
   
   test "should show registration info" do

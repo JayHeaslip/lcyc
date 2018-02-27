@@ -21,6 +21,10 @@ gem 'turbolinks', '~> 5'
 gem 'bootstrap', '~> 4.0.0'
 gem 'jquery-rails'
 
+gem 'delayed_job_active_record'
+# required by delayed job
+gem 'daemons'          
+
 gem 'capistrano-rails', group: :development
 
 group :development, :test do

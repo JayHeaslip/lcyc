@@ -15,6 +15,7 @@ class AdminController < ApplicationController
       if logged_in?
         session[:expired] = false
         session[:breadcrumbs] = "/"
+        flash.delete(:notice)
         if params[:remember_me] == '1'
           self.current_user.remember_me unless self.current_user.remember_token?
           cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
