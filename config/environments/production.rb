@@ -88,4 +88,23 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+
+  config.action_mailer.perform_caching = false
+
+  cfg = YAML::load(IO.read("#{config.root}/config/database.yml"))
+  gmailpw = cfg['gmailpw']
+
+  config.action_mailer.smtp_settings = {
+	 :address     	       => "smtp.gmail.com",
+	 :port        	       => 587,
+	 :domain      	       => 'members.lcyc.info',
+	 :user_name   	       => 'lcyc@members.lcyc.info',
+	 :password    	       => gmailpw,
+	 :authentication       => 'plain',
+         :enable_starttls_auto => true
+  }
+
 end
