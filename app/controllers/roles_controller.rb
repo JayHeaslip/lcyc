@@ -40,12 +40,12 @@ class RolesController < ApplicationController
         @role.rights << right
     end
     flash[:notice] = "#{@role.name} role was successfully updated." if @role.save
-    redirect_to roles_path(@role)
+    redirect_to roles_path
   end
 
   def destroy
     role = Role.find(params[:id])
-    flash[:notice] = "Deleted #{role.name} role"
+    flash[:notice] = "Deleted #{role.name} role."
     role.destroy
     redirect_to roles_path
   end

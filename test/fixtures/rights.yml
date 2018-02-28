@@ -3,3 +3,9 @@ user_create:
   controller: Users
   action: create
 
+user_destroy:
+  name: UsersController.destroy
+  controller: Users
+  action: destroy
+
+  

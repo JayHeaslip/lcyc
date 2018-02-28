@@ -1,7 +1,17 @@
 <h2>Rights for <%= @role.name %></h2>
 
-<%=raw render_controller_tree(@controller_tree) %>
-
+<ul class="list-group">
+<% @controller_tree.keys.sort.each do |controller| %>
+<li class="list-group-item"><%= controller.camelize %></li>
+<div class="offset-sm-2">
+  <ul class="list-group">
+    <% @controller_tree[controller].keys.sort.each do |action| %>
+    <li class="list-group-item"><%= action %></li>
+    <% end %>
+  </ul>
+</div>
+  <% end %>
+</ul>
 
 <%= link_to 'Edit', edit_role_path(@role) %> |
 <%= link_to 'Back', roles_path %>
