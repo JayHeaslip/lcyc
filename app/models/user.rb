@@ -3,7 +3,6 @@ require 'digest/sha1'
 class User < ActiveRecord::Base
   
   belongs_to :person, optional: true
-  #attr_accessible :firstname, :lastname, :email, :email_confirmed, :password, :password_confirmation
 
   validates_presence_of     :firstname, :lastname
   validates_uniqueness_of   :email

@@ -1,7 +1,7 @@
 class Membership < ActiveRecord::Base
 
   @@current_year = Time.now.year
-  @@Dues = { 'Active' => 850, 'Senior' => 283, 'Inactive' => 50, 'Associate' => 425, 'Life' => 0}
+  @@Dues = { 'Active' => 850, 'Senior' => 283, 'Inactive' => 50, 'Associate' => 425, 'Life' => 0 }
 
   has_many :people, :foreign_key => "MembershipID", :dependent => :destroy
   has_and_belongs_to_many :boats
@@ -18,14 +18,14 @@ class Membership < ActiveRecord::Base
   validate :check_type, :if => Proc.new {|m| !m.people.empty?}
   validate :member_since, :if => Proc.new {|m| m.Status != 'Accepted'}
 
-#  # all categories of membership
-#  scope :members, where("Status in('Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior')").order(:LastName) 
-#  # eligible for a mooring
-#  scope :active, where("Status in('Active', 'Life')").order(:LastName)                                                 
-#  # all membership except Inactive  
-#  scope :all_active, where("Status in('Active', 'Associate', 'Honorary', 'Life', 'Senior')").order(:LastName)          
-#  # not on the email announce list
-#  scope :no_email, where("Status in('Active', 'Associate', 'Honorary', 'Life', 'Senior')").order(:LastName)
+  # all categories of membership
+  scope :members, -> { where("Status in('Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior')").order(:LastName) }
+  # eligible for a mooring
+  scope :active, -> { where("Status in('Active', 'Life')").order(:LastName) }
+  # all membership except Inactive  
+  scope :all_active, -> { where("Status in('Active', 'Associate', 'Honorary', 'Life', 'Senior')").order(:LastName) }
+  # not on the email announce list
+  scope :no_email, -> { where("Status in('Active', 'Associate', 'Honorary', 'Life', 'Senior')").order(:LastName) }
 
   def member_since
     # allow setting MemberSince to next year
