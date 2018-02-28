@@ -26,37 +26,27 @@ class RolesController < ApplicationController
     @rights_tree= {}
     rights= Right.all
     rights.each do |r|
-      name= r.controller
-      @rights_tree[name] ||= {}
-      if @controller_tree.include?(name) &&
-          @controller_tree[name][r.action]
-        v = true
-      else
-        v = false
-      end
-      @rights_tree[name][r.action] = v
+      @rights_tree[r.controller] ||= {}
+      @rights_tree[r.controller][r.action] = r
     end
   end
 
   def update
     @role = Role.find(params[:id])
-    rights= params['right']
-    unless rights.nil?
-      @role.rights.clear
-      rights.each do |controller, actions|
-        actions.each do |action|
-          right= Right.find_by_controller_and_action(controller, action)
-          @role.rights << right
-        end
-      end
+    rights= params[:right_ids]
+    @role.rights.clear
+    rights.each do |right|
+        right= Right.find(right)
+        @role.rights << right
     end
-    flash[:notice] = 'Role was successfully updated.' if @role.save
-    render @role
+    flash[:notice] = "#{@role.name} role was successfully updated." if @role.save
+    redirect_to roles_path(@role)
   end
 
   def destroy
-    @role = Role.find(params[:id])
-    @role.destroy
+    role = Role.find(params[:id])
+    flash[:notice] = "Deleted #{role.name} role"
+    role.destroy
     redirect_to roles_path
   end
 
