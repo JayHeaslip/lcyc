@@ -1,22 +1,22 @@
 class Membership < ActiveRecord::Base
 
   @@current_year = Time.now.year
-  @@Dues = { 'Active' => 850, 'Senior' => 283, 'Inactive' => 50, 'Associate' => 425, 'Life' => 0 }
+  @@Dues = { 'Active': 850, 'Senior': 283, 'Inactive': 50, 'Associate': 425, 'Life': 0 }
 
-  has_many :people, :foreign_key => "MembershipID", :dependent => :destroy
+  has_many :people, foreign_key: "MembershipID", dependent: :destroy
   has_and_belongs_to_many :boats
-  has_one :wait_list_entry, :dependent => :destroy
+  has_one :wait_list_entry, dependent: :destroy
 
-  validates :LastName, :presence => true
-  validates :MailingName, :presence => true
-  validates :StreetAddress, :presence => true
-  validates :City, :presence => true
-  validates :State, :presence => true
-  validates :Zip, :presence => true
-  validates :Status, :presence => true
-  validates :mooring_num, :allow_nil => true, :length => (0..155)
-  validate :check_type, :if => Proc.new {|m| !m.people.empty?}
-  validate :member_since, :if => Proc.new {|m| m.Status != 'Accepted'}
+  validates :LastName, presence: true, length: { maximum: 30 }
+  validates :MailingName, presence: true, length: { maximum: 100 }
+  validates :StreetAddress, presence: true, length: { maximum: 50 }
+  validates :City, presence: true, length: { maximum: 30 }
+  validates :State, presence: true, length: { is: 2}
+  validates :Zip, presence: true, length: { maximum: 12 }
+  validates :Status, presence: true
+  validates :mooring_num, allow_nil: true, inclusion: { in: (0..155) }
+  validate :check_type, if: Proc.new {|m| !m.people.empty?}
+  validate :member_since, if: Proc.new {|m| m.Status != 'Accepted'}
 
   # all categories of membership
   scope :members, -> { where("Status in('Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior')").order(:LastName) }
@@ -27,6 +27,11 @@ class Membership < ActiveRecord::Base
   # not on the email announce list
   scope :no_email, -> { where("Status in('Active', 'Associate', 'Honorary', 'Life', 'Senior')").order(:LastName) }
 
+  #used for filtering
+  scope :lastname, -> (lastname) { where("LastName like ?", "#{lastname}%") }
+  scope :since, -> (membersince, operator) { where("MemberSince #{operator} ?", membersince) }
+  scope :status, -> (status) { where("Status IN (?)", status) }
+  
   def member_since
     # allow setting MemberSince to next year
     errors.add(:MemberSince, "has invalid year") unless (1940..(@@current_year+1)).include?(self.MemberSince)
@@ -76,7 +81,7 @@ class Membership < ActiveRecord::Base
     case type
     when "Log Members" 
       members = self.members.includes(:people).order('LastName, MailingName')
-      FasterCSV.generate(:col_sep => ",") do |tsv|
+      FasterCSV.generate(col_sep: ",") do |tsv|
         tsv << %w(LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
                   HomePhone MN MW MC ME Partner Children)
         for m in members
@@ -90,7 +95,7 @@ class Membership < ActiveRecord::Base
       end
     when "Billing"
       members = self.members.where('Status != "Honorary"').includes(:people)
-      FasterCSV.generate(:col_sep => ",") do |tsv|
+      FasterCSV.generate(col_sep: ",") do |tsv|
         tsv << %w(LastName MailingName Street City State Zip Country Status Mooring Email Dues Initiation MooringFee Total)
         for m in members
           dues = @@Dues[m.Status]

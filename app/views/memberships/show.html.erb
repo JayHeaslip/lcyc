@@ -1,0 +1,91 @@
+<div class="compact">
+  <h3>Membership</h3>
+  <hr>
+    <table>
+      <tr>
+	<td><b>Last Name:</b></td><td><%= @membership.LastName %></td>
+      </tr>
+      <tr>
+	<td><b>Mailing Name:</b></td><td><%= @membership.MailingName %></td>
+      </tr>
+      <tr>
+	<td><b>Street Address:</b></td><td><%= @membership.StreetAddress %></td>
+      </tr>
+      <tr>
+	<td><b>City:</b></td><td><%= @membership.City %></td>
+      </tr>
+      <tr>
+	<td><b>State:</b></td><td><%= @membership.State %></td>
+      </tr>
+      <tr>
+	<td><b>Zip:</b></td><td><%= @membership.Zip %></td>
+      </tr>
+      <tr>
+	<td><b>Country:</b></td><td><%= @membership.Country %></td>
+      </tr>
+      <tr>
+	<td><b>Mooring #:</b></td><td><%= @membership.mooring_num %></td>
+      </tr>
+      <tr>
+	<td><b>Member Since:</b></td><td><%= @membership.MemberSince %></td>
+      </tr>
+      <tr>
+	<td><b>Status:</b></td><td><%= @membership.Status %></td>
+      </tr>
+      <tr>
+	<td><b>Email Binnacle?</b></td><td><%= yes_no(@membership.email_binnacle) %></td>
+      </tr>
+      <tr>
+	<td><b>Email Binnacle to Partner?</b></td><td><%= yes_no(@membership.email_partner_binnacle) %></td>
+      </tr>
+    </table>
+  <p>
+    <%= link_to 'Edit Membership', edit_membership_path(@membership) %>
+  </p>
+  <% if not @membership.people.empty? %>
+  <h3>People<span class="note"> (Click on first name to edit)</span></h3>
+  <hr>
+    <table>
+      <tr>
+	<th>First<th>Last<th>Type<th>Home Phone<th>Cell Phone<th>Work Phone<th>Email<th>Committee<th>BirthYear
+      </tr>
+      <% for person in @membership.people %>
+      <tr>
+	<td>
+           <%= link_to person.FirstName, edit_membership_person_path(@membership,person) %>
+	</td>
+	<td><%= person.LastName %></td>
+	<td><%= person.MemberType %></td>
+	<td><%= person.HomePhone %></td>
+	<td><%= person.CellPhone %></td>
+	<td><%= person.WorkPhone %></td>
+	<td><%= person.EmailAddress %></td>
+	<td><%= person.Committee1 %></td>
+	<td><%= person.BirthYear %></td>
+	<td class="list-actions">
+	  <% if person.MemberType != 'Member' %>
+            <%= link_to "Delete", membership_person_path(@membership,person), :confirm => "Are you sure?", :method => :delete %>
+          <% end %>
+	</td>
+      </tr>
+      <% end %>
+    </table>
+  <% end %>
+  <p>
+    <%= link_to 'Add Person', new_membership_person_path(@membership) %>
+  </p>
+  <% if not @membership.boats.empty? %>
+    <h3><%= pluralize(@membership.boats.size, 'Boat') %><span class="note"> (Click on name or mfg/size to edit)</span></h3>
+    <hr>
+    <%= render 'boats/boats_table', :locals => {:boats_array => @membership.boats, :edit => false, :membership => @membership} %>
+  <% end %>
+  <p>
+    <%= link_to 'Add Boat', new_membership_boat_path(@membership) %>
+  </p>
+  <p>
+    <%= link_to 'Associate an Existing Boat', associate_membership_path(@membership) %>
+  </p>
+  <p>
+    <%= link_to 'Back', back_link(1) %>
+  </p>
+</div>

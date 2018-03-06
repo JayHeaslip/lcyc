@@ -30,6 +30,14 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :memberships
+  resources :memberships do
+    member do
+      get :wl
+      post :wladd
+      get :associate
+    end
+    resources :people
+    resources :boats
+  end
   
 end

@@ -1,0 +1,30 @@
+<table>
+  <tr>
+    <th><%= sortable "Name" %></th>
+    <th><%= sortable "Mfg_Size", "Mfg/Size" %></th>
+    <th><%= sortable "Type" %></th>
+    <th><%= sortable "Length" %></th>
+    <th><%= sortable "Draft" %></th>
+    <th><%= sortable "mooring_num", "Mooring" %></th>
+  </tr>
+
+<% for boat in locals[:boats_array] %>
+
+  <tr valign="top" class=<%= cycle('list-line-even', 'list-line-odd') %>>
+    <% if boat.Name.nil? || boat.Name == "" %>
+      <td><%= boat.Name %></td>
+      <td><%= link_to boat.Mfg_Size, edit_membership_boat_path(boat) %></td>
+    <% else %>
+      <td><%= link_to boat.Name, edit_membership_boat_path(boat) %></td>
+      <td><%= boat.Mfg_Size %></td>
+    <% end %>
+    <td><%= boat.Type %></td>
+    <td><%= boat.Length %></td>
+    <td><%= boat.Draft %></td>
+    <td><%= boat.mooring_num %></td>
+    <td class="list-actions">
+	<%= link_to 'Delete', membership_boat_path(boat), data:{ confirm: 'Are you sure?'}, method: :delete %>
+   </td>
+  </tr>
+<% end %>
+</table>

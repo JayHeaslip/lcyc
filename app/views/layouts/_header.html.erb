@@ -14,6 +14,19 @@
 	  <a class="nav-link" href=<%= "#{membership_path(current_user.membership)}" %>>My Club Info</a>
 	</li>
         <% end %>
+	<% if logged_in? && current_user.roles?(['Admin', 'BOG']) %>
+	<li class="nav-item dropdown">
+	  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Memberships</a>
+	  <ul class="dropdown-menu">
+            <li><%= link_to "Memberships", memberships_path %></li>
+            <li><%= link_to "New Membership", new_membership_path %></li>
+            <li class="dropdown-divider"></li>
+            <li><%= link_to "Committees", roles_path %></li>
+            <li><%= link_to "Labels", roles_path %></li>
+            <li><%= link_to "Spreadsheets", roles_path %></li>
+	  </ul>
+	</li>
+        <% end %>
 	<% if current_user && current_user.role?('Admin') %>
 	<li class="nav-item dropdown">
 	  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>

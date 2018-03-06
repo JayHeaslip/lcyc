@@ -1,38 +1,25 @@
-require 'conditions_helper'
-require 'prawn'
-require 'prawn/layout'
-require 'prawn/measurement_extensions'
+#require 'prawn'
+#require 'prawn/layout'
+#require 'prawn/measurement_extensions'
 #require 'iconv'
 
 class MembershipsController < ApplicationController
-  BOM = "\377\376" #Byte Order Mark
-
-  include ConditionsHelper
 
   helper_method :sort_column, :sort_direction, :mooring_sort_column
-  before_filter :get_membership, :except => [:index, :moorings, :unassigned_moorings, :new, :create, :destroy, 
+  before_action :get_membership, :except => [:index, :moorings, :unassigned_moorings, :new, :create, :destroy, 
                                              :labels, :download_labels,
                                              :spreadsheets, :download_spreadsheet]
-  before_filter :authorize, :only => [:edit, :update, :associate, :save_association, :rmboat]
-
-  respond_to :html
+  before_action :authorize, :only => [:edit, :update, :associate, :save_association, :rmboat]
 
   def index
-    params[:status] ||= %w(Active Associate Honorary Life Senior)
-    logger.info "params[:status] #{params[:status]}"
-    logger.info "                #{status_filter}"
-    params[:operator] ||= '='
-    filter = create_conditions do |c|
-      c.and ["LastName LIKE ?", lastname_filter+'%'] if lastname_filter
-      c.and ["Status IN (?)", status_filter] if status_filter
-      c.and ["MemberSince #{params[:operator]} ?", membersince_filter] if membersince_filter
-    end
-    @memberships = Membership.where(filter).order(sort_column + " " + sort_direction)
-    @lastname = lastname_filter
-    @status = status_filter
+    @status_options = %w(Accepted Active Associate Honorary Inactive Life Resigned Senior)
+    params[:status] = ['Active', 'Associate', 'Honorary', 'Life', 'Senior'] if params[:status].blank?
+    @memberships = filter_memberships(params)
+    @memberships = @memberships.order(sort_column + " " + sort_direction)
+    @lastname = params[:lastname]
+    @selected_status = params[:status] 
     @operator = params[:operator]
-    @membersince = membersince_filter
-    respond_with(@memberships)
+    @since = params[:since]
   end
 
   def new
@@ -41,11 +28,10 @@ class MembershipsController < ApplicationController
   end
 
   def create
-    @membership = Membership.new
-    @membership.attributes = params[:membership]
+    @membership = Membership.new(membership_params)
     if @membership.save
       flash[:notice] = 'Membership was successfully created.'
-      respond_with(@membership, :location => wl_membership_path(@membership))
+      redirect_to wl_membership_path(@membership)
     else
       render :action => :new
     end      
@@ -62,7 +48,7 @@ class MembershipsController < ApplicationController
   end
 
   def show
-    @membership.people.sort!
+    @membership.people.sort
   end
 
   def edit
@@ -73,7 +59,7 @@ class MembershipsController < ApplicationController
     @membership = Membership.includes(:people).find(params[:id])
     @membership.attributes = params[:membership]
     flash[:notice] = 'Membership was successfully updated.' if @membership.save
-    respond_with(@membership)
+#    respond_with(@membership)
   end
 
   def destroy
@@ -101,7 +87,7 @@ class MembershipsController < ApplicationController
     if @membership.save
       flash[:notice] = 'Saved association.'
     end
-    respond_with(@membership, :action => :associate, :location => membership_path(params[:id]))
+#    respond_with(@membership, :action => :associate, :location => membership_path(params[:id]))
   end
 
   def moorings
@@ -193,19 +179,6 @@ class MembershipsController < ApplicationController
     %w(asc desc).include?(params[:direction]) ? params[:direction] : "asc"
   end
 
-  def lastname_filter
-    params[:lastname] if params[:lastname] =~ /[a-z]+/i
-  end
-
-  def status_filter
-    # check if params[:status] is a subset of the allowed Status
-    params[:status] if params[:status].to_set.subset?(%w(Accepted Active Associate Honorary Life Senior Inactive Resigned).to_set)
-  end
-
-  def membersince_filter
-    params[:membersince] if params[:membersince] =~ /\d\d\d\d/ && %w(= < >).include?(params[:operator]) 
-  end
-
   def generate_labels(list, workday)
     pages = list.length/30 
     Prawn::Document.new(:left_margin => 0.21975.in, :right_margin => 0.21975.in)  do |p|
@@ -268,9 +241,18 @@ class MembershipsController < ApplicationController
       mime_type = "text/csv"
       filename += ".csv"
     end
-    # for excel?
-    #content = BOM + Iconv.conv("utf-16le", "utf-8", content)
     send_data(content, :type => mime_type, :filename => filename)
   end 
 
+  def filter_memberships(params)
+    @memberships = Membership.where(nil)
+    @memberships = @memberships.since(params[:since], params[:operator]) if params[:since].present?
+    @memberships = @memberships.lastname(params[:lastname]) if params[:lastname].present?
+    @memberships = @memberships.status(params[:status]) if params[:status].present?
+  end
+
+  def membership_params
+    params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
+                                       :State, :Zip, :Country, :Status, :MemberSince)
+  end
 end
