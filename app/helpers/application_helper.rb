@@ -5,14 +5,14 @@ module ApplicationHelper
   end
 
   def button_for(name, options ={})
-    return content_tag(:button, name, :class => options[:class], :type => options[:button_type])
+    return content_tag(:button, name, class: options[:class], type: options[:button_type])
   end
 
   def sortable(column, title = nil)
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == "asc" ? "desc": "asc"
-    link_to title, request.params.merge(:sort => column, :direction => direction), {:class => css_class}
+    link_to title, request.params.merge(:sort => column, :direction => direction), {class: css_class}
   end
 
   def back_link(i)

@@ -18,13 +18,13 @@
   
 <p><b>Total : </b><%= @memberships.length %></p>
 <table class="table table-sm table-striped">
-  <thead class="thead-dark">
+  <thead class="thead-light">
     <tr>
-      <th><%= "Last Name" %></th>
-      <th><%= "Mailing Name" %></th>
-      <th><%= "Member Since" %></th>
-      <th><%= "Status" %></th>
-      <th><%= "Mooring#" %></th>
+      <th><%= sortable "LastName", "Last Name" %></th>
+      <th><%= sortable "MailingName", "Mailing Name" %></th>
+      <th><%= sortable "MemberSince", "Member Since" %></th>
+      <th><%= sortable "Status", "Status" %></th>
+      <th><%= sortable "mooring_num", "Mooring#" %></th>
     </tr>
   </thead>
 
