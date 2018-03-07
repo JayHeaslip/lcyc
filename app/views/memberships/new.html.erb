@@ -16,7 +16,20 @@
 <% end %>
 
 <%= render :partial => "form_member_update1", :locals => { :f => f} %>
+
+<% if current_user.roles?(['Admin','Harbormaster']) %>
+<%= render :partial => "form_harbor_update", :locals => { :f => f} %>
+<% else %>
+<p><label>Mooring#:</label><%= @membership.mooring_num %></p><br/>
+<% end %>
+
+<% if current_user.roles?(['Admin','Membership']) %>
 <%= render :partial => "form_membership_update", :locals => { :f => f} %>
+<% else %>
+<p><label>Member Since:</label><%= @membership.MemberSince %></p><br/>
+<p><label>Status:</label><%= @membership.Status %></p><br/>
+<% end %>
+
 <div class="form-group row">
   <div class="offset-sm-2 col-sm-10">
     <button type="submit"class="btn btn-primary">Create</button>
