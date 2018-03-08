@@ -25,6 +25,9 @@ class MembershipsController < ApplicationController
   def new
     @membership = Membership.new
     @membership.application_date = Time.now
+    3.times do
+      @membership.people.build
+    end
   end
 
   def create

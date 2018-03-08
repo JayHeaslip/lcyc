@@ -4,6 +4,9 @@ class Membership < ActiveRecord::Base
   @@Dues = { 'Active': 850, 'Senior': 283, 'Inactive': 50, 'Associate': 425, 'Life': 0 }
 
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
+  accepts_nested_attributes_for :people, allow_destroy: true,
+                                reject_if: proc { |a| a['FirstName'].blank? }
+  
   has_and_belongs_to_many :boats
   has_one :wait_list_entry, dependent: :destroy
 

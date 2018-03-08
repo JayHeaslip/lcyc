@@ -30,6 +30,16 @@
 <p><label>Status:</label><%= @membership.Status %></p><br/>
 <% end %>
 
+<table>
+  <tbody class='person_fields'>
+    <%= f.fields_for :people do |f| %>
+    <%= render 'person', f: f %>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to_add_person('Add person', f, :people, class: 'btn btn-primary') %>
+
 <div class="form-group row">
   <div class="offset-sm-2 col-sm-10">
     <button type="submit"class="btn btn-primary">Create</button>

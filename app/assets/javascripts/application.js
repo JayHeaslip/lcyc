@@ -16,3 +16,13 @@
 //= require bootstrap
 //= require turbolinks
 //= require_tree .
+
+$(document).on('turbolinks:load', function() {
+    $('form').on('click', '.add_person', function() {
+	var regexp, time;
+	time = new Date().getTime();
+	regexp = new RegExp($(this).data('id'), 'g');
+	$('.person_fields').append($(this).data('personFields').replace(regexp, time));
+	return event.preventDefault();
+    });
+});
