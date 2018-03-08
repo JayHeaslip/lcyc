@@ -18,11 +18,17 @@
 //= require_tree .
 
 $(document).on('turbolinks:load', function() {
-    $('form').on('click', '.add_person', function() {
+    $('form').on('click', '.remove_record', function(e) {
+	$(this).prev('input[type=hidden]').val('1');
+	$(this).closest('tr').hide();
+	return e.preventDefault();
+    });
+
+    $('form').on('click', '.add_person', function(e) {
 	var regexp, time;
 	time = new Date().getTime();
 	regexp = new RegExp($(this).data('id'), 'g');
 	$('.person_fields').append($(this).data('personFields').replace(regexp, time));
-	return event.preventDefault();
+	return e.preventDefault();
     });
 });
