@@ -20,7 +20,7 @@
 $(document).on('turbolinks:load', function() {
     $('form').on('click', '.remove_record', function(e) {
 	$(this).prev('input[type=hidden]').val('1');
-	$(this).closest('tr').hide();
+	$(this).closest('div.person').hide();
 	return e.preventDefault();
     });
 

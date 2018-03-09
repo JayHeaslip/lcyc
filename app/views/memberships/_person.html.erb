@@ -1,0 +1,17 @@
+<div class="person">
+  <div class="form-row mb-1">
+    <div class="form-group col-sm-3">
+      <%= f.text_field :FirstName, id: :FirstName, class: "form-control", placeholder: "First Name"  %>
+    </div>
+    <div class="form-group col-sm-3">
+      <%= f.text_field :LastName, id: :LastName, class: "form-control", placeholder: "Last Name"  %>
+    </div>
+    <div class="form-group col-sm-6">
+      <%= f.text_field :EmailAddress, id: :EmailAddress, class: "form-control", placeholder: "Email"  %>
+    </div>
+  </div>
+  <div class="form-row mb-1">
+    <%= f.hidden_field :_destroy %>
+    <%= link_to 'Delete', '#', class: 'remove_record' %>
+  </div>
+</div>

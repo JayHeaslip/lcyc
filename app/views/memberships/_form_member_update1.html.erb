@@ -1,43 +1,35 @@
-<div class="form-group row mb-1">
-  <label for="LastName" class="col-form-label col-sm-2">Last Name</label>
-  <div class="col-sm-10">
-    <%= f.text_field :LastName, id: "LastName", class: "form-control" %>
+<div class="form-row">
+  <div class="form-group col-sm-4">
+    <%= f.text_field :LastName, id: "LastName", class: "form-control", required: true %>
+    <label class="form-control-placeholder" for="LastName">Last Name</label>
+  </div>
+  <div class="form-group col-sm-8">
+    <%= f.text_field :MailingName, id: "MailingName", class: "form-control", required: true %>
+    <label class="form-control-placeholder" for="MailingName">Mailing Name</label>
   </div>
 </div>
-<div class="form-group row mb-1">
-  <label for="MailingName" class="col-form-label col-sm-2">Mailing Name</label>
-  <div class="col-sm-10">
-    <%= f.text_field :MailingName, id: "MailingName", class: "form-control" %>
+<div class="form-row">
+  <div class="form-group col-sm-4">
+    <%= f.text_field :StreetAddress, id: "StreetAddress", class: "form-control", required: true %>
+    <label class="form-control-placeholder" for="StreetAddress">Street Address</label>
+  </div>
+  <div class="form-group col-sm-4">
+    <%= f.text_field :City, id: "City", class: "form-control", required: true %>
+    <label class="form-control-placeholder" for="City">City</label>
+  </div>
+  <div class="form-group col-sm-2">
+    <%= f.text_field :State, id: "State", class: "form-control", required: true %>
+    <label class="form-control-placeholder" for="State">State</label>
+  </div>
+  <div class="col-sm-2">
+    <%= f.text_field :Zip, id: "Zip", class: "form-control", required: true %>
+    <label class="form-control-placeholder" for="Zip">Zip</label>
   </div>
 </div>
-<div class="form-group row mb-1">
-  <label for="StreetAddress" class="col-form-label col-sm-2">Street Address</label>
-  <div class="col-sm-10">
-    <%= f.text_field :StreetAddress, id: "StreetAddress", class: "form-control" %>
-  </div>
-</div>
-<div class="form-group row mb-1">
-  <label for="City" class="col-form-label col-sm-2">City</label>
-  <div class="col-sm-10">
-    <%= f.text_field :City, id: "City", class: "form-control" %>
-  </div>
-</div>
-<div class="form-group row mb-1">
-  <label for="State" class="col-form-label col-sm-2">State</label>
-  <div class="col-sm-10">
-    <%= f.text_field :State, id: "State", class: "form-control" %>
-  </div>
-</div>
-<div class="form-group row mb-1">
-  <label for="Zip" class="col-form-label col-sm-2">Zip</label>
-  <div class="col-sm-10">
-    <%= f.text_field :Zip, id: "Zip", class: "form-control" %>
-  </div>
-</div>
-<div class="form-group row mb-1">
-  <label for="Country" class="col-form-label col-sm-2">Country</label>
-  <div class="col-sm-10">
-    <%= f.text_field :Country, id: "Country", class: "form-control" %>
+<div class="form-row">
+  <div class="form-group col-sm-4">
+    <%= f.text_field :Country, id: "Country", class: "form-control", required: true %>
+    <label class="form-control-placeholder" for="Country">Country</label>
   </div>
 </div>
 

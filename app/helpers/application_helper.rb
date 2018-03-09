@@ -44,4 +44,8 @@ module ApplicationHelper
     link_to(name, '#', class: "add_person " + args[:class], data: {id: id, person_fields: person_fields.gsub("\n", "")})
   end
 
+  def read_only_not(roles)
+    current_user.roles?(roles) ? false : true
+  end
+
 end
