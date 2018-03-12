@@ -1,17 +1,69 @@
 <div class="person">
-  <div class="form-row mb-1">
-    <div class="form-group col-sm-3">
-      <%= f.text_field :FirstName, id: :FirstName, class: "form-control", placeholder: "First Name"  %>
+  <div class="form-row">
+    <div class="form-group row">
+      <label for="Type" class="col-form-label pt-0 col-sm-4">Type:</label>
+      <div class="col-sm-2" id="type_select">
+	<%= f.collection_select :MemberType, MemberType.all, :Type, :Type, class: "form-control", disabled: read_only_not(['Admin', 'Membership']) %>
+      </div>
     </div>
-    <div class="form-group col-sm-3">
-      <%= f.text_field :LastName, id: :LastName, class: "form-control", placeholder: "Last Name"  %>
+    <div class="form-group col-sm-2">
+      <span class="has-float-label">
+	<%= f.text_field :FirstName, id: :FirstName, class: "form-control", placeholder: " " %>
+	<label for="FirstName">First Name</label>
+      </span>
+    </div>
+    <div class="form-group col-sm-2">
+      <span class="has-float-label">
+      <%= f.text_field :LastName, id: :LastName, class: "form-control", placeholder: " " %>
+      <label for="LastName">Last Name</label>
+      </span>
     </div>
     <div class="form-group col-sm-6">
-      <%= f.text_field :EmailAddress, id: :EmailAddress, class: "form-control", placeholder: "Email"  %>
+      <span class="has-float-label">
+      <%= f.text_field :EmailAddress, id: :EmailAddress, class: "form-control", placeholder: " " %>
+      <label for="EmailAddress">Email</label>
+      </span>
     </div>
   </div>
   <div class="form-row mb-1">
-    <%= f.hidden_field :_destroy %>
-    <%= link_to 'Delete', '#', class: 'remove_record' %>
+    <div class="form-group col-sm-1 mb-1">
+      <span class="has-float-label">
+	<%= f.text_field :BirthYear, id: :BirthYear, class: "form-control", placeholder: " " %>
+	<label  for="BirthYear">Birth Year</label>
+      </span>
+    </div>
+    <div class="form-group col-sm-2 mb-1">
+      <span class="has-float-label">
+      <%= f.text_field :HomePhone, id: :HomePhone, class: "form-control", placeholder: " " %>
+      <label for="HomePhone">Home Phone</label>
+      </span>
+    </div>
+    <div class="form-group col-sm-2 mb-1">
+      <span class="has-float-label">
+      <%= f.text_field :WorkPhone, id: :WorkPhone, class: "form-control", placeholder: " " %>
+      <label for="WorkPhone">Work Phone</label>
+      </span>
+    </div>
+    <div class="form-group col-sm-2 mb-1">
+      <span class="has-float-label">
+      <%= f.text_field :CellPhone, id: :CellPhone, class: "form-control", placeholder: " " %>
+      <label for="CellPhone">Cell Phone</label>
+      </span>
+    </div>
+    <div class="form-group row">
+      <label for="Committee" class="col-form-label pt-0 col-sm-4">Committee:</label>
+      <div class="col-sm-2">
+	<%= f.collection_select :Committee1, Committee.all, :Name, :Name, class: "form-control" %>
+      </div>
+    </div>
   </div>
+  <div class="form-row mb-4">
+    <div class="form-check mr-4">
+      <%= f.check_box :subscribe_general, class: "form-check-input" %>
+      <label for="subscribe_general" class="form-check-label">Subscribe</label>
+    </div>
+    <%= f.hidden_field :_destroy %>
+    <%= link_to 'Delete Person', '#', class: 'remove_record col-offset-6' %>
+  </div>
+  <hr>
 </div>

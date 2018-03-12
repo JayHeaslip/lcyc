@@ -18,6 +18,7 @@
 //= require_tree .
 
 $(document).on('turbolinks:load', function() {
+
     $('form').on('click', '.remove_record', function(e) {
 	$(this).prev('input[type=hidden]').val('1');
 	$(this).closest('div.person').hide();
@@ -31,4 +32,10 @@ $(document).on('turbolinks:load', function() {
 	$('.person_fields').append($(this).data('personFields').replace(regexp, time));
 	return e.preventDefault();
     });
+
+    $("form").on('change', 'div#type_select select', function() {
+	var type = this.value;
+	alert(type);
+    });
+
 });

@@ -253,6 +253,7 @@ class MembershipsController < ApplicationController
 
   def membership_params
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
-                                       :State, :Zip, :Country, :Status, :MemberSince)
+                                       :State, :Zip, :Country, :Status, :MemberSince,
+                                       people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy))
   end
 end
