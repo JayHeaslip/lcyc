@@ -2,11 +2,11 @@
 
 <ul class="list-group">
 <% @controller_tree.keys.sort.each do |controller| %>
-<li class="list-group-item"><%= controller.camelize %></li>
+<li class="list-group-item py-0"><%= controller.camelize %></li>
 <div class="offset-sm-2">
   <ul class="list-group">
     <% @controller_tree[controller].keys.sort.each do |action| %>
-    <li class="list-group-item"><%= action %></li>
+    <li class="list-group-item py-0"><%= action %></li>
     <% end %>
   </ul>
 </div>
