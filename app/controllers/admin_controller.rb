@@ -1,6 +1,6 @@
 class AdminController < ApplicationController
 
-  skip_before_action :check_authentication, :session_expiry, :except => [:index]
+  skip_before_action :check_authentication, :session_expiry, except: [:index]
   skip_before_action :check_authorization
 
   def index
@@ -18,7 +18,7 @@ class AdminController < ApplicationController
         flash.delete(:notice)
         if params[:remember_me] == '1'
           self.current_user.remember_me unless self.current_user.remember_token?
-          cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
+          cookies[:auth_token] = { value: self.current_user.remember_token , expires: self.current_user.remember_token_expires_at }
         end
         redirect_to(uri || root_path)
       else
@@ -32,7 +32,7 @@ class AdminController < ApplicationController
     self.current_user.forget_me if logged_in?
     cookies.delete :auth_token
     reset_session
-    redirect_to :action => "login"
+    redirect_to action: "login"
   end
 
 end

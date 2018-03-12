@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
     user = cookies[:auth_token] && User.find_by_remember_token(cookies[:auth_token])
     if user && user.remember_token?
       logger.info "logging in from cookie"
-      cookies[:auth_token] = { :value => user.remember_token, :expires => user.remember_token_expires_at }
+      cookies[:auth_token] = { value: user.remember_token, expires: user.remember_token_expires_at }
       self.current_user = user
     else
       logger.info "no current user"

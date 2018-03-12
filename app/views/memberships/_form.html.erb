@@ -1,0 +1,43 @@
+<%= form_for @membership do |f| %>
+<% if @membership.errors.any? %>
+<div id="error_explanation">
+  <h3><%= pluralize(@membership.errors.count, "error") %>
+    prohibited this membership from being saved:</h3>
+  
+  <ul>
+    <% @membership.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+<%= render partial: "form_member_update1", locals: { f: f} %>
+<%= render partial: "form_membership_update", locals: { f: f} %>
+
+<h4>People</h4>
+<hr>
+<div class="person_fields">
+  <%= f.fields_for :people do |f| %>
+  <%= render 'person', f: f %>
+  <% end %>
+</div>
+
+<%= link_to_add_person('Add person', f, :people, class: 'btn btn-primary mb-3') %>
+
+<h4>Boat</h4>
+<hr>
+<div class="boat_fields">
+  <%= f.fields_for :boats do |f| %>
+  <%= render 'boat', f: f %>
+  <% end %>
+</div>
+
+<%= link_to_add_boat('Add boat', f, :boats, class: 'btn btn-primary') %>
+
+<div class="form-group row mt-3">
+  <div class="col-sm-3">
+    <button type="submit"class="btn btn-primary"><%= button %></button>
+  </div>
+</div>
+<% end %>

@@ -23,7 +23,7 @@
       <td><%= user.email_confirmed %></td>
       <td class="list-actions">
 	<% if @role %>
-        <%= link_to 'Remove', rmrole_role_user_path(@role, user), :confirm => 'Are you sure?', :method => :delete %>
+        <%= link_to 'Remove', rmrole_role_user_path(@role, user), confirm: 'Are you sure?', method: :delete %>
 	<% else %>
         <%= link_to 'Show', user %><br/>
         <%= link_to 'Destroy', user, data: { confirm: 'Are you sure?'}, method: :delete %>

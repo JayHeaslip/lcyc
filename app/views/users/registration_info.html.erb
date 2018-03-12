@@ -7,7 +7,7 @@ Your registration must be confirmed before you can login. To complete your regis
 click on the link in the email.
 </p>
 
-<%= form_for :user, :url => resend_email_user_path(@user) do |f| %>
+<%= form_for :user, url: resend_email_user_path(@user) do |f| %>
 <div class="form-group row">
   <div class="offset-sm-1">
     <button type="submit"class="btn btn-primary">Resend email</button> |  <%= link_to 'Go to login', login_path %>

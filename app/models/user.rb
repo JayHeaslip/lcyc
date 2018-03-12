@@ -6,10 +6,10 @@ class User < ActiveRecord::Base
 
   validates_presence_of     :firstname, :lastname
   validates_uniqueness_of   :email
-  validates_format_of       :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
-  validates_length_of       :password, :minimum => 6,    :if => :validate_password?
-  validates_confirmation_of :password,                   :if => :validate_password?
-  validates_presence_of     :password_confirmation,      :if => :validate_password?
+  validates_format_of       :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
+  validates_length_of       :password, minimum: 6,    if: :validate_password?
+  validates_confirmation_of :password,                if: :validate_password?
+  validates_presence_of     :password_confirmation,   if: :validate_password?
   validate :member
 
   has_and_belongs_to_many :roles
@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   def get_confirmation_hash
     if self.confirmation_hash.nil?
       self.confirmation_hash = Digest::SHA256.hexdigest(self.email + Time.now.to_s)
-      save(:validate => false)
+      save(validate: false)
     end
     self.confirmation_hash
   end
@@ -74,13 +74,13 @@ class User < ActiveRecord::Base
   def remember_me_until(time)
     self.remember_token_expires_at = time
     self.remember_token            = encrypt("#{email}--#{remember_token_expires_at}")
-    save(:validate => false)
+    save(validate: false)
   end
 
   def forget_me
     self.remember_token_expires_at = nil
     self.remember_token            = nil
-    save(:validate => false)
+    save(validate: false)
   end
 
   def membership

@@ -8,6 +8,9 @@ class Membership < ActiveRecord::Base
                                 reject_if: proc { |a| a['FirstName'].blank? }
   
   has_and_belongs_to_many :boats
+  accepts_nested_attributes_for :boats, allow_destroy: true,
+                                reject_if: proc { |a| a['Name'].blank? && a['Mfg_Size'].blank?}
+
   has_one :wait_list_entry, dependent: :destroy
 
   validates :LastName, presence: true, length: { maximum: 30 }

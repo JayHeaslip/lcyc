@@ -39,7 +39,7 @@
     <%= link_to 'Edit Membership', edit_membership_path(@membership) %>
   </p>
   <% if not @membership.people.empty? %>
-  <h3>People<span class="note"> (Click on first name to edit)</span></h3>
+  <h3>People</h3>
   <hr>
   <table class="table table-sm">
     <thead class="thead-dark">
@@ -58,9 +58,7 @@
     <tbody>
       <% for person in @membership.people %>
       <tr>
-	<td>
-          <%= link_to person.FirstName, edit_membership_person_path(@membership,person) %>
-	</td>
+	<td><%= person.FirstName %></td>
 	<td><%= person.LastName %></td>
 	<td><%= person.MemberType %></td>
 	<td><%= person.HomePhone %></td>
@@ -79,17 +77,11 @@
     </tbody>
   </table>
   <% end %>
-  <p>
-    <%= link_to 'Add Person', new_membership_person_path(@membership) %>
-  </p>
   <% if not @membership.boats.empty? %>
-    <h3><%= 'Boat'.pluralize(@membership.boats.size) %><span class="note"> (Click on name or mfg/size to edit)</span></h3>
+  <h3><%= 'Boat'.pluralize(@membership.boats.size) %></h3>
     <hr>
-    <%= render 'boats/boats_table', locals: {boats_array: @membership.boats} %>
+    <%= render 'boats/boats_table', locals: {boats_array: @membership.boats, show_sort: false } %>
   <% end %>
-  <p>
-    <%= link_to 'Add Boat', new_membership_boat_path(@membership) %>
-  </p>
   <p>
     <%= link_to 'Associate an Existing Boat', associate_membership_path(@membership) %>
   </p>

@@ -8,7 +8,7 @@
   <%= text_field_tag :lastname, @lastname, size: 8, class:"form-control" %>
   <label class="my-1 ml-2 mr-2">Member Since:</label>
   <%= select_tag :operator, options_for_select(['=', '<', '>'], @operator) %>
-  <%= text_field_tag :since, @since, :size => 4 %>
+  <%= text_field_tag :since, @since, size: 4 %>
   <label class="my-1 ml-2 mr-2">Status:</label>
   <%= select_tag :status, options_for_select(@status_options, @selected_status), multiple: true, size: 3 %>
   <button type ="submit" class="btn btn-primary ml-2 my-1 mr-2">Search</button> | <%= link_to "Show All", memberships_path, class: 'ml-2' %>						     

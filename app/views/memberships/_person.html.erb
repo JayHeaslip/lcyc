@@ -6,7 +6,7 @@
 	<%= f.collection_select :MemberType, MemberType.all, :Type, :Type, class: "form-control", disabled: read_only_not(['Admin', 'Membership']) %>
       </div>
     </div>
-    <div class="form-group col-sm-2">
+    <div class="form-group col-sm-1">
       <span class="has-float-label">
 	<%= f.text_field :FirstName, id: :FirstName, class: "form-control", placeholder: " " %>
 	<label for="FirstName">First Name</label>
@@ -18,20 +18,20 @@
       <label for="LastName">Last Name</label>
       </span>
     </div>
-    <div class="form-group col-sm-6">
-      <span class="has-float-label">
-      <%= f.text_field :EmailAddress, id: :EmailAddress, class: "form-control", placeholder: " " %>
-      <label for="EmailAddress">Email</label>
-      </span>
-    </div>
-  </div>
-  <div class="form-row mb-1">
     <div class="form-group col-sm-1 mb-1">
       <span class="has-float-label">
 	<%= f.text_field :BirthYear, id: :BirthYear, class: "form-control", placeholder: " " %>
 	<label  for="BirthYear">Birth Year</label>
       </span>
     </div>
+    <div class="form-group col-sm-5 child-hide">
+      <span class="has-float-label">
+      <%= f.text_field :EmailAddress, id: :EmailAddress, class: "form-control", placeholder: " " %>
+      <label for="EmailAddress">Email</label>
+      </span>
+    </div>
+  </div>
+  <div class="form-row mb-1 child-hide">
     <div class="form-group col-sm-2 mb-1">
       <span class="has-float-label">
       <%= f.text_field :HomePhone, id: :HomePhone, class: "form-control", placeholder: " " %>
@@ -58,12 +58,12 @@
     </div>
   </div>
   <div class="form-row mb-4">
-    <div class="form-check mr-4">
+    <div class="form-check mr-4 child-hide">
       <%= f.check_box :subscribe_general, class: "form-check-input" %>
       <label for="subscribe_general" class="form-check-label">Subscribe</label>
     </div>
     <%= f.hidden_field :_destroy %>
-    <%= link_to 'Delete Person', '#', class: 'remove_record col-offset-6' %>
+    <%= link_to 'Delete Person', '#', class: 'remove_person col-offset-6' %>
   </div>
   <hr>
 </div>

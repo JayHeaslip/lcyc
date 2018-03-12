@@ -19,7 +19,7 @@
 
 $(document).on('turbolinks:load', function() {
 
-    $('form').on('click', '.remove_record', function(e) {
+    $('form').on('click', '.remove_person', function(e) {
 	$(this).prev('input[type=hidden]').val('1');
 	$(this).closest('div.person').hide();
 	return e.preventDefault();
@@ -33,9 +33,28 @@ $(document).on('turbolinks:load', function() {
 	return e.preventDefault();
     });
 
+    $('form').on('click', '.add_boat', function(e) {
+	var regexp, time;
+	time = new Date().getTime();
+	regexp = new RegExp($(this).data('id'), 'g');
+	$('.boat_fields').append($(this).data('boatFields').replace(regexp, time));
+	return e.preventDefault();
+    });
+
+    $('form').on('click', '.remove_boat', function(e) {
+	$(this).prev('input[type=hidden]').val('1');
+	$(this).closest('div.boat').hide();
+	return e.preventDefault();
+    });
+
     $("form").on('change', 'div#type_select select', function() {
 	var type = this.value;
-	alert(type);
+	if (type === 'Child') {
+	    //$(this).closest('div.person').children('.child-hide').css("backgrond-color","red");
+	    $(this).closest('div.person').find('.child-hide').hide();
+	} else {
+	    $(this).closest('div.person').find('.child-hide').show();
+	}
     });
 
 });

@@ -32,7 +32,7 @@ class Boat < ActiveRecord::Base
     #boats = Boat.where("location = 'Mooring'").order('Name, mooring_num').includes(:memberships)
     boats = Boat.order('Name, mooring_num').includes(:memberships)
     valid_moored_boats = []
-    FasterCSV.generate(:col_sep => "\t") do |tsv|
+    FasterCSV.generate(col_sep: "\t") do |tsv|
       tsv << ['Name', 'Mooring#', 'Sail#', 'Mfg/Size', 'PHRF', 'Owner']
       boats.each do |b|
         phrf = b.PHRF == 0 ? '' : b.PHRF

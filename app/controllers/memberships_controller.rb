@@ -6,10 +6,10 @@
 class MembershipsController < ApplicationController
 
   helper_method :sort_column, :sort_direction, :mooring_sort_column
-  before_action :get_membership, :except => [:index, :moorings, :unassigned_moorings, :new, :create, :destroy, 
+  before_action :get_membership, except: [:index, :moorings, :unassigned_moorings, :new, :create, :destroy, 
                                              :labels, :download_labels,
                                              :spreadsheets, :download_spreadsheet]
-  before_action :authorize, :only => [:edit, :update, :associate, :save_association, :rmboat]
+  before_action :authorize, only: [:edit, :update, :associate, :save_association, :rmboat]
 
   def index
     @status_options = %w(Accepted Active Associate Honorary Inactive Life Resigned Senior)
@@ -33,7 +33,7 @@ class MembershipsController < ApplicationController
       flash[:notice] = 'Membership was successfully created.'
       redirect_to wl_membership_path(@membership)
     else
-      render :action => :new
+      render action: :new
     end      
   end
 
@@ -57,9 +57,13 @@ class MembershipsController < ApplicationController
 
   def update
     @membership = Membership.includes(:people).find(params[:id])
-    @membership.attributes = params[:membership]
-    flash[:notice] = 'Membership was successfully updated.' if @membership.save
-#    respond_with(@membership)
+    @membership.attributes = membership_params
+    if @membership.save
+      flash[:notice] = 'Membership was successfully updated.'
+      redirect_to membership_path(@membership)
+    else
+      render :edit
+    end
   end
 
   def destroy
@@ -87,7 +91,6 @@ class MembershipsController < ApplicationController
     if @membership.save
       flash[:notice] = 'Saved association.'
     end
-#    respond_with(@membership, :action => :associate, :location => membership_path(params[:id]))
   end
 
   def moorings
@@ -126,7 +129,7 @@ class MembershipsController < ApplicationController
       members = Membership.all_active
       workday = true
     end
-    send_data generate_labels(members, workday), :filename => "labels.pdf", :type => "application/pdf"
+    send_data generate_labels(members, workday), filename: "labels.pdf", type: "application/pdf"
   end
 
   def spreadsheets
@@ -181,16 +184,16 @@ class MembershipsController < ApplicationController
 
   def generate_labels(list, workday)
     pages = list.length/30 
-    Prawn::Document.new(:left_margin => 0.21975.in, :right_margin => 0.21975.in)  do |p|
+    Prawn::Document.new(left_margin: 0.21975.in, right_margin: 0.21975.in)  do |p|
       p.font "Times-Roman"
       p.font_size 11
       (0..pages).each  do |page|
-        p.define_grid(:columns => 3, :rows => 10, :column_gutter => 10)
+        p.define_grid(columns: 3, rows: 10, column_gutter: 10)
         p.grid.rows.times do |i|
           p.grid.columns.times do |j|
             b = p.grid(i,j)
             indent = 10
-            p.bounding_box [b.top_left[0]+indent, b.top_left[1]], :width => b.width, :height => b.height-indent do
+            p.bounding_box [b.top_left[0]+indent, b.top_left[1]], width: b.width, height: b.height-indent do
               m = list[page*30 + 3*i + j]
               overflow = generate_text(p, m, b.width, workday) if not m.nil?
               logger.info "#{m.MailingName} overflowed: |#{overflow}|" if overflow && overflow != ""
@@ -219,15 +222,15 @@ class MembershipsController < ApplicationController
       ma = m.StreetAddress
     end
     if workday 
-      p.text m.LastName, :style => :bold
+      p.text m.LastName, style: :bold
       p.text "\n\n#{mn}"
     else
-      p.text_box "#{mn}\n#{ma}\n#{m.City}, #{m.State}   #{m.Zip}", :valign => :center
+      p.text_box "#{mn}\n#{ma}\n#{m.City}, #{m.State}   #{m.Zip}", valign: :center
     end
   end
 
   def export_csv(type)
-    filename = I18n.l(Time.now, :format => :short) + "#{type}"
+    filename = I18n.l(Time.now, format: :short) + "#{type}"
     if type.start_with?("Member Card")
       content = Person.to_csv
       mime_type = "text/csv"
@@ -241,7 +244,7 @@ class MembershipsController < ApplicationController
       mime_type = "text/csv"
       filename += ".csv"
     end
-    send_data(content, :type => mime_type, :filename => filename)
+    send_data(content, type: mime_type, filename: filename)
   end 
 
   def filter_memberships(params)
@@ -252,8 +255,12 @@ class MembershipsController < ApplicationController
   end
 
   def membership_params
+    logger.info "params:"
+    logger.info params
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
-                                       :State, :Zip, :Country, :Status, :MemberSince,
-                                       people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy))
+                                       :State, :Zip, :Country, :Status, :MemberSince, :mooring_num,
+                                       people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),
+                                       boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy),)
   end
+  
 end

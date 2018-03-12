@@ -24,7 +24,7 @@ class Right < ActiveRecord::Base
         puts action
         next if /return_to_main|component_update|component|^_/ =~ action
         if self.where("controller = ? AND action = ?", controller.controller_path, action).empty?
-          self.new(:name => "#{controller}.#{action}", :controller => controller.controller_path, :action => action).save!
+          self.new(name: "#{controller}.#{action}", controller: controller.controller_path, action: action).save!
         end
       end
       # The following thanks to Tom Styles

@@ -1,31 +1,32 @@
 <table class="table table-sm">
   <thead class="thead-dark">
     <tr>
+      <% if locals[:show_sort] %>
       <th><%= sortable "Name" %></th>
       <th><%= sortable "Mfg_Size", "Mfg/Size" %></th>
       <th><%= sortable "Type" %></th>
       <th><%= sortable "Length" %></th>
       <th><%= sortable "Draft" %></th>
       <th><%= sortable "mooring_num", "Mooring" %></th>
+      <% else %>
+      <th>Name</th>
+      <th>Mfg/Size</th>
+      <th>Type</th>
+      <th>Length</th>
+      <th>Draft</th>
+      <th>Mooring</th>
+      <% end %>
     </tr>
   </thead>
   <tbody>
     <% for boat in locals[:boats_array] %>
     <tr>
-      <% if boat.Name.nil? || boat.Name == "" %>
       <td><%= boat.Name %></td>
-      <td><%= link_to boat.Mfg_Size, edit_membership_boat_path(boat) %></td>
-      <% else %>
-      <td><%= link_to boat.Name, edit_membership_boat_path(boat) %></td>
       <td><%= boat.Mfg_Size %></td>
-      <% end %>
       <td><%= boat.Type %></td>
       <td><%= boat.Length %></td>
       <td><%= boat.Draft %></td>
       <td><%= boat.mooring_num %></td>
-      <td class="list-actions">
-	<%= link_to 'Delete', membership_boat_path(boat), data:{ confirm: 'Are you sure?'}, method: :delete %>
-      </td>
     </tr>
     <% end %>
   </tbody>

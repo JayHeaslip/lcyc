@@ -2,10 +2,10 @@ require 'digest/sha2'
 
 class UsersController < ApplicationController
 
-  before_action :check_authentication, :only => [:index, :show, :edit, :update, :destroy, :editpw, :updatepw]
-  before_action :check_authorization, :only => [:index, :destroy, :rmrole]
-  before_action :set_current_user, :only => [:show, :edit, :update, :editpw, :updatepw]
-  before_action :check_delayed_job, :only => [:create, :resend_email, :forgotpw]
+  before_action :check_authentication, only: [:index, :show, :edit, :update, :destroy, :editpw, :updatepw]
+  before_action :check_authorization, only: [:index, :destroy, :rmrole]
+  before_action :set_current_user, only: [:show, :edit, :update, :editpw, :updatepw]
+  before_action :check_delayed_job, only: [:create, :resend_email, :forgotpw]
 
   def index
     if params[:role_id]
@@ -79,7 +79,7 @@ class UsersController < ApplicationController
     if @user
       @user.email_confirmed = true
       @user.confirmation_hash = nil
-      @user.save(:validate => false)
+      @user.save(validate: false)
       flash[:success] = "Thank you for validating your email."
     else
       flash[:error] = "User not found."
