@@ -39,5 +39,12 @@ Rails.application.routes.draw do
     resources :people
     resources :boats
   end
-  
+
+  resources :people, only: [] do
+    collection do
+      get :committee
+    end
+  end
+
+
 end
