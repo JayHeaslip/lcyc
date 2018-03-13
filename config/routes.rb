@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       get :wl
       post :wladd
       get :associate
+      post :save_association
     end
     resources :people
     resources :boats

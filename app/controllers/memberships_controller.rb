@@ -90,6 +90,7 @@ class MembershipsController < ApplicationController
     @membership.boats << Boat.find(params[:membership][:boats].to_i)
     if @membership.save
       flash[:notice] = 'Saved association.'
+      redirect_to membership_path(@membership)
     end
   end
 
