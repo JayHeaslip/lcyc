@@ -1,3 +1,5 @@
+require 'csv'
+
 class Membership < ActiveRecord::Base
 
   @@current_year = Time.now.year
@@ -79,15 +81,15 @@ class Membership < ActiveRecord::Base
     club_moorings - membership_moorings
   end
 
-  def self.dues(status)
-    @@Dues[status]
+  def self.dues(membership)
+    @@Dues[membership.Status.to_sym] || 0
   end
     
   def self.to_csv(type)
     case type
     when "Log Members" 
       members = self.members.includes(:people).order('LastName, MailingName')
-      FasterCSV.generate(col_sep: ",") do |tsv|
+      CSV.generate(col_sep: ",") do |tsv|
         tsv << %w(LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
                   HomePhone MN MW MC ME Partner Children)
         for m in members
@@ -101,10 +103,12 @@ class Membership < ActiveRecord::Base
       end
     when "Billing"
       members = self.members.where('Status != "Honorary"').includes(:people)
-      FasterCSV.generate(col_sep: ",") do |tsv|
+      CSV.generate(col_sep: ",") do |tsv|
         tsv << %w(LastName MailingName Street City State Zip Country Status Mooring Email Dues Initiation MooringFee Total)
         for m in members
-          dues = @@Dues[m.Status]
+          logger.info "Member: #{m.MailingName} #{m.Status}"
+          dues = Membership.dues(m) || 0
+          logger.info "Member: #{m.MailingName} #{m.Status} dues: #{dues}"
           if first = m.people.where('MemberType = "Member"').first
             email = first.EmailAddress
           else

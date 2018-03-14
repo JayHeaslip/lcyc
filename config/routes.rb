@@ -34,6 +34,8 @@ Rails.application.routes.draw do
     collection do
       get :labels
       post :download_labels
+      get :spreadsheets
+      post :download_spreadsheet
     end
     member do
       get :wl

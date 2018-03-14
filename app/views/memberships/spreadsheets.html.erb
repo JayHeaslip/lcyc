@@ -1,0 +1,6 @@
+<h2>Generate a spreadsheet</h2>
+<%= form_tag download_spreadsheet_memberships_path do %>
+<label>Type:</label>
+<%= select_tag :spreadsheet, options_for_select(@spreadsheet_options, @spreadsheet) %>
+<button class="btn btn-primary" type='submit'>Generate</button> | <%= link_to 'Back', back_link(1) %>
+<% end %>

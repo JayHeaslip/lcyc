@@ -1,3 +1,5 @@
+require 'csv'
+
 class Boat < ActiveRecord::Base
 
   has_and_belongs_to_many :memberships
@@ -29,10 +31,9 @@ class Boat < ActiveRecord::Base
   end
   
   def self.to_csv
-    #boats = Boat.where("location = 'Mooring'").order('Name, mooring_num').includes(:memberships)
     boats = Boat.order('Name, mooring_num').includes(:memberships)
     valid_moored_boats = []
-    FasterCSV.generate(col_sep: "\t") do |tsv|
+    CSV.generate(col_sep: "\t") do |tsv|
       tsv << ['Name', 'Mooring#', 'Sail#', 'Mfg/Size', 'PHRF', 'Owner']
       boats.each do |b|
         phrf = b.PHRF == 0 ? '' : b.PHRF
