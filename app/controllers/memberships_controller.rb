@@ -1,7 +1,5 @@
-#require 'prawn'
-#require 'prawn/layout'
-#require 'prawn/measurement_extensions'
-#require 'iconv'
+require 'prawn'
+require 'prawn/measurement_extensions'
 
 class MembershipsController < ApplicationController
 
@@ -23,7 +21,7 @@ class MembershipsController < ApplicationController
   end
 
   def new
-    @membership = Membership.new
+    @membership = Membership.newo
     @membership.application_date = Time.now
   end
 

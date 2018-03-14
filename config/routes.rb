@@ -31,6 +31,10 @@ Rails.application.routes.draw do
   end
 
   resources :memberships do
+    collection do
+      get :labels
+      post :download_labels
+    end
     member do
       get :wl
       post :wladd
