@@ -21,7 +21,7 @@ class MembershipsController < ApplicationController
   end
 
   def new
-    @membership = Membership.newo
+    @membership = Membership.new
     @membership.application_date = Time.now
   end
 

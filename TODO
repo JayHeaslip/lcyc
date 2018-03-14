@@ -1,4 +1,4 @@
-add sort colums to membership index
+membership validation
 remove =>
 add updated_by field
 reveiw person model (compare to production version)
