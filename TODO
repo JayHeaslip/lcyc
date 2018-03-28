@@ -1,7 +1,8 @@
 membership validation
 remove =>
 add updated_by field
-reveiw person model (compare to production version)
+review person model (compare to production version)
+fix mooring (make it a mooring table, instead of a membership field)
 
 clean up log messages
 clean up database (resigned members, etc.)

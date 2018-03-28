@@ -1,10 +1,13 @@
 member1:
   MailingName: 'Bob'
+  Status: 'Active'
 
 member2:
   MailingName: 'Jim'
+  Status: 'Active'
 
 member3:
   MailingName: 'John'
+  Status: 'Active'
 
   

@@ -21,7 +21,7 @@ class UsersController < ApplicationController
   end
 
   def new
-    flash[:notice] = "Please use the email that is in the LCYC database so you will be recognized"
+    flash[:notice] = "Please use the email that is in the LCYC log so you will be recognized"
     @user = User.new
   end
 
