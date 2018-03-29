@@ -90,6 +90,9 @@ class MembershipsController < ApplicationController
     if @membership.save
       flash[:notice] = 'Saved association.'
       redirect_to membership_path(@membership)
+    else
+      @boats = Boat.order(:Name) - @membership.boats
+      render :associate
     end
   end
 

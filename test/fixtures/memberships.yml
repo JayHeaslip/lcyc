@@ -1,13 +1,33 @@
 member1:
+  LastName: 'Smith'
   MailingName: 'Bob'
+  StreetAddress: '123 Main St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
   Status: 'Active'
+  MemberSince: 2001
 
 member2:
+  LastName: 'Smith'
   MailingName: 'Jim'
+  StreetAddress: '234 Main St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  Status: 'Active'
+  MemberSince: 2001
   Status: 'Active'
 
 member3:
+  LastName: 'Jones'
   MailingName: 'John'
+  StreetAddress: '567 Main St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  Status: 'Active'
+  MemberSince: 2001
   Status: 'Active'
 
   
