@@ -258,12 +258,10 @@ class MembershipsController < ApplicationController
   end
 
   def membership_params
-    logger.info "params:"
-    logger.info params
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
                                        :State, :Zip, :Country, :Status, :MemberSince, :mooring_num,
                                        people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),
-                                       boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy),)
+                                       boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy))
   end
   
 end
