@@ -32,6 +32,8 @@ Rails.application.routes.draw do
 
   resources :memberships do
     collection do
+      get :moorings
+      get :unassigned_moorings
       get :labels
       post :download_labels
       get :spreadsheets
@@ -42,6 +44,7 @@ Rails.application.routes.draw do
       post :wladd
       get :associate
       post :save_association
+      post :unassign
     end
     resources :people
     resources :boats
@@ -50,6 +53,25 @@ Rails.application.routes.draw do
   resources :people, only: [] do
     collection do
       get :committee
+    end
+  end
+
+  resources :boats do
+    member do
+      get :associate
+      post :save_association
+    end
+    resources :memberships do
+      member do
+        delete :rmboat
+      end
+    end
+  end
+    
+  resources :wait_list_entries, :except => [:show, :edit, :update] do
+    member do
+      get :assign
+      put :mooring_update
     end
   end
 

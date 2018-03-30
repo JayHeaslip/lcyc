@@ -1,5 +1,5 @@
 <table class="table table-sm">
-  <thead class="thead-dark">
+  <thead class="thead-light">
     <tr>
       <% if locals[:show_sort] %>
       <th><%= sortable "Name" %></th>
@@ -27,6 +27,11 @@
       <td><%= boat.Length %></td>
       <td><%= boat.Draft %></td>
       <td><%= boat.mooring_num %></td>
+      <td>
+	<span class="list-actions"><%= link_to 'Delete', boat,
+				       data: {confirm: 'Are you sure?'}, method: :delete %>
+	</span>
+      </td>
     </tr>
     <% end %>
   </tbody>
