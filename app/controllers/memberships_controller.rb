@@ -50,11 +50,11 @@ class MembershipsController < ApplicationController
   end
 
   def edit
-    @membership = Membership.includes(:people).find(params[:id])
+    @membership = Membership.includes(:people, :boats).find(params[:id])
   end
 
   def update
-    @membership = Membership.includes(:people).find(params[:id])
+    @membership = Membership.includes(:people, :boats).find(params[:id])
     @membership.attributes = membership_params
     if @membership.save
       flash[:notice] = 'Membership was successfully updated.'

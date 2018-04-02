@@ -23,11 +23,26 @@ class BoatsController < ApplicationController
     redirect_to @membership ? membership_path(@membership) : boats_path
   end
 
+  def associate
+    @boat = Boat.find(params[:id])
+    @memberships = Membership.active - @boat.memberships
+  end
+
+  def save_association
+    @boat = Boat.find(params[:id])
+    @boat.memberships << Membership.find(params[:boat][:memberships].to_i)
+    if @boat.save
+      redirect_to boat_path(@boat)
+    else
+      render :associate
+    end
+  end
+
   private
 
   def get_membership
     if params[:membership_id]  
-      @membership = Membership.find(params[:membership_id]) 
+      @membership = Membership.include(:boats).find(params[:membership_id]) 
       @authorized_memberships = [@membership]
     else
       @membership = nil

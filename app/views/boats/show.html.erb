@@ -1,0 +1,52 @@
+<div>
+  <h3>Boat</h3>
+  <hr>
+  <table class="table table-sm">
+    <tbody>
+      <tr>
+	<td><b>Name:</b></td><td><%= @boat.Name %></td>
+      </tr>
+      <tr>
+	<td><b>Mfg/Size:</b></td><td><%= @boat.Mfg_Size %></td>
+      </tr>
+      <tr>
+	<td><b>Length:</b></td><td><%= @boat.Length %></td>
+      </tr>
+      <tr>
+	<td><b>Draft:</b></td><td><%= @boat.Draft %></td>
+      </tr>
+      <tr>
+	<td><b>Mooring#:</b></td><td><%= @boat.mooring_num %></td>
+      </tr>
+    </tbody>
+  </table>
+  <p>
+    <%= link_to 'Edit Boat', edit_boat_path(@boat) %>
+  </p>
+  <% if not @boat.memberships.empty? %>
+  <h3>Memberships</h3>
+  <hr>
+  <table class="table table-sm">
+    <thead class="thead-light">
+      <tr>
+	<th>Last Name</th>
+	<th>Mailing Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for membership in @boat.memberships %>
+      <tr>
+	<td><%= membership.LastName %></td>
+	<td><%= membership.MailingName %></td>
+	<td class="list-actions">
+          <%= link_to "Remove Association", rmboat_boat_membership_path(@boat,membership), data: {confirm: "Are you sure?"}, method: :delete %>
+	</td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% end %>
+  <p>
+    <%= link_to 'Associate with a membership', associate_boat_path(@boat) %>
+  </p>
+</div>

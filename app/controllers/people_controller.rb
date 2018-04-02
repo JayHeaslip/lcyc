@@ -24,6 +24,14 @@ class PeopleController < ApplicationController
     end
   end
 
+  def destroy
+    @membership  = Membership.find(params[:membership_id])
+    @membership.people.find(params[:id]).destroy
+    logger.info params
+    flash[:notice] = 'Person was successfully deleted.'
+    redirect_to membership_path(params[:membership_id])
+  end
+
   private
 
   def get_membership
