@@ -71,7 +71,7 @@ Rails.application.routes.draw do
   resources :wait_list_entries, :except => [:show, :edit, :update] do
     member do
       get :assign
-      put :mooring_update
+      patch :mooring_update
     end
   end
 

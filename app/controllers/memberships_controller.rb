@@ -251,7 +251,7 @@ class MembershipsController < ApplicationController
   end 
 
   def filter_memberships(params)
-    @memberships = Membership.where(nil)
+    @memberships = Membership.all 
     @memberships = @memberships.since(params[:since], params[:operator]) if params[:since].present?
     @memberships = @memberships.lastname(params[:lastname]) if params[:lastname].present?
     @memberships = @memberships.status(params[:status]) if params[:status].present?

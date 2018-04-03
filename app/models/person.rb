@@ -4,12 +4,13 @@ class Person < ActiveRecord::Base
   belongs_to :membership, foreign_key: 'MembershipID', optional: true
   has_one :user
 
-  scope :active, -> { joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Honorary', 'Life', 'Senior')") }
-  scope :committee, ->(cmte) { where(:Committee1 => cmte) }
+  #postgres: column names with upper case need to be quoted
+  scope :active, -> { joins(:membership).where("memberships.Status IN ('Active', 'Associate', 'Honorary', 'Life', 'Senior')") }
+  scope :committee, ->(cmte) { where(Committee1: cmte) }
 
 
   def self.to_csv
-    people = Person.active.where("MemberType in ('Member', 'Partner')").order('memberships.LastName')
+    people = Person.active.where(MemberType: ['Member', 'Partner']).order('memberships.LastName')
     CSV.generate(:col_sep => ",") do |tsv|
       tsv << %w(FirstName LastName MemberLastName MailingName Status Comittee MemberSince)
       people.each do |p|

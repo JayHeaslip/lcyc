@@ -2,6 +2,9 @@ membership validation
 remove =>
 add updated_by field
 review person model (compare to production version)
+make sure ./cronjob runs ok
+add application data/active data to memebership form
+
 fix mooring (make it a mooring table, instead of a membership field)
 
 clean up log messages

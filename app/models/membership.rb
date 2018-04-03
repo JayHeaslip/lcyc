@@ -27,18 +27,18 @@ class Membership < ActiveRecord::Base
   validate :member_since, if: Proc.new {|m| m.Status != 'Accepted'}
 
   # all categories of membership
-  scope :members, -> { where("Status in('Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior')").order(:LastName) }
+  scope :members, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior']).order(:LastName) }
   # eligible for a mooring
-  scope :active, -> { where("Status in('Active', 'Life')").order(:LastName) }
+  scope :active, -> { where(Status: ['Active', 'Life']).order(:LastName) }
   # all membership except Inactive  
-  scope :all_active, -> { where("Status in('Active', 'Associate', 'Honorary', 'Life', 'Senior')").order(:LastName) }
+  scope :all_active, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
   # not on the email announce list
-  scope :no_email, -> { where("Status in('Active', 'Associate', 'Honorary', 'Life', 'Senior')").order(:LastName) }
+  scope :no_email, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
 
   #used for filtering
-  scope :lastname, -> (lastname) { where("LastName like ?", "#{lastname}%") }
-  scope :since, -> (membersince, operator) { where("MemberSince #{operator} ?", membersince) }
-  scope :status, -> (status) { where("Status IN (?)", status) }
+  scope :lastname, -> (lastname) { where('LastName like ?', "#{lastname}%") }
+  scope :since, -> (membersince, operator) { where('MemberSince #{operator} ?', membersince) }
+  scope :status, -> (status) { where('Status IN (?)', status) }
   
   def member_since
     # allow setting MemberSince to next year

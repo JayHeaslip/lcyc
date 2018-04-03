@@ -1,0 +1,17 @@
+<h2>Unassigned Moorings</h2>
+
+<p><b>Total : </b><%= @moorings.length %></p>
+<table class="table table-sm">
+  <thead class="thead-light">
+    <tr>
+      <th>Mooring #</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% for mooring in @moorings %>
+    <tr>
+      <td><%= mooring %></td>
+    </tr>
+    <% end %>
+    </tbody>
+</table>

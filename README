@@ -1,0 +1,4 @@
+postgres
+
+sudo -i -u postgres
+

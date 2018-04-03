@@ -3,8 +3,8 @@ admin:
 
 member:
   name: Member
-  rights: []
+  rights: [user_create, user_destroy]
 
 BOG:
   name: BOG
-  rights: []
+  rights: [user_create, user_destroy]

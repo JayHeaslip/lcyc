@@ -11,16 +11,16 @@ class PeopleController < ApplicationController
     if @person
       if request.post?
         @person.subscribe_general = false
-        if @person.save(:validate => false)
+        if @person.save(validate: false)
           flash[:notice] = "You have unsubscribed." 
-          redirect_to :controller => 'admin', :action => 'index'
+          redirect_to controller: 'admin', action: 'index'
         else
           flash[:notice] = "There was a problem unsubscribing."
         end
       end
     else
       flash[:notice] = "Email address not found."
-      redirect_to :controller => 'admin', :action => 'index'
+      redirect_to controller: 'admin', action: 'index'
     end
   end
 

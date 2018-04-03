@@ -1,0 +1,59 @@
+<h2>Mooring Wait List</h2>
+
+<p><b>Total : </b><%= @wait_list_entries.length %></p>
+
+<%= link_to 'New Entry', new_wait_list_entry_path %>
+<p>
+<table class="table table-sm">
+  <thead class="thead-light">
+    <tr>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Date</th>
+      <th>Home Phone</th>
+      <th>Work Phone</th>
+      <th>Cell Phone</th>
+      <th>Email Address</th>
+      <th>Mooring</th>
+      <th class="col-sm-left"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for wle in @wait_list_entries %>
+    <% m = wle.membership %>
+    <% p = wl_member(m) %>
+    <tr>
+      <td><%= link_to m.MailingName, membership_path(m) %></td>
+      <td><%= m.Status %></td>
+      <td class="text-nowrap"><%= waitlist_date(m) %></td>
+      <td class="text-nowrap"><%= p.HomePhone if p %></td>
+      <td class="text-nowrap"><%= p.WorkPhone if p %></td>
+      <td class="text-nowrap"><%= p.CellPhone if p %></td>
+      <td class="text-nowrap"><%= p.EmailAddress if p %></td>
+      <% if mooring_assigned?(m) %>
+      <td><%= m.mooring_num %></td>
+      <td class="text-nowrap">
+	<span class="list-actions">
+          <%= link_to 'Remove from list', wle,
+              data: {confirm:'Are you sure?'},
+              :method => :delete %>
+        </span>
+       </td>
+      <% else %>
+      <td>-</td>
+      <td class="text-nowrap">
+	<span class="list-actions">
+          <%= link_to "Assign", assign_wait_list_entry_path(wle) %>
+	  <br/>
+          <%= link_to 'Remove from list', wle,
+              data: {confirm: 'Are you sure?'},
+              :method => :delete %>
+        </span>
+      </td>
+      <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+<p class='note'>Note: Date is the application date for Accepted members and Active date for Active members</p> 
+
