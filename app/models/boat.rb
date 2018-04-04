@@ -1,6 +1,6 @@
 require 'csv'
 
-class Boat < ActiveRecord::Base
+class Boat < ApplicationRecord
 
   has_and_belongs_to_many :memberships
 

@@ -1,4 +1,4 @@
-class Memberstatus < ActiveRecord::Base
+class Memberstatus < ApplicationRecord
 
   self.table_name = 'memberstatus'
 

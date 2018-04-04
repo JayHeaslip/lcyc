@@ -1,6 +1,6 @@
 require 'csv'
 
-class Membership < ActiveRecord::Base
+class Membership < ApplicationRecord
 
   @@current_year = Time.now.year
   @@Dues = { 'Active': 850, 'Senior': 283, 'Inactive': 50, 'Associate': 425, 'Life': 0 }
@@ -106,9 +106,7 @@ class Membership < ActiveRecord::Base
       CSV.generate(col_sep: ",") do |tsv|
         tsv << %w(LastName MailingName Street City State Zip Country Status Mooring Email Dues Initiation MooringFee Total)
         for m in members
-          logger.info "Member: #{m.MailingName} #{m.Status}"
           dues = Membership.dues(m) || 0
-          logger.info "Member: #{m.MailingName} #{m.Status} dues: #{dues}"
           if first = m.people.where('MemberType = "Member"').first
             email = first.EmailAddress
           else
@@ -129,7 +127,7 @@ class Membership < ActiveRecord::Base
     if m
       [m.HomePhone, m.FirstName, m.WorkPhone, m.CellPhone, m.EmailAddress]
     else
-      logger.info "No member for #{self.id}"
+      logger.info "No member for #{self.id}, #{self.FirstName} #{self.LastName}"
       [nil, nil, nil, nil, nil]
     end
   end

@@ -47,6 +47,20 @@ $(document).on('turbolinks:load', function() {
 	return e.preventDefault();
     });
 
+    $('form').on('click', '.remove_attachment', function(e) {
+	$(this).prev('input[type=hidden]').val('1');
+	$(this).closest('div.attachment').hide();
+	return e.preventDefault();
+    });
+
+    $('form').on('click', '.add_attachment', function(e) {
+	var regexp, time;
+	time = new Date().getTime();
+	regexp = new RegExp($(this).data('id'), 'g');
+	$('.attachment_fields').append($(this).data('attachmentFields').replace(regexp, time));
+	return e.preventDefault();
+    });
+
     $("form").on('change', 'div#type_select select', function() {
 	var type = this.value;
 	if (type === 'Child') {

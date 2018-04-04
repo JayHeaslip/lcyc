@@ -1,4 +1,7 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'lcyc@members.lcyc.info'
-  layout 'mailer'
+  layout 'mailrobot'
+
+  default :from => 'No Reply <lcyc@members.lcyc.info>', :reply_to => 'lcyc@members.lcyc.info'
+  default :date => Proc.new { Time.now.localtime }
+
 end

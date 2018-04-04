@@ -1,21 +1,16 @@
 #needed for number_to_currency
 include ActionView::Helpers::NumberHelper
 
-class MailRobot < ActionMailer::Base
-
-  layout 'mailrobot'
-
-  default :from => 'No Reply <lcyc@members.lcyc.info>', :reply_to => 'lcyc@members.lcyc.info'
-  default :date => Proc.new { Time.now.localtime }
+class MailRobot < ApplicationMailer
 
   def confirmation_email(user, hash, host)
     @url = "#{host}confirm_email/#{hash}"
-    mail(:to => user.email, :subject => 'Confirm LCYC registration')
+    mail(to: user.email, subject: 'Confirm LCYC registration')
   end
 
   def newpw_email(user, host)
     @url = "#{host}rp/#{user.reset_password_code}"
-    mail(:to => user.email, :subject => 'Password reset for LCYC')
+    mail(to: user.email, subject: 'Password reset for LCYC')
   end
 
   def binnacle(email, filenames, binnacle_name, body)
@@ -23,7 +18,7 @@ class MailRobot < ActionMailer::Base
     filenames.each do |f|
       attachments[File.basename(f)] = File.read("#{Rails.root}/public/#{f}")
     end
-    mail(:to => email, :subject => "LCYC #{binnacle_name}")
+    mail(to: email, subject: "LCYC #{binnacle_name}")
   end
 
   def mailing(person, mailing, host)
@@ -34,11 +29,10 @@ class MailRobot < ActionMailer::Base
     filenames.each do |f|
       attachments[File.basename(f)] = File.read("#{Rails.root}/public/#{f}")
     end
-    #attachments[mailing.pdf_file_name] = File.read("#{Rails.root}/public#{mailing.pdf.url(:original,false)}") if mailing.pdf_file_name
-    mail(:to => person.EmailAddress,
-         :from => 'LCYC Announcements <lcyc@members.lcyc.info>',
-         :reply_to => mailing.replyto,
-         :subject => '[LCYC] ' + mailing.subject)
+    mail(to: person.EmailAddress,
+         from: 'LCYC Announcements <lcyc@members.lcyc.info>',
+         reply_to: mailing.replyto,
+         subject: '[LCYC] ' + mailing.subject)
   end
 
   def send_bills(email, replyto, mailingname, status, mooring, dues, fees, mooring_maint_fee, initiation)
@@ -51,15 +45,15 @@ class MailRobot < ActionMailer::Base
     @mooring_maint_fee = number_to_currency(mooring_maint_fee).rjust(10)
     @initiation = initiation
     @total = number_to_currency(dues + fees + mooring_maint_fee + initiation).rjust(10)
-    mail(:to => email,
-         :from => 'LCYC Announcements <lcyc@members.lcyc.info>',
-         :reply_to => replyto,
-         :subject => '[LCYC] ' + 'Annual Dues')
+    mail(to: email,
+         from: 'LCYC Announcements <lcyc@members.lcyc.info>',
+         reply_to: replyto,
+         subject: '[LCYC] ' + 'Annual Dues')
   end
 
   def dbbackup(backup)
     attachments["sqldump.sql.gz"] = File.read(backup)
-    mail(:to => 'lcycadmin@gmail.com', :subject => 'Database backup')
+    mail(to: 'lcycadmin@gmail.com', subject: 'Database backup')
   end
 
 end

@@ -1,3 +1,3 @@
-class MemberType < ActiveRecord::Base
+class MemberType < ApplicationRecord
   self.table_name = 'membertypes'
 end

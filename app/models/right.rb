@@ -1,4 +1,4 @@
-class Right < ActiveRecord::Base
+class Right < ApplicationRecord
 
   has_and_belongs_to_many :roles
   validates_presence_of :controller, :action, :name

@@ -1,0 +1,8 @@
+
+export GEM_HOME="$HOME/.gem"
+export GEM_PATH="$HOME/.gem:/usr/lib/ruby/gems/1.8"
+export PATH="$HOME/bin:$HOME/.gem/bin:$PATH"
+export RUBYLIB="$HOME/lib:$RUBYLIB"
+
+cd /home/odziozo/rails/lcyc/current
+bundle exec rake RAILS_ENV=production chores:daily

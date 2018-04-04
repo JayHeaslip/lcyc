@@ -172,7 +172,6 @@ class MembershipsController < ApplicationController
   end
 
   def sort_column
-    #logger.info "params[:sort] : #{params[:sort]}"
     Membership.column_names.include?(params[:sort]) ? params[:sort] : "LastName"
   end
   
@@ -181,7 +180,6 @@ class MembershipsController < ApplicationController
   end
   
   def sort_direction
-    #logger.info "params[:direction]: #{params[:direction]}"
     %w(asc desc).include?(params[:direction]) ? params[:direction] : "asc"
   end
 

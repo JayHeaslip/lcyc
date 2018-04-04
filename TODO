@@ -1,15 +1,30 @@
-membership validation
+Check these at each checkpoint:
+-------------------------------
+dos2unix
 remove =>
-review person model (compare to production version)
-make sure ./cronjob runs ok
-add application data/active data to memebership form
-add new/edit to waiting list
 clean up log messages
-clean up database (resigned members, etc.)
+
+TODO items
+------------------------------------------
+membership validation
+make sure ./cronjob runs ok
+add testing to complete coverage
+add testing on permission/authorization stuff
+check delayed job
+
+tasks
+------------------------------------------
+clean up database (resigned members, boats with no owners, etc.)
 
 
-non transparent updates
+non-transparent updates
 -------------------------------------------------------------------
 fix mooring (make it a mooring table, instead of a membership field)
 add updated_by field
+remove unused fiels in attachment table
 
+Done
+----------------------------------------------------------------------\
+review person model (compare to production version)
+add application data/active data to memebership form
+add new/edit to waiting list

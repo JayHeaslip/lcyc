@@ -76,4 +76,15 @@ Rails.application.routes.draw do
   end
 
 
+  resources :mailings do
+    get :billing, on: :collection
+    post :send_bills, on: :collection
+    member do
+      put :send_email
+      post :send_email
+    end
+  end
+  
+  resources :preview, :only => [:show]
+
 end

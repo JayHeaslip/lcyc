@@ -1,24 +1,28 @@
-<div class="lcyc-form">
-<p><label>Committee:</label><%=h @mailing.committee %>
-<p><label>Subject:</label><%=h @mailing.subject %>
-<p><label>Reply To:</label><%=h @mailing.replyto %>
-<p><label>Body</label>
-<% if @mailing.html %>
-  <iframe src="/preview/<%= @mailing.id %>" height="600" width="650"> 
-  </iframe>
-<% else %>
+<div>
+  <p><label>Committee: </label><%=h @mailing.committee %></p>
+  <p><label>Subject: </label><%=h @mailing.subject %></p>
+  <p><label>Reply To: </label><%=h @mailing.replyto %></p>
+  <% if @mailing.html %>
+  <iframe src="/preview/<%= @mailing.id %>" height="600" width="650"></iframe>
+  <% else %>
   <%= content_tag(:p, h(@mailing.body)) %>
-<% end %>
+  <% end %>
 
-<%- @mailing.attachments.each do |a| %>
-<p><label>PDF:</label> <%= link_to(a.pdf_file_name, a.pdf.url) %>
-</p>
-<%- end %>    
-<br/>
-<br/>
-<p>
+  <h4>Attachments</h4>
+  <% @mailing.attachments.each do |a| %>
+  <p><label>Filename: </label><%= link_to(a.pdf_file_name, a.pdf.url) %></p>
+  <% end %>    
+  <br/>
+  <br/>
+  
   <%= form_tag send_email_mailing_path(@mailing) do %>
-     <p><label>Test?</label><%= check_box_tag :test, :test, @test %>
-     <p><button type='submit'>Email</button> | <%= link_to 'Edit', edit_mailing_path(@mailing) %> | <%= link_to "Index", mailings_path %>
- <% end %>
-</div>
+  <div class="form-row form-check mr-4 pb-2">
+    <%= check_box_tag :test, :test, @test, class: "form-check-input" %>
+    <label for="test" class="form-check-label">Test?</label>
+  </div>
+  <div class="form-group row mt-3">
+    <div class="col-sm-3">
+      <button type="submit" class="btn btn-primary">Email</button> | <%= link_to 'Edit', edit_mailing_path(@mailing) %> | <%= link_to "Mailings", mailings_path %>
+    </div>
+  </div
+    <% end %>

@@ -1,4 +1,4 @@
-class WaitListEntry < ActiveRecord::Base
+class WaitListEntry < ApplicationRecord
 
   belongs_to :membership
 

@@ -14,7 +14,7 @@ class WaitListEntriesController < ApplicationController
   end
 
   def create
-    @wait_list_entry = WaitListEntry.new(params[:wait_list_entry])
+    @wait_list_entry = WaitListEntry.new(wait_list_params)
     if @wait_list_entry.save
       flash[:notice] = 'Wait list entry was successfully created.'
       redirect_to wait_list_entries_path
@@ -58,6 +58,12 @@ class WaitListEntriesController < ApplicationController
       flash[:error] = 'Problem assigning mooring.'
       render :index
     end
+  end
+
+  private
+
+  def wait_list_params
+    params.require(:wait_list_entry).permit(:membership_id)
   end
 
 end
