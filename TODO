@@ -9,19 +9,29 @@ TODO items
 membership validation
 make sure ./cronjob runs ok
 add testing to complete coverage
-add testing on permission/authorization stuff
+add testing on permission/authorization stuff - current user, current membershipb
 check delayed job
 
 tasks
 ------------------------------------------
 clean up database (resigned members, boats with no owners, etc.)
 
+deploy
+-----------
+production secret key - env variable?
+staging - use diffferent database
+          use different directory
+git branches for staging/production
 
 non-transparent updates
 -------------------------------------------------------------------
 fix mooring (make it a mooring table, instead of a membership field)
 add updated_by field
-remove unused fiels in attachment table
+remove unused fields in attachment table
+add partner xref to spreadsheet generation
+
+
+
 
 Done
 ----------------------------------------------------------------------\

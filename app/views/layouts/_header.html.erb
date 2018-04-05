@@ -31,7 +31,10 @@
 	  <ul class="dropdown-menu">
             <li><%= link_to "Boats", boats_path %></li>
             <li><%= link_to "Moorings", moorings_memberships_path %></li>
+            <li class="dropdown-divider"></li>
             <li><%= link_to "Waiting List", wait_list_entries_path %></li>
+            <li><%= link_to "New Wait List Entry", new_wait_list_entry_path %></li>
+            <li class="dropdown-divider"></li>
             <li><%= link_to "Unassigned Moorings", unassigned_moorings_memberships_path %></li>
 	  </ul>
 	</li>
@@ -39,6 +42,8 @@
 	  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mailing Lists</a>
 	  <ul class="dropdown-menu">
             <li><%= link_to "General", mailings_path %></li>
+            <li><%= link_to "New Mailing", new_mailing_path %></li>
+            <li class="dropdown-divider"></li>
             <li><%= link_to "Bills", billing_mailings_path %></li>
 	  </ul>
 	</li>

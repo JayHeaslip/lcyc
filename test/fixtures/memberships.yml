@@ -30,4 +30,16 @@ member3:
   MemberSince: 2001
   Status: 'Active'
 
+member4:
+  LastName: 'Smith'
+  MailingName: 'Tom'
+  StreetAddress: '123 Maple St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  application_date: 02-03-2018
+  Status: 'Accepted'
+  MemberSince: 2001
+  
+  
   

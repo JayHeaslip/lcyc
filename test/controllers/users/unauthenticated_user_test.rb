@@ -56,6 +56,13 @@ class UsersControllerTest3 < ActionDispatch::IntegrationTest
     assert_equal flash[:success], 'User was successfully created.'
   end
   
+  test "should not create invalid user" do
+    @user = User.new
+    post users_url, params: {:user => {firstname: 'Tom', lastname: 'tom', email: 'tom@abc.com',
+                                       password: 'password', password_confirmation: 'passwor1'}}
+    assert_response :success
+  end
+  
   test "should show registration info" do
     get registration_info_user_url(@user)
     assert_response :success
@@ -66,7 +73,13 @@ class UsersControllerTest3 < ActionDispatch::IntegrationTest
     assert_redirected_to registration_info_user_url(@user)
   end
 
-  test "should confirm email" do
+  test "should confirm email, correct hash" do
+    get confirm_email_url(@user.confirmation_hash)
+    assert @user.email_confirmed = true
+    assert_redirected_to login_url
+  end
+
+  test "should confirm email, incorrect hash" do
     get confirm_email_url(@user.hash)
     assert @user.email_confirmed = true
     assert_redirected_to login_url
@@ -101,6 +114,12 @@ class UsersControllerTest3 < ActionDispatch::IntegrationTest
     put rp_url(@user2.reset_password_code), params: {user: {password: 'password',
                                                             password_confirmation: 'password'}}
     assert_redirected_to login_url
+  end
+
+  test "should reset password with incorrect parms" do
+    put rp_url(@user2.reset_password_code), params: {user: {password: 'password',
+                                                            password_confirmation: 'passwor1'}}
+    assert_response :success
   end
 
   test "should not reset password with expired hash" do

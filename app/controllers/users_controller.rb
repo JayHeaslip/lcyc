@@ -145,7 +145,6 @@ class UsersController < ApplicationController
         flash[:success] = "Your password has been updated."
         redirect_to login_path
       else
-        puts @user.errors.full_messages
         render
       end
     else # get request

@@ -8,7 +8,7 @@ class UsersControllerTest2 < ActionDispatch::IntegrationTest
     @update = {
       firstname: 'Jim',
       lastname:  'Dave',
-      email: 'bob1@abc.com',
+      email: 'bob@abc.com',
       password:  'password',
       password_confirmation:  'password'
     }
@@ -35,6 +35,12 @@ class UsersControllerTest2 < ActionDispatch::IntegrationTest
     assert_redirected_to user_path(@user)
   end
     
+  test "update invalid user" do
+    @update[:password_confirmation] = 'passwor1'
+    patch user_url(@user),params: { user: @update}
+    assert_response :success
+  end
+    
   test "edit current password" do
     get editpw_user_url(@user)
     assert_response :success
@@ -45,6 +51,21 @@ class UsersControllerTest2 < ActionDispatch::IntegrationTest
                                             password: 'password',
                                             password_confirmation: 'password' }
     assert_redirected_to root_url
+  end
+    
+  test "update current password incorrect old password" do
+    post updatepw_user_url(@user), params: { old_password: 'passwor3',
+                                            password: 'password',
+                                            password_confirmation: 'password' }
+    assert_response :success
+    assert_equal "Incorrect old password", flash.now[:error]
+  end
+
+  test "update current password invalid new password" do
+    post updatepw_user_url(@user), params: { old_password: 'passwor2',
+                                            password: 'password',
+                                            password_confirmation: 'passwor1' }
+    assert_response :success
   end
     
   test "should not delete an user" do

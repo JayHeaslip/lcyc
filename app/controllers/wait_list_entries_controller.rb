@@ -54,7 +54,7 @@ class WaitListEntriesController < ApplicationController
     else
       @wait_list_entries = WaitListEntry.includes(:membership).where("memberships.Status = 'Active'").order("memberships.active_date")
       wait_list_accepted = WaitListEntry.includes(:membership).where("memberships.Status = 'Accepted'").order("memberships.application_date")
-      @wait_list_entries = @wait_list_entries.concat(wait_list_accepted)
+      @wait_list_entries = @wait_list_entries.to_a.concat(wait_list_accepted)
       flash[:error] = 'Problem assigning mooring.'
       render :index
     end

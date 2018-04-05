@@ -11,6 +11,7 @@ gmailpw
 REVISION
 public/assets
 public/system
+coverage
 
 # Ignore bundler config.
 /.bundle

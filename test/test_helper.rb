@@ -13,7 +13,7 @@ SimpleCov.start do
   add_group 'Helpers', 'app/helpers'
   add_group 'Mailers', 'app/mailers'
   add_group 'Views', 'app/views'
-end
+end if ENV['COVERAGE']
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.

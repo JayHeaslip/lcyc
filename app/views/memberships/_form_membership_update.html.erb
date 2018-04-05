@@ -28,7 +28,6 @@
   <div class="form-group row col-sm-3">
     <label for="active_date" class="col-form-label pt-0">Active Date:</label>
     <div class="">
-      start_year: 1980, end_year: 1+Time.now.year
       <%= f.date_select :active_date, include_blank: true, order: [:month, :day, :year], start_year: 1980, end_year: 1+Time.now.year, class: 'form-control' %>
     </div>
   </div>

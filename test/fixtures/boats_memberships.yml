@@ -1,0 +1,4 @@
+1:
+  boat_id:  <%= ActiveRecord::FixtureSet.identify(:boat1) %>
+  membership_id:  <%= ActiveRecord::FixtureSet.identify(:member4) %>
+  
