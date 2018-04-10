@@ -6,6 +6,7 @@
 
 *~
 config/database.yml
+config/secrets.yml
 config/mail.yml
 gmailpw
 REVISION

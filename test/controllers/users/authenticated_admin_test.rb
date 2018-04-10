@@ -22,6 +22,11 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
     assert_response :success
   end
     
+  test "get index with roles" do
+    get role_users_url(roles(:BOG))
+    assert_response :success
+  end
+    
   test "list any user" do
     get user_url(@user)
     assert_response :success

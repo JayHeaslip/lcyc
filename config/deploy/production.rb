@@ -7,7 +7,7 @@
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-
+server 'members.lcyc.info', user: 'odziozo', roles: %w{app db web}
 
 # role-based syntax
 # ==================
@@ -31,6 +31,8 @@
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
+set :stage, 'production'
+set :branch, 'production'
 
 
 # Custom SSH Options
