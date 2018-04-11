@@ -3,6 +3,8 @@ Check these at each checkpoint:
 dos2unix
 remove =>
 clean up log messages
+capistrano bundler flags - do not do deployment
+
 
 TODO items
 ------------------------------------------
