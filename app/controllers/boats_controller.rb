@@ -23,6 +23,21 @@ class BoatsController < ApplicationController
     redirect_to @membership ? membership_path(@membership) : boats_path
   end
 
+  def edit
+    @boat = Boat.find(params[:id])
+  end
+
+  def update
+    @boat = Boat.find(params[:id])
+    @boat.attributes = boat_params
+    if @boat.save
+      flash[:notice] = "Successfully updated boat."
+      redirect_to boat_path(@boat)
+    else
+      render :edit
+    end
+  end
+
   def associate
     @boat = Boat.find(params[:id])
     @memberships = Membership.active - @boat.memberships
@@ -72,4 +87,11 @@ class BoatsController < ApplicationController
     %w(asc desc).include?(params[:direction]) ? params[:direction] : "asc"
   end
 
+  private
+
+  def boat_params
+    params.require(:boat).permit(:Mfg_Size, :Type, :Name, :Length,
+                                 :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring_num)
+  end
+  
 end
