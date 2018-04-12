@@ -41,3 +41,5 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 
 # install in system directory to simplify things
 set :bundle_flags, '--deployment --path=/home/odziozo/.rvm/gems/ruby-2.3.7@global'
+
+set :passenger_restart_with_touch, true
