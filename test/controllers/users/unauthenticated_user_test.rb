@@ -111,13 +111,13 @@ class UsersControllerTest3 < ActionDispatch::IntegrationTest
   end
 
   test "should reset password with correct hash" do
-    put rp_url(@user2.reset_password_code), params: {user: {password: 'password',
+    patch rp_url(@user2.reset_password_code), params: {user: {password: 'password',
                                                             password_confirmation: 'password'}}
     assert_redirected_to login_url
   end
 
-  test "should reset password with incorrect parms" do
-    put rp_url(@user2.reset_password_code), params: {user: {password: 'password',
+  test "should not reset password with incorrect parms" do
+    patch rp_url(@user2.reset_password_code), params: {user: {password: 'password',
                                                             password_confirmation: 'passwor1'}}
     assert_response :success
   end

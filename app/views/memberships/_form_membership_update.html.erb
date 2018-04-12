@@ -7,9 +7,15 @@
   </div>
   <div class="form-group row">
     <label for="Status" class="col-form-label pt-0 col-sm-4">Status:</label>
+    <% if current_user.roles?(%w(Admin Membership)) %>
     <div class="col-sm-2">
-      <%= f.collection_select :Status, Memberstatus.all, :Status, :Status, class: "form-control", disabled: read_only_not(['Admin', 'Membership']) %>
+      <%= f.collection_select :Status, Memberstatus.all, :Status, :Status, {}, {class: "form-control"} %>
     </div>
+    <% else %>
+    <div class="col-sm-2">
+      <%= @membership.Status %>
+    </div>
+    <% end %>
   </div>
   <div class="form-group col-sm-3">
     <span class="has-float-label">
@@ -18,6 +24,7 @@
     </span>
   </div>
 </div>
+<% if current_user.roles?(%w(Admin Membership)) %>
 <div class="form-row">
   <div class="form-group row col-sm-3">
     <label for="application_date" class="col-form-label pt-0">Application Date:</label>
@@ -46,3 +53,4 @@
     <label for="skip_mooring" class="form-check-label">Skip mooring fee?</label>
   </div>
 </div>
+<% end %>
