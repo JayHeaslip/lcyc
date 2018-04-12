@@ -137,7 +137,7 @@ class UsersController < ApplicationController
   #reset password
   def rp
     @user = User.find_by_reset_password_code(params[:hash])
-    if request.put?
+    if request.patch?
       @user.password = params[:user][:password]
       @user.password_confirmation = params[:user][:password_confirmation]
       @user.reset_password_code = nil

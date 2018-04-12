@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   
   match 'admin/login', via: [:get, :post], as: 'login'
-  match 'rp/:hash' => 'users#rp', via: [:get, :put], as: 'rp'
+  match 'rp/:hash' => 'users#rp', via: [:get, :patch], as: 'rp'
   get 'admin/logout'
   get 'confirm_email/:hash' => 'users#confirm_email', as: 'confirm_email'
   get 'unsubscribe/:hash' => 'people#unsubscribe', as: 'unsubscribe'
