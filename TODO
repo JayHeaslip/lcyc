@@ -1,9 +1,8 @@
 Check these at each checkpoint:
 -------------------------------
-dos2unix
+find_dos
 remove =>
 clean up log messages
-
 
 TODO items
 ------------------------------------------
@@ -40,3 +39,4 @@ capistrano bundler flags - do not do deployment
 production secret key - env variable?
 staging - use diffferent database
           use different directory
+shorten header(Lake Champlain Yacht Club-> LCYC) on mobile devices
