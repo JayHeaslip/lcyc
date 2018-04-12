@@ -3,7 +3,6 @@ Check these at each checkpoint:
 dos2unix
 remove =>
 clean up log messages
-capistrano bundler flags - do not do deployment
 
 
 TODO items
@@ -11,8 +10,9 @@ TODO items
 membership validation
 make sure ./cronjob runs ok
 add testing to complete coverage
-add testing on permission/authorization stuff - current user, current membershipb
+add testing on permission/authorization stuff - current user, current membership
 check delayed job
+update rights database, remove obsolete entries
 
 tasks
 ------------------------------------------
@@ -20,9 +20,6 @@ clean up database (resigned members, boats with no owners, etc.)
 
 deploy
 -----------
-production secret key - env variable?
-staging - use diffferent database
-          use different directory
 git branches for staging/production
 
 non-transparent updates
@@ -34,9 +31,12 @@ add partner xref to spreadsheet generation
 
 
 
-
 Done
-----------------------------------------------------------------------\
+----------------------------------------------------------------------
 review person model (compare to production version)
 add application data/active data to memebership form
 add new/edit to waiting list
+capistrano bundler flags - do not do deployment
+production secret key - env variable?
+staging - use diffferent database
+          use different directory

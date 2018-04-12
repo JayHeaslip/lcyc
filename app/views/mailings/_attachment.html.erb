@@ -1,7 +1,7 @@
 <div class="attachment">
   <div class="form-row pb-2">
     <% if f.object.new_record? %>
-    <%= f.file_field :pdf, :size => 60 %>
+    <%= f.file_field :pdf, size: 60 %>
     <% else %>
     <p><%= f.object.pdf_file_name %></p>
     <% end %>

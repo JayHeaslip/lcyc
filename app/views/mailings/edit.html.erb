@@ -1,7 +1,7 @@
 <h2>Edit Mailing</h2>
 
 <%= form_for @mailing, html: {multipart: true} do |f| %>
-<%= render :partial => "form", :locals => { :f => f } %>
+<%= render partial: "form", locals: { f: f } %>
 
 <h4>Attachments</h4>
 <hr>
