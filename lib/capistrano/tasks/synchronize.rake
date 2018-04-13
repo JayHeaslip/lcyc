@@ -11,6 +11,6 @@ namespace :deploy do
     end
   end
 
-  after 'deploy:finish', 'deploy:synchronize'
+  after 'deploy:finishing', 'deploy:synchronize'
   
 end
