@@ -35,7 +35,7 @@ class Right < ApplicationRecord
       # still exist in the controller itself
       self.where(['controller = ?', controller.controller_path]).each do |right_to_go|
         unless controller.public_instance_methods(false).include?(right_to_go.action.to_sym)
-          puts "removing from database: #{controller.controller_path}, #{right_to_go}"
+          puts "removing from database: #{controller.controller_path}, #{right_to_go.action}"
           right_to_go.destroy
         end
       end
