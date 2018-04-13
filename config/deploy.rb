@@ -44,5 +44,16 @@ set :bundle_flags, '--deployment --path=/home/odziozo/.rvm/gems/ruby-2.3.7@globa
 
 set :passenger_restart_with_touch, true
 
-after :finishing, :synchronize
+namespace :deploy do
+  after :finishing, :synchronize do
+    on primary fetch(:app) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          info "Executing synchronize"
+          execute :rake, :synchronize
+        end
+      end
+    end
+  end
+end
 

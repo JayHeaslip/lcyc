@@ -24,8 +24,6 @@ class Right < ApplicationRecord
     # Find the actions in each of the controllers, and add them to the database
     controllers.each do |controller|
       controller.public_instance_methods(false).each do |action|
-        puts controller.controller_path
-        puts action
         next if /return_to_main|component_update|component|^_/ =~ action
         if self.where("controller = ? AND action = ?", controller.controller_path, action).empty?
           puts "adding to database: #{controller.controller_path}, #{action}"
