@@ -43,3 +43,6 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 set :bundle_flags, '--deployment --path=/home/odziozo/.rvm/gems/ruby-2.3.7@global'
 
 set :passenger_restart_with_touch, true
+
+after :finishing, :synchronize
+

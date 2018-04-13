@@ -1,17 +1,12 @@
-Check these at each checkpoint:
--------------------------------
-find_dos
-remove =>
-clean up log messages
-
 TODO items
 ------------------------------------------
-membership validation
-make sure ./cronjob runs ok
+update rights database, remove obsolete entries
+check session expired message
+add partner xref to spreadsheet generation, for Log
+make sure ./cronjob runs ok, only need to run on production
 add testing to complete coverage
 add testing on permission/authorization stuff - current user, current membership
 check delayed job
-update rights database, remove obsolete entries
 
 tasks
 ------------------------------------------
@@ -19,14 +14,15 @@ clean up database (resigned members, boats with no owners, etc.)
 
 deploy
 -----------
-git branches for staging/production
+git branches for staging: master
+                 production: production  - modify .htaccess (PassengerAppEnv production)
+		      need to rebase before production deploy
 
 non-transparent updates
 -------------------------------------------------------------------
 fix mooring (make it a mooring table, instead of a membership field)
 add updated_by field
 remove unused fields in attachment table
-add partner xref to spreadsheet generation
 
 
 
@@ -40,3 +36,7 @@ production secret key - env variable?
 staging - use diffferent database
           use different directory
 shorten header(Lake Champlain Yacht Club-> LCYC) on mobile devices
+membership validation
+find_dos
+remove =>
+clean up log messages

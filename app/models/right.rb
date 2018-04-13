@@ -6,6 +6,10 @@ class Right < ApplicationRecord
 
   # Ensure that the table has one entry for each controller/action pair
   # this is intended to be run in the console whenever controllers are updated
+  
+  # RAILS_ENV=? bundle exec rails c
+  # Right.synchronize_with_controllers
+  
   def self.synchronize_with_controllers
     # Load all the controller files (except application)
     controller_files = Dir[Rails.root.to_s + "/app/controllers/*_controller.rb"].reject {|e| e =~ /\/application_controller.rb/}
@@ -24,6 +28,7 @@ class Right < ApplicationRecord
         puts action
         next if /return_to_main|component_update|component|^_/ =~ action
         if self.where("controller = ? AND action = ?", controller.controller_path, action).empty?
+          puts "adding to database: #{controller.controller_path}, #{action}"
           self.new(name: "#{controller}.#{action}", controller: controller.controller_path, action: action).save!
         end
       end
@@ -32,6 +37,7 @@ class Right < ApplicationRecord
       # still exist in the controller itself
       self.where(['controller = ?', controller.controller_path]).each do |right_to_go|
         unless controller.public_instance_methods(false).include?(right_to_go.action.to_sym)
+          puts "removing from database: #{controller.controller_path}, #{right_to_go}"
           right_to_go.destroy
         end
       end
