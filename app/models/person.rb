@@ -21,7 +21,9 @@ class Person < ApplicationRecord
   end
 
   def validate_committee?
-    self.MemberType != "Child" and %w(Active Senior).include?(self.membership.Status)
+    unless self.membership.nil?
+      self.MemberType != "Child" and %w(Active Senior).include?(self.membership.Status)
+    end
   end
 
   def <=>(other)

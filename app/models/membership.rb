@@ -24,6 +24,7 @@ class Membership < ApplicationRecord
   validates :Status, presence: true
   validates :mooring_num, allow_nil: true, inclusion: { in: (0..155) }
   validate :check_type, if: Proc.new {|m| !m.people.empty?}
+  validate :ensure_people, if: Proc.new {|m| m.people.empty?}
   validate :member_since, if: Proc.new {|m| m.Status != 'Accepted'}
 
   # all categories of membership
@@ -48,6 +49,10 @@ class Membership < ApplicationRecord
   def check_type
     errors.add :base, "There can be one and only one 'Member'" if self.count_type('Member') != 1
     errors.add :base, "There can be at most one 'Partner'" if self.count_type('Partner') > 1
+  end
+
+  def ensure_people
+    errors.add :base, "You must have a Member in the list of people"
   end
 
   def count_type(type)

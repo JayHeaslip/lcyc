@@ -8,11 +8,11 @@
   <div class="form-group row">
     <label for="Status" class="col-form-label pt-0 col-sm-4">Status:</label>
     <% if current_user.roles?(%w(Admin Membership)) %>
-    <div class="col-sm-2">
-      <%= f.collection_select :Status, Memberstatus.all, :Status, :Status, {}, {class: "form-control"} %>
+    <div class="col-sm-4">
+      <%= f.collection_select :Status, Memberstatus.all, :Status, :Status, class: "form-control" %>
     </div>
     <% else %>
-    <div class="col-sm-2">
+    <div class="col-sm-4">
       <%= @membership.Status %>
     </div>
     <% end %>
@@ -26,19 +26,19 @@
 </div>
 <% if current_user.roles?(%w(Admin Membership)) %>
 <div class="form-row">
-  <div class="form-group row col-sm-3">
+  <div class="form-group col-sm-3">
     <label for="application_date" class="col-form-label pt-0">Application Date:</label>
     <div class="">
       <%= f.date_select :application_date, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year-2, end_year: Time.now.year, class: 'form-control' %>
     </div>
   </div>
-  <div class="form-group row col-sm-3">
+  <div class="form-group col-sm-3">
     <label for="active_date" class="col-form-label pt-0">Active Date:</label>
     <div class="">
       <%= f.date_select :active_date, include_blank: true, order: [:month, :day, :year], start_year: 1980, end_year: 1+Time.now.year, class: 'form-control' %>
     </div>
   </div>
-  <div class="form-group row col-sm-2 mr-2">
+  <div class="form-group col-sm-2 mr-2">
     <span class="has-float-label">
       <%= f.text_field :initiation, id: "initiation", class: "form-control", placeholder: " " %>
       <label for="initiation">Initiation</label>
