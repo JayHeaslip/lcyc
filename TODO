@@ -1,8 +1,5 @@
 TODO items
 ------------------------------------------
-update rights database, remove obsolete entries
-check session expired message
-add partner xref to spreadsheet generation, for Log
 make sure ./cronjob runs ok, only need to run on production
 add testing to complete coverage
 add testing on permission/authorization stuff - current user, current membership
@@ -40,3 +37,6 @@ membership validation
 find_dos
 remove =>
 clean up log messages
+update rights database, remove obsolete entries
+check session expired message
+add partner xref to spreadsheet generation, for Log

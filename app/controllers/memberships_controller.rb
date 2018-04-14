@@ -137,7 +137,8 @@ class MembershipsController < ApplicationController
 
   def spreadsheets
     session[:breadcrumbs] = request.path
-    @spreadsheet_options = ["Billing", "Log Members", "Log Fleet", "Member Cards/Workday Checklist"]
+    @spreadsheet_options = ["Billing", "Log Members", "Log Fleet",
+                            "Log Partner Xref", "Member Cards/Workday Checklist"]
   end
 
   def download_spreadsheet

@@ -106,6 +106,18 @@ class Membership < ApplicationRecord
           tsv << info
         end
       end
+    when "Log Partner Xref" 
+      all = Membership.all_active.includes(:people)
+      CSV.generate(col_sep: "\t") do |tsv|
+        tsv << ["Partner", "",  "Member"]
+        for m in all
+          member = m.people.where(MemberType: 'Member').first
+          partner = m.people.where(MemberType: 'Partner').first
+          if partner && member.LastName != partner.LastName
+            tsv << ["#{partner.LastName}, #{partner.FirstName}", "see", "#{member.LastName}, #{member.FirstName}"]
+          end
+        end
+      end
     when "Billing"
       members = self.members.where('Status != "Honorary"').includes(:people)
       CSV.generate(col_sep: ",") do |tsv|
