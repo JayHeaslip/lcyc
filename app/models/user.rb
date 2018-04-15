@@ -64,7 +64,7 @@ class User < ApplicationRecord
 
   # These create and unset the fields required for remembering users between browser closes
   def remember_me
-    remember_me_for 4.weeks
+    remember_me_for 3.months
   end
 
   def remember_me_for(time)

@@ -1,11 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  # Timeout after inactivity of one hour.
-  MAX_SESSION_PERIOD = 3600
-  #MAX_SESSION_PERIOD = 10 # for testing
-
-  before_action :check_authentication, :check_authorization, :session_expiry, :breadcrumbs
+  before_action :check_authentication, :check_authorization, :breadcrumbs
 
   # used in views
   helper_method :logged_in?, :current_user
@@ -52,15 +48,6 @@ class ApplicationController < ActionController::Base
       redirect_to login_path
       false
     end
-  end
-
-  def session_expiry
-    if session[:expiry_time] and session[:expiry_time] < Time.now
-      reset_session
-      session[:expired] = true
-    end
-    session[:expiry_time] = MAX_SESSION_PERIOD.seconds.from_now
-    true
   end
 
   def check_authorization
