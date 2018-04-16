@@ -5,6 +5,59 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
   setup do
     admin = users(:one)
     login_as(admin, 'passwor1')
+    @mailing = mailings(:one)
+  end
+
+  test "index" do
+    get mailings_url
+    assert_response :success
+  end
+
+  test "show" do
+    get mailing_url(@mailing)
+    assert_response :success
+  end
+
+  test "new" do
+    get new_mailing_url
+    assert_response :success
+  end
+
+  test "create" do
+    post mailings_url, params: {mailing: {subject: 'test2' , body: 'test'}}
+    @mailing = Mailing.find_by_subject('test2')
+    assert_redirected_to mailing_url(@mailing)
+  end
+
+  test "create bad" do
+    post mailings_url, params: {mailing: {body: 'test'}}
+    assert_response :success
+  end
+
+  test "edit" do
+    get edit_mailing_url(@mailing)
+    assert_response :success
+  end
+
+  test "update" do
+    patch mailing_url(@mailing), params: {mailing: {subject: 'test3' , body: 'test'}}
+    @mailing = Mailing.find_by_subject('test3')
+    assert_redirected_to mailing_url(@mailing)
+  end
+
+  test "update bad" do
+    patch mailing_url(@mailing), params: {mailing: {subject: ' ', body: 'test22'}}
+    assert_response :success
+  end
+
+  test "delete" do
+    delete mailing_url(@mailing)
+    assert_redirected_to mailings_url
+  end
+
+  test "billings" do
+    get billing_mailings_url
+    assert_response :success
   end
 
   test "send bills" do
@@ -20,6 +73,12 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
   test "send bills no member email" do
     login_as(users(:barb2), 'passwor2')
     post send_bills_mailings_url, params: {test: true}
+    assert_redirected_to root_path
+  end
+
+  test "send bills no email" do
+    post send_bills_mailings_url
+    assert_equal 'Note: bill was not sent for Joe No email, no valid email<br/>',flash[:notice]
     assert_redirected_to root_path
   end
 

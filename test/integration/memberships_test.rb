@@ -12,7 +12,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   test "get_index" do
     get memberships_url
     assert_response :success
-    assert_select "fieldset + p", "Total : 6"
+    assert_select "fieldset + p", "Total : 7"
   end
 
   test "show_membership" do

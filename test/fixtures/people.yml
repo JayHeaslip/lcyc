@@ -67,4 +67,10 @@ jim2:
   FirstName: jim
   EmailAddress: jim2@abc.com
   MembershipID: <%= ActiveRecord::FixtureSet.identify(:paid) %>
+
+joe:  
+  MemberType: Member
+  LastName: dave
+  FirstName: joe
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:noemail) %>
   

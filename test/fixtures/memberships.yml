@@ -75,5 +75,16 @@ paid:
   MemberSince: 2001
   paid: true
   
+noemail:
+  LastName: 'Smith'
+  MailingName: 'Joe No email'
+  StreetAddress: '123 Maple St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  application_date: 02-03-2018
+  Status: 'Active'
+  MemberSince: 2001
+  
   
   
