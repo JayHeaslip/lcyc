@@ -10,7 +10,7 @@ class BoatsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "get_index" do
-    get "/boats"
+    get boats_url
     assert_response :success
   end
 

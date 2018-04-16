@@ -9,7 +9,7 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
     @update = {
       firstname: 'Jim',
       lastname:  'Bob',
-      email: 'bob@abc.com',
+      email: 'bob2@abc.com',
       password:  'password',
       password_confirmation:  'password'
     }

@@ -11,31 +11,31 @@ class RolesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "get_index" do
-    get "/roles"
+    get roles_url
     assert_response :success
     assert_select "h2", "Roles"
   end
 
   test "show_role" do
-    get "/roles/#{@role.id}"
+    get role_url(@role)
     assert_response :success
     assert_select "h2", "Rights for #{@role.name}"
   end
 
   test "display edit form" do
-    get "/roles/#{@role.id}/edit"
+    get edit_role_url(@role)
     assert_response :success
     assert_select "h2", "Rights Editor for #{@role.name}"
   end
 
   test "update role" do
-    patch "/roles/#{@role.id}", params: {right_ids: [@right.id] }
+    patch role_url(@role), params: {right_ids: [@right.id] }
     assert_redirected_to roles_url
     assert_equal flash[:notice], "#{@role.name} role was successfully updated."
   end
 
   test "delete role" do
-    delete "/roles/#{@role.id}"
+    delete role_url(@role)
     assert_redirected_to roles_url
     assert_equal flash[:notice], "Deleted #{@role.name} role."
   end

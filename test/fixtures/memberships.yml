@@ -41,5 +41,39 @@ member4:
   Status: 'Accepted'
   MemberSince: 2001
   
+member5:
+  LastName: 'Smith'
+  MailingName: 'Dave'
+  StreetAddress: '123 Maple St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  application_date: 02-03-2018
+  Status: 'Active'
+  MemberSince: 2001
+  
+no_member_email:
+  LastName: 'Smith'
+  MailingName: 'Dave'
+  StreetAddress: '123 Maple St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  application_date: 02-03-2018
+  Status: 'Active'
+  MemberSince: 2001
+  
+paid:
+  LastName: 'Smith'
+  MailingName: 'Dave'
+  StreetAddress: '123 Maple St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  application_date: 02-03-2018
+  Status: 'Active'
+  MemberSince: 2001
+  paid: true
+  
   
   

@@ -34,3 +34,37 @@ bill:
   EmailAddress: bill@abc.com
   MembershipID: <%= ActiveRecord::FixtureSet.identify(:member4) %>
   
+dave:  
+  MemberType: Member
+  LastName: dave
+  FirstName: dave
+  EmailAddress: dave@abc.com
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member5) %>
+  
+barb:  
+  MemberType: Partner
+  LastName: dave
+  FirstName: barb
+  EmailAddress: barb@abc.com
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member5) %>
+  
+dave2:  
+  MemberType: Member
+  LastName: dave
+  FirstName: dave
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:no_member_email) %>
+  
+barb2:  
+  MemberType: Partner
+  LastName: dave
+  FirstName: barb
+  EmailAddress: barb2@abc.com
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:no_member_email) %>
+  
+jim2:  
+  MemberType: Member
+  LastName: dave
+  FirstName: jim
+  EmailAddress: jim2@abc.com
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:paid) %>
+  

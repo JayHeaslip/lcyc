@@ -52,3 +52,13 @@ expired:
   roles: [member]
   person: jim
 
+barb2:  
+  firstname: barb
+  lastname: barb
+  email: barb2@abc.com
+  salt: salt
+  hashed_password: <%= User.encrypted_password('passwor2', 'salt') %>
+  email_confirmed: true
+  roles: [BOG, member]
+  person: barb2
+
