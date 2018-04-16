@@ -27,3 +27,10 @@ john:
   MembershipID: <%= ActiveRecord::FixtureSet.identify(:member3) %>
 
   
+bill:  
+  MemberType: Member
+  LastName: bil
+  FirstName: bill
+  EmailAddress: bill@abc.com
+  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member4) %>
+  
