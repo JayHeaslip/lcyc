@@ -93,7 +93,7 @@ class MailingsController < ApplicationController
       else
         if Rails.env == 'development'
           MailRobot.send_bills(email, replyto,
-                               m.MailingName, m.Status, m.mooring_num, dues, fees, initiation).deliver
+                               m.MailingName, m.Status, m.mooring_num, dues, fees, mooring_maint_fee, initiation).deliver
         else
           MailRobot.delay(run_at: i.minutes.from_now).send_bills(email, replyto,
                                                                     m.MailingName, m.Status, m.mooring_num, dues, fees, mooring_maint_fee, initiation)
@@ -114,18 +114,27 @@ class MailingsController < ApplicationController
     people.each {|e| logger.info "General email: #{e.EmailAddress}" }
     if params[:test]
       p = Person.find_by_EmailAddress(current_user.email)
-      people = [p]   #,p2]*120
-      people.each do |p|
-         logger.info "Test email address: #{p.EmailAddress}"
+      if p.nil?
+        flash[:error] = "Current user's email not found in membership database"
+        people = []
+        redirect_to mailings_path
+      else
+        people = [p]   #,p2]*120
+        people.each do |p|
+          logger.info "Test email address: #{p.EmailAddress}"
+        end
       end
     else
       @mailing.sent_at = Time.now
       @mailing.save
     end
-    people.map! {|p| p.id} 
-    self.deliver_mail(people, params[:id].to_i, host)
-    flash[:notice] = "Delivering mail."
-    redirect_to mailings_path
+
+    unless people.empty?
+      people.map! {|p| p.id} 
+      self.deliver_mail(people, params[:id].to_i, host)
+      flash[:notice] = "Delivering mail."
+      redirect_to mailings_path
+    end
   end
 
   def deliver_mail(people, mailing, host)

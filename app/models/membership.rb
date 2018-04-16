@@ -86,8 +86,8 @@ class Membership < ApplicationRecord
     club_moorings - membership_moorings
   end
 
-  def self.dues(membership)
-    @@Dues[membership.Status.to_sym] || 0
+  def self.dues(status)
+    @@Dues[status.to_sym] || 0
   end
     
   def self.to_csv(type)

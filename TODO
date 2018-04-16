@@ -17,6 +17,7 @@ git branches for staging: master
 
 non-transparent updates
 -------------------------------------------------------------------
+add a fees table to be used in generating bills (active dues, senior dues, mooring fee, etc.)
 fix mooring (make it a mooring table, instead of a membership field)
 add updated_by field
 remove unused fields in attachment table
