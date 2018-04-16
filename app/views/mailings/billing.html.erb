@@ -1,7 +1,12 @@
-<div class="lcyc-form">
-  <p>
-    <%= form_tag send_bills_mailings_path do %>
-      <p><label>Test?</label><%= check_box_tag :test, :test, @test %>
-      <p><button type='submit'>Send out bills</button>
-    <% end %>
+<h2>Send out bills</h2>
+<%= form_tag send_bills_mailings_path do %>
+<div class="form-row form-check mr-4 pb-2">
+  <%= check_box_tag :test, :test, @test, class: "form-check-input" %>
+  <label for="html" class="form-check-label">Test?</label>
 </div>
+<div class="form-group row mt-3">
+  <div class="col-sm-3">
+    <button type="submit" class="btn btn-primary">Send out bills</button>
+  </div>
+</div>
+<% end %>

@@ -13,14 +13,6 @@ class MailRobot < ApplicationMailer
     mail(to: user.email, subject: 'Password reset for LCYC')
   end
 
-  def binnacle(email, filenames, binnacle_name, body)
-    @content = body
-    filenames.each do |f|
-      attachments[File.basename(f)] = File.read("#{Rails.root}/public/#{f}")
-    end
-    mail(to: email, subject: "LCYC #{binnacle_name}")
-  end
-
   def mailing(person, mailing, host)
     mailing = Mailing.find(mailing)
     @content = mailing.body
