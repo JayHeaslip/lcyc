@@ -70,7 +70,7 @@ class MailingsController < ApplicationController
 
     members.each_with_index do |m, i|
       logger.info "Generating bill for #{m.MailingName}"
-      dues = Membership.dues(m.Status)
+      dues = Membership.dues(m)
       mooring_maint_fee = fees = 0
       fees = 80 if (m.mooring_num && m.mooring_num != "" && !m.skip_mooring)
       mooring_maint_fee = 120 if (m.mooring_num && m.mooring_num != "" && !m.skip_mooring)

@@ -1,7 +1,7 @@
 member1:
   LastName: 'Smith'
-  MailingName: 'Bob'
-  StreetAddress: '123 Main St'
+  MailingName: 'Very Long Mailing Name & another long mailing name part'
+  StreetAddress: '123 Real long street name that forever, PO Box 100'
   City: 'Shelburne'
   State: 'VT'
   Zip: 05482

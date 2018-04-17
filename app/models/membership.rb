@@ -69,8 +69,8 @@ class Membership < ApplicationRecord
   end
 
   def self.mail_hardcopy
-    email_memberships = Person.members.where('subscribe_general is true and EmailAddress is not null and EmailAddress != ""').group(:MembershipID).map{|p| p.membership}
-    mail_memberships = Person.members.where('subscribe_general is false or EmailAddress is null or EmailAddress = ""').group(:MembershipID).map{|p| p.membership}
+    email_memberships = Person.members.where('subscribe_general is true and EmailAddress is not null and EmailAddress != ""').map{|p| p.membership}.uniq
+    mail_memberships = Person.members.where('subscribe_general is false or EmailAddress is null or EmailAddress = ""').map{|p| p.membership}.uniq
     mail_memberships - email_memberships # remove memberships who get an email
   end
 
@@ -86,8 +86,8 @@ class Membership < ApplicationRecord
     club_moorings - membership_moorings
   end
 
-  def self.dues(status)
-    @@Dues[status.to_sym] || 0
+  def self.dues(m)
+    @@Dues[m.Status] || 0
   end
     
   def self.to_csv(type)
