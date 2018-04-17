@@ -4,6 +4,7 @@ make sure ./cronjob runs ok, only need to run on production
 add testing to complete coverage
 add testing on permission/authorization stuff - current user, current membership
 check delayed job
+check message for duplicate user email
 
 tasks
 ------------------------------------------
