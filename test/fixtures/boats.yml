@@ -2,3 +2,11 @@ boat1:
   Mfg_Size: 'J29'
   Name: "Hello"
   
+boat2:
+  Mfg_Size: 'J80'
+  Name: "Hello2"
+
+boat3:
+  Mfg_Size: 'J120'
+  Name: "Hello3"
+  

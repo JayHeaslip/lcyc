@@ -1,11 +1,16 @@
 user_create:
   name: UsersController.create
-  controller: Users
+  controller: users
   action: create
 
 user_destroy:
   name: UsersController.destroy
-  controller: Users
+  controller: users
   action: destroy
 
+boat_update:
+  name: BoatsController.create
+  controller: boats
+  action: update
+  
   

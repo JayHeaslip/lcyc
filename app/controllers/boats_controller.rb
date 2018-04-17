@@ -57,7 +57,7 @@ class BoatsController < ApplicationController
 
   def get_membership
     if params[:membership_id]  
-      @membership = Membership.include(:boats).find(params[:membership_id]) 
+      @membership = Membership.includes(:boats).find(params[:membership_id])
       @authorized_memberships = [@membership]
     else
       @membership = nil
@@ -86,8 +86,6 @@ class BoatsController < ApplicationController
   def sort_direction
     %w(asc desc).include?(params[:direction]) ? params[:direction] : "asc"
   end
-
-  private
 
   def boat_params
     params.require(:boat).permit(:Mfg_Size, :Type, :Name, :Length,

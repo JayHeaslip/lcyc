@@ -4,6 +4,7 @@ class UsersControllerTest3 < ActionDispatch::IntegrationTest
 
   def setup
     @user = users(:three)
+    @unconfirmed = users(:not_confirmed)
     @user2 = users(:four)
     @update = {
       firstname: 'Jim',
@@ -91,8 +92,9 @@ class UsersControllerTest3 < ActionDispatch::IntegrationTest
   end
 
   test "should redirect from password form if not confirmed" do
-    post forgotpw_users_url, params: {user: {email: 'jim@abc.com'}}
-    assert_redirected_to registration_info_user_url(@user)
+    post forgotpw_users_url, params: {user: {email: 'unconfirmed@abc.com'}}
+    assert_redirected_to registration_info_user_url(@unconfirmed)
+    assert_equal flash[:success], 'Please confirm your account before trying to reset your password.'
   end
 
   test "should send forgot password email" do

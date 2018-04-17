@@ -47,6 +47,12 @@ class WaitListEntriesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to wait_list_entries_url
   end
 
+  test "update mooring with boat" do
+    @wl2 = wait_list_entries(:wl2)
+    patch mooring_update_wait_list_entry_url(@wl2), params: {mooring: 100}
+    assert_redirected_to wait_list_entries_url
+  end
+
   test "update bad mooring" do
     patch mooring_update_wait_list_entry_url(@wl), params: {mooring: 200}
     assert_response :success

@@ -21,7 +21,7 @@ member2:
 
 member3:
   LastName: 'Jones'
-  MailingName: 'John'
+  MailingName: 'John with boat'
   StreetAddress: '567 Main St'
   City: 'Shelburne'
   State: 'VT'

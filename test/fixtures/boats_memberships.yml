@@ -1,4 +1,10 @@
 1:
   boat_id:  <%= ActiveRecord::FixtureSet.identify(:boat1) %>
-  membership_id:  <%= ActiveRecord::FixtureSet.identify(:member4) %>
+  membership_id:  <%= ActiveRecord::FixtureSet.identify(:member3) %>
+2:
+  boat_id:  <%= ActiveRecord::FixtureSet.identify(:boat2) %>
+  membership_id:  <%= ActiveRecord::FixtureSet.identify(:member1) %>
+3:
+  boat_id:  <%= ActiveRecord::FixtureSet.identify(:boat3) %>
+  membership_id:  <%= ActiveRecord::FixtureSet.identify(:member2) %>
   

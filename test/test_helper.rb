@@ -27,7 +27,7 @@ class ActionDispatch::IntegrationTest
   end
 
   def logout
-    delete logout_url
+    get admin_logout_url
   end
 
 end
