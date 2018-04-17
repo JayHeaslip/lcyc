@@ -43,6 +43,7 @@ class MailingsController < ApplicationController
       flash[:notice] = "Success."
       redirect_to mailing_path(@mailing)
     else
+      @committees = ['All'].concat(Committee.names)
       render :edit
     end
   end
@@ -91,7 +92,7 @@ class MailingsController < ApplicationController
       elsif m.paid
         logger.info "#{m.MailingName} was marked as paid"
       else
-        if Rails.env == 'development'
+        if Rails.env == 'development' || Rails.env == 'staging'
           MailRobot.send_bills(email, replyto,
                                m.MailingName, m.Status, m.mooring_num, dues, fees, mooring_maint_fee, initiation).deliver
         else
@@ -120,17 +121,15 @@ class MailingsController < ApplicationController
         redirect_to mailings_path
       else
         people = [p]   #,p2]*120
-        people.each do |p|
-          logger.info "Test email address: #{p.EmailAddress}"
-        end
+        logger.info "Test email address: #{p.EmailAddress}"
       end
-    else
-      @mailing.sent_at = Time.now
-      @mailing.save
     end
 
+    @mailing.sent_at = Time.now
+    @mailing.save
+    
     unless people.empty?
-      people.map! {|p| p.id} 
+      people.to_a.map! {|p| p.id} 
       self.deliver_mail(people, params[:id].to_i, host)
       flash[:notice] = "Delivering mail."
       redirect_to mailings_path
@@ -145,7 +144,7 @@ class MailingsController < ApplicationController
         logger.info "   to : #{person.EmailAddress}"
         person.generate_email_hash if person.email_hash.nil?
 	#hr = (i/60)
-        if Rails.env == 'development'
+        if Rails.env == 'development' || Rails.env == 'staging'
           MailRobot.mailing(person, mailing, host).deliver
         else
           MailRobot.delay(run_at: i.minutes.from_now).mailing(person, mailing, host)

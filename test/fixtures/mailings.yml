@@ -1,4 +1,5 @@
 one:
   subject: test
   body:  test2
+  committee: 'All'
   

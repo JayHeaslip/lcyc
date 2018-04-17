@@ -62,3 +62,12 @@ barb2:
   roles: [BOG, member]
   person: barb2
 
+no_member_email:  
+  firstname: gary
+  lastname: barb
+  email: gary@abc.com
+  salt: salt
+  hashed_password: <%= User.encrypted_password('passwor2', 'salt') %>
+  email_confirmed: true
+  roles: [admin]
+
