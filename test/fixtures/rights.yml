@@ -18,4 +18,9 @@ membership_edit:
   controller: memberships
   action: edit
   
+person_destroy:
+  name: PeopleController.destroy
+  controller: people
+  action: destroy
+  
   

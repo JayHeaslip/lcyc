@@ -7,6 +7,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     login_as(admin, 'passwor1')
     @membership = memberships(:member1)
     @membership2 = memberships(:member2)
+    @membership3 = memberships(:member3)
     @boat = boats(:boat1)
     @boat2 = boats(:boat2)
   end
@@ -18,10 +19,10 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "show_membership" do
-    get membership_url(@membership)
+    get membership_url(@membership3)
     assert_response :success
     assert_select "tr td", "Mailing Name:"
-    assert_select "tr td+td", @membership.MailingName
+    assert_select "tr td+td", @membership3.MailingName
   end
 
   test "new" do
@@ -95,7 +96,10 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
                        State: 'VT',
                        Zip: '05401',
                        MemberSince: '1974',
-                       Status: 'Active'                       
+                       Status: 'Active',
+                       people_attributes: [{FirstName: 'Jill', LastName: 'Doe',
+                                             Committee1: 'Dock', MemberType: 'Partner'}]
+                       
                      }
                   }
     assert_redirected_to membership_url(@membership.id)

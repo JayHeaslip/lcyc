@@ -29,6 +29,12 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to mailing_url(@mailing)
   end
 
+  test "create with committee" do
+    post mailings_url, params: {mailing: {subject: 'test2' , body: 'test', committee: 'Boats'}}
+    @mailing = Mailing.find_by_subject('test2')
+    assert_redirected_to mailing_url(@mailing)
+  end
+
   test "create bad" do
     post mailings_url, params: {mailing: {body: 'test'}}
     assert_response :success
@@ -83,6 +89,13 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "send mailing" do
+    post send_email_mailing_url(@mailing)
+    assert_redirected_to mailings_url
+  end
+
+  test "send mailing with committee" do
+    @mailing.committee = 'Boats'
+    @mailing.save
     post send_email_mailing_url(@mailing)
     assert_redirected_to mailings_url
   end
