@@ -37,7 +37,7 @@ class MembershipTest < ApplicationSystemTestCase
     assert_text "Membership was successfully created."
     assert_text "Add John Doe to waiting list?"
     click_on "Yes"
-    take_screenshot
+    #take_screenshot
     assert_text "Membership"
     assert_text "1 Maple St"
     assert_text "john@abc.com"
