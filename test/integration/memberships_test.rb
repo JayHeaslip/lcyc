@@ -6,6 +6,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     admin = users(:one)
     login_as(admin, 'passwor1')
     @membership = memberships(:member1)
+    @membership2 = memberships(:member2)
     @boat = boats(:boat1)
     @boat2 = boats(:boat2)
   end
@@ -68,6 +69,20 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     get edit_membership_url(@membership)
     assert_response :success
     assert_select "h2", "Edit membership"
+  end
+
+  test "display member edit form" do
+    login_as(users(:three), 'passwor3')
+    get edit_membership_url(@membership2)
+    assert_response :success
+    assert_select "h2", "Edit membership"
+  end
+
+  test "display invalid member edit form" do
+    login_as(users(:three), 'passwor3')
+    get edit_membership_url(@membership)
+    assert_redirected_to root_path
+    assert_equal flash[:error], "You are not authorized to view the page you requested."
   end
 
   test "update membership" do

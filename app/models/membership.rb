@@ -3,7 +3,7 @@ require 'csv'
 class Membership < ApplicationRecord
 
   @@current_year = Time.now.year
-  @@Dues = { 'Active': 850, 'Senior': 283, 'Inactive': 50, 'Associate': 425, 'Life': 0 }
+  @@Dues = { Active: 850, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
 
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
   accepts_nested_attributes_for :people, allow_destroy: true,
@@ -87,7 +87,7 @@ class Membership < ApplicationRecord
   end
 
   def self.dues(m)
-    @@Dues[m.Status] || 0
+    @@Dues[m.Status.to_sym] || 0
   end
     
   def self.to_csv(type)

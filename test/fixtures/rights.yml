@@ -12,5 +12,10 @@ boat_update:
   name: BoatsController.create
   controller: boats
   action: update
+
+membership_edit:
+  name: MembershipsController.edit
+  controller: memberships
+  action: edit
   
   
