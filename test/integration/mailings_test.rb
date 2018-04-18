@@ -67,7 +67,13 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "send bills" do
-    post send_bills_mailings_url
+    assert_difference 'ActionMailer::Base.deliveries.size', +5 do
+      post send_bills_mailings_url
+    end
+
+    bill = ActionMailer::Base.deliveries.last
+    assert_equal '[LCYC] Annual Dues', bill.subject
+    
     assert_redirected_to root_path
   end
 
