@@ -59,9 +59,10 @@ class Membership < ApplicationRecord
     self.people.inject(0) { |cnt, p| cnt + (p.MemberType == type ? 1 : 0) }
   end
 
-  def member
-    %w(Active Associate Honorary Inactive Life Senior).include?(self.Status)
-  end
+  # not used?
+  #def member
+  #  %w(Active Associate Honorary Inactive Life Senior).include?(self.Status)
+  #end
 
   def self.binnacle_hardcopy
     m = Membership.members.joins(:people)
@@ -124,8 +125,9 @@ class Membership < ApplicationRecord
         tsv << %w(LastName MailingName Street City State Zip Country Status Mooring Email Dues Initiation MooringFee Total)
         for m in members
           dues = Membership.dues(m) || 0
-          if first = m.people.where('MemberType = "Member"').first
-            email = first.EmailAddress
+          member = m.people.where('MemberType = "Member"').first
+          if member 
+            email = member.EmailAddress
           else
 	    email = ''
           end

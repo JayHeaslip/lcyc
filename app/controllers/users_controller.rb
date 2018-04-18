@@ -27,11 +27,16 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
+    @user.set_roles(current_user, params[:role_ids])
     @user.person = Person.find_by_EmailAddress(@user.email)
     if @user.save
       flash[:success] = 'User was successfully created.'
-      MailRobot.confirmation_email(@user, @user.get_confirmation_hash, host).deliver
-      redirect_to registration_info_user_path(@user)
+      if @user.email_confirmed
+        redirect_to users_path
+      else
+        MailRobot.confirmation_email(@user, @user.get_confirmation_hash, host).deliver
+        redirect_to registration_info_user_path(@user)
+      end
     else
       render :new
     end
@@ -180,7 +185,9 @@ class UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:firstname, :lastname, :email,
-                                 :password, :password_confirmation)
+    permitted = [:firstname, :lastname, :email, :password, :password_confirmation]
+    permitted << :email_confirmed if current_user && current_user.role?('Admin')
+    params.require(:user).permit(permitted)
   end
+  
 end

@@ -50,14 +50,14 @@ billy:
   MemberType: Child
   LastName: john
   FirstName: billy
-  BirthYear: 1990
+  BirthYear: 2010
   MembershipID: <%= ActiveRecord::FixtureSet.identify(:member3) %>
 
 bobby:  
   MemberType: Child
   LastName: john
   FirstName: bobby
-  BirthYear: 1985
+  BirthYear: 2011
   MembershipID: <%= ActiveRecord::FixtureSet.identify(:member3) %>
 
   
@@ -80,7 +80,7 @@ dave:
   
 barb:  
   MemberType: Partner
-  LastName: dave
+  LastName: dave2
   FirstName: barb
   EmailAddress: barb@abc.com
   MembershipID: <%= ActiveRecord::FixtureSet.identify(:member5) %>

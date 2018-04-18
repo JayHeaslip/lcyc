@@ -45,6 +45,12 @@
 </div>
 <% end %>
 <% if current_user && current_user.role?('Admin') %>
+<div class="form-group offset-sm-2 row">
+  <div class="form-check mr-4 col-sm-10">
+    <%= f.check_box :email_confirmed, class: "form-check-input" %>
+    <label for="email_confirmed" class="form-check-label">Confirm Email?</label>
+  </div>
+</div>
 <div class="form-group row">
   <label class="col-form-label col-sm-2 pt-0">Role</label>
   <div class="col-sm-10">

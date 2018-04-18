@@ -66,6 +66,28 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h2", "New membership"
   end
 
+  test "create with rejected boat " do
+    post memberships_url, params: {membership:
+                                     {LastName: "Doe_unique",
+                                      MailingName: "Doe",
+                                      StreetAddress: "123 Oak St",
+                                      City: "Burlington",
+                                      State: "VT",
+                                      Zip: '05401',
+                                      MemberSince: '2018',
+                                      Status: 'Active',
+                                      people_attributes: [{FirstName: 'John', LastName: 'Doe',
+                                                           Committee1: 'Boats', MemberType: 'Member'}],
+                                      boat_attributes: [{Name: 'Testing', Mfg_Size: '', Type: 'Sail'}]
+                                       
+                                     }
+                                  }
+
+    @m = Membership.find_by_LastName('Doe_unique')
+    assert_redirected_to wl_membership_url(@m)
+    assert_equal flash[:notice], 'Membership was successfully created.'
+  end
+  
   test "display edit form" do
     get edit_membership_url(@membership)
     assert_response :success

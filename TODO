@@ -7,10 +7,12 @@ check delayed job
 check message for duplicate user email when creating new account
 test unsubscribe function
 make committe/person a has relationship
+allow admin user email to be non-member?
+
 
 tasks
 ------------------------------------------
-clean up database (resigned members, boats with no owners, etc.)
+clean up database (resigned members, boats with no owners, etc., users that are no longer members)
 
 deploy
 -----------

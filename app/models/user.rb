@@ -53,7 +53,7 @@ class User < ApplicationRecord
     if current_user and current_user.role?('Admin')
       self.role_ids = role_ids
     else
-      self.roles << Person.determine_role(self.email)
+      self.roles << Role.find_by_name('Member')
       self.person = Person.find_by_EmailAddress(self.email)
     end
   end

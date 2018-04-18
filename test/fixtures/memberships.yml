@@ -29,6 +29,7 @@ member3:
   Status: 'Active'
   MemberSince: 2001
   Status: 'Active'
+  mooring_num: 100
 
 member4:
   LastName: 'Smith'

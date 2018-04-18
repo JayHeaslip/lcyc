@@ -11,7 +11,18 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
       lastname:  'Bob',
       email: 'bob2@abc.com',
       password:  'password',
-      password_confirmation:  'password'
+      password_confirmation:  'password',
+      email_confirmed: true
+    }
+
+    #exists in people but not in users
+    @new = {
+      firstname: 'Jim',
+      lastname:  'Bob',
+      email: 'jim2@abc.com',
+      password:  'password',
+      password_confirmation:  'password',
+      email_confirmed: true
     }
     @role_ids = [roles(:BOG).id, roles(:member).id]
     @BOG = roles(:BOG)
@@ -40,6 +51,17 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
   test "update an user" do
     patch user_url(@user),params: { user: @update, role_ids: @role_ids }
     assert_redirected_to users_url
+  end
+    
+  test "new user" do
+    get new_user_url
+    assert_response :success
+  end
+    
+  test "create an user" do
+    post users_url,params: { user: @new, role_ids: @role_ids }
+    assert_redirected_to users_url
+    assert_equal flash[:success],'User was successfully created.'
   end
     
   test "delete an user" do

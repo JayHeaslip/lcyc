@@ -40,6 +40,11 @@ class BoatsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to boat_url(@boat)
   end
   
+  test "update bad mooring" do
+    patch boat_url(@boat), params: {boat: {Name: 'new name', mooring_num: 99}}
+    assert_response :success
+  end
+  
   test "member update" do
     login_as(users(:three), 'passwor3')
     @boat = boats(:boat3)
