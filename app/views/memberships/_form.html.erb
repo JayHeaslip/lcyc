@@ -35,9 +35,12 @@
 
 <%= link_to_add_boat('Add boat', f, :boats, class: 'btn btn-primary') %>
 
-<div class="form-group row mt-3">
-  <div class="col-sm-3">
+<div class="form-group row mt-4">
+  <div class="mr-4">
     <button type="submit" class="btn btn-primary"><%= button %></button>
   </div>
+  <% if button == "Update Membership" %>
+  <p> | <%= link_to ' Show', membership_url(@membership) %></p>
+  <% end %>
 </div>
 <% end %>

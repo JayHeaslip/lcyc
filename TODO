@@ -1,13 +1,10 @@
 TODO items
 ------------------------------------------
 make sure ./cronjob runs ok, only need to run on production
-add testing to complete coverage
-add testing on permission/authorization stuff - current user, current membership
 check delayed job
 check message for duplicate user email when creating new account
 test unsubscribe function
-make committe/person a has relationship
-allow admin user email to be non-member?
+adding boat, check for duplicate?
 
 
 tasks
@@ -18,7 +15,7 @@ deploy
 -----------
 git branches for staging: master
                  production: production  - modify .htaccess (PassengerAppEnv production)
-		      need to rebase before production deploy
+                  need to rebase before production deploy
 
 non-transparent updates
 -------------------------------------------------------------------
@@ -26,6 +23,8 @@ add a fees table to be used in generating bills (active dues, senior dues, moori
 fix mooring (make it a mooring table, instead of a membership field)
 add updated_by field
 remove unused fields in attachment table
+make committe/person a has relationship
+allow admin user email to be non-member?
 
 
 
@@ -46,3 +45,7 @@ clean up log messages
 update rights database, remove obsolete entries
 check session expired message
 add partner xref to spreadsheet generation, for Log
+add testing to complete coverage
+add testing on permission/authorization stuff - current user, current membership
+fix width of first name in person form
+do not add committee when adding child
