@@ -8,7 +8,12 @@ class AdminController < ApplicationController
 
   def login
     self.current_user = nil
-    flash[:notice] = "Session expired, please login again" if !session[:user] && !flash[:success] && !flash[:error]
+    if !session[:user] && flash[:success].blank? && flash[:error].blank? 
+      flash[:notice] = "Session expired, please login again"
+    else
+      flash[:notice] = ''
+    end
+    
     if request.post?
       uri = session[:original_uri]
       self.current_user = User.authenticate(params[:email], params[:password])

@@ -167,7 +167,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @role.users.delete(@user)
     flash[:success] = "#{@user.firstname} #{@user.lastname} removed from #{@role.name}."
-    redirect_to roles_path
+    redirect_to role_users_path(@role)
   end
 
   private

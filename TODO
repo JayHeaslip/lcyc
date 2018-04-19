@@ -5,6 +5,7 @@ check delayed job
 check message for duplicate user email when creating new account
 test unsubscribe function
 adding boat, check for duplicate?
+create hierarchy of roles (Member, BOG, etc.)
 
 
 tasks

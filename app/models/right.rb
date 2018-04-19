@@ -17,10 +17,21 @@ class Right < ApplicationRecord
     # we need to load all the controllers...
     controllers = []
     controller_files.each do |file_name|
+      next if File.basename(file_name) == 'admin_controller.rb'
       require file_name
       controllers << extract_class_name(file_name)
     end
 
+    # look at all rights, delete ones that don't have a matching controller
+    controllers_str_array = controllers.map {|e| e.to_s}
+    self.all.each do |r|
+      controller = r.name.gsub(/\..*/,'')
+      unless controllers_str_array.include?(controller)
+        puts "removing #{r.name}"
+        r.destroy
+      end
+    end
+    
     # Find the actions in each of the controllers, and add them to the database
     controllers.each do |controller|
       controller.public_instance_methods(false).each do |action|

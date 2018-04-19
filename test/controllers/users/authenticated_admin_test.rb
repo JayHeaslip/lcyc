@@ -75,7 +75,7 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
     assert_difference('@BOG.users.count', -1) do
       delete rmrole_role_user_url(@BOG,@user)
     end
-    assert_redirected_to roles_url
+    assert_redirected_to role_users_url(@BOG)
   end
 
 end
