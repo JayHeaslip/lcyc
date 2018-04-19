@@ -37,10 +37,10 @@
 
 <div class="form-group row mt-4">
   <div class="mr-4">
-    <button type="submit" class="btn btn-primary"><%= button %></button>
+    <button type="submit" class="btn btn-primary"><%= button %></button> 
+    <% if button == "Update Membership" %>
+    | <%= link_to 'Back', membership_url(@membership) %>
+    <% end %>
   </div> 
-  <% if button == "Update Membership" %>
-  <p> |&nbsp;&nbsp;&nbsp;<%= link_to 'Back', membership_url(@membership) %></p>
-  <% end %>
 </div>
 <% end %>
