@@ -38,7 +38,7 @@ class Membership < ApplicationRecord
 
   #used for filtering
   scope :lastname, -> (lastname) { where('LastName like ?', "#{lastname}%") }
-  scope :since, -> (membersince, operator) { where('MemberSince #{operator} ?', membersince) }
+  scope :since, -> (membersince, operator) { where("MemberSince #{operator} ?", membersince) }
   scope :status, -> (status) { where('Status IN (?)', status) }
   
   def member_since
