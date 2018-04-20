@@ -15,5 +15,5 @@ RewriteRule ^(.*)$ dispatch.fcgi [QSA,L]
  
 ErrorDocument 500 "/500.html"
 
-PassengerAppEnv staging
+PassengerAppEnv production
 PassengerRuby /home/odziozo/.rvm/wrappers/ruby-2.3.7@global/ruby
