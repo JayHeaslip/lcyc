@@ -34,6 +34,7 @@ server 'members.lcyc.info', user: 'odziozo', roles: %w{app db web}
 set :stage, 'production'
 set :branch, 'production'
 
+#current directory defaults to current
 
 # Custom SSH Options
 # ==================
