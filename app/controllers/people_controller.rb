@@ -1,30 +1,11 @@
 class PeopleController < ApplicationController
 
-  skip_before_action :check_authentication, :only => [ :unsubscribe ]
-  skip_before_action :check_authorization,  :only => [ :unsubscribe ]
-  before_action :get_membership, :except => [:unsubscribe, :committee]
-  before_action :authorize, :except => [:committee, :unsubscribe]
+  before_action :get_membership, :except => [:committee]
+  before_action :authorize, :except => [:committee]
 
   def committee
     @committee = params[:committee] || 'Boats'
     @people = Person.active.committee(@committee).order(:LastName)
-  end
-
-  def unsubscribe
-    @person = Person.find_by_email_hash(params[:hash])
-    @hash = params[:hash]
-    if @person
-      @person.subscribe_general = false
-      if @person.save(validate: false)
-        flash[:notice] = "You have unsubscribed." 
-      else
-        flash[:notice] = "There was a problem unsubscribing."
-      end
-      redirect_to root_path
-    else
-      flash[:notice] = "Email address not found."
-      redirect_to root_path
-    end
   end
 
   def destroy

@@ -50,3 +50,4 @@ add testing to complete coverage
 add testing on permission/authorization stuff - current user, current membership
 fix width of first name in person form
 do not add committee when adding child
+add confirmation unsubscribe request

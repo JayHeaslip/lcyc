@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   match 'rp/:hash' => 'users#rp', via: [:get, :patch], as: 'rp'
   get 'admin/logout'
   get 'confirm_email/:hash' => 'users#confirm_email', as: 'confirm_email'
-  get 'unsubscribe/:hash' => 'people#unsubscribe', as: 'unsubscribe'
+
+  resources :unsubscribe, only: [:show, :update]
 
   resources :users do
     collection do
