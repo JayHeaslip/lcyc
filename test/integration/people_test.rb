@@ -24,7 +24,7 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "unsubscribe" do
-    get unsubscribe_url('2345')
+    patch unsubscribe_url('2345')
     assert_redirected_to root_url
     assert_equal flash[:notice], "You have unsubscribed."
   end
