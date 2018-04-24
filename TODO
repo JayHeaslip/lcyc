@@ -3,10 +3,8 @@ TODO items
 make sure ./cronjob runs ok, only need to run on production
 check delayed job
 check message for duplicate user email when creating new account
-test unsubscribe function
 adding boat, check for duplicate?
 create hierarchy of roles (Member, BOG, etc.)
-
 
 tasks
 ------------------------------------------
@@ -25,7 +23,6 @@ fix mooring (make it a mooring table, instead of a membership field)
 add updated_by field
 remove unused fields in attachment table
 make committe/person a has relationship
-allow admin user email to be non-member?
 
 
 
@@ -51,3 +48,5 @@ add testing on permission/authorization stuff - current user, current membership
 fix width of first name in person form
 do not add committee when adding child
 add confirmation unsubscribe request
+allow admin user email to be non-member
+test unsubscribe function
