@@ -1,4 +1,16 @@
 <%= form_for @boat do |f| %>
+<% if @boat.errors.any? %>
+<div id="error_explanation">
+  <h3><%= pluralize(@boat.errors.count, "error") %>
+    prohibited this boat from being saved:</h3>
+  
+  <ul>
+    <% @boat.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
 <div class="boat">
   <div class="form-row">
     <div class="form-group col-sm-3">
