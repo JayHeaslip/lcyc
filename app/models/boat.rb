@@ -15,45 +15,35 @@ class Boat < ApplicationRecord
   
   # make sure mooring assigned to boat belongs to one of the boat memberships
   def mooring
-    valid_moorings = self.memberships.map {|m| m.mooring_num}
-    if self.mooring_num and not valid_moorings.include?(self.mooring_num)
-      errors.add(:base, "Mooring does not belong to any of the boat owners")
-    end
+    errors.add(:base, "Mooring does not belong to any of the boat owners") if !valid_mooring?
   end
 
   def selection_string
-    if self.Name && self.Name != ''
-      name = self.Name
-    else 
-      name = "(no name)"
-    end
+    name = (self.Name && self.Name != '') ? self.Name : "(no name)"
     [name, self.Mfg_Size].join(" ")
   end
   
   def self.to_csv
     boats = Boat.order('Name, mooring_num').includes(:memberships)
-    valid_moored_boats = []
     CSV.generate(col_sep: "\t") do |tsv|
       tsv << ['Name', 'Mooring#', 'Sail#', 'Mfg/Size', 'PHRF', 'Owner']
       boats.each do |b|
         phrf = b.PHRF == 0 ? '' : b.PHRF
-        owners = []
-        found = false
-        b.memberships.each do |m|
-          #ensure that mooring # for boat is valid
-          #mooring # must belong to one of the owners
-          if m.mooring_num and not found and b.mooring_num == m.mooring_num
-            found = true
-            valid_moored_boats << b
-          end
-          owners << m.LastName
-        end
-        logger.info "boat not on owners mooring: #{b.Name}, #{b.Mfg_Size}" if not found
-        owners.sort!
-        owner_str = owners.join("/")
-        tsv << [b.Name, b.mooring_num, b.sail_num, b.Mfg_Size, phrf, owner_str]
+        owners = b.memberships.map {|e| e.LastName}.sort!
+        tsv << [b.Name, b.mooring_num, b.sail_num, b.Mfg_Size, phrf, owners.join("/")]
       end
     end
   end
 
+  private
+
+  def valid_mooring?
+    valid_moorings = self.memberships.map {|m| m.mooring_num}
+    if self.mooring_num and not valid_moorings.include?(self.mooring_num)
+      return false
+    else
+      return true
+    end
+  end
+  
 end
