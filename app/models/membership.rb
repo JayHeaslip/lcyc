@@ -95,7 +95,7 @@ class Membership < ApplicationRecord
     case type
     when "Log Members" 
       members = self.members.includes(:people).order('LastName, MailingName')
-      CSV.generate(col_sep: ",") do |tsv|
+      CSV.generate(col_sep: "\t") do |tsv|
         tsv << %w(LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
                   HomePhone MN MW MC ME Partner Children)
         for m in members
@@ -121,7 +121,7 @@ class Membership < ApplicationRecord
       end
     when "Billing"
       members = self.members.where('Status != "Honorary"').includes(:people)
-      CSV.generate(col_sep: ",") do |tsv|
+      CSV.generate(col_sep: "\t") do |tsv|
         tsv << %w(LastName MailingName Street City State Zip Country Status Mooring Email Dues Initiation MooringFee Total)
         for m in members
           dues = Membership.dues(m) || 0

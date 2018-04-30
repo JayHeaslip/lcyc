@@ -1,9 +1,10 @@
 TODO items
 ------------------------------------------
-make sure ./cronjob runs ok, only need to run on production
-check delayed job
+remove rights that aren't needed (anything that skips authorization)
 check message for duplicate user email when creating new account
 adding boat, check for duplicate?
+make sure ./cronjob runs ok, only need to run on production
+check delayed job
 create hierarchy of roles (Member, BOG, etc.)
 
 tasks
