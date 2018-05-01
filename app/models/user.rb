@@ -5,7 +5,7 @@ class User < ApplicationRecord
   belongs_to :person, optional: true
 
   validates_presence_of     :firstname, :lastname
-  validates_uniqueness_of   :email
+  validates_uniqueness_of   :email, message: "An account with this email already exists, please use the forgot password link to reset the password"
   validates_format_of       :email, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
   validates_length_of       :password, minimum: 6,    if: :validate_password?
   validates_confirmation_of :password,                if: :validate_password?
