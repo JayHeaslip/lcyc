@@ -49,6 +49,8 @@ class BoatsController < ApplicationController
     if @boat.save
       redirect_to boat_path(@boat)
     else
+      @memberships = Membership.active - @boat.memberships
+      puts @boat.errors.full_messages
       render :associate
     end
   end

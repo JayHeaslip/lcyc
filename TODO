@@ -1,7 +1,5 @@
 TODO items
 ------------------------------------------
-remove rights that aren't needed (anything that skips authorization)
-adding boat, check for duplicate?
 make sure ./cronjob runs ok, only need to run on production
 on switch to production, kill delayed job, then restart and check
 
@@ -13,7 +11,7 @@ deploy
 -----------
 git branches for staging: master
                  production: production  - modify .htaccess (PassengerAppEnv production)
-                  need to rebase before production deploy
+                  need to merge before production deploy
 
 non-transparent updates
 -------------------------------------------------------------------
@@ -57,3 +55,5 @@ add confirmation unsubscribe request
 allow admin user email to be non-member
 test unsubscribe function
 check message for duplicate user email when creating new account
+remove rights that aren't needed (anything that skips authorization)
+adding boat, check for duplicate?

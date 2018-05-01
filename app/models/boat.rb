@@ -6,6 +6,8 @@ class Boat < ApplicationRecord
 
   validate :name_or_mfg?
   validate :mooring
+  validates_uniqueness_of :Name, scope: :Mfg_Size, allow_blank: true
+  validates_uniqueness_of :Mfg_Size, scope: :Name, allow_blank: true 
 
   def name_or_mfg?
     if self.Name.blank? and self.Mfg_Size.blank?
