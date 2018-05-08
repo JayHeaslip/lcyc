@@ -21,8 +21,10 @@ class Person < ApplicationRecord
   end
 
   def validate_committee?
-    unless self.membership.nil?
-      self.MemberType != "Child" and %w(Active Senior).include?(self.membership.Status)
+    if self.membership.nil?  # creating the membership, don't look at status
+      self.MemberType != "Child"
+    else
+      self.MemberType != "Child" and %w(Accepted Active Associate Life Senior).include?(self.membership.Status)
     end
   end
 

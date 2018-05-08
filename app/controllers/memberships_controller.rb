@@ -244,7 +244,7 @@ class MembershipsController < ApplicationController
     else
       content = Membership.to_csv(type)
       mime_type = "text/csv"
-      filename += ".csv"
+      filename += ".txt"
     end
     send_data(content, type: mime_type, filename: filename)
   end 
