@@ -1,4 +1,5 @@
 <h2>Generate a spreadsheet</h2>
+<p>Note: these are tab separated files.</p>
 <%= form_tag download_spreadsheet_memberships_path do %>
 <label>Type:</label>
 <%= select_tag :spreadsheet, options_for_select(@spreadsheet_options, @spreadsheet) %>
