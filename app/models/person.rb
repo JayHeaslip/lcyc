@@ -57,11 +57,11 @@ class Person < ApplicationRecord
 
   def self.to_csv
     people = Person.active.where(MemberType: ['Member', 'Partner']).order('memberships.LastName')
-    CSV.generate(col_sep: "\t") do |tsv|
-      tsv << %w(FirstName LastName MemberLastName MailingName Status Comittee MemberSince)
+    CSV.generate(col_sep: ",") do |csv|
+      csv << %w(FirstName LastName MemberLastName MailingName Status Comittee MemberSince)
       people.each do |p|
         m = p.membership
-        tsv << [p.FirstName, p.LastName, m.LastName, m.MailingName, m.Status, p.Committee1, m.MemberSince]
+        csv << [p.FirstName, p.LastName, m.LastName, m.MailingName, m.Status, p.Committee1, m.MemberSince]
       end
     end
   end

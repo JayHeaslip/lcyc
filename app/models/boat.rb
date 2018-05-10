@@ -27,12 +27,12 @@ class Boat < ApplicationRecord
   
   def self.to_csv
     boats = Boat.order('Name, mooring_num').includes(:memberships)
-    CSV.generate(col_sep: "\t") do |tsv|
-      tsv << ['Name', 'Mooring#', 'Sail#', 'Mfg/Size', 'PHRF', 'Owner']
+    CSV.generate(col_sep: ",") do |csv|
+      csv << ['Name', 'Mooring#', 'Sail#', 'Mfg/Size', 'PHRF', 'Owner']
       boats.each do |b|
         phrf = b.PHRF == 0 ? '' : b.PHRF
         owners = b.memberships.map {|e| e.LastName}.sort!
-        tsv << [b.Name, b.mooring_num, b.sail_num, b.Mfg_Size, phrf, owners.join("/")]
+        csv << [b.Name, b.mooring_num, b.sail_num, b.Mfg_Size, phrf, owners.join("/")]
       end
     end
   end

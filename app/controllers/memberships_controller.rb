@@ -232,9 +232,9 @@ class MembershipsController < ApplicationController
   end
 
   def export_csv(type)
-    mime_type = "application/xls"
+    mime_type = "text/csv"
     filename = I18n.l(Time.now, format: :short) + "#{type}"
-    filename += ".xls"
+    filename += ".csv"
 
     if type.start_with?("Member Card")
       content = Person.to_csv
