@@ -1,8 +1,11 @@
 class PeopleController < ApplicationController
 
-  before_action :get_membership, :except => [:committee]
-  before_action :authorize, :except => [:committee]
+  before_action :get_membership, only: [:destroy]
+  before_action :authorize, only: [:destroy]
 
+  def select_committee
+  end
+  
   def committee
     @committee = params[:committee] || 'Boats'
     @people = Person.active.committee(@committee).order(:LastName)
