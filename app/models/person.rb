@@ -21,8 +21,10 @@ class Person < ApplicationRecord
   end
 
   def validate_committee?
-    unless self.membership.nil?
-      self.MemberType != "Child" and %w(Active Senior).include?(self.membership.Status)
+    if self.membership.nil?  # creating the membership, don't look at status
+      self.MemberType != "Child"
+    else
+      self.MemberType != "Child" and %w(Accepted Active Associate Life Senior).include?(self.membership.Status)
     end
   end
 
@@ -55,15 +57,24 @@ class Person < ApplicationRecord
 
   def self.to_csv
     people = Person.active.where(MemberType: ['Member', 'Partner']).order('memberships.LastName')
-    CSV.generate(col_sep: ",") do |tsv|
-      tsv << %w(FirstName LastName MemberLastName MailingName Status Comittee MemberSince)
+    CSV.generate(col_sep: ",") do |csv|
+      csv << %w(FirstName LastName MemberLastName MailingName Status Comittee MemberSince)
       people.each do |p|
         m = p.membership
-        tsv << [p.FirstName, p.LastName, m.LastName, m.MailingName, m.Status, p.Committee1, m.MemberSince]
+        csv << [p.FirstName, p.LastName, m.LastName, m.MailingName, m.Status, p.Committee1, m.MemberSince]
       end
     end
   end
 
+  def self.committee_spreadsheet(committee)
+    people = Person.active.committee(committee).order(:LastName)
+    CSV.generate(col_sep: ",") do |csv|
+      csv << %w(FirstName LastName HomePhone WorkPhone CellPhone EmailAddress)
+      people.each do |p|
+        csv << [p.LastName, p.FirstName, p.HomePhone, p.WorkPhone, p.CellPhone, p.EmailAddress]
+      end
+    end
+  end
     
 
   private

@@ -11,9 +11,11 @@ class Right < ApplicationRecord
   # Right.synchronize_with_controllers
   
   def self.synchronize_with_controllers
-    # Load all the controller files (except application)
-    controller_files = Dir[Rails.root.to_s + "/app/controllers/*_controller.rb"].reject {|e| e =~ /\/application_controller.rb/}
-
+    # Load all the controller files (except application, admin, unsubscribe)
+    controller_files = Dir[Rails.root.to_s + "/app/controllers/*_controller.rb"].reject do |e|
+      e =~ /\/application_controller.rb/ || e =~ /\/admin_controller.rb/ || e =~ /\/unsubscribe_controller.rb/
+    end
+    
     # we need to load all the controllers...
     controllers = []
     controller_files.each do |file_name|
@@ -51,6 +53,10 @@ class Right < ApplicationRecord
         end
       end
     end
+
+    #special case - MailingsController#deliver_mail - don't check authorization on this (run in delayed job)
+    find_by_name('MailingsController.deliver_mail').destroy
+    
   end
 
   def self.extract_class_name(filename)

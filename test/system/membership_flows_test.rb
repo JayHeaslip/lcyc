@@ -26,6 +26,7 @@ class MembershipTest < ApplicationSystemTestCase
       fill_in "BirthYear", with: "1960"
       fill_in "Email", with: "john@abc.com"
       fill_in "CellPhone", with: "802-878-1111"
+      select "Boats"
     end
 
     click_on "Add boat"

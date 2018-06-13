@@ -1,10 +1,8 @@
 TODO items
 ------------------------------------------
 make sure ./cronjob runs ok, only need to run on production
-check delayed job
-check message for duplicate user email when creating new account
-adding boat, check for duplicate?
-create hierarchy of roles (Member, BOG, etc.)
+on switch to production, kill delayed job, then restart and check
+allow BOG to People#select_commitee, People#committee, Committees#download_spreadsheet
 
 tasks
 ------------------------------------------
@@ -14,7 +12,7 @@ deploy
 -----------
 git branches for staging: master
                  production: production  - modify .htaccess (PassengerAppEnv production)
-                  need to rebase before production deploy
+                 need to merge before production deploy
 
 non-transparent updates
 -------------------------------------------------------------------
@@ -23,7 +21,14 @@ fix mooring (make it a mooring table, instead of a membership field)
 add updated_by field
 remove unused fields in attachment table
 make committe/person a has relationship
-
+create hierarchy of roles (Member->BOG-> [Membership, Harbormaster, Communications])
+    add parent to each role
+    showing - display ancestor rights in a different color
+    editing - display ancestor rights by making checkbox read only
+    authorizing - traverse hierarchy
+    see: http://www.leighhalliday.com/tree-structures-in-your-rails-models
+    https://www.slideshare.net/billkarwin/models-for-hierarchical-data
+    cache rights? into session?
 
 
 Done
@@ -50,3 +55,6 @@ do not add committee when adding child
 add confirmation unsubscribe request
 allow admin user email to be non-member
 test unsubscribe function
+check message for duplicate user email when creating new account
+remove rights that aren't needed (anything that skips authorization)
+adding boat, check for duplicate?

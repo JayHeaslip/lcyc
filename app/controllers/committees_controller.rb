@@ -1,21 +1,11 @@
-class PeopleController < ApplicationController
+class CommitteesController < ApplicationController
 
-  before_action :get_membership, only: [:destroy]
-  before_action :authorize, only: [:destroy]
+  before_action :authorize
 
-  def select_committee
-  end
-  
-  def committee
-    @committee = params[:committee] || 'Boats'
-    @people = Person.active.committee(@committee).order(:LastName)
-  end
-
-  def destroy
-    @membership  = Membership.find(params[:membership_id])
-    @membership.people.find(params[:id]).destroy
-    flash[:notice] = 'Person was successfully deleted.'
-    redirect_to membership_path(params[:membership_id])
+  def download_spreadsheet
+    @committee = params[:id] || 'Boats'
+    content = Person.committee_spreadsheet(@committee)
+    send_data(content, type: "text/csv", filename: "#{@committee}_committee.csv")
   end
 
   private

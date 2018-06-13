@@ -1,24 +1,26 @@
-# README
+# Lake Champlain Yacht Club membership website
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This site is for maintaining the membership database for LCYC.
 
-Things you may want to cover:
 
-* Ruby version
+* Ruby version - 2.3.7
 
-* System dependencies
+* To run the test suite: rake test, rake test:system
 
-* Configuration
+* The site uses delayed_job to send email, the daemon will be started when creating email if it's not already running.
 
-* Database creation
+* This uses capistrano for deployment.
 
-* Database initialization
+  To deploy the staging version:
+  
+    * bundle exec cap staging deploy
 
-* How to run the test suite
+  To deploy the production version:
 
-* Services (job queues, cache servers, search engines, etc.)
+    1. Merge in staging changes:
+  
+       * git co production
+       * git merge master
+       * git push origin
 
-* Deployment instructions
-
-* ...
+    2. bundle exec cap production deploy

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class PeopleControllerTest < ActionDispatch::IntegrationTest
+class CommitteesControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)
@@ -11,10 +11,9 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     @boat2 = boats(:boat2)
   end
 
-  test "get_committee" do
-    get select_committee_people_url
+  test "download_spreadsheet" do
+    post download_spreadsheet_committee_url('Boats')
     assert_response :success
-    assert_select "h2", "Committee Members"
   end
 
   test "show_committee" do

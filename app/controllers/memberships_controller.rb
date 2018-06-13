@@ -232,19 +232,16 @@ class MembershipsController < ApplicationController
   end
 
   def export_csv(type)
+    mime_type = "text/csv"
     filename = I18n.l(Time.now, format: :short) + "#{type}"
+    filename += ".csv"
+
     if type.start_with?("Member Card")
       content = Person.to_csv
-      mime_type = "text/csv"
-      filename += ".csv"
     elsif type.start_with?("Log Fleet")
       content = Boat.to_csv
-      mime_type = "text/csv"
-      filename += ".csv"
     else
       content = Membership.to_csv(type)
-      mime_type = "text/csv"
-      filename += ".csv"
     end
     send_data(content, type: mime_type, filename: filename)
   end 
@@ -259,6 +256,8 @@ class MembershipsController < ApplicationController
   def membership_params
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
                                        :State, :Zip, :Country, :Status, :MemberSince, :mooring_num,
+                                       :application_date, :active_date, :initiation,
+                                       :paid, :skip_mooring,
                                        people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),
                                        boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy))
   end

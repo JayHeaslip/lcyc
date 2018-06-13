@@ -53,10 +53,17 @@ Rails.application.routes.draw do
 
   resources :people, only: [] do
     collection do
-      get :committee
+      get :select_committee
+      post :committee
     end
   end
 
+  resources :committees, only: [] do
+    member do
+      post :download_spreadsheet
+    end
+  end
+  
   resources :boats do
     member do
       get :associate

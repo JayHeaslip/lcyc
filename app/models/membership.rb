@@ -95,8 +95,8 @@ class Membership < ApplicationRecord
     case type
     when "Log Members" 
       members = self.members.includes(:people).order('LastName, MailingName')
-      CSV.generate(col_sep: ",") do |tsv|
-        tsv << %w(LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
+      CSV.generate(col_sep: ",") do |csv|
+        csv << %w(LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
                   HomePhone MN MW MC ME Partner Children)
         for m in members
           info = [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
@@ -104,25 +104,25 @@ class Membership < ApplicationRecord
           info = info.concat(m.member_info)
           info = info.concat(m.partner_info)
           info = info.concat(m.children_info)
-          tsv << info
+          csv << info
         end
       end
     when "Log Partner Xref" 
       all = Membership.all_active.includes(:people)
-      CSV.generate(col_sep: "\t") do |tsv|
-        tsv << ["Partner", "",  "Member"]
+      CSV.generate(col_sep: ",") do |csv|
+        csv << ["Partner", "",  "Member"]
         for m in all
           member = m.people.where(MemberType: 'Member').first
           partner = m.people.where(MemberType: 'Partner').first
           if partner && member.LastName != partner.LastName
-            tsv << ["#{partner.LastName}, #{partner.FirstName}", "see", "#{member.LastName}, #{member.FirstName}"]
+            csv << ["#{partner.LastName}, #{partner.FirstName}", "see", "#{member.LastName}, #{member.FirstName}"]
           end
         end
       end
     when "Billing"
       members = self.members.where('Status != "Honorary"').includes(:people)
-      CSV.generate(col_sep: ",") do |tsv|
-        tsv << %w(LastName MailingName Street City State Zip Country Status Mooring Email Dues Initiation MooringFee Total)
+      CSV.generate(col_sep: ",") do |csv|
+        csv << %w(LastName MailingName Street City State Zip Country Status Mooring Email Dues Initiation MooringFee Total)
         for m in members
           dues = Membership.dues(m) || 0
           member = m.people.where('MemberType = "Member"').first
@@ -134,7 +134,7 @@ class Membership < ApplicationRecord
           mooring_fee = if m.mooring_num && m.mooring_num != "" && !m.skip_mooring then 80 else nil end
           initiation = m.initiation || nil
           total = dues + (mooring_fee ? 80 : 0) + (initiation ? initiation : 0)
-          tsv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
+          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
                   m.mooring_num, email, dues, initiation, mooring_fee, total]
         end
       end

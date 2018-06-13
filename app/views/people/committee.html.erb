@@ -1,8 +1,7 @@
-<h2 class="mb-3">Committee Members</h2>
+<h2 class="mt-3 mb-3"><%= @committee %> Committee</h2>
 <div>
-  <%= form_tag committee_people_path, method: :get do %>
-  <%= select_tag :committee, options_for_select(Committee.names, @committee) %>
-  <button type="submit" class="btn btn-primary">Show</button>
+  <%= form_tag download_spreadsheet_committee_path(@committee) do %>
+  <button type="submit" class="btn btn-primary">Download as a spreadsheet</button> | <%= link_to 'Back', select_committee_people_path %>
   <% end %>
 </div>
 
