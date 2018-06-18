@@ -23,7 +23,7 @@ namespace :chores do
       user, pw, db, home = get_db_config
 
       # clear sessions older than 24 hours
-      ActiveRecord::SessionStore::Session.delete_all ['updated_at < ?', 24.hours.ago]
+      #ActiveRecord::SessionStore::Session.delete_all ['updated_at < ?', 24.hours.ago]
 
       # backup the database and mail a copy to my gmail account
       verbose(false)
