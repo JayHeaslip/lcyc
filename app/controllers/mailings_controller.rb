@@ -138,9 +138,9 @@ class MailingsController < ApplicationController
 
   def deliver_mail(people, mailing, host)
     logger.info "Delivering mail from #{host}"
-    people.each_with_index do |id, i|
+    people.each_with_index do |p, i|
       begin
-        person = Person.find(id)
+        person = Person.find(p.id)
         logger.info "   to : #{person.EmailAddress}"
         person.generate_email_hash if person.email_hash.nil?
 	#hr = (i/60)
@@ -150,7 +150,7 @@ class MailingsController < ApplicationController
           MailRobot.delay(run_at: i.minutes.from_now).mailing(person, mailing, host)
         end
       rescue
-        logger.info "Person not found: #{id}"
+        logger.info "Person not found: #{p.id}"
       end
     end
   end
