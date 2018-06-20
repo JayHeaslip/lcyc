@@ -92,7 +92,7 @@ class MailingsController < ApplicationController
       elsif m.paid
         logger.info "#{m.MailingName} was marked as paid"
       else
-        if Rails.env == 'development' || Rails.env == 'staging' || Rails.env == 'test'
+        if Rails.env == 'development' || Rails.env == 'test'
           MailRobot.send_bills(email, replyto,
                                m.MailingName, m.Status, m.mooring_num, dues, fees, mooring_maint_fee, initiation).deliver
         else
@@ -144,7 +144,7 @@ class MailingsController < ApplicationController
         logger.info "   to : #{person.EmailAddress}"
         person.generate_email_hash if person.email_hash.nil?
 	#hr = (i/60)
-        if Rails.env == 'development' || Rails.env == 'staging' || Rails.env == 'test'
+        if Rails.env == 'development' || Rails.env == 'test'
           MailRobot.mailing(person, mailing, host).deliver
         else
           MailRobot.delay(run_at: i.minutes.from_now).mailing(person, mailing, host)
