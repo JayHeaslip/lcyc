@@ -92,7 +92,7 @@ class MailingsController < ApplicationController
       elsif m.paid
         logger.info "#{m.MailingName} was marked as paid"
       else
-        if Rails.env == 'development' || Rails.env == 'staging' || Rails.env == 'test'
+        if Rails.env == 'development' || Rails.env == 'test'
           MailRobot.send_bills(email, replyto,
                                m.MailingName, m.Status, m.mooring_num, dues, fees, mooring_maint_fee, initiation).deliver
         else
@@ -129,8 +129,8 @@ class MailingsController < ApplicationController
     @mailing.save
     
     unless people.empty?
-      people.to_a.map! {|p| p.id} 
-      self.deliver_mail(people, params[:id].to_i, host)
+      people_ids = people.to_a.map {|p| p.id} 
+      self.deliver_mail(people_ids, params[:id].to_i, host)
       flash[:notice] = "Delivering mail."
       redirect_to mailings_path
     end
@@ -138,19 +138,19 @@ class MailingsController < ApplicationController
 
   def deliver_mail(people, mailing, host)
     logger.info "Delivering mail from #{host}"
-    people.each_with_index do |p, i|
+    people.each_with_index do |id, i|
       begin
-        person = Person.find(p.id)
+        person = Person.find(id)
         logger.info "   to : #{person.EmailAddress}"
         person.generate_email_hash if person.email_hash.nil?
 	#hr = (i/60)
-        if Rails.env == 'development' || Rails.env == 'staging' || Rails.env == 'test'
+        if Rails.env == 'development' || Rails.env == 'test'
           MailRobot.mailing(person, mailing, host).deliver
         else
           MailRobot.delay(run_at: i.minutes.from_now).mailing(person, mailing, host)
         end
       rescue
-        logger.info "Person not found: #{p.id}"
+        logger.info "Person not found: #{id}"
       end
     end
   end
