@@ -27,6 +27,14 @@ class MailRobot < ApplicationMailer
          subject: '[LCYC] ' + mailing.subject)
   end
 
+  def binnacle(email, filenames, binnacle_name, body)
+    @content = body
+    filenames.each do |f|
+      attachments[File.basename(f)] = File.read("#{Rails.root}/public/#{f}")
+    end
+    mail(:to => email, :subject => "LCYC #{binnacle_name}")
+  end
+
   def send_bills(email, replyto, mailingname, status, mooring, dues, fees, mooring_maint_fee, initiation)
     @mailingname = mailingname
     @email = email
