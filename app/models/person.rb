@@ -42,6 +42,13 @@ class Person < ApplicationRecord
     end
   end
 
+  def self.binnacle_emails
+    alternates = Membership.members.where('email_binnacle is true and alternate_email is not null').map {|m| m.alternate_email}
+    email_binnacle = Person.members.where('MemberType = "Member" and EmailAddress is not null and EmailAddress != "" and memberships.email_binnacle is true and memberships.alternate_email is null')
+    email_binnacle.concat(Person.members.where('MemberType = "Partner" and EmailAddress is not null and EmailAddress != "" and memberships.email_partner_binnacle is true'))
+    alternates + email_binnacle.map {|p| p.EmailAddress}
+  end
+  
   def self.email_list(cmte = 'All')
     if cmte == 'All'
       Person.members.valid_email
