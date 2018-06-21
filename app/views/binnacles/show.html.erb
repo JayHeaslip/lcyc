@@ -1,0 +1,11 @@
+<div class="lcyc-form">
+  <iframe src="/binnacle_preview/<%= @binnacle.id %>" height="600" width="650"> 
+  </iframe>
+<br/>
+<br/>
+<p>
+  <%= form_tag send_email_binnacle_path(@binnacle) do %>
+     <p><label>Test?</label><%= check_box_tag :test, :test, @test %>
+     <p><button type='submit'>Email</button> | <%= link_to 'Edit', edit_binnacle_path(@binnacle) %> | <%= link_to "Index", binnacles_path %>
+ <% end %>
+</div>
