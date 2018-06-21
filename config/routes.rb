@@ -83,7 +83,6 @@ Rails.application.routes.draw do
     end
   end
 
-
   resources :mailings do
     get :billing, on: :collection
     post :send_bills, on: :collection
@@ -93,6 +92,14 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :binnacles do
+    member do
+      get :email
+      post :send_email
+    end
+  end
+
   resources :preview, :only => [:show]
+  resources :binnacle_preview, :only => [:show]
 
 end
