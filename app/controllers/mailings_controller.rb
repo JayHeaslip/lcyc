@@ -11,6 +11,7 @@ class MailingsController < ApplicationController
   def show
     @mailing = Mailing.find(params[:id])
     @test = true
+    @filter_emails = false
   end
 
   def new
@@ -111,7 +112,8 @@ class MailingsController < ApplicationController
   
   def send_email
     @mailing = Mailing.find(params[:id])
-    people = Person.email_list(@mailing.committee)
+    @filter_emails = !params[:filter_emails].nil?
+    people = Person.email_list(@mailing.committee, @filter_emails)
     people.each {|e| logger.info "General email: #{e.EmailAddress}" }
     if params[:test]
       p = Person.find_by_EmailAddress(current_user.email)
