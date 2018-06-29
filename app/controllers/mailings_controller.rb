@@ -126,8 +126,10 @@ class MailingsController < ApplicationController
       end
     end
 
-    @mailing.sent_at = Time.now
-    @mailing.save
+    unless params[:test]
+      @mailing.sent_at = Time.now
+      @mailing.save
+    end
     
     unless people.empty?
       people_ids = people.to_a.map {|p| p.id}
