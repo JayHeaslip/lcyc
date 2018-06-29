@@ -113,6 +113,7 @@ class MailingsController < ApplicationController
   def send_email
     @mailing = Mailing.find(params[:id])
     @filter_emails = !params[:filter_emails].nil?
+    debugger
     people = Person.email_list(@mailing.committee, @filter_emails)
     people.each {|e| logger.info "General email: #{e.EmailAddress}" }
     if params[:test]
@@ -127,8 +128,10 @@ class MailingsController < ApplicationController
       end
     end
 
-    @mailing.sent_at = Time.now
-    @mailing.save
+    unless params[:test]
+      @mailing.sent_at = Time.now
+      @mailing.save
+    end
     
     unless people.empty?
       people_ids = people.to_a.map {|p| p.id}
