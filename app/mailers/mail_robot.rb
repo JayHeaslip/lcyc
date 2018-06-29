@@ -27,7 +27,7 @@ class MailRobot < ApplicationMailer
       attachments[File.basename(f)] = File.read("#{Rails.root}/public/#{f}")
     end
     mail(to: person.EmailAddress,
-         from: from_address,
+         from: 'LCYC Announcements <lcyc@members.lcyc.info>',
          reply_to: mailing.replyto,
          subject: tag + mailing.subject)
   end
