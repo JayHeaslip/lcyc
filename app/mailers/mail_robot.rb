@@ -13,8 +13,13 @@ class MailRobot < ApplicationMailer
     mail(to: user.email, subject: 'Password reset for LCYC')
   end
 
-  def mailing(person, mailing, host)
+  def mailing(person, mailing, host, filtered = nil)
     mailing = Mailing.find(mailing)
+    unless filtered
+      tag = '[LCYC] '
+    else
+      tag = ''
+    end
     @content = mailing.body
     filenames = mailing.attachments.map { |a| a.pdf.url(:original, false)}
     @url = "#{host}unsubscribe/#{person.email_hash}"
@@ -22,9 +27,9 @@ class MailRobot < ApplicationMailer
       attachments[File.basename(f)] = File.read("#{Rails.root}/public/#{f}")
     end
     mail(to: person.EmailAddress,
-         from: 'LCYC Announcements <lcyc@members.lcyc.info>',
+         from: from_address,
          reply_to: mailing.replyto,
-         subject: '[LCYC] ' + mailing.subject)
+         subject: tag + mailing.subject)
   end
 
   def binnacle(email, filenames, binnacle_name, body)

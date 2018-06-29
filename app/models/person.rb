@@ -49,9 +49,13 @@ class Person < ApplicationRecord
     alternates + email_binnacle.map {|p| p.EmailAddress}
   end
   
-  def self.email_list(cmte = 'All')
+  def self.email_list(cmte = 'All', filter = false)
     if cmte == 'All'
-      Person.members.valid_email
+      if filter
+        Person.members.valid_email.where('select_email is true')
+      else
+        Person.members.valid_email
+      end
     else
       Person.has_committee.committee(cmte).valid_email
     end

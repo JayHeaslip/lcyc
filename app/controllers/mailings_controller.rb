@@ -11,6 +11,7 @@ class MailingsController < ApplicationController
   def show
     @mailing = Mailing.find(params[:id])
     @test = true
+    @filter_emails = false
   end
 
   def new
@@ -111,7 +112,8 @@ class MailingsController < ApplicationController
   
   def send_email
     @mailing = Mailing.find(params[:id])
-    people = Person.email_list(@mailing.committee)
+    @filter_emails = !params[:filter_emails].nil?
+    people = Person.email_list(@mailing.committee, @filter_emails)
     people.each {|e| logger.info "General email: #{e.EmailAddress}" }
     if params[:test]
       p = Person.find_by_EmailAddress(current_user.email)
@@ -129,14 +131,14 @@ class MailingsController < ApplicationController
     @mailing.save
     
     unless people.empty?
-      people_ids = people.to_a.map {|p| p.id} 
-      self.deliver_mail(people_ids, params[:id].to_i, host)
+      people_ids = people.to_a.map {|p| p.id}
+      self.deliver_mail(people_ids, params[:id].to_i, host, @filter_emails)
       flash[:notice] = "Delivering mail."
       redirect_to mailings_path
     end
   end
 
-  def deliver_mail(people, mailing, host)
+  def deliver_mail(people, mailing, host, filtered)
     logger.info "Delivering mail from #{host}"
     people.each_with_index do |id, i|
       begin
@@ -145,9 +147,9 @@ class MailingsController < ApplicationController
         person.generate_email_hash if person.email_hash.nil?
 	#hr = (i/60)
         if Rails.env == 'development' || Rails.env == 'test'
-          MailRobot.mailing(person, mailing, host).deliver
+          MailRobot.mailing(person, mailing, host, filtered).deliver
         else
-          MailRobot.delay(run_at: i.minutes.from_now).mailing(person, mailing, host)
+          MailRobot.delay(run_at: i.minutes.from_now).mailing(person, mailing, host,filtered)
         end
       rescue
         logger.info "Person not found: #{id}"

@@ -20,6 +20,13 @@
     <%= check_box_tag :test, :test, @test, class: "form-check-input" %>
     <label for="test" class="form-check-label">Test?</label>
   </div>
+  <div class="form-row form-check mr-4 pb-2">
+    <%= check_box_tag :filter_emails, :filter_emailso, @filter_emails, class: "form-check-input" %>
+    <label for="filter_emails" class="form-check-label">Filter Emails?</label>
+  </div>
+  </div>
+    <p class='font-italic'>When Filter Emails? is checked, email will only be sent to people who have the select_email field set to true.<p>
+  </div>
   <div class="form-group row mt-3">
     <div class="col-sm-3">
       <button type="submit" class="btn btn-primary">Email</button> | <%= link_to 'Edit', edit_mailing_path(@mailing) %> | <%= link_to "Mailings", mailings_path %>
