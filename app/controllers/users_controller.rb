@@ -5,8 +5,6 @@ class UsersController < ApplicationController
   before_action :check_authentication, only: [:index, :show, :edit, :update, :destroy, :editpw, :updatepw]
   before_action :check_authorization, only: [:index, :destroy, :rmrole]
   before_action :set_current_user, only: [:show, :edit, :update, :editpw, :updatepw]
-  before_action :check_delayed_job, only: [:create, :resend_email, :forgotpw]
-
   def index
     if params[:role_id]
       @role = Role.find(params[:role_id])
