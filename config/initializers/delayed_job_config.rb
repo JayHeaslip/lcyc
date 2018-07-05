@@ -5,3 +5,5 @@ Delayed::Worker.sleep_delay = 45
 Delayed::Worker.read_ahead = 2
 Delayed::Worker.max_attempts = 3
 
+::ActiveRecord::Base.logger.level = Logger::WARN
+
