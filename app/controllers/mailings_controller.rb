@@ -4,7 +4,7 @@ class MailingsController < ApplicationController
   skip_before_action :check_authentication, :check_authorization, only: [:deliver_mail]
   
   def index
-    @mailings = Mailing.order('created_at DESC')
+    @mailings = Mailing.sorted
   end
 
   def show
