@@ -12,7 +12,7 @@ deploy
 -----------
 git branches for staging: master
                  production: production  - modify .htaccess (PassengerAppEnv production)
-                  need to merge before production deploy
+                 need to merge before production deploy
 
 non-transparent updates
 -------------------------------------------------------------------

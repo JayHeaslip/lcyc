@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-source "home/odziozo/.rvm/gems/ruby-2.3.7@global/environment"
+source "/home/odziozo/.rvm/gems/ruby-2.3.7@global/environment"
 
-#cd /home/odziozo/rails5/lcyc/current
+cd /home/odziozo/rails5/lcyc/current
 # for test only
-cd /home/odziozo/rails5/lcyc/staging
+#cd /home/odziozo/rails5/lcyc/staging
 bundle exec rake RAILS_ENV=production chores:daily
