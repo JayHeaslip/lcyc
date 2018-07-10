@@ -11,6 +11,7 @@ class MailingsController < ApplicationController
     @mailing = Mailing.find(params[:id])
     @test = true
     @filter_emails = false
+    check_delayed_job
   end
 
   def new
@@ -18,6 +19,7 @@ class MailingsController < ApplicationController
     @mailing.replyto = current_user.email
     @mailing.html = true
     @committees = ['All'].concat(Committee.names)
+    check_delayed_job
   end
 
   def create
@@ -55,6 +57,7 @@ class MailingsController < ApplicationController
 
   def billing
     @test = true
+    check_delayed_job
   end
 
   def send_bills

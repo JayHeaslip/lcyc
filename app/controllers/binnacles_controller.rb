@@ -9,6 +9,7 @@ class BinnaclesController < ApplicationController
     @binnacle.body = "<p>Attached is the latest binnacle.</p>\n<p>Previous binnacles are available online at http://lcyc.info/club/binnacle</p>"
     # see railscasts 73
     2.times { @binnacle.pdfs.build }
+    check_delayed_job
   end
 
   def create
@@ -24,6 +25,7 @@ class BinnaclesController < ApplicationController
   def show
     @binnacle = Binnacle.find(params[:id])
     @test = true
+    check_delayed_job
   end
 
   def edit
