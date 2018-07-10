@@ -5,6 +5,6 @@ class Mailing < ApplicationRecord
   validates_presence_of     :subject
 
   scope :nulls_first, -> { order("sent_at IS NOT NULL") }
-  scope :sorted, -> { nulls_first.order(created_at: :desc) }
+  scope :sorted, -> { nulls_first.order(sent_at: :desc, created_at: :desc) }
   
 end
