@@ -111,6 +111,16 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to mailings_url
   end
 
+  test "send too soon" do
+    t = Time.now
+    old_email = mailings(:two)
+    old_email.sent_at = t
+    old_email.save
+    post send_email_mailing_url(@mailing)
+    formatted_time = (t+23.hours).strftime("%m/%d/%Y at %I:%M %p")
+    assert_equal "You've sent a mailing within the last 23 hours, please wait until #{formatted_time} to send an email",flash[:error]
+  end
+
   test "send test mailing no email" do
     login_as(users(:no_member_email), 'passwor2')
     post send_email_mailing_url(@mailing), params: {test: true}

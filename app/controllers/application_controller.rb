@@ -91,7 +91,9 @@ class ApplicationController < ActionController::Base
     rescue
       psout = ""
     end
-    system("cd #{Rails.root}; RAILS_ENV=#{Rails.env} bundle exec bin/delayed_job start") unless psout.include?('ruby')
+    if Rails.env != "test"
+      system("cd #{Rails.root}; RAILS_ENV=#{Rails.env} bundle exec bin/delayed_job start") unless psout.include?('ruby')
+    end
   end
       
 end
