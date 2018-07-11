@@ -139,7 +139,7 @@ class MailingsController < ApplicationController
       
       unless people.empty?
         people_ids = people.to_a.map {|p| p.id}
-        #self.deliver_mail(people_ids, params[:id].to_i, host, @filter_emails)
+        self.deliver_mail(people_ids, params[:id].to_i, host, @filter_emails)
         flash[:notice] = "Delivering mail."
         redirect_to mailings_path
       end
