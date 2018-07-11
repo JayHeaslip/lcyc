@@ -117,7 +117,7 @@ class MailingsController < ApplicationController
     @mailing = Mailing.find(params[:id])
 
     # it's been at least 23 hours since we sent a blast
-    
+    last_email_sent_time = Time.now - 1.day if last_email_sent_time.nil?
     if params[:test] || (Time.now > (last_email_sent_time + 23.hours))  
       @filter_emails = !params[:filter_emails].nil?
       people = Person.email_list(@mailing.committee, @filter_emails)
@@ -144,7 +144,7 @@ class MailingsController < ApplicationController
         redirect_to mailings_path
       end
     else
-      formatted_time = (last_email_sent_time+23.hour).strftime("%m/%d/%Y at %I:%M %p")
+      formatted_time = (last_email_sent_time+23.hours).strftime("%m/%d/%Y at %I:%M %p")
       flash[:error] = "You've sent a mailing within the last 23 hours, please wait until #{formatted_time} to send an email"
       render :show
     end

@@ -2,4 +2,10 @@ one:
   subject: test
   body:  test2
   committee: 'All'
+  sent_at: nil
+two:
+  subject: test
+  body:  test2
+  committee: 'All'
+  sent_at: Time.now - 1.day
   
