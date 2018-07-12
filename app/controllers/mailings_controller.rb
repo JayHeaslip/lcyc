@@ -155,7 +155,6 @@ class MailingsController < ApplicationController
     people.each_with_index do |id, i|
       begin
         person = Person.find(id)
-        logger.info "   to : #{person.EmailAddress}"
         person.generate_email_hash if person.email_hash.nil?
 	#hr = (i/60)
         if Rails.env == 'development' || Rails.env == 'test'
