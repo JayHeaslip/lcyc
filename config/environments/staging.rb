@@ -53,8 +53,7 @@ Rails.application.configure do
 
   # Prepend all log lines with the following tags.
   config.log_tags = [
-    proc { |req| req.session[:user] || "No session" },
-    proc { |req| req.session[:email] || "Anonymous" }
+    -> request { request.cookie_jar.signed[:user_email] }
   ]
 
   # Use a different cache store in production.
