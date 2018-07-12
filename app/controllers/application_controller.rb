@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
 
   def current_user=(new_user)
     session[:user] = new_user ? new_user.id : nil
+    session[:email] = new_user ? new_user.email : nil
     @current_user = new_user || false
     logger.info "setting current user to #{@current_user.email}" if @current_user
   end
