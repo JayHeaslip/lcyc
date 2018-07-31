@@ -34,7 +34,7 @@ class BinnaclesController < ApplicationController
 
   def update
     @binnacle = Binnacle.find(params[:id])
-    @binnacle.attributes = binnacle_attributes
+    @binnacle.attributes = binnacle_params
     if @binnacle.save
       flash[:notice] = "Successfully updated binacle."
       redirect_to binnacle_path(@binnacle)
