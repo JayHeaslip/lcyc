@@ -15,9 +15,7 @@ RewriteRule ^(.*)$ dispatch.fcgi [QSA,L]
  
 ErrorDocument 500 "/500.html"
 
-RewriteEngine On 
-RewriteCond %{SERVER_PORT} 80 
-RewriteRule ^(.*)$ https://www.example.com/$1 [R=301,L]
-
 PassengerAppEnv staging
 PassengerRuby /home/odziozo/.rvm/wrappers/ruby-2.3.7@global/ruby
+
+SSLEngine On
