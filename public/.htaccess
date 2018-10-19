@@ -17,5 +17,3 @@ ErrorDocument 500 "/500.html"
 
 PassengerAppEnv staging
 PassengerRuby /home/odziozo/.rvm/wrappers/ruby-2.3.7@global/ruby
-
-SSLEngine On
