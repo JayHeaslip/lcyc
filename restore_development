@@ -1,6 +1,6 @@
 #
-# edit sqldump.sql to add "USE lcyc_members_development;"
+# edit sqldump.sql to add "USE lcyc_development;"
 #
-mysql -h 127.0.0.1 -u root -p -e "DROP DATABASE IF EXISTS lcyc_members_development;"
-mysql -h 127.0.0.1 -u root -p -e "CREATE DATABASE lcyc_members_development;"
+mysql -h 127.0.0.1 -u root -p -e "DROP DATABASE IF EXISTS lcyc_development;"
+mysql -h 127.0.0.1 -u root -p -e "CREATE DATABASE lcyc_development;"
 mysql -h 127.0.0.1 -u root -p <./sqldump.sql
