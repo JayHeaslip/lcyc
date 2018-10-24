@@ -9,9 +9,9 @@ class Person < ApplicationRecord
   validates_format_of   :EmailAddress, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, if: Proc.new { |p| !p.EmailAddress.blank? }
   validates_presence_of :Committee1, if: :validate_committee?
 
-  scope :members, -> {joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior', 'Affiliated')")  }
-  scope :active, -> {joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Honorary', 'Life', 'Senior')")}
-  scope :has_committee, -> {joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Life', 'Senior')")}
+  scope :members, -> {joins(:membership).where("memberships.Status in ('Active', 'Active2016', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior', 'Affiliated')")  }
+  scope :active, -> {joins(:membership).where("memberships.Status in ('Active', 'Active2016', 'Associate', 'Honorary', 'Life', 'Senior')")}
+  scope :has_committee, -> {joins(:membership).where("memberships.Status in ('Active', 'Active2016', 'Associate', 'Life', 'Senior')")}
   scope :committee, proc {|cmte| where(Committee1: cmte) }
 
   scope :valid_email, -> {where('subscribe_general is true and EmailAddress is not null and EmailAddress != ""')}
@@ -24,7 +24,7 @@ class Person < ApplicationRecord
     if self.membership.nil?  # creating the membership, don't look at status
       self.MemberType != "Child"
     else
-      self.MemberType != "Child" and %w(Accepted Active Associate Life Senior).include?(self.membership.Status)
+      self.MemberType != "Child" and %w(Accepted Active Active2016 Associate Life Senior).include?(self.membership.Status)
     end
   end
 

@@ -9,7 +9,7 @@
     <label for="Status" class="col-form-label pt-0 col-sm-4">Status:</label>
     <% if current_user.roles?(%w(Admin Membership)) %>
     <div class="col-sm-4">
-      <%= f.collection_select :Status, Memberstatus.all, :Status, :Status, class: "form-control" %>
+      <%= f.collection_select :Status, Memberstatus.order(:Status), :Status, :Status, class: "form-control" %>
     </div>
     <% else %>
     <div class="col-sm-4">
