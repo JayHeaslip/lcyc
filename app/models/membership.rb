@@ -127,7 +127,13 @@ class Membership < ApplicationRecord
 	    email = ''
           end
           mooring_fee = if m.mooring_num && m.mooring_num != "" && !m.skip_mooring then 80 else nil end
-          initiation = m.initiation || nil
+          if !m.initiation.blank?
+            initiation = m.initiation
+          elsif !m.initiation_fee.blank?
+            initiation = self.calculate_initiation_installment(m.initiation_fee, m.installments, m.MemberSince)
+          else
+            initiation = nil
+          end
           total = dues + (mooring_fee ? 80 : 0) + (initiation ? initiation : 0)
           csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
                   m.mooring_num, email, dues, initiation, mooring_fee, total]
@@ -180,4 +186,16 @@ class Membership < ApplicationRecord
     end
   end
 
+  def self.calculate_initiation_installment(fee, installments, active_year)
+    # assume first installment was paid upon joining
+    # subsequent installments are billed in the year previous to being due
+    # for example: a member joining in 2018, with 3 intallments would be billed for subsequent installments
+    # in 2019 (bill generated in 2018) & 2020 (bill generated in 2019)
+
+    if (Time.now.year - active_year) < (installments - 1)
+      fee/installments
+    else
+      nil
+    end
+  end
 end

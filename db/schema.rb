@@ -156,7 +156,7 @@ ActiveRecord::Schema.define(version: 2018_10_25_165053) do
     t.boolean "paid"
     t.boolean "skip_mooring"
     t.integer "installments"
-    t.integer "initiation_fee", default: 3000
+    t.integer "initiation_fee"
     t.index ["Boat"], name: "Boat"
   end
 
