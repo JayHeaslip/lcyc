@@ -6,7 +6,7 @@ class MembershipsController < ApplicationController
   helper_method :sort_column, :sort_direction, :mooring_sort_column
   before_action :get_membership, except: [:index, :moorings, :unassigned_moorings, :new, :create, :destroy, 
                                              :labels, :download_labels,
-                                             :spreadsheets, :download_spreadsheet]
+                                             :spreadsheets, :download_spreadsheet, :initiation_report]
   before_action :authorize, only: [:edit, :update, :associate, :save_association, :rmboat]
 
   def index
@@ -145,6 +145,17 @@ class MembershipsController < ApplicationController
     export_csv(params[:spreadsheet])
   end
 
+  def initiation_report
+    members = Membership.members.where('Status != "Honorary"').includes(:people)
+    @initiation_fee_due = []
+    members.each do |m|
+      initiation_due = m.calculate_initiation_installment
+      unless initiation_due.nil?
+        @initiation_fee_due << [m, initiation_due]
+      end
+    end
+  end
+  
   private
 
   def get_membership

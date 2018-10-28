@@ -26,6 +26,7 @@ class Membership < ApplicationRecord
   validate :check_type, if: Proc.new {|m| !m.people.empty?}
   validate :ensure_people, if: Proc.new {|m| m.people.empty?}
   validate :member_since, if: Proc.new {|m| m.Status != 'Accepted'}
+  validates :installments, allow_nil: true, inclusion: { in: (2..4) }
 
   # all categories of membership
   scope :members, -> { where(Status: ['Active', 'Active2016', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior']).order(:LastName) }
@@ -127,16 +128,10 @@ class Membership < ApplicationRecord
 	    email = ''
           end
           mooring_fee = if m.mooring_num && m.mooring_num != "" && !m.skip_mooring then 80 else nil end
-          if !m.initiation.blank?
-            initiation = m.initiation
-          elsif !m.initiation_fee.blank?
-            initiation = self.calculate_initiation_installment(m.initiation_fee, m.installments, m.MemberSince)
-          else
-            initiation = nil
-          end
-          total = dues + (mooring_fee ? 80 : 0) + (initiation ? initiation : 0)
+          initiation_due = m.calculate_initiation_installment
+          total = dues + (mooring_fee ? 80 : 0) + (initiation_due ? initiation_due : 0)
           csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
-                  m.mooring_num, email, dues, initiation, mooring_fee, total]
+                  m.mooring_num, email, dues, initiation_due, mooring_fee, total]
         end
       end
     end
@@ -186,16 +181,22 @@ class Membership < ApplicationRecord
     end
   end
 
-  def self.calculate_initiation_installment(fee, installments, active_year)
-    # assume first installment was paid upon joining
-    # subsequent installments are billed in the year previous to being due
-    # for example: a member joining in 2018, with 3 intallments would be billed for subsequent installments
-    # in 2019 (bill generated in 2018) & 2020 (bill generated in 2019)
-
-    if (Time.now.year - active_year) < (installments - 1)
-      fee/installments
+  def calculate_initiation_installment
+    if !initiation.blank?   # initiation field overrides installment calculation
+      return initiation
+    elsif !initiation_fee.blank?
+      # assume first installment was paid upon joining
+      # subsequent installments are billed in the year previous to being due
+      # for example: a member joining in 2018, with 3 intallments would be billed for subsequent installments
+      # in 2019 (bill generated in 2018) & 2020 (bill generated in 2019)
+      if (Time.now.year - self.MemberSince) < (installments - 1)
+        initiation_fee/installments
+      else
+        nil
+      end
     else
       nil
     end
   end
+
 end
