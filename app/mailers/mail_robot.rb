@@ -40,16 +40,16 @@ class MailRobot < ApplicationMailer
     mail(:to => email, :subject => "LCYC #{binnacle_name}")
   end
 
-  def send_bills(email, replyto, mailingname, status, mooring, dues, fees, mooring_maint_fee, initiation)
+  def send_bills(email, replyto, mailingname, status, mooring, dues, mooring_fees, drysail_fee, initiation)
     @mailingname = mailingname
     @email = email
     @status = status
     @mooring = mooring
     @dues = number_to_currency(dues).rjust(10)
-    @fees = number_to_currency(fees).rjust(10)
-    @mooring_maint_fee = number_to_currency(mooring_maint_fee).rjust(10)
-    @initiation = initiation
-    @total = number_to_currency(dues + fees + mooring_maint_fee + initiation).rjust(10)
+    @mooring_fees = number_to_currency(mooring_fees).rjust(10)
+    @drysail_fee = number_to_currency(drysail_fee).rjust(10)
+    @initiation = number_to_currency(initiation).rjust(10)
+    @total = number_to_currency(dues + mooring_fees + drysail_fee + initiation).rjust(10)
     mail(to: email,
          from: 'LCYC Announcements <lcyc@members.lcyc.info>',
          reply_to: replyto,

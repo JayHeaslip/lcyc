@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_25_165053) do
+ActiveRecord::Schema.define(version: 2018_11_20_000440) do
 
   create_table "attachments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "mailing_id", null: false
@@ -157,6 +157,7 @@ ActiveRecord::Schema.define(version: 2018_10_25_165053) do
     t.boolean "skip_mooring"
     t.integer "installments"
     t.integer "initiation_fee"
+    t.integer "drysail_num"
     t.index ["Boat"], name: "Boat"
   end
 

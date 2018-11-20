@@ -23,6 +23,12 @@
       <label for="mooring_num">Mooring #</label>
     </span>
   </div>
+  <div class="form-group col-sm-3">
+    <span class="has-float-label">
+      <%= f.text_field :drysail_num, class: "form-control", readonly: read_only_not(['Admin','Harbormaster']), placeholder: " " %>
+      <label for="drysail_num">DrySail #</label>
+    </span>
+  </div>
 </div>
 
 <% if current_user.roles?(%w(Admin Membership)) %>

@@ -1,20 +1,13 @@
-<p>RE: <%=  1 + Time.now.year %> Membership Renewal and Mooring Information. <strong>Please note that you should be receiving this billing statement through both the US Postal Service as well as email.</\
-strong>
+<p>RE: <%=  1 + Time.now.year %> Membership Renewal and Mooring Information.
 </p>
-<p> Dear LCYC Member,
+<p> Dear <%= @mailingname %>,
 </p>
-<p>Please verify your current email address and update it as needed on the form below.  If you are not receiving emails from LCYC, check your SPAM folder. To ensure continued delivery of email, add lcyc@\
-members.lcyc.info to your contacts.  Questions about mooring assignments should be directed to the Harbormaster, Bob Finn (rmfinn2@icloud.com).
+<p>Please find below your <%= 1 + Time.now.year %> Lake Champlain Yacht Club membership renewal and mooring billing statement. Please note that you should be receiving this billing statement through both the US Postal Service as well as email. If you are not receiving emails from LCYC check your SPAM folder. To ensure continued delivery of email add <strong>lcyc@members.lcyc.info</strong> to your contacts.
 </p>
-<p>Please return the following section with your payment.
-  <ul>
-    <li>Annual dues and mooring fees are due by <strong>December 31</strong>.
-    <li> Checks should be made payable to LCYC
-    <li>A $100 late fee is required for all payments received after 12/31.
-    <li>If payment is not received by February 1, <%=  1 + Time.now.year %>,  membership is terminated
-  </ul>
+<p>
+  <strong>Annual dues and mooring fees are due by December 31, <%= Time.now.year %>. A $100 late fee is required for all payments received after 12/31/<%= Time.now.year %>. Membership is terminated if payment is not received by February 1, <%= 1 + Time.now.year %>.</strong>
 </p>
-<p>Return form and payment to:
+<p>Please return the following section with your payment to
 </p>
 <p style="margin-left: 10px">
 Lake Champlain Yacht Club<br/>
@@ -53,27 +46,28 @@ Shelburne, VT   05482<br/><br/><br/>
           <td>Annual Dues</td>
           <td style="text-align: right"><%= @dues %></td>
         </tr>
+        <% if @mooring_fees != 0 %>
         <tr>
           <td>Mooring Fees</td>
-          <td style="text-align: right"><%= @fees %></td>
+          <td style="text-align: right"><%= @mooring_fees %></td>
         </tr>
-        <% if @mooring_maint_fee != 0 %>
+	<% end %>
+        <% if @drysail_fee != 0 %>
         <tr>
-          <td>Mooring Replacement Fund</td>
-          <td style="text-align: right"><%=  @mooring_maint_fee %></td>
-        </tr>
+          <td>Dry Sail Fee</td>
+          <td style="text-align: right"><%= @drysail_fee %></td>
+        </tr> 
         <% end %>
-        <% if @initiation != 0 %>
+	<% if @initiation != 0 %>
         <tr>
           <td>Initiation</td>
-          <td style="text-align: right"><%= number_to_currency(@initiation).rjust(10) %></td>
+          <td style="text-align: right"><%= @initiation %></td>
         </tr>
         <% end %>
-        <tr>
-	        <tr>
+	<tr>
         </tr>
         <tr style="font-weight: bold">
-          <td>Total Fees</td>
+          <td>Total</td>
           <td style="text-align: right"><%= @total %></td>
         </tr>
       </table>
@@ -81,11 +75,17 @@ Shelburne, VT   05482<br/><br/><br/>
   </tr>
   <tr>
     <td style="border: 1px solid black; padding: 10px"> Mooring info:<br/>
-      <input type="checkbox" readonly> I wish to relinquish my mooring assignment until further notice.<br/>
-      <input type="checkbox" readonly> I previously relinquished, now I wish to moor a boat at LCYC:<br/>
+      <input type="checkbox" readonly> I wish to relinquish my mooring assignment<br/>
+      <input type="checkbox" readonly> I wish to moor a boat at LCYC in 2019:<br/>
       <p>Type: ___________________________<br/>
-      <p>Length: _______________
-      <p>Special Requests/Comments<br/><br/><br/><br/><br/><br/>
+	Length: _______________
+      </p>
+      <input type="checkbox" readonly> I wish to request dry sail storage in 2019:<br/>
+      <p>Type: ___________________________<br/>
+	Length: _______________<br/>
+      </p>
+      <p class="small"><strong>Note: </strong>dry sail storage is limited to sportboat or other craft that must be stored with the mast up and on a trailer.  Questions about mooring assignments and dry sail storage should be directed to the Harbornaster, Bob Finn (rmfinn2@icloud.com)
+	<p>
     </td>
   </tr>
 </table>
