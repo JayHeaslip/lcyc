@@ -34,12 +34,6 @@ Shelburne, VT   05482<br/><br/><br/>
     </td>
   </tr>
   <tr>
-    <td style="border: 1px solid black; padding: 10px">
-      <p>I wish to resign my LCYC membership:<br/><br/><br/></p>
-      <p>Signed: </p>
-    </td>
-  </tr>
-  <tr>
     <td style="vertical-align: top; border: 1px solid black; padding: 10px">
       <table>
         <tr>
@@ -50,24 +44,18 @@ Shelburne, VT   05482<br/><br/><br/>
           <td>Annual Dues</td>
           <td style="text-align: right"><%= @dues %></td>
         </tr>
-        <% if @mooring_fees != 0 %>
         <tr>
           <td>Mooring Fees</td>
           <td style="text-align: right"><%= @mooring_fees %></td>
         </tr>
-	<% end %>
-        <% if @drysail_fee != 0 %>
         <tr>
           <td>Dry Sail Fee</td>
           <td style="text-align: right"><%= @drysail_fee %></td>
         </tr> 
-        <% end %>
-	<% if @initiation != 0 %>
         <tr>
           <td>Initiation</td>
           <td style="text-align: right"><%= @initiation %></td>
         </tr>
-        <% end %>
 	<tr>
         </tr>
         <tr style="font-weight: bold">
@@ -79,7 +67,7 @@ Shelburne, VT   05482<br/><br/><br/>
   </tr>
   <tr>
     <td style="border: 1px solid black; padding: 10px"> Mooring info:<br/>
-      <input type="checkbox" readonly> I wish to relinquish my mooring assignment<br/>
+      <input type="checkbox" readonly> I wish to relinquish my mooring or dry sailing storage assignment <span style="font-style: italic">(circle one or both)<span><br/>
       <input type="checkbox" readonly> I wish to moor a boat at LCYC in 2019:<br/>
       Type: ___________________________<br/>
       Length: _______________<br/>
@@ -88,6 +76,12 @@ Shelburne, VT   05482<br/><br/><br/>
 	Length: _______________<br/>
       <p style="font-size:small"><strong>Note: </strong>dry sail storage is limited to sportboat or other craft that must be stored with the mast up and on a trailer.  Questions about mooring assignments and dry sail storage should be directed to the Harbornaster, Bob Finn (rmfinn2@icloud.com)
 	<p>
+    </td>
+  </tr>
+  <tr>
+    <td style="border: 1px solid black; padding: 10px">
+      <p>I wish to resign my LCYC membership:<br/><br/><br/></p>
+      <p>Signed: </p>
     </td>
   </tr>
 </table>
