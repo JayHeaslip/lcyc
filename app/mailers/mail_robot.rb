@@ -40,8 +40,12 @@ class MailRobot < ApplicationMailer
     mail(:to => email, :subject => "LCYC #{binnacle_name}")
   end
 
-  def send_bills(email, replyto, mailingname, status, mooring, dues, mooring_fees, drysail_fee, initiation)
+  def send_bills(email, replyto, mailingname, streetaddress, city, state, zip, status, mooring, dues, mooring_fees, drysail_fee, initiation)
     @mailingname = mailingname
+    @streetaddress = streetaddress
+    @city = city
+    @state = state
+    @zip = zip
     @email = email
     @status = status
     @mooring = mooring

@@ -22,7 +22,11 @@ Shelburne, VT   05482<br/><br/><br/>
     <td></td>
   </tr>
   <tr>
-    <td style="border: 1px solid black; padding: 10px">Membership:  <%= @mailingname %><br/>
+    
+    <td style="border: 1px solid black; padding: 10px">
+      Membership Information <span style="font-size:small">Please verify current address and email, if incorrect please update</span><br/><br/>
+      Membership:  <%= @mailingname %><br/>
+      Current address: <%= @streetaddress %>,<%= @city %>,<%= @state %>&nbsp;&nbsp;&nbsp;<%= @zip %><br/>
       Current email: <%= @email %><br/>
       Membership Status: <%= @status %><br/>
       Mooring#: <%= @mooring %><br/><br/><br/>
@@ -77,14 +81,12 @@ Shelburne, VT   05482<br/><br/><br/>
     <td style="border: 1px solid black; padding: 10px"> Mooring info:<br/>
       <input type="checkbox" readonly> I wish to relinquish my mooring assignment<br/>
       <input type="checkbox" readonly> I wish to moor a boat at LCYC in 2019:<br/>
-      <p>Type: ___________________________<br/>
-	Length: _______________
-      </p>
+      Type: ___________________________<br/>
+      Length: _______________<br/>
       <input type="checkbox" readonly> I wish to request dry sail storage in 2019:<br/>
-      <p>Type: ___________________________<br/>
+      Type: ___________________________<br/>
 	Length: _______________<br/>
-      </p>
-      <p class="small"><strong>Note: </strong>dry sail storage is limited to sportboat or other craft that must be stored with the mast up and on a trailer.  Questions about mooring assignments and dry sail storage should be directed to the Harbornaster, Bob Finn (rmfinn2@icloud.com)
+      <p style="font-size:small"><strong>Note: </strong>dry sail storage is limited to sportboat or other craft that must be stored with the mast up and on a trailer.  Questions about mooring assignments and dry sail storage should be directed to the Harbornaster, Bob Finn (rmfinn2@icloud.com)
 	<p>
     </td>
   </tr>

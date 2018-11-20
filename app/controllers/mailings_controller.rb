@@ -98,10 +98,12 @@ class MailingsController < ApplicationController
       else
         if Rails.env == 'development' || Rails.env == 'test'
           MailRobot.send_bills(email, replyto,
-                               m.MailingName, m.Status, m.mooring_num, dues, mooring_fees, drysail_fee, initiation).deliver
+                               m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
+                               m.Status, m.mooring_num, dues, mooring_fees, drysail_fee, initiation).deliver
         else
           MailRobot.delay(run_at: i.minutes.from_now).send_bills(email, replyto,
-                                                                    m.MailingName, m.Status, m.mooring_num, dues, mooring_fees, drysail_fee, initiation)
+                                                                 m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
+                                                                 m.Status, m.mooring_num, dues, mooring_fees, drysail_fee, initiation)
         end
       end
     end
