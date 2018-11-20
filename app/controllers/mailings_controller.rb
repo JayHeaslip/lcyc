@@ -74,10 +74,11 @@ class MailingsController < ApplicationController
     members.each_with_index do |m, i|
       logger.info "Generating bill for #{m.MailingName}"
       dues = Membership.dues(m)
-      mooring_maint_fee = fees = 0
-      fees = 80 if (m.mooring_num && m.mooring_num != "" && !m.skip_mooring)
-      mooring_maint_fee = 120 if (m.mooring_num && m.mooring_num != "" && !m.skip_mooring)
-      initiation = m.initiation || 0
+      mooring_fees = drysail_fee = 0
+      mooring_fees = 200 if (m.mooring_num && m.mooring_num != "" && !m.skip_mooring)
+      drysail_fee = 100 if (m.drysail_num && m.drysail_num != "")
+      initiation = m.calculate_initiation_installment
+      initiation = 0 if initiation.nil?
       member = m.people.where('MemberType = "Member"').first
       email = nil
       if member.EmailAddress && member.EmailAddress != ""
@@ -97,10 +98,12 @@ class MailingsController < ApplicationController
       else
         if Rails.env == 'development' || Rails.env == 'test'
           MailRobot.send_bills(email, replyto,
-                               m.MailingName, m.Status, m.mooring_num, dues, fees, mooring_maint_fee, initiation).deliver
+                               m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
+                               m.Status, m.mooring_num, dues, mooring_fees, drysail_fee, initiation).deliver
         else
           MailRobot.delay(run_at: i.minutes.from_now).send_bills(email, replyto,
-                                                                    m.MailingName, m.Status, m.mooring_num, dues, fees, mooring_maint_fee, initiation)
+                                                                 m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
+                                                                 m.Status, m.mooring_num, dues, mooring_fees, drysail_fee, initiation)
         end
       end
     end

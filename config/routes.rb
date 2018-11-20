@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       post :download_labels
       get :spreadsheets
       post :download_spreadsheet
+      get :initiation_report
     end
     member do
       get :wl

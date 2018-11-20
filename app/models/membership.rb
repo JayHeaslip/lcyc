@@ -3,7 +3,7 @@ require 'csv'
 class Membership < ApplicationRecord
 
   @@current_year = Time.now.year
-  @@Dues = { Active: 850, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
+  @@Dues = { Active: 850, Active2016: 283, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
 
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
   accepts_nested_attributes_for :people, allow_destroy: true,
@@ -26,15 +26,16 @@ class Membership < ApplicationRecord
   validate :check_type, if: Proc.new {|m| !m.people.empty?}
   validate :ensure_people, if: Proc.new {|m| m.people.empty?}
   validate :member_since, if: Proc.new {|m| m.Status != 'Accepted'}
+  validates :installments, allow_nil: true, inclusion: { in: (2..4) }
 
   # all categories of membership
-  scope :members, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior']).order(:LastName) }
+  scope :members, -> { where(Status: ['Active', 'Active2016', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior']).order(:LastName) }
   # eligible for a mooring
-  scope :active, -> { where(Status: ['Active', 'Life']).order(:LastName) }
+  scope :active, -> { where(Status: ['Active', 'Active2016', 'Life']).order(:LastName) }
   # all membership except Inactive  
-  scope :all_active, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
+  scope :all_active, -> { where(Status: ['Active', 'Active2016', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
   # not on the email announce list
-  scope :no_email, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
+  scope :no_email, -> { where(Status: ['Active', 'Active2016', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
 
   #used for filtering
   scope :lastname, -> (lastname) { where('LastName like ?', "#{lastname}%") }
@@ -58,11 +59,6 @@ class Membership < ApplicationRecord
   def count_type(type)
     self.people.inject(0) { |cnt, p| cnt + (p.MemberType == type ? 1 : 0) }
   end
-
-  # not used?
-  #def member
-  #  %w(Active Associate Honorary Inactive Life Senior).include?(self.Status)
-  #end
 
   def self.binnacle_hardcopy
     m = Membership.members.joins(:people)
@@ -99,7 +95,7 @@ class Membership < ApplicationRecord
         csv << %w(LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
                   HomePhone MN MW MC ME Partner Children)
         for m in members
-          info = [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
+          info = [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status.sub(/2016/,""),   #hack for the Active2016 members, change it to active for the log
                   m.MemberSince, m.mooring_num].concat(m.boat_info)
           info = info.concat(m.member_info)
           info = info.concat(m.partner_info)
@@ -122,7 +118,7 @@ class Membership < ApplicationRecord
     when "Billing"
       members = self.members.where('Status != "Honorary"').includes(:people)
       CSV.generate(col_sep: ",") do |csv|
-        csv << %w(LastName MailingName Street City State Zip Country Status Mooring Email Dues Initiation MooringFee Total)
+        csv << %w(LastName MailingName Street City State Zip Country Status Mooring Email Dues Initiation MooringFee DrySailFee Total)
         for m in members
           dues = Membership.dues(m) || 0
           member = m.people.where('MemberType = "Member"').first
@@ -131,11 +127,12 @@ class Membership < ApplicationRecord
           else
 	    email = ''
           end
-          mooring_fee = if m.mooring_num && m.mooring_num != "" && !m.skip_mooring then 80 else nil end
-          initiation = m.initiation || nil
-          total = dues + (mooring_fee ? 80 : 0) + (initiation ? initiation : 0)
+          mooring_fee = if m.mooring_num && m.mooring_num != "" && !m.skip_mooring then 200 else nil end
+          drysail_fee = if m.drysail_num && m.drysail_num != "" && !m.skip_mooring then 100 else nil end
+          initiation_due = m.calculate_initiation_installment
+          total = dues + (mooring_fee ? 200 : 0) + (initiation_due ? initiation_due : 0) + (drysail_fee ? 100 : 0)
           csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
-                  m.mooring_num, email, dues, initiation, mooring_fee, total]
+                  m.mooring_num, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end
     end
@@ -182,6 +179,24 @@ class Membership < ApplicationRecord
       [boat.Name, boat.Mfg_Size]
     else
       [nil,nil]
+    end
+  end
+
+  def calculate_initiation_installment
+    if !initiation.blank?   # initiation field overrides installment calculation
+      return initiation
+    elsif !initiation_fee.blank?
+      # assume first installment was paid upon joining
+      # subsequent installments are billed in the year previous to being due
+      # for example: a member joining in 2018, with 3 intallments would be billed for subsequent installments
+      # in 2019 (bill generated in 2018) & 2020 (bill generated in 2019)
+      if (Time.now.year - self.MemberSince) < (installments - 1)
+        initiation_fee/installments
+      else
+        nil
+      end
+    else
+      nil
     end
   end
 

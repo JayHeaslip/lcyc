@@ -9,7 +9,7 @@
     <label for="Status" class="col-form-label pt-0 col-sm-4">Status:</label>
     <% if current_user.roles?(%w(Admin Membership)) %>
     <div class="col-sm-4">
-      <%= f.collection_select :Status, Memberstatus.all, :Status, :Status, class: "form-control" %>
+      <%= f.collection_select :Status, Memberstatus.order(:Status), :Status, :Status, class: "form-control" %>
     </div>
     <% else %>
     <div class="col-sm-4">
@@ -23,7 +23,14 @@
       <label for="mooring_num">Mooring #</label>
     </span>
   </div>
+  <div class="form-group col-sm-3">
+    <span class="has-float-label">
+      <%= f.text_field :drysail_num, class: "form-control", readonly: read_only_not(['Admin','Harbormaster']), placeholder: " " %>
+      <label for="drysail_num">DrySail #</label>
+    </span>
+  </div>
 </div>
+
 <% if current_user.roles?(%w(Admin Membership)) %>
 <div class="form-row">
   <div class="form-group col-sm-3">
@@ -38,19 +45,33 @@
       <%= f.date_select :active_date, include_blank: true, order: [:month, :day, :year], start_year: 1972, end_year: 1+Time.now.year, class: 'form-control' %>
     </div>
   </div>
-  <div class="form-group col-sm-2 mr-2">
+  <div class="form-group col-sm-2 mr-2 mt-4">
     <span class="has-float-label">
       <%= f.text_field :initiation, id: "initiation", class: "form-control", placeholder: " " %>
-      <label for="initiation">Initiation</label>
+      <label for="initiation">Initiation Installment</label>
     </span>
   </div>
-  <div class="form-check mr-4">
+  <div class="form-check mr-4 mt-4">
     <%= f.check_box :paid, class: "form-check-input" %>
     <label for="paid" class="form-check-label">Paid?</label>
   </div>
-  <div class="form-check mr-4">
+  <div class="form-check mr-4 mt-4">
     <%= f.check_box :skip_mooring, class: "form-check-input" %>
     <label for="skip_mooring" class="form-check-label">Skip mooring fee?</label>
+  </div>
+</div>
+<div class="form-row">
+  <div class="form-group col-sm-2">
+    <span class="has-float-label">
+      <%= f.text_field :initiation_fee, id: "initiation_fee", class: "form-control", placeholder: " " %>
+      <label for="initiation">Initiation Fee</label>
+    </span>
+  </div>
+  <div class="form-group row">
+    <label for="installments" class="col-form-label pt-0 col-sm-6">Installments:</label>
+    <div class="col-sm-2">
+      <%= f.select :installments, ['2','3','4'], include_blank: true, class: "form-control" %>
+    </div>
   </div>
 </div>
 <% end %>

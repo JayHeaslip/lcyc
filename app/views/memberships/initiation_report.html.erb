@@ -1,0 +1,25 @@
+<div>
+  <h2>Initiation installments due</h2>
+
+  
+<p><b>Total : </b><%= @initiation_fee_due.length %></p>
+<table class="table table-sm table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>Last Name</th>
+      <th>Mailing Name</th>
+      <th>Initiation Due</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% for membership in @initiation_fee_due %>
+    <tr scope="row">
+      <td><%= link_to membership[0].LastName, membership[0] %>
+      <td><%= membership[0].MailingName %></td>
+      <td><%= membership[1] %></td>
+    </tr>
+    <% end %>
+    <tbody>
+</table>
+</div>

@@ -6,12 +6,12 @@ class MembershipsController < ApplicationController
   helper_method :sort_column, :sort_direction, :mooring_sort_column
   before_action :get_membership, except: [:index, :moorings, :unassigned_moorings, :new, :create, :destroy, 
                                              :labels, :download_labels,
-                                             :spreadsheets, :download_spreadsheet]
+                                             :spreadsheets, :download_spreadsheet, :initiation_report]
   before_action :authorize, only: [:edit, :update, :associate, :save_association, :rmboat]
 
   def index
-    @status_options = %w(Accepted Active Associate Honorary Inactive Life Resigned Senior)
-    params[:status] = ['Active', 'Associate', 'Honorary', 'Life', 'Senior'] if params[:status].blank?
+    @status_options = %w(Accepted Active Active2016 Associate Honorary Inactive Life Resigned Senior)
+    params[:status] = ['Active', 'Active2016', 'Associate', 'Honorary', 'Life', 'Senior'] if params[:status].blank?
     @memberships = filter_memberships(params)
     @memberships = @memberships.order(sort_column + " " + sort_direction)
     @lastname = params[:lastname]
@@ -145,6 +145,17 @@ class MembershipsController < ApplicationController
     export_csv(params[:spreadsheet])
   end
 
+  def initiation_report
+    members = Membership.members.where('Status != "Honorary"').includes(:people)
+    @initiation_fee_due = []
+    members.each do |m|
+      initiation_due = m.calculate_initiation_installment
+      unless initiation_due.nil?
+        @initiation_fee_due << [m, initiation_due]
+      end
+    end
+  end
+  
   private
 
   def get_membership
@@ -257,7 +268,7 @@ class MembershipsController < ApplicationController
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
                                        :State, :Zip, :Country, :Status, :MemberSince, :mooring_num,
                                        :application_date, :active_date, :initiation,
-                                       :paid, :skip_mooring,
+                                       :paid, :skip_mooring, :installments, :initiation_fee, :drysail_num,
                                        people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),
                                        boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy))
   end
