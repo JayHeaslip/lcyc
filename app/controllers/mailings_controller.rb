@@ -61,7 +61,6 @@ class MailingsController < ApplicationController
   end
 
   def send_bills
-    #send_bills(email, replyto, mailingname, email, status, mooring, dues, fees)
     flashes = ""
     replyto = current_user.email
     if params[:test]
@@ -99,11 +98,11 @@ class MailingsController < ApplicationController
         if Rails.env == 'development' || Rails.env == 'test'
           MailRobot.send_bills(email, replyto,
                                m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
-                               m.Status, m.mooring_num, dues, mooring_fees, drysail_fee, initiation).deliver
+                               m.Status, m.mooring_num, m.drysail_num, dues, mooring_fees, drysail_fee, initiation).deliver
         else
           MailRobot.delay(run_at: i.minutes.from_now).send_bills(email, replyto,
                                                                  m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
-                                                                 m.Status, m.mooring_num, dues, mooring_fees, drysail_fee, initiation)
+                                                                 m.Status, m.mooring_num, m.drysail_num, dues, mooring_fees, drysail_fee, initiation)
         end
       end
     end

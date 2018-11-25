@@ -40,7 +40,7 @@ class MailRobot < ApplicationMailer
     mail(:to => email, :subject => "LCYC #{binnacle_name}")
   end
 
-  def send_bills(email, replyto, mailingname, streetaddress, city, state, zip, status, mooring, dues, mooring_fees, drysail_fee, initiation)
+  def send_bills(email, replyto, mailingname, streetaddress, city, state, zip, status, mooring, drysail, dues, mooring_fees, drysail_fee, initiation)
     @mailingname = mailingname
     @streetaddress = streetaddress
     @city = city
@@ -49,6 +49,7 @@ class MailRobot < ApplicationMailer
     @email = email
     @status = status
     @mooring = mooring
+    @drysail = drysail
     @dues = number_to_currency(dues).rjust(10)
     @mooring_fees = number_to_currency(mooring_fees).rjust(10)
     @drysail_fee = number_to_currency(drysail_fee).rjust(10)
@@ -57,7 +58,9 @@ class MailRobot < ApplicationMailer
     mail(to: email,
          from: 'LCYC Announcements <lcyc@members.lcyc.info>',
          reply_to: replyto,
-         subject: '[LCYC] ' + 'Annual Dues')
+         subject: '[LCYC] ' + 'Annual Dues') do |format|
+      format.html { render layout: 'bills'}
+    end
   end
 
   def dbbackup(backup)

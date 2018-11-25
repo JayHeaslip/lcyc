@@ -29,8 +29,25 @@ Shelburne, VT   05482<br/><br/><br/>
       Current address: <%= @streetaddress %>,<%= @city %>,<%= @state %>&nbsp;&nbsp;&nbsp;<%= @zip %><br/>
       Current email: <%= @email %><br/>
       Membership Status: <%= @status %><br/>
-      Mooring#: <%= @mooring %><br/><br/><br/>
+      Mooring#: <%= @mooring %><br/>
+      <% unless @drysail.nil? %>
+      Drysail#: <%= @drysail %><br/>
+      <% end %>
+      <br/><br/>
       New email:_________________________________________________
+    </td>
+  </tr>
+  <tr>
+    <td style="border: 1px solid black; padding: 10px">Requested chanegs to Mooring or Dry Sail Storage status<br/>
+      <input type="checkbox" readonly> I wish to relinquish my mooring or dry sailing storage assignment <span style="font-size: 80%;font-style: italic">(circle one or both)</span><br/>
+      <input type="checkbox" readonly> I wish to moor a boat at LCYC in 2019:<br/>
+      Type: ___________________________<br/>
+      Length: _______________<br/>
+      <input type="checkbox" readonly> I wish to request dry sail storage in 2019:<br/>
+      Type: ___________________________<br/>
+	Length: _______________<br/>
+      <p style="font-size:80%"><strong>Note: </strong>Starting in 2019, dry sail storage spaces will be assigned by the Harbormaster and a $100 fee charged. Spaces are limited to sportboat or other craft that must be stored with the mast up and on a trailer.  Questions about mooring assignments and dry sail storage should be directed to the Harbornaster, Bob Finn (rmfinn2@icloud.com)
+	<p>
     </td>
   </tr>
   <tr>
@@ -66,22 +83,10 @@ Shelburne, VT   05482<br/><br/><br/>
     </td>
   </tr>
   <tr>
-    <td style="border: 1px solid black; padding: 10px"> Mooring info:<br/>
-      <input type="checkbox" readonly> I wish to relinquish my mooring or dry sailing storage assignment <span style="font-size: 80%;font-style: italic">(circle one or both)<span><br/>
-      <input type="checkbox" readonly> I wish to moor a boat at LCYC in 2019:<br/>
-      Type: ___________________________<br/>
-      Length: _______________<br/>
-      <input type="checkbox" readonly> I wish to request dry sail storage in 2019:<br/>
-      Type: ___________________________<br/>
-	Length: _______________<br/>
-      <p style="font-size:80%"><strong>Note: </strong>dry sail storage is limited to sportboat or other craft that must be stored with the mast up and on a trailer.  Questions about mooring assignments and dry sail storage should be directed to the Harbornaster, Bob Finn (rmfinn2@icloud.com)
-	<p>
-    </td>
-  </tr>
-  <tr>
-    <td style="border: 1px solid black; padding: 10px">
-      <p>I wish to resign my LCYC membership:<br/><br/><br/></p>
-      <p>Signed: </p>
+    <td style="border: 1px solid black; padding: 10px"><strong>Membership Resignation</strong><br/>
+      If you choose to resign from the Lake Champlain Yacht Club, please check the box below, sign and date.<br/>
+      <input type="checkbox" readonly> I wish to resign my LCYC membership<br/><br/>
+      <p>Signed: ___________________________________________________  Date:  _____________</p>
     </td>
   </tr>
 </table>
