@@ -1,0 +1,31 @@
+<table class="table table-sm table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th><%= sortable 'LastName', 'Last Name' %></th>
+      <th><%= sortable 'MailingName', 'Mailing Name' %></th>
+      <th><%= sortable 'drysail_num', 'Dry Sail #' %></th>
+      <th>Boat Name</th>
+      <th>Boat Type</th>
+    </tr>
+  </thead>
+<% for membership in @memberships %>
+  <tbody>
+    <tr scope="row">
+      <td><%= link_to membership.LastName, membership %>
+      <td><%= membership.MailingName %></td>
+      <td><%= membership.drysail_num %></td>
+      <% if membership.drysailed_boat.nil? %>
+        <td></td>
+        <td></td>
+      <% else %>
+        <td><%= membership.drysailed_boat.Name %></td>
+        <td><%= membership.drysailed_boat.Mfg_Size %></td>
+      <% end %>
+      <td><span class="list-actions"><%= link_to 'Unassign', unassign_drysail_membership_path(membership),
+					 data: {confirm: 'Are you sure?'}, method: :post %>
+	</span>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

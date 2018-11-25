@@ -4,7 +4,7 @@ require 'prawn/measurement_extensions'
 class MembershipsController < ApplicationController
 
   helper_method :sort_column, :sort_direction, :mooring_sort_column
-  before_action :get_membership, except: [:index, :moorings, :unassigned_moorings, :new, :create, :destroy, 
+  before_action :get_membership, except: [:index, :moorings, :unassigned_moorings, :drysail, :new, :create, :destroy, 
                                              :labels, :download_labels,
                                              :spreadsheets, :download_spreadsheet, :initiation_report]
   before_action :authorize, only: [:edit, :update, :associate, :save_association, :rmboat]
@@ -102,11 +102,24 @@ class MembershipsController < ApplicationController
     @memberships = @memberships.order(mooring_sort_column + " " + sort_direction)
   end
 
+  def drysail
+    session[:breadcrumbs] = request.path
+    @memberships = Membership.where('memberships.drysail_num is not NULL').includes(:boats)
+    @memberships = @memberships.order(drysail_sort_column + " " + sort_direction)
+  end
+
   def unassign
     m = Membership.find(params[:id])
     m.mooring_num = nil
     m.save!
     redirect_to moorings_memberships_path
+  end
+
+  def unassign_drysail
+    m = Membership.find(params[:id])
+    m.drysail_num = nil
+    m.save!
+    redirect_to drysail_memberships_path
   end
 
   def unassigned_moorings
@@ -189,6 +202,10 @@ class MembershipsController < ApplicationController
   
   def mooring_sort_column
     Membership.column_names.include?(params[:sort]) ? params[:sort] : "mooring_num"
+  end
+  
+  def drysail_sort_column
+    Membership.column_names.include?(params[:sort]) ? params[:sort] : "drysail_num"
   end
   
   def sort_direction

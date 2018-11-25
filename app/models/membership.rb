@@ -76,6 +76,11 @@ class Membership < ApplicationRecord
     self.boats.select {|b| b.mooring_num == self.mooring_num}[0]
   end
 
+  #return boat on mooring owned by the membership
+  def drysailed_boat
+    self.boats.select {|b| b.location == 'Parking Lot'}[0]
+  end
+
   def self.unassigned_moorings
     club_moorings = (1..155).to_a
     club_moorings.delete(142) # club mooring (for Dunn)
@@ -118,7 +123,7 @@ class Membership < ApplicationRecord
     when "Billing"
       members = self.members.where('Status != "Honorary"').includes(:people)
       CSV.generate(col_sep: ",") do |csv|
-        csv << %w(LastName MailingName Street City State Zip Country Status Mooring Email Dues Initiation MooringFee DrySailFee Total)
+        csv << %w(LastName MailingName Street City State Zip Country Status Mooring DrySailStorage Email Dues Initiation MooringFee DrySailStorageFee Total)
         for m in members
           dues = Membership.dues(m) || 0
           member = m.people.where('MemberType = "Member"').first
@@ -131,8 +136,8 @@ class Membership < ApplicationRecord
           drysail_fee = if m.drysail_num && m.drysail_num != "" && !m.skip_mooring then 100 else nil end
           initiation_due = m.calculate_initiation_installment
           total = dues + (mooring_fee ? 200 : 0) + (initiation_due ? initiation_due : 0) + (drysail_fee ? 100 : 0)
-          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
-                  m.mooring_num, email, dues, initiation_due, mooring_fee, drysail_fee, total]
+          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\x09", m.Country, m.Status, 
+                  m.mooring_num, m.drysail_num, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end
     end

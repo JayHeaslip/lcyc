@@ -3,16 +3,12 @@ TODO items
 make sure ./cronjob runs ok, only need to run on production
 on switch to production, kill delayed job, then restart and check
 allow BOG to People#select_commitee, People#committee, Committees#download_spreadsheet
+add validation to drysail_num (1..12), allow nil
 
 tasks
 ------------------------------------------
 clean up database (resigned members, boats with no owners, etc., users that are no longer members)
 
-deploy
------------
-git branches for staging: master
-                 production: production  - modify .htaccess (PassengerAppEnv production)
-                 need to merge before production deploy
 
 non-transparent updates
 -------------------------------------------------------------------
@@ -33,6 +29,12 @@ create hierarchy of roles (Member->BOG-> [Membership, Harbormaster, Communicatio
 
 Done
 ----------------------------------------------------------------------
+deploy
+-----------
+git branches for staging: master
+                 production: production  - modify .htaccess (PassengerAppEnv production)
+                 need to merge before production deploy
+
 review person model (compare to production version)
 add application data/active data to memebership form
 add new/edit to waiting list
