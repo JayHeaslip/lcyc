@@ -136,7 +136,7 @@ class Membership < ApplicationRecord
           drysail_fee = if m.drysail_num && m.drysail_num != "" && !m.skip_mooring then 100 else nil end
           initiation_due = m.calculate_initiation_installment
           total = dues + (mooring_fee ? 200 : 0) + (initiation_due ? initiation_due : 0) + (drysail_fee ? 100 : 0)
-          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\u200b", m.Country, m.Status, 
+          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\x09", m.Country, m.Status, 
                   m.mooring_num, m.drysail_num, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end
