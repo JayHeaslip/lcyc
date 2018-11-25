@@ -96,7 +96,7 @@ class Membership < ApplicationRecord
     case type
     when "Log Members" 
       members = self.members.includes(:people).order('LastName, MailingName')
-      CSV.generate(col_sep: ",") do |csv|
+      CSV.generate(col_sep: ",", quote_char: "'") do |csv|
         csv << %w(LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
                   HomePhone MN MW MC ME Partner Children)
         for m in members
@@ -136,7 +136,7 @@ class Membership < ApplicationRecord
           drysail_fee = if m.drysail_num && m.drysail_num != "" && !m.skip_mooring then 100 else nil end
           initiation_due = m.calculate_initiation_installment
           total = dues + (mooring_fee ? 200 : 0) + (initiation_due ? initiation_due : 0) + (drysail_fee ? 100 : 0)
-          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, '"="' + " \"#{m.Zip}\"", m.Country, m.Status, 
+          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\u200b", m.Country, m.Status, 
                   m.mooring_num, m.drysail_num, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end
