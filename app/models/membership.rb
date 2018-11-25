@@ -96,7 +96,7 @@ class Membership < ApplicationRecord
     case type
     when "Log Members" 
       members = self.members.includes(:people).order('LastName, MailingName')
-      CSV.generate(col_sep: ",", quote_char: "'") do |csv|
+      CSV.generate(col_sep: ",") do |csv|
         csv << %w(LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
                   HomePhone MN MW MC ME Partner Children)
         for m in members
