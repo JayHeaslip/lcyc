@@ -4,7 +4,9 @@ class Membership < ApplicationRecord
 
   @@current_year = Time.now.year
   @@Dues = { Active: 850, Active2016: 283, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
-
+  @@Mooring_fee = 200   # 80 + 120
+  @@Drysail_Fee = 100
+  
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
   accepts_nested_attributes_for :people, allow_destroy: true,
                                 reject_if: proc { |a| a['FirstName'].blank? }
@@ -132,11 +134,11 @@ class Membership < ApplicationRecord
           else
 	    email = ''
           end
-          mooring_fee = if m.mooring_num && m.mooring_num != "" && !m.skip_mooring then 200 else nil end
-          drysail_fee = if m.drysail_num && m.drysail_num != "" && !m.skip_mooring then 100 else nil end
+          mooring_fee = m.calculate_mooring_fee
+          drysail_fee = m.calculate_drysail_fee
           initiation_due = m.calculate_initiation_installment
-          total = dues + (mooring_fee ? 200 : 0) + (initiation_due ? initiation_due : 0) + (drysail_fee ? 100 : 0)
-          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\x09", m.Country, m.Status, 
+          total = dues + mooring_fee + initiation_due + drysail_fee
+          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\x09", m.Country, m.Status.sub(/2016/,""), 
                   m.mooring_num, m.drysail_num, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end
@@ -198,10 +200,26 @@ class Membership < ApplicationRecord
       if (Time.now.year - self.MemberSince) < (installments - 1)
         initiation_fee/installments
       else
-        nil
+        0
       end
     else
-      nil
+      0
+    end
+  end
+
+  def calculate_mooring_fee
+    if (mooring_num && mooring_num != "" && !skip_mooring)
+      @@Mooring_fee
+    else
+      0
+    end
+  end
+
+  def calculate_drysail_fee
+    if (drysail_num && mooring_num != "")
+      @@Drysail_Fee
+    else
+      0
     end
   end
 

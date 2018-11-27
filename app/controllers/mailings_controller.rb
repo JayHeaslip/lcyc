@@ -55,29 +55,61 @@ class MailingsController < ApplicationController
     redirect_to mailings_path
   end
 
+  def new_billing
+    @mailing = Mailing.new
+    @mailing.replyto = current_user.email
+    @mailing.html = true
+    @mailing.subject = "unused"
+  end
+
+  def create_billing
+    @mailing = Mailing.new(mailing_params)
+    @mailing.subject = "unused"
+    if @mailing.save
+      flash[:notice] = "Success."
+      redirect_to billing_mailing_path(@mailing)
+    else
+      render :new_billing
+    end
+  end
+
+  def edit_billing
+    @mailing = Mailing.find(params[:id])
+  end
+
+  def update_billing
+    @mailing = Mailing.find(params[:id])
+    @mailing.attributes = mailing_params
+    if @mailing.save
+      flash[:notice] = "Success."
+      redirect_to billing_mailing_path(@mailing)
+    else
+      render :edit_billing
+    end
+  end
+
   def billing
+    @mailing = Mailing.find(params[:id])
     @test = true
     check_delayed_job
   end
-
+  
   def send_bills
+    @mailing = Mailing.find(params[:id])
     flashes = ""
-    replyto = current_user.email
     if params[:test]
       p = Person.find_by_EmailAddress(current_user.email)
       members = [p.membership]
     else
-      members = Membership.members.where('Status != "Honorary"').includes(:people)
+      members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
     end
 
     members.each_with_index do |m, i|
       logger.info "Generating bill for #{m.MailingName}"
       dues = Membership.dues(m)
-      mooring_fees = drysail_fee = 0
-      mooring_fees = 200 if (m.mooring_num && m.mooring_num != "" && !m.skip_mooring)
-      drysail_fee = 100 if (m.drysail_num && m.drysail_num != "")
+      mooring_fees = m.calculate_mooring_fee
+      drysail_fee = m.calculate_drysail_fee
       initiation = m.calculate_initiation_installment
-      initiation = 0 if initiation.nil?
       member = m.people.where('MemberType = "Member"').first
       email = nil
       if member.EmailAddress && member.EmailAddress != ""
@@ -96,11 +128,11 @@ class MailingsController < ApplicationController
         logger.info "#{m.MailingName} was marked as paid"
       else
         if Rails.env == 'development' || Rails.env == 'test'
-          MailRobot.send_bills(email, replyto,
+          MailRobot.send_bills(params[:id].to_i, email, 
                                m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
                                m.Status, m.mooring_num, m.drysail_num, dues, mooring_fees, drysail_fee, initiation).deliver
         else
-          MailRobot.delay(run_at: i.minutes.from_now).send_bills(email, replyto,
+          MailRobot.delay(run_at: i.minutes.from_now).send_bills(params[:id].to_i, email, 
                                                                  m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
                                                                  m.Status, m.mooring_num, m.drysail_num, dues, mooring_fees, drysail_fee, initiation)
         end
