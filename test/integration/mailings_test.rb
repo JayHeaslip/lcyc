@@ -62,13 +62,13 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "billings" do
-    get billing_mailings_url
+    get billing_mailing_url(@mailing)
     assert_response :success
   end
 
   test "send bills" do
     assert_difference 'ActionMailer::Base.deliveries.size', +5 do
-      post send_bills_mailings_url
+      post send_bills_mailing_url(@mailing)
     end
 
     bill = ActionMailer::Base.deliveries.last
@@ -78,18 +78,18 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "send bills test" do
-    post send_bills_mailings_url, params: {test: true}
+    post send_bills_mailing_url(@mailing), params: {test: true}
     assert_redirected_to root_path
   end
 
   test "send bills no member email" do
     login_as(users(:barb2), 'passwor2')
-    post send_bills_mailings_url, params: {test: true}
+    post send_bills_mailing_url(@mailing), params: {test: true}
     assert_redirected_to root_path
   end
 
   test "send bills no email" do
-    post send_bills_mailings_url
+    post send_bills_mailing_url(@mailing)
     assert_equal 'Note: bill was not sent for Joe No email, no valid email<br/>',flash[:notice]
     assert_redirected_to root_path
   end
