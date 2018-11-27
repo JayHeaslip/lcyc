@@ -25,6 +25,7 @@ class Membership < ApplicationRecord
   validates :Zip, presence: true, length: { maximum: 12 }
   validates :Status, presence: true
   validates :mooring_num, allow_nil: true, inclusion: { in: (0..155) }
+  validates :drysail_num, allow_nil: true, inclusion: { in: (1..12) }
   validate :check_type, if: Proc.new {|m| !m.people.empty?}
   validate :ensure_people, if: Proc.new {|m| m.people.empty?}
   validate :member_since, if: Proc.new {|m| m.Status != 'Accepted'}
@@ -123,7 +124,7 @@ class Membership < ApplicationRecord
         end
       end
     when "Billing"
-      members = self.members.where('Status != "Honorary"').includes(:people)
+      members = self.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       CSV.generate(col_sep: ",") do |csv|
         csv << %w(LastName MailingName Street City State Zip Country Status Mooring DrySailStorage Email Dues Initiation MooringFee DrySailStorageFee Total)
         for m in members
