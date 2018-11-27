@@ -40,14 +40,19 @@ class MailRobot < ApplicationMailer
     mail(:to => email, :subject => "LCYC #{binnacle_name}")
   end
 
-  def send_bills(email, replyto, mailingname, streetaddress, city, state, zip, status, mooring, drysail, dues, mooring_fees, drysail_fee, initiation)
+  def send_bills(mailing_id, email, mailingname, streetaddress, city, state, zip, status, mooring, drysail, dues, mooring_fees, drysail_fee, initiation)
+    mailing = Mailing.find(mailing_id)
+    filenames = mailing.attachments.map { |a| a.pdf.url(:original, false)}
+    filenames.each do |f|
+      attachments[File.basename(f)] = File.read("#{Rails.root}/public/#{f}")
+    end
     @mailingname = mailingname
     @streetaddress = streetaddress
     @city = city
     @state = state
     @zip = zip
     @email = email
-    @status = status
+    @status = status.sub(/2016/,"")
     @mooring = mooring
     @drysail = drysail
     @dues = number_to_currency(dues).rjust(10)
@@ -57,7 +62,7 @@ class MailRobot < ApplicationMailer
     @total = number_to_currency(dues + mooring_fees + drysail_fee + initiation).rjust(10)
     mail(to: email,
          from: 'LCYC Announcements <lcyc@members.lcyc.info>',
-         reply_to: replyto,
+         reply_to: mailing.replyto,
          subject: '[LCYC] ' + 'Annual Dues') do |format|
       format.html { render layout: 'bills'}
     end

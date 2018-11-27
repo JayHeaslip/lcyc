@@ -87,10 +87,14 @@ Rails.application.routes.draw do
   end
 
   resources :mailings do
-    get :billing, on: :collection
-    post :send_bills, on: :collection
+    get :new_billing, on: :collection
+    post :create_billing, on: :collection
     member do
+      get :billing
       post :send_email
+      get :edit_billing
+      patch :update_billing
+      post :send_bills
     end
   end
   
