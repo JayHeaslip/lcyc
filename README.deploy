@@ -2,4 +2,5 @@ to deploy staging:
  bundle exec cap staging deploy
 
 to deploy production:
+ git merge master
  bundle exec cap production deploy
