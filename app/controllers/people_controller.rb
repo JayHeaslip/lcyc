@@ -8,7 +8,7 @@ class PeopleController < ApplicationController
   
   def committee
     @committee = params[:committee] || 'Boats'
-    @people = Person.active.committee(@committee).order(:LastName)
+    @people = Person.active.where(MemberType: ['Member', 'Partner']).committee(@committee).order(:LastName)
   end
 
   def destroy
