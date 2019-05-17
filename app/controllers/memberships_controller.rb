@@ -285,7 +285,7 @@ class MembershipsController < ApplicationController
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
                                        :State, :Zip, :Country, :Status, :MemberSince, :mooring_num,
                                        :application_date, :active_date, :initiation,
-                                       :paid, :skip_mooring, :installments, :initiation_fee, :drysail_num,
+                                       :paid, :skip_mooring, :installments, :initiation_fee, :drysail_num, :notes,
                                        people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),
                                        boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy))
   end
