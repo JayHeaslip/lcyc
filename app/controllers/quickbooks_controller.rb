@@ -7,6 +7,34 @@ require 'pp'
 
 class QuickbooksController < ApplicationController
 
+  # remove leading/trailing blanks for membership data going to quickbooks
+  def cleanup
+    members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
+    members.each do |m|
+      update = false
+      if m.MailingName != m.MailingName.strip
+        update = true
+        m.MailingName = m.MailingName.strip
+      elsif m.StreetAddress != m.StreetAddress.strip
+        update = true
+        m.StreetAddress = m.StreetAddress.strip
+      elsif m.City != m.City.strip
+        update = true
+        m.City = m.City.strip
+      elsif m.State != m.State.strip
+        update = true
+        m.State = m.State.strip
+      elsif m.Zip != m.Zip.strip
+        update = true
+        m.Zip = m.Zip.strip
+      elsif m.Zip != m.Zip.strip
+        update = true
+        m.Zip = m.Zip.strip
+      end
+      m.save if update
+    end
+  end
+
   def connect
 
     session[:state] = SecureRandom.uuid
@@ -48,9 +76,6 @@ class QuickbooksController < ApplicationController
       qb_members.each do |qbm|
         display_name = qbm['DisplayName']
         m = Membership.find_by_MailingName(display_name)
-        logger.info "looking up #{display_name}"
-        logger.info "m nil? #{m.nil?}"
-        logger.info m
         update_member(qbm,m,display_name)
       end
 
@@ -104,10 +129,46 @@ class QuickbooksController < ApplicationController
   def update_member(qbm, m, display_name)
     if m # update a member
       @existing_qbo_members[display_name] = true
+      member_email = m.people.where('MemberType = "Member"').first.EmailAddress
+      update = false
+      if qbm['PrimaryEmailAddr'] &&
+         qbm['PrimaryEmailAddr']['Address'] != member_email
+        update = true
+        logger.info "email changed"
+      elsif update_address(qbm,m)
+        logger.info "address changed"
+        update = true
+      end
+      if update
+        logger.info "Updating QBO info for #{display_name}"
+        member = {
+          "DisplayName": display_name,
+          "BillAddr": { "Line1": m.StreetAddress,
+                        "City":  m.City,
+                        "CountrySubDivisionCode": m.State,
+                        "PostalCode": m.Zip
+                      },
+                  "PrimaryEmailAddr": { "Address": member_email }
+        }
+        response = @api.update(:customer, id: qbm['Id'], payload: member)
+      end
     else # delete from QBO, no longer in membership db
       logger.info "deleting #{display_name}"
       response = @api.deactivate(:customer, id: qbm['Id'])
     end
   end
-  
+
+  def update_address(qbm, m)
+    if qbm['BillAddr']['Line1'] != m.StreetAddress
+      return true
+    elsif qbm['BillAddr']['City'] != m.City
+      return true
+    elsif qbm['BillAddr']['CountrySubDivisionCode'] != m.State
+      return true
+    elsif qbm['BillAddr']['PostalCode'] != m.Zip
+      return true
+    end
+    return false
+  end
+
 end

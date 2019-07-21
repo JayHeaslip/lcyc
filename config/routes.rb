@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :unsubscribe, only: [:show, :update]
   resources :quickbooks do
     collection do
+      get :cleanup
       get :connect
       get :update_members
       get :generate_invoices
