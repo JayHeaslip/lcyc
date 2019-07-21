@@ -1,7 +1,7 @@
-<h2>Update members</h2>
+<h2>Member update complete</h2>
 
-<table>
-  <% @customers.each do |c| %>
-  <tr><td><%= c.display_name %></td></tr>
-  <% end %>
-</table>
+<% @existing_qbo_members.each do |k,v| %>
+<% unless v %>
+<p>Created <%= k %></p>
+<% end %>
+<% end %>
