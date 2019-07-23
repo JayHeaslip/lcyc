@@ -108,6 +108,28 @@ class QuickbooksController < ApplicationController
   end
 
   def generate_invoices
+    if access_token = session[:access_token]
+      @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
+      members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
+      count = 0
+      members.each do |m| 
+        qbm = @api.get(:customer, ["DisplayName", m.MailingName])
+        logger.info qbm
+        logger.info "email: #{qbm["PrimaryEmailAddr"]}"
+        invoice = {
+          "CustomerRef": {"value": qbm["Id"] },
+          "AllowOnlineACHPayment": true,
+          "BillEmail": qbm["PrimaryEmailAddr"]
+        }
+        invoice["Line"] = generate_line_items(m)
+        logger.info invoice
+        response = @api.create(:invoice, payload: invoice)
+        count += 1
+        if (count % 20) == 0
+          sleep(40)
+        end
+      end
+    end
   end
 
   def oauth2_client
@@ -143,11 +165,11 @@ class QuickbooksController < ApplicationController
         logger.info "Updating QBO info for #{display_name}"
         member = {
           "DisplayName": display_name,
-          "BillAddr": { "Line1": m.StreetAddress,
-                        "City":  m.City,
-                        "CountrySubDivisionCode": m.State,
-                        "PostalCode": m.Zip
-                      },
+                  "BillAddr": { "Line1": m.StreetAddress,
+                                "City":  m.City,
+                                "CountrySubDivisionCode": m.State,
+                                "PostalCode": m.Zip
+                              },
                   "PrimaryEmailAddr": { "Address": member_email }
         }
         response = @api.update(:customer, id: qbm['Id'], payload: member)
@@ -157,7 +179,7 @@ class QuickbooksController < ApplicationController
       response = @api.deactivate(:customer, id: qbm['Id'])
     end
   end
-
+  
   def update_address(qbm, m)
     if qbm['BillAddr']['Line1'] != m.StreetAddress
       return true
@@ -170,5 +192,69 @@ class QuickbooksController < ApplicationController
     end
     return false
   end
+  
+  def generate_line_items(m)
+    dues = Membership.dues(m) || 0
+    mooring_fee = m.calculate_mooring_fee
+    drysail_fee = m.calculate_drysail_fee
+    initiation_due = m.calculate_initiation_installment
 
+    # need to query Items to get value & name (Id & Name)
+    line_items = []
+    if dues != 0
+      dues_value = @api.get(:item, ["Name", "Dues"])["Id"]
+      line_items << {
+        "Amount": dues,
+        "DetailType": "SalesItemLineDetail",
+        "SalesItemLineDetail": {
+                                 "ItemRef": {
+                                             "value": dues_value,
+                                             "name": "Dues"
+                                            }
+                               }
+      }
+    end
+    if mooring_fee != 0
+      mooring_fee_value = @api.get(:item, ["Name", "Mooring Fee"])["Id"]
+      line_items << {
+        "Amount": mooring_fee,
+        "DetailType": "SalesItemLineDetail",
+        "SalesItemLineDetail": {
+                                 "ItemRef": {
+                                             "value": mooring_fee_value,
+                                             "name": "Mooring Fee"
+                                            }
+                               }
+      }
+    end
+    if drysail_fee != 0
+      drysail_value = @api.get(:item, ["Name", "Drysail Fee"])["Id"]
+      line_items << {
+        "Amount": drysail_fee,
+        "DetailType": "SalesItemLineDetail",
+        "SalesItemLineDetail": {
+                                 "ItemRef": {
+                                             "value": drysail_value,
+                                             "name": "Drysail Fee"
+                                            }
+                               }
+      }
+    end
+    if initiation_due != 0
+      initiation_value = @api.get(:item, ["Name", "Initiation Installment"])["Id"]
+      line_items << {
+        "Amount": initiation_due,
+        "DetailType": "SalesItemLineDetail",
+        "SalesItemLineDetail": {
+                                 "ItemRef": {
+                                             "value": initiation_value,
+                                             "name": "Initiation Installment"
+                                            }
+                               }
+      }
+    end
+
+    line_items
+  end
+  
 end
