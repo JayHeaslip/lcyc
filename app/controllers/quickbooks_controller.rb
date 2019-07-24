@@ -138,7 +138,7 @@ class QuickbooksController < ApplicationController
           "AllowOnlineACHPayment": true,
           "BillEmail": qbm["PrimaryEmailAddr"]
         }
-        invoice["Line"] = generate_line_items(m)
+        invoice["Line"] = generate_line_items(m, params[:test])
         response = @api.create(:invoice, payload: invoice)
         count += 1
         if (count % 20) == 0
@@ -211,7 +211,7 @@ class QuickbooksController < ApplicationController
     return false
   end
   
-  def generate_line_items(m)
+  def generate_line_items(m, test)
     dues = Membership.dues(m) || 0
     mooring_fee = m.calculate_mooring_fee
     drysail_fee = m.calculate_drysail_fee
@@ -220,6 +220,7 @@ class QuickbooksController < ApplicationController
     # need to query Items to get value & name (Id & Name)
     line_items = []
     if dues != 0
+      dues = 5 if test
       dues_value = @api.get(:item, ["Name", "Dues"])["Id"]
       line_items << {
         "Amount": dues,
@@ -233,6 +234,7 @@ class QuickbooksController < ApplicationController
       }
     end
     if mooring_fee != 0
+      mooring_fee = 6 if test
       mooring_fee_value = @api.get(:item, ["Name", "Mooring Fee"])["Id"]
       line_items << {
         "Amount": mooring_fee,
@@ -246,6 +248,7 @@ class QuickbooksController < ApplicationController
       }
     end
     if drysail_fee != 0
+      drysail_fee = 7 if test
       drysail_value = @api.get(:item, ["Name", "Drysail Fee"])["Id"]
       line_items << {
         "Amount": drysail_fee,
@@ -259,6 +262,7 @@ class QuickbooksController < ApplicationController
       }
     end
     if initiation_due != 0
+      drysail_fee = 8 if test
       initiation_value = @api.get(:item, ["Name", "Initiation Installment"])["Id"]
       line_items << {
         "Amount": initiation_due,
