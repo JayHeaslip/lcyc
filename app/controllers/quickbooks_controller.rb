@@ -64,6 +64,7 @@ class QuickbooksController < ApplicationController
 
   def update_members
     if access_token = session[:access_token]
+      QboApi.production = true unless Rails.env == "development"
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
       members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       qb_members = @api.all(:customer)
@@ -109,20 +110,18 @@ class QuickbooksController < ApplicationController
 
   def generate_invoices
     if access_token = session[:access_token]
+      QboApi.production = true unless Rails.application == "development"
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
       members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       count = 0
       members.each do |m| 
         qbm = @api.get(:customer, ["DisplayName", m.MailingName])
-        logger.info qbm
-        logger.info "email: #{qbm["PrimaryEmailAddr"]}"
         invoice = {
           "CustomerRef": {"value": qbm["Id"] },
           "AllowOnlineACHPayment": true,
           "BillEmail": qbm["PrimaryEmailAddr"]
         }
         invoice["Line"] = generate_line_items(m)
-        logger.info invoice
         response = @api.create(:invoice, payload: invoice)
         count += 1
         if (count % 20) == 0
