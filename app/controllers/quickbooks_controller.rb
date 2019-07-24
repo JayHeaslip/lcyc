@@ -64,7 +64,11 @@ class QuickbooksController < ApplicationController
 
   def update_members
     if access_token = session[:access_token]
-      QboApi.production = true unless Rails.env == "development"
+      if Rails.env == "development"
+        QboApi.production = false
+      else
+        QboApi.production = true
+      end
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
       members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       qb_members = @api.all(:customer)
@@ -108,13 +112,26 @@ class QuickbooksController < ApplicationController
     
   end
 
+  def invoices
+    @test = true
+  end
+  
   def generate_invoices
     if access_token = session[:access_token]
-      QboApi.production = true unless Rails.application == "development"
+      if Rails.env == "development"
+        QboApi.production = false
+      else
+        QboApi.production = true
+      end
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
-      members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
+      if params[:test]
+        members = [Membership.find(64), Membership.find(345)]
+      else
+        members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
+      end
       count = 0
-      members.each do |m| 
+      members.each do |m|
+        logger.info "mailing name: #{m.MailingName}"
         qbm = @api.get(:customer, ["DisplayName", m.MailingName])
         invoice = {
           "CustomerRef": {"value": qbm["Id"] },
@@ -131,6 +148,8 @@ class QuickbooksController < ApplicationController
     end
   end
 
+  private
+  
   def oauth2_client
     client_id = Rails.application.secrets.OAUTH_CONSUMER_KEY
     client_secret = Rails.application.secrets.OAUTH_CONSUMER_SECRET

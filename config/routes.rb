@@ -14,7 +14,8 @@ Rails.application.routes.draw do
       get :cleanup
       get :connect
       get :update_members
-      get :generate_invoices
+      get :invoices
+      post :generate_invoices
     end
   end
 
