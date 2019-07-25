@@ -214,6 +214,7 @@ class QuickbooksController < ApplicationController
   def generate_line_items(m, test)
     dues = Membership.dues(m) || 0
     mooring_fee = m.calculate_mooring_fee
+    mooring_replacement_fee = m.calculate_mooring_replacement_fee
     drysail_fee = m.calculate_drysail_fee
     initiation_due = m.calculate_initiation_installment
 
@@ -247,8 +248,22 @@ class QuickbooksController < ApplicationController
                                }
       }
     end
+    if mooring_replacement_fee != 0
+      mooring_replacement_fee = 7 if test
+      mooring_replacement_fee_value = @api.get(:item, ["Name", "Mooring Replacement Fee"])["Id"]
+      line_items << {
+        "Amount": mooring_replacement_fee,
+        "DetailType": "SalesItemLineDetail",
+        "SalesItemLineDetail": {
+                                 "ItemRef": {
+                                             "value": mooring_replacement_fee_value,
+                                             "name": "Mooring Replacement Fee"
+                                            }
+                               }
+      }
+    end
     if drysail_fee != 0
-      drysail_fee = 7 if test
+      drysail_fee = 8 if test
       drysail_value = @api.get(:item, ["Name", "Drysail Fee"])["Id"]
       line_items << {
         "Amount": drysail_fee,
@@ -262,7 +277,7 @@ class QuickbooksController < ApplicationController
       }
     end
     if initiation_due != 0
-      drysail_fee = 8 if test
+      drysail_fee = 9 if test
       initiation_value = @api.get(:item, ["Name", "Initiation Installment"])["Id"]
       line_items << {
         "Amount": initiation_due,

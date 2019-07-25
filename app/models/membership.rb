@@ -4,7 +4,8 @@ class Membership < ApplicationRecord
 
   @@current_year = Time.now.year
   @@Dues = { Active: 850, Active2016: 283, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
-  @@Mooring_fee = 200   # 80 + 120
+  @@Mooring_fee = 80
+  @@Mooring_replacement_fee = 120
   @@Drysail_Fee = 100
   
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
@@ -211,6 +212,14 @@ class Membership < ApplicationRecord
   def calculate_mooring_fee
     if (mooring_num && mooring_num != "" && !skip_mooring)
       @@Mooring_fee
+    else
+      0
+    end
+  end
+
+  def calculate_mooring_replacement_fee
+    if (mooring_num && mooring_num != "" && !skip_mooring)
+      @@Mooring_replacement_fee
     else
       0
     end
