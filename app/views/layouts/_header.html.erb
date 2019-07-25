@@ -52,6 +52,15 @@
             <li><%= link_to "Bills", new_billing_mailings_path %></li>
 	  </ul>
 	</li>
+	<li class="nav-item dropdown">
+	  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Quickbooks</a>
+	  <ul class="dropdown-menu">
+            <li><%= link_to "Cleanup", cleanup_quickbooks_path %></li>
+            <li><%= link_to "Connect", connect_quickbooks_path %></li>
+            <li><%= link_to "Update members", update_members_quickbooks_path %></li>
+            <li><%= link_to "Invoices", invoices_quickbooks_path %></li>
+	  </ul>
+	</li>
         <% end %>
 	<% if current_user && current_user.role?('Admin') %>
 	<li class="nav-item dropdown">

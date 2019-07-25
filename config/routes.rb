@@ -9,6 +9,15 @@ Rails.application.routes.draw do
   get 'confirm_email/:hash' => 'users#confirm_email', as: 'confirm_email'
 
   resources :unsubscribe, only: [:show, :update]
+  resources :quickbooks do
+    collection do
+      get :cleanup
+      get :connect
+      get :update_members
+      get :invoices
+      post :generate_invoices
+    end
+  end
 
   resources :users do
     collection do

@@ -16,13 +16,16 @@ gem 'mini_racer', platforms: :ruby
 
 gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
-gem 'bootstrap', '~> 4.1.2'
+gem 'bootstrap', '~> 4.3.1'
 gem 'jquery-rails'
 gem "paperclip"
 
 gem 'delayed_job_active_record'
 # required by delayed job
 gem 'daemons'          
+
+gem 'qbo_api'
+gem 'rack-oauth2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
