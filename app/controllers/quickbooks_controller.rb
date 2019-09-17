@@ -80,7 +80,7 @@ class QuickbooksController < ApplicationController
       # for each membership, update the data in QBO
       qb_members.each do |qbm|
         display_name = qbm['DisplayName']
-        m = Membership.find_by_MailingName(display_name)
+        m = Membership.members.find_by_MailingName(display_name)
         update_member(qbm,m,display_name)
       end
 
@@ -107,7 +107,7 @@ class QuickbooksController < ApplicationController
           end
         end
       end
-      
+
     end
     
   end
