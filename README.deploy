@@ -1,5 +1,0 @@
-to deploy staging:
- bundle exec cap staging deploy
-
-to deploy production:
- bundle exec cap production deploy
