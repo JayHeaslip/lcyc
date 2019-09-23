@@ -3,12 +3,13 @@ require 'csv'
 class Membership < ApplicationRecord
 
   @@current_year = Time.now.year
-  @@Dues = { Active: 850, Active2016: 283, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
+  @@Dues = { Active: 850, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
   @@Mooring_fee = 80
   @@Mooring_replacement_fee = 120
   @@Drysail_Fee = 100
   
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
+  has_many :initiation_installments, dependent: :destroy
   accepts_nested_attributes_for :people, allow_destroy: true,
                                 reject_if: proc { |a| a['FirstName'].blank? }
   
@@ -33,13 +34,13 @@ class Membership < ApplicationRecord
   validates :installments, allow_nil: true, inclusion: { in: (2..4) }
 
   # all categories of membership
-  scope :members, -> { where(Status: ['Active', 'Active2016', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior']).order(:LastName) }
+  scope :members, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior']).order(:LastName) }
   # eligible for a mooring
-  scope :active, -> { where(Status: ['Active', 'Active2016', 'Life']).order(:LastName) }
+  scope :active, -> { where(Status: ['Active', 'Life']).order(:LastName) }
   # all membership except Inactive  
-  scope :all_active, -> { where(Status: ['Active', 'Active2016', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
+  scope :all_active, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
   # not on the email announce list
-  scope :no_email, -> { where(Status: ['Active', 'Active2016', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
+  scope :no_email, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
 
   #used for filtering
   scope :lastname, -> (lastname) { where('LastName like ?', "#{lastname}%") }
@@ -104,7 +105,7 @@ class Membership < ApplicationRecord
         csv << %w(LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
                   HomePhone MN MW MC ME Partner Children)
         for m in members
-          info = [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status.sub(/2016/,""),   #hack for the Active2016 members, change it to active for the log
+          info = [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status, 
                   m.MemberSince, m.mooring_num].concat(m.boat_info)
           info = info.concat(m.member_info)
           info = info.concat(m.partner_info)

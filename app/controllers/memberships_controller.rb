@@ -10,8 +10,8 @@ class MembershipsController < ApplicationController
   before_action :authorize, only: [:edit, :update, :associate, :save_association, :rmboat]
 
   def index
-    @status_options = %w(Accepted Active Active2016 Associate Honorary Inactive Life Resigned Senior)
-    params[:status] = ['Active', 'Active2016', 'Associate', 'Honorary', 'Life', 'Senior'] if params[:status].blank?
+    @status_options = %w(Accepted Active Associate Honorary Inactive Life Resigned Senior)
+    params[:status] = ['Active', 'Associate', 'Honorary', 'Life', 'Senior'] if params[:status].blank?
     @memberships = filter_memberships(params)
     @memberships = @memberships.order(sort_column + " " + sort_direction)
     @lastname = params[:lastname]

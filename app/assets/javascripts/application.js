@@ -19,6 +19,20 @@
 
 $(document).on('turbolinks:load', function() {
 
+    $('form').on('click', '.remove_initiation_installment', function(e) {
+	$(this).prev('input[type=hidden]').val('1');
+	$(this).closest('div.initiation_installment').hide();
+	return e.preventDefault();
+    });
+
+    $('form').on('click', '.add_initiation_installment', function(e) {
+	var regexp, time;
+	time = new Date().getTime();
+	regexp = new RegExp($(this).data('id'), 'g');
+	$('.initiation_installment').append($(this).data('initiationInstallmentFields').replace(regexp, time));
+	return e.preventDefault();
+    });
+
     $('form').on('click', '.remove_person', function(e) {
 	$(this).prev('input[type=hidden]').val('1');
 	$(this).closest('div.person').hide();

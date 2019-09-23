@@ -1,10 +1,10 @@
 module WaitListEntriesHelper
 
   def waitlist_date(membership)
-    if membership.Status == 'Active' || membership.Status == 'Active2016'
+    if membership.Status == 'Active' || membership.Status == 'Associate'
       membership.active_date
     else
-      membership.application_date
+      membership.wait_list_date
     end
   end
 

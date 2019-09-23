@@ -1,0 +1,15 @@
+<div class="initiation_installment">
+  <div class="form-row">
+    <div class="form-group col-sm-2">
+      <span class="has-float-label">
+	<%= f.number_field :amount, id: :amount, class: "form-control", placeholder: " " %>
+	<label for="amount">Amount:</label>
+      </span>
+    </div>
+    <div class="form-group col-sm-4">
+	<%= f.date_select :year, include_blank: true, discard_day: true, discard_month: true, start_year: 2015, end_year: 5+Time.now.year %>
+    </div>
+    <%= f.hidden_field :_destroy %>
+    <%= link_to 'Delete Installment', '#', class: 'remove_initiation_installment col-offset-6' %>
+  </div>
+</div>

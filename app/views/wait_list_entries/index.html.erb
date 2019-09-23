@@ -24,7 +24,7 @@
     <tr>
       <td><%= link_to m.MailingName, membership_path(m) %></td>
       <td><%= m.Status %></td>
-      <td class="text-nowrap"><%= waitlist_date(m) %></td>
+      <td class="text-nowrap"><%= wle.date %></td>
       <td class="text-nowrap"><%= p.HomePhone if p %></td>
       <td class="text-nowrap"><%= p.WorkPhone if p %></td>
       <td class="text-nowrap"><%= p.CellPhone if p %></td>

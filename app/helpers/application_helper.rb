@@ -27,6 +27,15 @@ module ApplicationHelper
     nil
   end
 
+  def link_to_add_initiation_installment(name, f, association, **args)
+    new_object = f.object.send(association).klass.new
+    id = new_object.object_id
+    initiation_installment_fields = f.fields_for(association, new_object, child_index: id) do |builder|
+      render(association.to_s.singularize, f: builder)
+    end
+    link_to(name, '#', class: "add_initiation_installment " + args[:class], data: {id: id, initiation_installment_fields: initiation_installment_fields.gsub("\n", "")})
+  end
+
   def link_to_add_person(name, f, association, **args)
     new_object = f.object.send(association).klass.new
     id = new_object.object_id
