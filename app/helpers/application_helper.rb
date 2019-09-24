@@ -33,6 +33,8 @@ module ApplicationHelper
     initiation_installment_fields = f.fields_for(association, new_object, child_index: id) do |builder|
       render(association.to_s.singularize, f: builder)
     end
+    logger.info "Init###" 
+    logger.info initiation_installment_fields
     link_to(name, '#', class: "add_initiation_installment " + args[:class], data: {id: id, initiation_installment_fields: initiation_installment_fields.gsub("\n", "")})
   end
 

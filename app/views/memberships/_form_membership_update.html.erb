@@ -48,7 +48,7 @@
   <div class="form-group col-sm-3">
     <label for="resignation_date" class="col-form-label pt-0">Resignation_Date:</label>
     <div class="">
-      <%= f.date_select :resignation_date, include_blank: true, order: [:month, :day, :year], start_year: 1960, end_year: 1+Time.now.year, class: 'form-cont' %>
+      <%= f.date_select :resignation_date, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year-1, end_year: 1+Time.now.year, class: 'form-cont' %>
     </div>
   </div>
 </div>
@@ -75,5 +75,5 @@
   <%= render 'initiation_installment', f: f %>
   <% end %>
 </div>
-<%= link_to_add_initiation_installment('Add initiation_installment', f, :initiation_installments, class: 'btn btn-primary mb-3') %>
+<%= link_to_add_initiation_installment('Add Initiation Installment', f, :initiation_installments, class: 'btn btn-primary mb-3') %>
 <% end %>

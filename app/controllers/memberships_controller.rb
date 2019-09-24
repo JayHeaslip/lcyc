@@ -50,11 +50,11 @@ class MembershipsController < ApplicationController
   end
 
   def edit
-    @membership = Membership.includes(:people, :boats).find(params[:id])
+    @membership = Membership.includes(:people, :boats, :initiation_installments).find(params[:id])
   end
 
   def update
-    @membership = Membership.includes(:people, :boats).find(params[:id])
+    @membership = Membership.includes(:people, :boats, :initiation_installments).find(params[:id])
     @membership.attributes = membership_params
     if @membership.save
       flash[:notice] = 'Membership was successfully updated.'
@@ -284,10 +284,12 @@ class MembershipsController < ApplicationController
   def membership_params
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
                                        :State, :Zip, :Country, :Status, :MemberSince, :mooring_num,
-                                       :application_date, :active_date, :initiation,
+                                       :application_date, :active_date, :resignation_date, :initiation,
                                        :paid, :skip_mooring, :installments, :initiation_fee, :drysail_num, :notes,
                                        people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),
-                                       boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy))
+                                       boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy),
+                                       initiation_installments_attributes: InitiationInstallment.attribute_names.map(&:to_sym).push(:_destroy))
+                                       
   end
   
 end

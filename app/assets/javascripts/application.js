@@ -29,7 +29,7 @@ $(document).on('turbolinks:load', function() {
 	var regexp, time;
 	time = new Date().getTime();
 	regexp = new RegExp($(this).data('id'), 'g');
-	$('.initiation_installment').append($(this).data('initiationInstallmentFields').replace(regexp, time));
+	$('.initiation_installment_fields').append($(this).data('initiationInstallmentFields').replace(regexp, time));
 	return e.preventDefault();
     });
 

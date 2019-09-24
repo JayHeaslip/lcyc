@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 2019_09_23_174405) do
 
   create_table "initiation_installments", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "amount"
-    t.date "year"
+    t.integer "year"
     t.integer "membership_id"
     t.index ["membership_id"], name: "fk_rails_2b86ebd36d"
   end

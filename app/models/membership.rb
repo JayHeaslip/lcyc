@@ -9,9 +9,11 @@ class Membership < ApplicationRecord
   @@Drysail_Fee = 100
   
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
-  has_many :initiation_installments, dependent: :destroy
   accepts_nested_attributes_for :people, allow_destroy: true,
                                 reject_if: proc { |a| a['FirstName'].blank? }
+  has_many :initiation_installments, dependent: :destroy
+  accepts_nested_attributes_for :initiation_installments, allow_destroy: true,
+                                reject_if: proc { |a| a['amount'].blank? }
   
   has_and_belongs_to_many :boats
   accepts_nested_attributes_for :boats, allow_destroy: true,
