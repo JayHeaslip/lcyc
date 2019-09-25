@@ -6,6 +6,7 @@ member1:
   State: 'VT'
   Zip: 05482
   Status: 'Active'
+  active_date: '2010-02-02'
   MemberSince: 2001
 
 member2:

@@ -10,8 +10,8 @@ class MembershipsController < ApplicationController
   before_action :authorize, only: [:edit, :update, :associate, :save_association, :rmboat]
 
   def index
-    @status_options = %w(Accepted Active Active2016 Associate Honorary Inactive Life Resigned Senior)
-    params[:status] = ['Active', 'Active2016', 'Associate', 'Honorary', 'Life', 'Senior'] if params[:status].blank?
+    @status_options = %w(Accepted Active Associate Honorary Inactive Life Resigned Senior)
+    params[:status] = ['Active', 'Associate', 'Honorary', 'Life', 'Senior'] if params[:status].blank?
     @memberships = filter_memberships(params)
     @memberships = @memberships.order(sort_column + " " + sort_direction)
     @lastname = params[:lastname]
@@ -50,11 +50,11 @@ class MembershipsController < ApplicationController
   end
 
   def edit
-    @membership = Membership.includes(:people, :boats).find(params[:id])
+    @membership = Membership.includes(:people, :boats, :initiation_installments).find(params[:id])
   end
 
   def update
-    @membership = Membership.includes(:people, :boats).find(params[:id])
+    @membership = Membership.includes(:people, :boats, :initiation_installments).find(params[:id])
     @membership.attributes = membership_params
     if @membership.save
       flash[:notice] = 'Membership was successfully updated.'
@@ -159,13 +159,10 @@ class MembershipsController < ApplicationController
   end
 
   def initiation_report
-    members = Membership.members.where('Status != "Honorary"').includes(:people)
+    installments = InitiationInstallment.includes(:membership).order(:year)
     @initiation_fee_due = []
-    members.each do |m|
-      initiation_due = m.calculate_initiation_installment
-      unless initiation_due.nil?
-        @initiation_fee_due << [m, initiation_due]
-      end
+    installments.each do |i|
+      @initiation_fee_due << [i.membership, i.amount, i.year]
     end
   end
   
@@ -284,10 +281,12 @@ class MembershipsController < ApplicationController
   def membership_params
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
                                        :State, :Zip, :Country, :Status, :MemberSince, :mooring_num,
-                                       :application_date, :active_date, :initiation,
+                                       :application_date, :active_date, :resignation_date, :initiation,
                                        :paid, :skip_mooring, :installments, :initiation_fee, :drysail_num, :notes,
                                        people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),
-                                       boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy))
+                                       boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy),
+                                       initiation_installments_attributes: InitiationInstallment.attribute_names.map(&:to_sym).push(:_destroy))
+                                       
   end
   
 end

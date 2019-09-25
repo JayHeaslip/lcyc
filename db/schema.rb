@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_17_222505) do
+ActiveRecord::Schema.define(version: 2019_09_23_174405) do
 
   create_table "attachments", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "mailing_id", null: false
@@ -111,6 +111,13 @@ ActiveRecord::Schema.define(version: 2019_05_17_222505) do
     t.date "deadline"
   end
 
+  create_table "initiation_installments", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+    t.integer "amount"
+    t.integer "year"
+    t.integer "membership_id"
+    t.index ["membership_id"], name: "fk_rails_2b86ebd36d"
+  end
+
   create_table "mailings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "subject"
     t.text "body"
@@ -159,6 +166,7 @@ ActiveRecord::Schema.define(version: 2019_05_17_222505) do
     t.integer "initiation_fee"
     t.integer "drysail_num"
     t.text "notes"
+    t.date "resignation_date"
     t.index ["Boat"], name: "Boat"
   end
 
@@ -312,5 +320,6 @@ ActiveRecord::Schema.define(version: 2019_05_17_222505) do
     t.integer "membership_id"
   end
 
+  add_foreign_key "initiation_installments", "memberships"
   add_foreign_key "memberships", "boats", column: "Boat", name: "memberships_ibfk_1", on_delete: :nullify
 end

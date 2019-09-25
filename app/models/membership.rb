@@ -3,14 +3,17 @@ require 'csv'
 class Membership < ApplicationRecord
 
   @@current_year = Time.now.year
-  @@Dues = { Active: 850, Active2016: 283, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
-  @@Mooring_fee = 80
+  @@Dues = { Active: 850, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
+  @@Mooring_fee = 200
   @@Mooring_replacement_fee = 120
   @@Drysail_Fee = 100
   
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
   accepts_nested_attributes_for :people, allow_destroy: true,
                                 reject_if: proc { |a| a['FirstName'].blank? }
+  has_many :initiation_installments, dependent: :destroy
+  accepts_nested_attributes_for :initiation_installments, allow_destroy: true,
+                                reject_if: proc { |a| a['amount'].blank? }
   
   has_and_belongs_to_many :boats
   accepts_nested_attributes_for :boats, allow_destroy: true,
@@ -33,13 +36,13 @@ class Membership < ApplicationRecord
   validates :installments, allow_nil: true, inclusion: { in: (2..4) }
 
   # all categories of membership
-  scope :members, -> { where(Status: ['Active', 'Active2016', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior']).order(:LastName) }
+  scope :members, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior']).order(:LastName) }
   # eligible for a mooring
-  scope :active, -> { where(Status: ['Active', 'Active2016', 'Life']).order(:LastName) }
+  scope :active, -> { where(Status: ['Active', 'Life']).order(:LastName) }
   # all membership except Inactive  
-  scope :all_active, -> { where(Status: ['Active', 'Active2016', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
+  scope :all_active, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
   # not on the email announce list
-  scope :no_email, -> { where(Status: ['Active', 'Active2016', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
+  scope :no_email, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
 
   #used for filtering
   scope :lastname, -> (lastname) { where('LastName like ?', "#{lastname}%") }
@@ -104,7 +107,7 @@ class Membership < ApplicationRecord
         csv << %w(LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
                   HomePhone MN MW MC ME Partner Children)
         for m in members
-          info = [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status.sub(/2016/,""),   #hack for the Active2016 members, change it to active for the log
+          info = [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status, 
                   m.MemberSince, m.mooring_num].concat(m.boat_info)
           info = info.concat(m.member_info)
           info = info.concat(m.partner_info)
@@ -140,7 +143,7 @@ class Membership < ApplicationRecord
           drysail_fee = m.calculate_drysail_fee
           initiation_due = m.calculate_initiation_installment
           total = dues + mooring_fee + initiation_due + drysail_fee
-          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\x09", m.Country, m.Status.sub(/2016/,""), 
+          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\x09", m.Country, m.Status, 
                   m.mooring_num, m.drysail_num, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end
@@ -192,18 +195,21 @@ class Membership < ApplicationRecord
   end
 
   def calculate_initiation_installment
-    if !initiation.blank?   # initiation field overrides installment calculation
-      return initiation
-    elsif !initiation_fee.blank?
-      # assume first installment was paid upon joining
-      # subsequent installments are billed in the year previous to being due
-      # for example: a member joining in 2018, with 3 intallments would be billed for subsequent installments
-      # in 2019 (bill generated in 2018) & 2020 (bill generated in 2019)
-      if (Time.now.year - self.MemberSince) < (installments - 1)
-        initiation_fee/installments
-      else
-        0
-      end
+    installment = initiation_installments.where(year: Time.now.year+1).first
+    if installment
+      installment.amount
+    ##if !initiation.blank?   # initiation field overrides installment calculation
+    ##  return initiation
+    ##elsif !initiation_fee.blank?
+    ##  # assume first installment was paid upon joining
+    ##  # subsequent installments are billed in the year previous to being due
+    ##  # for example: a member joining in 2018, with 3 intallments would be billed for subsequent installments
+    ##  # in 2019 (bill generated in 2018) & 2020 (bill generated in 2019)
+    ##  if (Time.now.year - self.MemberSince) < (installments - 1)
+    ##    initiation_fee/installments
+    ##  else
+    ##    0
+    ##  end
     else
       0
     end

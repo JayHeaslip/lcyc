@@ -1,13 +1,13 @@
 class WaitListEntriesController < ApplicationController
 
   def index
-    @wait_list_entries = WaitListEntry.includes(:membership).where("memberships.Status IN ('Active', 'Active2016')").order("memberships.active_date")
-    wait_list_accepted = WaitListEntry.includes(:membership).where("memberships.Status = 'Accepted'").order("memberships.application_date")
-    @wait_list_entries = @wait_list_entries.to_a.concat(wait_list_accepted)
+    @wait_list_entries = WaitListEntry.joins(:membership).where("memberships.Status IN ('Active', 'Accepted', 'Associate', 'Senior')").order("date")
+    #wait_list_accepted = WaitListEntry.includes(:membership).where("memberships.Status = 'Accepted'").order("memberships.application_date")
+    #@wait_list_entries = @wait_list_entries.to_a.concat(wait_list_accepted)
   end
 
   def new
-    @memberships = Membership.where(Status: ['Accepted', 'Active', 'Active2016'], mooring_num: nil).order("LastName")
+    @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Senior'], mooring_num: nil).order("LastName")
     wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
     @memberships -= wait_list_memberships
     @wait_list_entry = WaitListEntry.new
@@ -15,11 +15,14 @@ class WaitListEntriesController < ApplicationController
 
   def create
     @wait_list_entry = WaitListEntry.new(wait_list_params)
+    unless params[:force_wld]
+      @wait_list_entry.date = @wait_list_entry.membership.active_date
+    end
     if @wait_list_entry.save
       flash[:notice] = 'Wait list entry was successfully created.'
       redirect_to wait_list_entries_path
     else
-      @memberships = Membership.where(Status: ['Accepted', 'Active', 'Active2016'], mooring_num: nil).order("LastName")
+      @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Senior'], mooring_num: nil).order("LastName")
       wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
       @memberships -= wait_list_memberships
       render :new
@@ -52,9 +55,9 @@ class WaitListEntriesController < ApplicationController
       flash[:notice] = 'Mooring assigned.'
       redirect_to wait_list_entries_path
     else
-      @wait_list_entries = WaitListEntry.includes(:membership).where("memberships.Status IN ('Active', 'Active2016')").order("memberships.active_date")
-      wait_list_accepted = WaitListEntry.includes(:membership).where("memberships.Status = 'Accepted'").order("memberships.application_date")
-      @wait_list_entries = @wait_list_entries.to_a.concat(wait_list_accepted)
+      @wait_list_entries = WaitListEntry.joins(:membership).where("memberships.Status IN ('Active', 'Accepted', 'Associate', 'Senior')").order("date")
+      #wait_list_accepted = WaitListEntry.includes(:membership).where("memberships.Status = 'Accepted'").order("memberships.application_date")
+      #@wait_list_entries = @wait_list_entries.to_a.concat(wait_list_accepted)
       flash[:error] = 'Problem assigning mooring.'
       render :index
     end
@@ -63,7 +66,7 @@ class WaitListEntriesController < ApplicationController
   private
 
   def wait_list_params
-    params.require(:wait_list_entry).permit(:membership_id)
+    params.require(:wait_list_entry).permit(:date, :membership_id)
   end
 
 end
