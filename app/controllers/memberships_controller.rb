@@ -159,13 +159,10 @@ class MembershipsController < ApplicationController
   end
 
   def initiation_report
-    members = Membership.members.where('Status != "Honorary"').includes(:people)
+    installments = InitiationInstallment.includes(:membership).order(:year)
     @initiation_fee_due = []
-    members.each do |m|
-      initiation_due = m.calculate_initiation_installment
-      unless initiation_due.nil?
-        @initiation_fee_due << [m, initiation_due]
-      end
+    installments.each do |i|
+      @initiation_fee_due << [i.membership, i.amount, i.year]
     end
   end
   

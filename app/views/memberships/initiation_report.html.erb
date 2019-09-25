@@ -6,18 +6,18 @@
 <table class="table table-sm table-striped">
   <thead class="thead-light">
     <tr>
-      <th>Last Name</th>
       <th>Mailing Name</th>
-      <th>Initiation Due</th>
+      <th>Amount Due</th>
+      <th>Year</th>
     </tr>
   </thead>
 
   <tbody>
-    <% for membership in @initiation_fee_due %>
+    <% for installment in @initiation_fee_due %>
     <tr scope="row">
-      <td><%= link_to membership[0].LastName, membership[0] %>
-      <td><%= membership[0].MailingName %></td>
-      <td><%= membership[1] %></td>
+      <td><%= link_to installment[0].MailingName, installment[0] %>
+      <td><%= installment[1] %></td>
+      <td><%= installment[2] %></td>
     </tr>
     <% end %>
     <tbody>
