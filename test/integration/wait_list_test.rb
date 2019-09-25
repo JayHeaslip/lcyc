@@ -26,11 +26,6 @@ class WaitListEntriesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to  wait_list_entries_url
   end
 
-  test "invalid entry" do
-    post wait_list_entries_url, params: {wait_list_entry: {membership_id: 0}}
-    assert_select "h2", "New Wait List Entry"
-  end
-
   test "delete entry" do
     delete wait_list_entry_url(@wl)
     assert_redirected_to  wait_list_entries_url
