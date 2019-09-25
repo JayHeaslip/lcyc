@@ -4,7 +4,7 @@ class Membership < ApplicationRecord
 
   @@current_year = Time.now.year
   @@Dues = { Active: 850, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
-  @@Mooring_fee = 80
+  @@Mooring_fee = 200
   @@Mooring_replacement_fee = 120
   @@Drysail_Fee = 100
   
@@ -143,7 +143,7 @@ class Membership < ApplicationRecord
           drysail_fee = m.calculate_drysail_fee
           initiation_due = m.calculate_initiation_installment
           total = dues + mooring_fee + initiation_due + drysail_fee
-          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\x09", m.Country, m.Status.sub(/2016/,""), 
+          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\x09", m.Country, m.Status, 
                   m.mooring_num, m.drysail_num, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end
@@ -195,18 +195,21 @@ class Membership < ApplicationRecord
   end
 
   def calculate_initiation_installment
-    if !initiation.blank?   # initiation field overrides installment calculation
-      return initiation
-    elsif !initiation_fee.blank?
-      # assume first installment was paid upon joining
-      # subsequent installments are billed in the year previous to being due
-      # for example: a member joining in 2018, with 3 intallments would be billed for subsequent installments
-      # in 2019 (bill generated in 2018) & 2020 (bill generated in 2019)
-      if (Time.now.year - self.MemberSince) < (installments - 1)
-        initiation_fee/installments
-      else
-        0
-      end
+    installment = initiation_installments.where(year: Time.now.year+1).first
+    if installment
+      installment.amount
+    ##if !initiation.blank?   # initiation field overrides installment calculation
+    ##  return initiation
+    ##elsif !initiation_fee.blank?
+    ##  # assume first installment was paid upon joining
+    ##  # subsequent installments are billed in the year previous to being due
+    ##  # for example: a member joining in 2018, with 3 intallments would be billed for subsequent installments
+    ##  # in 2019 (bill generated in 2018) & 2020 (bill generated in 2019)
+    ##  if (Time.now.year - self.MemberSince) < (installments - 1)
+    ##    initiation_fee/installments
+    ##  else
+    ##    0
+    ##  end
     else
       0
     end
