@@ -42,14 +42,16 @@ Rails.application.routes.draw do
 
   resources :memberships do
     collection do
-      get :moorings
-      get :drysail
-      get :unassigned_moorings
-      get :labels
+      get  :moorings
+      get  :drysail
+      get  :unassigned_moorings
+      get  :labels
       post :download_labels
-      get :spreadsheets
+      get  :spreadsheets
       post :download_spreadsheet
-      get :initiation_report
+      get  :initiation_report
+      get  :new_drysail
+      post :assign_drysail
     end
     member do
       get :wl

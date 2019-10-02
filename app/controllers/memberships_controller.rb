@@ -4,9 +4,10 @@ require 'prawn/measurement_extensions'
 class MembershipsController < ApplicationController
 
   helper_method :sort_column, :sort_direction, :mooring_sort_column
-  before_action :get_membership, except: [:index, :moorings, :unassigned_moorings, :drysail, :new, :create, :destroy, 
-                                             :labels, :download_labels,
-                                             :spreadsheets, :download_spreadsheet, :initiation_report]
+  before_action :get_membership, except: [:index, :moorings, :unassigned_moorings, :new_drysail,
+                                          :assign_drysail, :drysail, :new, :create, :destroy, 
+                                          :labels, :download_labels,
+                                          :spreadsheets, :download_spreadsheet, :initiation_report]
   before_action :authorize, only: [:edit, :update, :associate, :save_association, :rmboat]
 
   def index
@@ -100,6 +101,22 @@ class MembershipsController < ApplicationController
     session[:breadcrumbs] = request.path
     @memberships = Membership.where('memberships.mooring_num is not NULL').includes(:boats)
     @memberships = @memberships.order(mooring_sort_column + " " + sort_direction)
+  end
+
+  def new_drysail
+    dry_sail_memberships = Membership.where('memberships.drysail_num is not NULL')
+    @memberships = Membership.active - dry_sail_memberships
+    @available_dry_sail =  (1..12).to_a - dry_sail_memberships.map {|m| m.drysail_num }
+  end
+
+  def assign_drysail
+    membership = Membership.find(params[:membership])
+    membership.drysail_num = params[:drysail_num]
+    if membership.save 
+      redirect_to drysail_memberships_path
+    else
+      redirect_to new_drysail_memberships_path
+    end
   end
 
   def drysail
