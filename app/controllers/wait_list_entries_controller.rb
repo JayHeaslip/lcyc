@@ -29,6 +29,22 @@ class WaitListEntriesController < ApplicationController
     end
   end
 
+  def edit
+    @wait_list_entry = WaitListEntry.find(params[:id])
+    render :edit
+  end
+
+  def update
+    @wait_list_entry = WaitListEntry.find(params[:id])
+    @wait_list_entry.attributes = wait_list_params
+    if @wait_list_entry.save
+      flash[:notice] = 'Wait list entry was successfully updated.'
+      redirect_to wait_list_entries_path
+    else
+      render :edit
+    end
+  end
+
   def destroy
     @wait_list_entry = WaitListEntry.find(params[:id])
     @wait_list_entry.destroy
