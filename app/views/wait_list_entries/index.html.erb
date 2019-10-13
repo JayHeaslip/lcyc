@@ -33,6 +33,8 @@
       <td><%= m.mooring_num %></td>
       <td class="text-nowrap">
 	<span class="list-actions">
+	  <%= link_to 'Edit', edit_wait_list_entry_path(wle) %>
+	  <br/>
           <%= link_to 'Remove from list', wle,
               data: {confirm:'Are you sure?'},
               method: :delete %>
@@ -42,6 +44,8 @@
       <td>-</td>
       <td class="text-nowrap">
 	<span class="list-actions">
+	  <%= link_to 'Edit', edit_wait_list_entry_path(wle) %>
+	  <br/>
           <%= link_to "Assign", assign_wait_list_entry_path(wle) %>
 	  <br/>
           <%= link_to 'Remove from list', wle,

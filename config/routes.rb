@@ -90,7 +90,7 @@ Rails.application.routes.draw do
     end
   end
     
-  resources :wait_list_entries, :except => [:show, :edit, :update] do
+  resources :wait_list_entries, :except => [:show] do
     member do
       get :assign
       patch :mooring_update

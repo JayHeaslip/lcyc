@@ -16,7 +16,11 @@ class WaitListEntriesController < ApplicationController
   def create
     @wait_list_entry = WaitListEntry.new(wait_list_params)
     unless params[:force_wld]
-      @wait_list_entry.date = @wait_list_entry.membership.active_date
+      if @membership.Status == 'Accepted' then
+        @wait_list_entry.date = @wait_list_entry.membership.application_date
+      else
+        @wait_list_entry.date = @wait_list_entry.membership.active_date
+      end
     end
     if @wait_list_entry.save
       flash[:notice] = 'Wait list entry was successfully created.'
@@ -26,6 +30,22 @@ class WaitListEntriesController < ApplicationController
       wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
       @memberships -= wait_list_memberships
       render :new
+    end
+  end
+
+  def edit
+    @wait_list_entry = WaitListEntry.find(params[:id])
+    render :edit
+  end
+
+  def update
+    @wait_list_entry = WaitListEntry.find(params[:id])
+    @wait_list_entry.attributes = wait_list_params
+    if @wait_list_entry.save
+      flash[:notice] = 'Wait list entry was successfully updated.'
+      redirect_to wait_list_entries_path
+    else
+      render :edit
     end
   end
 

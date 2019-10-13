@@ -42,6 +42,7 @@ class MembershipsController < ApplicationController
   def wladd
     @wl = WaitListEntry.new
     @wl.membership = @membership
+    @wl.date = @membership.application_date
     @wl.save
     redirect_to membership_path(@membership)
   end
