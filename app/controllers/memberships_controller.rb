@@ -57,7 +57,9 @@ class MembershipsController < ApplicationController
 
   def update
     @membership = Membership.includes(:people, :boats, :initiation_installments).find(params[:id])
+    current_status = @membership.Status
     @membership.attributes = membership_params
+    @membership.change_status_date = Time.now.strftime("%Y-%m-%d") if current_status != @membership.Status
     if @membership.save
       flash[:notice] = 'Membership was successfully updated.'
       redirect_to membership_path(@membership)
