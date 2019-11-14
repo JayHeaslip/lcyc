@@ -34,7 +34,7 @@
 <% if current_user.roles?(%w(Admin Membership)) %>
 <div class="form-row">
   <div class="form-group col-sm-3">
-    <label for="application_date" class="col-form-label pt-0">Application Date:</label>
+    <label for="application_date" class="col-form-label pt-0">Approval Date:</label>
     <div class="">
       <%= f.date_select :application_date, include_blank: true, order: [:month, :day, :year], start_year: 1960, end_year: Time.now.year, class: 'form-control' %>
     </div>
