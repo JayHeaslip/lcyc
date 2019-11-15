@@ -14,6 +14,7 @@ class WaitListEntriesController < ApplicationController
   end
 
   def create
+    @membership = Membership.find(params[:wait_list_entry][:membership_id])
     @wait_list_entry = WaitListEntry.new(wait_list_params)
     unless params[:force_wld]
       if @membership.Status == 'Accepted' then
