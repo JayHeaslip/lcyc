@@ -4,7 +4,7 @@ class Membership < ApplicationRecord
 
   @@current_year = Time.now.year
   @@Dues = { Active: 850, Senior: 283, Inactive: 50, Associate: 425, Life: 0 }
-  @@Mooring_fee = 200
+  @@Mooring_fee = 80
   @@Mooring_replacement_fee = 120
   @@Drysail_Fee = 100
   
@@ -139,7 +139,7 @@ class Membership < ApplicationRecord
           else
 	    email = ''
           end
-          mooring_fee = m.calculate_mooring_fee
+          mooring_fee = m.calculate_mooring_fee + m.calculate_mooring_replacement_fee 
           drysail_fee = m.calculate_drysail_fee
           initiation_due = m.calculate_initiation_installment
           total = dues + mooring_fee + initiation_due + drysail_fee

@@ -134,9 +134,10 @@ class QuickbooksController < ApplicationController
         logger.info "mailing name: #{m.MailingName}"
         qbm = @api.get(:customer, ["DisplayName", m.MailingName])
         invoice = {
-          "CustomerRef": {"value": qbm["Id"] },
-          "AllowOnlineACHPayment": true,
-          "BillEmail": qbm["PrimaryEmailAddr"]
+                   "CustomerRef": {"value": qbm["Id"] },
+                   "AllowOnlineACHPayment": true,
+                   "BillEmail": qbm["PrimaryEmailAddr"],
+                   "DueDate": "#{Time.now.year}-12-31"
         }
         invoice["Line"] = generate_line_items(m, params[:test])
         response = @api.create(:invoice, payload: invoice)
