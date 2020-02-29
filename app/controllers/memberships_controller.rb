@@ -171,7 +171,7 @@ class MembershipsController < ApplicationController
   def spreadsheets
     session[:breadcrumbs] = request.path
     @spreadsheet_options = ["Billing", "Log Members", "Log Fleet",
-                            "Log Partner Xref", "Member Cards/Workday Checklist"]
+                            "Log Partner Xref", "Member Cards/Workday Checklist", "Resigned"]
   end
 
   def download_spreadsheet
@@ -281,8 +281,10 @@ class MembershipsController < ApplicationController
     filename = I18n.l(Time.now, format: :short) + "#{type}"
     filename += ".csv"
 
-    if type.start_with?("Member Card")
+    if type.start_with?("Member Card") 
       content = Person.to_csv
+    elsif type.start_with?("Resigned") 
+      content = Person.resigned_to_csv
     elsif type.start_with?("Log Fleet")
       content = Boat.to_csv
     else

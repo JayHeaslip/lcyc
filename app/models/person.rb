@@ -11,6 +11,7 @@ class Person < ApplicationRecord
 
   scope :members, -> {joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior', 'Affiliated')")  }
   scope :active, -> {joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Honorary', 'Life', 'Senior')")}
+  scope :resigned, -> {joins(:membership).where("memberships.Status = 'Resigned'")}
   scope :has_committee, -> {joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Life', 'Senior')")}
   scope :committee, proc {|cmte| where(Committee1: cmte) }
 
@@ -73,6 +74,17 @@ class Person < ApplicationRecord
       people.each do |p|
         m = p.membership
         csv << [p.FirstName, p.LastName, m.LastName, m.MailingName, m.Status, p.Committee1, m.MemberSince, p.MemberType, p.BirthYear]
+      end
+    end
+  end
+
+  def self.resigned_to_csv
+    people = Person.resigned.where(MemberType: ['Member', 'Partner']).order('memberships.LastName')
+    CSV.generate(col_sep: ",") do |csv|
+      csv << %w(FirstName LastName MemberLastName MailingName Status Comittee MemberSince MemberType Birthyear ResignationDate Updated_at)
+      people.each do |p|
+        m = p.membership
+        csv << [p.FirstName, p.LastName, m.LastName, m.MailingName, m.Status, p.Committee1, m.MemberSince, p.MemberType, p.BirthYear, m.resignation_date, m.updated_at]
       end
     end
   end
