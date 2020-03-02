@@ -44,6 +44,7 @@ set :bundle_flags, '--deployment --path=/home/odziozo/.rvm/gems/ruby-2.3.7@globa
 
 set :passenger_restart_with_touch, true
 
+# only restart delayed_job for production
 namespace :deploy do
   after :finishing, :synchronize do
     on primary fetch(:app) do
@@ -57,9 +58,3 @@ namespace :deploy do
   end
 end
 
-after 'deploy:publishing', 'deploy:restart'
-namespace :deploy do
-  task :restart do
-    invoke 'delayed_job:restart'
-  end
-end

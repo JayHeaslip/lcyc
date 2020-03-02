@@ -90,7 +90,7 @@ class Membership < ApplicationRecord
 
   def self.unassigned_moorings
     club_moorings = (1..155).to_a
-    club_moorings.delete(142) # club mooring (for Dunn)
+    #club_moorings.delete(142) # club mooring (for Dunn)
     membership_moorings = Membership.where('mooring_num is not NULL').map {|m| m.mooring_num}
     club_moorings - membership_moorings
   end

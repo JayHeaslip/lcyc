@@ -62,3 +62,11 @@ set :branch, 'production'
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
+
+# only restart delayed_job for production
+after 'deploy:publishing', 'deploy:restart'
+namespace :deploy do
+  task :restart do
+    invoke 'delayed_job:restart'
+  end
+end
