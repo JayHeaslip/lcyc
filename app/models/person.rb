@@ -55,7 +55,7 @@ class Person < ApplicationRecord
       if filter
         Person.members.valid_email.where('select_email is true')
       else
-        Person.members.valid_email
+        Person.members.valid_email.to_a.concat(Person.where(MemberType: 'MailList'))
       end
     else
       Person.has_committee.committee(cmte).valid_email
