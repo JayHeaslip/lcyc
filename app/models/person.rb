@@ -16,7 +16,7 @@ class Person < ApplicationRecord
   scope :committee, proc {|cmte| where(Committee1: cmte) }
 
   scope :valid_email, -> {where('subscribe_general is true and EmailAddress is not null and EmailAddress != ""')}
-
+  scope :maillist, -> {where('subscribe_general is true and EmailAddress is not null and EmailAddress != "" and MemberType is "MailList"')}
   def validate_birthyear?
     self.MemberType == "Child"
   end
@@ -55,7 +55,7 @@ class Person < ApplicationRecord
       if filter
         Person.members.valid_email.where('select_email is true')
       else
-        Person.members.valid_email.to_a.concat(Person.where(MemberType: 'MailList'))
+        Person.members.valid_email.to_a.concat(Person.maillist)
       end
     else
       Person.has_committee.committee(cmte).valid_email
