@@ -9,5 +9,6 @@ p = Person.new(FirstName: 'Head',
                  LastName: 'Steward',
                  EmailAddress: 'lcycheadsteward@gmail.com',
                  subscribe_general: true,
+                 MemberType: 'MailList',
                  MembershipID: m.id)
 p.save(validate: false)
