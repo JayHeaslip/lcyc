@@ -40,8 +40,7 @@ set :keep_releases, 8
 # set :ssh_options, verify_host_key: :secure
 
 # install in system directory to simplify things
-set :bundle_flags, '--deployment --path=/home/odziozo/.rvm/gems/ruby-2.3.7@global'
-
+set :bundle_path, "/home/odziozo/.rvm/gems/ruby-2.7.2@global"
 set :passenger_restart_with_touch, true
 
 # only restart delayed_job for production
