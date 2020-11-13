@@ -3,7 +3,7 @@
 This site is for maintaining the membership database for LCYC.
 
 
-* Ruby version - 2.3.7
+* Ruby version - 2.7.2
 
 * To run the test suite: rake test, rake test:system
 
