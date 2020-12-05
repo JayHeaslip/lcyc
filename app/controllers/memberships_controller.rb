@@ -60,6 +60,10 @@ class MembershipsController < ApplicationController
     current_status = @membership.Status
     @membership.attributes = membership_params
     @membership.change_status_date = Time.now.strftime("%Y-%m-%d") if current_status != @membership.Status
+    unless @membership.Status.in? ['Active', 'Life', 'Associate']
+      flash[:alert] = 'Mooring removed due to membership category' if !@membership.mooring_num.nil?
+      @membership.mooring_num = nil
+    end
     if @membership.save
       flash[:notice] = 'Membership was successfully updated.'
       redirect_to membership_path(@membership)
