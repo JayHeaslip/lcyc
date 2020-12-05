@@ -81,6 +81,8 @@ class QuickbooksController < ApplicationController
       qb_members.each do |qbm|
         display_name = qbm['DisplayName']
         m = Membership.members.find_by_MailingName(display_name)
+        # look in accepted if not found 
+        m = Membership.accepted.find_by_MailingName(display_name) if m.nil?
         update_member(qbm,m,display_name)
       end
 

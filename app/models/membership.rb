@@ -39,6 +39,8 @@ class Membership < ApplicationRecord
   scope :members, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior']).order(:LastName) }
   # eligible for a mooring
   scope :active, -> { where(Status: ['Active', 'Life']).order(:LastName) }
+  # adding accepted for QBO since they can be billed for mooring wait list
+  scope :accepted, -> { where(Status: ['Accepted']).order(:LastName) }
   # all membership except Inactive  
   scope :all_active, -> { where(Status: ['Active', 'Associate', 'Honorary', 'Life', 'Senior']).order(:LastName) }
   # not on the email announce list
