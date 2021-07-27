@@ -1,13 +1,13 @@
 class WaitListEntriesController < ApplicationController
 
   def index
-    @wait_list_entries = WaitListEntry.joins(:membership).where("memberships.Status IN ('Active', 'Accepted', 'Associate', 'Senior')").order("date")
+    @wait_list_entries = WaitListEntry.joins(:membership).where("memberships.Status IN ('Active', 'Accepted', 'Associate', 'Inactive', 'Senior')").order("date")
     #wait_list_accepted = WaitListEntry.includes(:membership).where("memberships.Status = 'Accepted'").order("memberships.application_date")
     #@wait_list_entries = @wait_list_entries.to_a.concat(wait_list_accepted)
   end
 
   def new
-    @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Senior'], mooring_num: nil).order("LastName")
+    @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Inactive', 'Senior'], mooring_num: nil).order("LastName")
     wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
     @memberships -= wait_list_memberships
     @wait_list_entry = WaitListEntry.new
@@ -27,7 +27,7 @@ class WaitListEntriesController < ApplicationController
       flash[:notice] = 'Wait list entry was successfully created.'
       redirect_to wait_list_entries_path
     else
-      @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Senior'], mooring_num: nil).order("LastName")
+      @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Inactive', 'Senior'], mooring_num: nil).order("LastName")
       wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
       @memberships -= wait_list_memberships
       render :new
@@ -76,7 +76,7 @@ class WaitListEntriesController < ApplicationController
       flash[:notice] = 'Mooring assigned.'
       redirect_to wait_list_entries_path
     else
-      @wait_list_entries = WaitListEntry.joins(:membership).where("memberships.Status IN ('Active', 'Accepted', 'Associate', 'Senior')").order("date")
+      @wait_list_entries = WaitListEntry.joins(:membership).where("memberships.Status IN ('Active', 'Accepted', 'Associate', 'Inactive', 'Senior')").order("date")
       #wait_list_accepted = WaitListEntry.includes(:membership).where("memberships.Status = 'Accepted'").order("memberships.application_date")
       #@wait_list_entries = @wait_list_entries.to_a.concat(wait_list_accepted)
       flash[:error] = 'Problem assigning mooring.'
