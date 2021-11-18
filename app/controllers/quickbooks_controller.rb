@@ -202,7 +202,9 @@ class QuickbooksController < ApplicationController
   end
   
   def update_address(qbm, m)
-    if qbm['BillAddr']['Line1'] != m.StreetAddress
+    if qbm['BillAddr'].nil?
+      return true
+    elsif qbm['BillAddr']['Line1'] != m.StreetAddress
       return true
     elsif qbm['BillAddr']['City'] != m.City
       return true
