@@ -24,6 +24,7 @@
       <th><%= sortable "MailingName", "Mailing Name" %></th>
       <th><%= sortable "MemberSince", "Member Since" %></th>
       <th><%= sortable "Status", "Status" %></th>
+      <th><%= sortable "Status Changed", "updated_at" %></th>
       <th><%= sortable "mooring_num", "Mooring#" %></th>
     </tr>
   </thead>
@@ -35,6 +36,7 @@
       <td><%= membership.MailingName %></td>
       <td><%= membership.MemberSince %></td>
       <td><%= membership.Status %></td>
+      <td><%= membership.change_status_date %></td>
       <td><%= membership.mooring_num %></td>
       <td class="list-actions">
 	<%= link_to 'Delete', membership, data: { confirm: 'Are you sure?'}, method: :delete %>

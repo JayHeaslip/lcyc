@@ -90,11 +90,15 @@ class Person < ApplicationRecord
   end
 
   def self.committee_spreadsheet(committee)
-    people = Person.active.where(MemberType: ['Member', 'Partner']).committee(committee).order(:LastName)
+    unless committee == "All"
+      people = Person.active.where(MemberType: ['Member', 'Partner']).committee(committee).order(:LastName)
+    else
+      people = Person.active.where(MemberType: ['Member', 'Partner']).order(:LastName)
+    end
     CSV.generate(col_sep: ",") do |csv|
-      csv << %w(FirstName LastName HomePhone WorkPhone CellPhone EmailAddress)
+      csv << %w(FirstName LastName HomePhone WorkPhone CellPhone EmailAddress Committee)
       people.each do |p|
-        csv << [p.LastName, p.FirstName, p.HomePhone, p.WorkPhone, p.CellPhone, p.EmailAddress]
+        csv << [p.LastName, p.FirstName, p.HomePhone, p.WorkPhone, p.CellPhone, p.EmailAddress, p.Committee1]
       end
     end
   end
