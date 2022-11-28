@@ -3,27 +3,28 @@
   <head>
     <title>LCYC</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= csrf_meta_tag %>
-    <%= favicon_link_tag asset_path("favicon.png"), rel: 'icon', type: 'image/x-icon' %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= favicon_link_tag asset_path("favicon.png"), rel: "icon", type: "image/x-icon" %>
   </head>
   <body>
-    <%= render 'layouts/header' %>
-    <div class='container pt-4'>
-      <div id="header">
-	<div id="logo-title">
+    <%= render "layouts/header" %>
+    <div id="header" class="container-fluid mt-0 mb-1">
+      <div id="logo-title" class="row align-items-center">
+	<span>
           <a id="logo-img" href="/" title="Home"><%= image_tag("logo8.png", alt: "LCYC", id: "logo") %></a>
-          <h1 id='site-name'>
+          <h1 id="site-name">
             <a href="/" title="Home"><span class="text-nowrap">Lake Champlain Yacht Club Administration</span></a>
           </h1>
-	</div>
-      </div>
-      <%= flash_messages %>
-      <div> 
-	<%= yield %>
+	</span>
       </div>
     </div>
-    <%= render 'layouts/footer' %>
+    <div class="container row mt-2">
+      <%= flash_messages %>
+      <%= yield %>
+    </div>
+    <%= render "layouts/footer" %>
   </body>
 </html>

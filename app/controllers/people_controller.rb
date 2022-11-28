@@ -16,16 +16,23 @@ class PeopleController < ApplicationController
   end
 
   def destroy
-    @membership  = Membership.find(params[:membership_id])
-    @membership.people.find(params[:id]).destroy
-    flash[:notice] = 'Person was successfully deleted.'
-    redirect_to membership_path(params[:membership_id])
+    if params[:membership_id] 
+      @membership  = Membership.find(params[:membership_id])
+      @membership.people.find(params[:id]).destroy
+      flash[:notice] = 'Person was successfully deleted.'
+      redirect_to membership_path(params[:membership_id])
+    else
+      @membership = Membership.new(people: [Person.new])
+      render :destroy
+    end
   end
 
   private
 
   def get_membership
-    @membership = Membership.find(params[:membership_id])
+    if params[:membership_id]
+      @membership = Membership.find(params[:membership_id])
+    end
   end
 
   def authorize

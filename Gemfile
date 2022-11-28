@@ -1,23 +1,31 @@
 source 'https://rubygems.org'
-ruby "2.7.1"
+ruby "3.1.2"
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2'
+gem 'rails', '~> 7.0.4'
+gem "sprockets-rails"
 gem "prawn"
+gem 'matrix'
+gem "bcrypt", "~> 3.1.7"  # for user password
 
 # for dreamhost
 gem 'mysql2'
 
-gem 'puma', '>= 5.5.1'
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-# See https://github.com/rails/execjs#readme for more supported runtimes
-gem 'mini_racer', platforms: :ruby
+gem 'puma', '~> 5.6'
+# Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
+gem "jsbundling-rails"
 
-gem 'coffee-rails', '~> 4.2'
-gem 'turbolinks', '~> 5'
-gem 'bootstrap', '~> 4.3.1'
-gem 'jquery-rails'
+# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem "turbo-rails"
+
+# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem "stimulus-rails"
+
+# Bundle and process CSS [https://github.com/rails/cssbundling-rails]
+gem "cssbundling-rails"
+
+gem "bootsnap", require: false
+
+gem 'sassc-rails'
 gem "paperclip"
 
 gem 'delayed_job_active_record'
@@ -31,7 +39,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '~> 2.13'
+  gem 'capybara', '~> 3.26'
   gem 'selenium-webdriver'
   gem 'webdrivers', '~> 4.0', require: false
   gem 'simplecov'

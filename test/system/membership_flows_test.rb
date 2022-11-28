@@ -9,7 +9,7 @@ class MembershipTest < ApplicationSystemTestCase
     click_on "Login"
     click_on 'Memberships'
     click_on 'New Membership'
-    fill_in "Last Name", with: "Doe"
+    fill_in "MembershipLastName", with: "Doe"
     fill_in "Mailing Name", with: "John Doe"
     fill_in "Street Address", with: "1 Maple St"
     fill_in "City", with: "Burlington"
@@ -19,7 +19,7 @@ class MembershipTest < ApplicationSystemTestCase
     select "Active", from: "membership_Status"
     fill_in "membership_mooring_num", with: "100"
 
-    click_on "Add person"
+    #click_on "Add person"
     within('.person') do
       fill_in "FirstName", with: "John"
       fill_in "LastName", with: "Doe"

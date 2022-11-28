@@ -13,6 +13,7 @@ class MembershipsController < ApplicationController
   def index
     @status_options = %w(Accepted Active Associate Honorary Inactive Life Resigned Senior)
     params[:status] = ['Active', 'Associate', 'Honorary', 'Life', 'Senior'] if params[:status].blank?
+    #  https://www.colby.so/posts/filtering-tables-with-rails-and-hotwire
     @memberships = filter_memberships(params)
     @memberships = @memberships.order(sort_column + " " + sort_direction)
     @lastname = params[:lastname]
@@ -23,16 +24,27 @@ class MembershipsController < ApplicationController
 
   def new
     @membership = Membership.new
+    @membership.people << Person.new
     @membership.application_date = Time.now
+  end
+
+  def add_person
+    @membership = Membership.find(params[:id])
+    @membership.people << person.new
+    render "people"
   end
 
   def create
     @membership = Membership.new(membership_params)
+    logger.info "Creating membership #{@membership}"
     if @membership.save
       flash[:notice] = 'Membership was successfully created.'
       redirect_to wl_membership_path(@membership)
     else
-      render action: :new
+      if @membership.errors.any?
+        logger.info "#{@membership.errors.count} error prohibited this membership from being saved"
+      end
+      render :new, status: :unprocessable_entity
     end      
   end
 

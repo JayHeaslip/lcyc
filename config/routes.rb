@@ -2,13 +2,14 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root :to => "admin#index"
 
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy"
+  get "login", to: "sessions#new"
   
-  match 'admin/login', via: [:get, :post], as: 'login'
-  match 'rp/:hash' => 'users#rp', via: [:get, :patch], as: 'rp'
-  get 'admin/logout'
-  get 'confirm_email/:hash' => 'users#confirm_email', as: 'confirm_email'
-
+  resources :confirmations, only: [:create, :edit, :new], param: :confirmation_token
+  resources :passwords, only: [:create, :edit, :new, :update], param: :password_reset_token
   resources :unsubscribe, only: [:show, :update]
+  
   resources :quickbooks do
     collection do
       get :cleanup
@@ -20,15 +21,9 @@ Rails.application.routes.draw do
   end
 
   resources :users do
-    collection do
-      get  :forgotpw
-      post :forgotpw
-    end
     member do
       get  :registration_info
       post :resend_email
-      get  :editpw
-      post :updatepw
     end
   end
   
@@ -52,6 +47,7 @@ Rails.application.routes.draw do
       get  :initiation_report
       get  :new_drysail
       post :assign_drysail
+      post :add_person
     end
     member do
       get :wl
@@ -69,6 +65,12 @@ Rails.application.routes.draw do
     collection do
       get :select_committee
       post :committee
+    end
+  end
+
+  resources :people, only: [], param: :index do
+    member do
+      delete '(:id)' => "people#destroy", as: ""
     end
   end
 

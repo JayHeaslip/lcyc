@@ -1,10 +1,7 @@
-require 'digest/sha2'
-
 class UsersController < ApplicationController
+  before_action :authenticate_user!, only: [:edit, :destroy, :update]
+  before_action :redirect_if_authenticated, only: [:new, :create], unless: -> {Current.user&.admin? }
 
-  before_action :check_authentication, only: [:index, :show, :edit, :update, :destroy, :editpw, :updatepw]
-  before_action :check_authorization, only: [:index, :destroy, :rmrole]
-  before_action :set_current_user, only: [:show, :edit, :update, :editpw, :updatepw]
   def index
     if params[:role_id]
       @role = Role.find(params[:role_id])
@@ -16,6 +13,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    @user = User.find(params[:id])
   end
 
   def new
@@ -27,23 +25,26 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     @user.set_roles(current_user, params[:role_ids])
     @user.person = Person.find_by_EmailAddress(@user.email)
+    @user.confirmed_at = Time.now if params[:email_confirmed]
     if @user.save
       flash[:success] = 'User was successfully created.'
-      if @user.email_confirmed
+      if @user.confirmed_at
         redirect_to users_path
       else
-        MailRobot.confirmation_email(@user, @user.get_confirmation_hash, host).deliver
+        @user.send_confirmation_email!
         redirect_to registration_info_user_path(@user)
       end
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    @user = User.find(params[:id])
   end
 
   def update
+    @user = User.find(params[:id])
     @user.role_ids = params[:role_ids] if current_user.role?('Admin')
     if @user.update(user_params)
       flash[:success] = 'User was successfully updated.'
@@ -53,7 +54,7 @@ class UsersController < ApplicationController
         redirect_to user_path(@user)
       end
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -70,94 +71,9 @@ class UsersController < ApplicationController
 
   def resend_email
     @user = User.find(params[:id])
-    MailRobot.confirmation_email(@user,  @user.get_confirmation_hash, host).deliver
+    @user.send_confirmation_email!
     flash[:success] = "Confirmation email was resent."
     redirect_to registration_info_user_path(@user)
-  end
-
-  # confirm an email address
-  def confirm_email
-    # if the passed hash matches up with a User, confirm
-    @user = User.find_by_confirmation_hash(params[:hash])
-    if @user
-      @user.email_confirmed = true
-      @user.confirmation_hash = nil
-      @user.save(validate: false)
-      flash[:success] = "Thank you for validating your email."
-    else
-      flash[:error] = "User not found."
-    end
-    redirect_to login_path
-  end
-
-  def editpw
-  end
-
-  def updatepw
-    @user = User.authenticate(current_user.email, params[:old_password])
-    if @user
-      @user.password = params[:password]
-      @user.password_confirmation = params[:password_confirmation]
-      if @user.save
-        flash[:success] = "Password Updated."
-        redirect_to helpers.back_link(2)
-      else
-        pop_back_link
-        render :editpw
-      end
-    else
-      @user = current_user
-      flash.now[:error] = "Incorrect old password"
-      pop_back_link
-      render :editpw
-    end
-  end
-
-  def forgotpw
-    @user = User.new
-    if request.post?
-      @user = User.find_by_email(params[:user][:email])
-      if @user
-        if not @user.email_confirmed
-          flash[:success] = "Please confirm your account before trying to reset your password."
-          redirect_to registration_info_user_path(@user)
-        else
-          @user.reset_password_code_until = 1.day.from_now
-          @user.reset_password_code = Digest::SHA256.hexdigest("#{@user.email}#{Time.now.to_s.split(//).sort_by {rand}.join}")
-          @user.save!
-          MailRobot.newpw_email(@user, host).deliver
-          flash[:success] = "A link has been mailed to you to allow you to reset your password."
-          redirect_to login_path
-        end
-      else
-        @user = User.new
-        flash.now[:error] = "Email address not found."
-        render 
-      end
-    end
-  end
-
-  #reset password
-  def rp
-    @user = User.find_by_reset_password_code(params[:hash])
-    if request.patch?
-      @user.password = params[:user][:password]
-      @user.password_confirmation = params[:user][:password_confirmation]
-      @user.reset_password_code = nil
-      if @user.save
-        flash[:success] = "Your password has been updated."
-        redirect_to login_path
-      else
-        render
-      end
-    else # get request
-      if @user && @user.reset_password_code_until && Time.now < @user.reset_password_code_until
-        render
-      else
-        flash[:error] = "Not found, link may have expired."
-        redirect_to forgotpw_users_path
-      end
-    end
   end
 
   def rmrole
@@ -184,7 +100,6 @@ class UsersController < ApplicationController
 
   def user_params
     permitted = [:firstname, :lastname, :email, :password, :password_confirmation]
-    permitted << :email_confirmed if current_user && current_user.role?('Admin')
     params.require(:user).permit(permitted)
   end
   

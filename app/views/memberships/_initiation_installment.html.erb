@@ -1,18 +1,20 @@
-<div class="initiation_installment">
-  <div class="form-row">
-    <div class="form-group col-sm-2">
-      <span class="has-float-label">
-	<%= f.number_field :amount, id: :amount, class: "form-control", placeholder: " " %>
-	<label for="amount">Amount:</label>
-      </span>
+<div class="dynamic-form-installment initiation_installment" data-new-record="<%= f.object.new_record? %>">
+    <div class="row">
+	<div class="col-sm-2">
+	    <span class="has-float-label">
+		<%= f.number_field :amount, id: :amount, class: "form-control", placeholder: " " %>
+		<label for="amount">Amount:</label>
+	    </span>
+	</div>
+	<div class="col-sm-2">
+	    <span class="has-float-label">
+		<%= f.number_field :year, id: :year, class: "form-control", placeholder: " " %>
+		<label for="year">Year:</label>
+	    </span>
+	</div>
+	<div class ="col-sm-2">
+	    <%= f.hidden_field :_destroy %>
+	    <button type="button" data-action="dynamic-form#remove_installment", class="btn btn-link">Remove installment</button>
+	</div>
     </div>
-    <div class="form-group col-sm-2">
-      <span class="has-float-label">
-	<%= f.number_field :year, id: :year, class: "form-control", placeholder: " " %>
-	<label for="year">Year:</label>
-      </span>
-    </div>
-    <%= f.hidden_field :_destroy %>
-    <%= link_to 'Delete Installment', '#', class: 'remove_initiation_installment col-offset-6' %>
-  </div>
 </div>

@@ -4,16 +4,6 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-*~
-config/database.yml
-config/secrets.yml
-config/mail.yml
-gmailpw
-REVISION
-public/assets
-public/system
-coverage
-
 # Ignore bundler config.
 /.bundle
 
@@ -24,7 +14,20 @@ coverage
 !/log/.keep
 !/tmp/.keep
 
-/node_modules
-/yarn-error.log
+# Ignore pidfiles, but keep the directory.
+/tmp/pids/*
+!/tmp/pids/
+!/tmp/pids/.keep
 
-.byebug_history
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
+/tmp/storage/*
+!/tmp/storage/
+!/tmp/storage/.keep
+
+/public/assets
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+/config/database.yml

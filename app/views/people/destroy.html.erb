@@ -1,0 +1,8 @@
+<%= fields model: @membership do |form| %>
+    <%= form.fields_for :people, child_index: params[:index] do |person_form| %>
+	<%= turbo_frame_tag "person_#{person_form.index}" do %>
+	    <% person_form.hidden_field :id, value: params[:id] %>
+	    <% person_form.hidden_field :_destroy, value: true %>
+	<% end %>
+    <% end %>
+<% end %>

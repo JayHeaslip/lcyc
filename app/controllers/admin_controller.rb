@@ -1,8 +1,5 @@
 class AdminController < ApplicationController
 
-  skip_before_action :check_authentication, except: [:index]
-  skip_before_action :check_authorization
-
   def index
   end
 

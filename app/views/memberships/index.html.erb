@@ -39,7 +39,7 @@
       <td><%= membership.change_status_date %></td>
       <td><%= membership.mooring_num %></td>
       <td class="list-actions">
-	<%= link_to 'Delete', membership, data: { confirm: 'Are you sure?'}, method: :delete %>
+	<%= button_to 'Delete', membership_path(membership), method: :delete, class: "btn btn-link" %>
       </td>
     </tr>
     <% end %>

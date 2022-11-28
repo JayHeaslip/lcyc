@@ -1,93 +1,91 @@
-<div class="container">
-  <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
-    <a class="navbar-brand" href="/">Lake Champlain Yacht Club</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav mr-auto">
-	<li class="nav-item active">
-          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2mb-lg-0">
+	<li class="nav-item">
+          <a class="nav-link active" href="/">Home</a>
 	</li>
-	<% if logged_in? && current_user.role?('Member') %>
+	<% if user_signed_in? && current_user.role?('Member') %>
 	<li class="nav-item">
 	  <a class="nav-link" href=<%= "#{membership_path(current_user.membership)}" %>>My Club Info</a>
 	</li>
         <% end %>
-	<% if logged_in? && current_user.roles?(['Admin', 'BOG']) %>
+	<% if user_signed_in? && current_user.roles?(['Admin', 'BOG']) %>
 	<li class="nav-item dropdown">
-	  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Memberships</a>
-	  <ul class="dropdown-menu">
-            <li><%= link_to "Memberships", memberships_path %></li>
-            <li><%= link_to "New Membership", new_membership_path %></li>
-            <li class="dropdown-divider"></li>
-            <li><%= link_to "Committees", select_committee_people_path %></li>
-            <li><%= link_to "Labels", labels_memberships_path %></li>
-            <li><%= link_to "Spreadsheets", spreadsheets_memberships_path %></li>
-            <li><%= link_to "Initiation Report", initiation_report_memberships_path %></li>
+	  <a class="nav-link dropdown-toggle" href="#" id="navbarMembershipDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Memberships</a>
+	  <ul class="dropdown-menu" aria-labelledby="navbarMembershipDropdown">
+            <li><%= link_to "Memberships", memberships_path, class: "dropdown-item" %></li>
+            <li><%= link_to "New Membership", new_membership_path, class: "dropdown-item" %></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><%= link_to "Committees", select_committee_people_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Labels", labels_memberships_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Spreadsheets", spreadsheets_memberships_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Initiation Report", initiation_report_memberships_path, class: "dropdown-item" %></li>
 	  </ul>
 	</li>
 	<li class="nav-item dropdown">
-	  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Harbor</a>
-	  <ul class="dropdown-menu">
-            <li><%= link_to "Boats", boats_path %></li>
-            <li><%= link_to "Moorings", moorings_memberships_path %></li>
-            <li class="dropdown-divider"></li>
-            <li><%= link_to "Dry Sail List", drysail_memberships_path %></li>
-            <li><%= link_to "Dry Sail Assignment", new_drysail_memberships_path %></li>
-            <li class="dropdown-divider"></li>
-            <li><%= link_to "Waiting List", wait_list_entries_path %></li>
-            <li><%= link_to "New Wait List Entry", new_wait_list_entry_path %></li>
-            <li class="dropdown-divider"></li>
-            <li><%= link_to "Unassigned Moorings", unassigned_moorings_memberships_path %></li>
+	  <a class="nav-link dropdown-toggle" href="#" id="navbarHarborDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Harbor</a>
+	  <ul class="dropdown-menu" aria-labelledby="navbarHarborDropdown">
+            <li><%= link_to "Boats", boats_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Moorings", moorings_memberships_path, class: "dropdown-item" %></li>
+            <li><hr class="dropdown-divider"></li>
+	    <li><%= link_to "Dry Sail List", drysail_memberships_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Dry Sail Assignment", new_drysail_memberships_path, class: "dropdown-item" %></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><%= link_to "Waiting List", wait_list_entries_path, class: "dropdown-item" %></li>
+            <li><%= link_to "New Wait List Entry", new_wait_list_entry_path, class: "dropdown-item" %></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><%= link_to "Unassigned Moorings", unassigned_moorings_memberships_path, class: "dropdown-item" %></li>
 	  </ul>
 	</li>
 	<li class="nav-item dropdown">
-	  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Mailing Lists</a>
-	  <ul class="dropdown-menu">
-            <li><%= link_to "General", mailings_path %></li>
-            <li><%= link_to "New Mailing", new_mailing_path %></li>
-            <li class="dropdown-divider"></li>
-            <li><%= link_to "Binnacles", binnacles_path %></li>
-            <li><%= link_to "New Binnacle", new_binnacle_path %></li>
-            <li class="dropdown-divider"></li>
-            <li><%= link_to "Bills", new_billing_mailings_path %></li>
+	  <a class="nav-link dropdown-toggle" href="#" id="navbarMailingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mailing Lists</a>
+	  <ul class="dropdown-menu" aria-labelledby="navbarMailingDropdown">
+            <li><%= link_to "General", mailings_path, class: "dropdown-item" %></li>
+            <li><%= link_to "New Mailing", new_mailing_path, class: "dropdown-item" %></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><%= link_to "Binnacles", binnacles_path, class: "dropdown-item" %></li>
+            <li><%= link_to "New Binnacle", new_binnacle_path, class: "dropdown-item" %></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><%= link_to "Bills", new_billing_mailings_path, class: "dropdown-item" %></li>
 	  </ul>
 	</li>
 	<li class="nav-item dropdown">
-	  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Quickbooks</a>
-	  <ul class="dropdown-menu">
-            <li><%= link_to "Cleanup", cleanup_quickbooks_path %></li>
-            <li><%= link_to "Connect", connect_quickbooks_path %></li>
-            <li><%= link_to "Update members", update_members_quickbooks_path %></li>
-            <li><%= link_to "Invoices", invoices_quickbooks_path %></li>
+	  <a class="nav-link dropdown-toggle" href="#" id="navbarQBDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Quickbooks</a>
+	  <ul class="dropdown-menu" aria-labelledby="navbarQBDropdown">
+            <li><%= link_to "Cleanup", cleanup_quickbooks_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Connect", connect_quickbooks_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Update members", update_members_quickbooks_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Invoices", invoices_quickbooks_path, class: "dropdown-item" %></li>
 	  </ul>
 	</li>
         <% end %>
 	<% if current_user && current_user.role?('Admin') %>
 	<li class="nav-item dropdown">
-	  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
-	  <ul class="dropdown-menu">
-            <li><%= link_to "Users", users_path %></li>
-            <li><%= link_to "New User", new_user_path %></li>
-            <li class="dropdown-divider"></li>
-            <li><%= link_to "Roles", roles_path %></li>
+	  <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
+	  <ul class="dropdown-menu" aria-labelledby="navbarAdminDropdown">
+            <li><%= link_to "Users", users_path, class: "dropdown-item" %></li>
+            <li><%= link_to "New User", new_user_path, class: "dropdown-item" %></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><%= link_to "Roles", roles_path, class: "dropdown-item" %></li>
 	  </ul>
 	</li>
 	<% end %>
       </ul>
-      <% if current_user %>
-      <ul class="nav navbar-nav navbar-right">
-	<li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><%= current_user.email %> <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><%= link_to "Profile", user_path(current_user) %></li>
-            <li><%= link_to "Change Password", editpw_user_path(current_user) %></li>
-            <li><%= link_to "Logout", controller: 'admin', action: 'logout' %></li>
-          </ul>
-	</li>
-      </ul>
-      <% end %>
+      <% if user_signed_in? %>
+      <ul class="navbar-nav">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarProfileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" ><%= current_user.email %> <span class="caret"></span></a>
+        <ul class="dropdown-menu" aria-labelledby="navbarProfileDropdown">
+          <li><%= link_to "Profile", user_path(current_user), class: "dropdown-item" %></li>
+          <li><%= link_to "Change Password", editpw_user_path(current_user), class: "dropdown-item" %></li>
+          <li><%= button_to "Logout", logout_path, method: :delete, class: "btn btn-link dropdown-item" %></li>
+        </ul>
+      </li>
+    </ul>
+    <% end %>
     </div>
-  </nav>
-</div>
+</nav>

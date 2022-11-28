@@ -62,7 +62,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
                                       people_attributes: [{FirstName: 'John', LastName: 'Doe',
                                              Committee1: 'Boats', MemberType: 'Partner'}]}}
                                    
-    assert_response :success
+    assert_response 422
     assert_select "h2", "New membership"
   end
 

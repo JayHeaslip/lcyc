@@ -1,0 +1,211 @@
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-icons/font/bootstrap-icons';
+@import "float-label";
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  min-height: 600px;
+  padding-top: 30px;
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+
+.navbar-nav > li > a, .navbar-brand {
+    padding-top: 5px !important; padding-bottom: 0 !important;
+    height: 30px;
+}
+.navbar {
+    min-height: 30px !important;
+}
+
+#header {
+  height: 91px;
+  padding: 0;
+  background-color: #ced4da;
+  background-image: var(--bs-gradient);
+  margin: 4px 0 15px 0;
+}
+
+#logo-title {
+  position: relative;
+  overflow: visible;
+  float: left;
+  height: 91px;
+  padding-left: 10px;
+  z-index: 1;
+}
+
+* html #logo-img {
+    display: none;
+}
+
+#header #site-name, #header #site-slogan {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  left: 100px;
+  padding-left: 10px;
+  border: 0;
+}
+
+#header #site-name a, #header #site-name a:visited, #header #site-name a:hover {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 25px;
+  color: #F8FEFF;
+  font-weight: bold;
+  letter-spacing: 3px;
+  text-decoration: none;
+  border: 0;
+}
+
+#header #site-name a:hover {
+  color: #fff;
+}
+
+#header #site-slogan {
+  text-align: left;
+  font-size: 12px;
+  font-weight: bold;
+  color: #A4BEDD;
+  letter-spacing: 1px;
+}
+
+#header #logo {
+  position: absolute;
+  top: -8px;
+}
+
+#logo a, #logo a:visited, #logo a:hover {
+  text-decoration: none;
+}
+
+#logo a img {
+  border: 0;
+}
+
+#header-region {
+  position: absolute;
+  top: 10px;
+  left: 122px;
+  height: 28px;
+  line-height: 28px;
+  vertical-align: bottom;
+  padding: 0;
+  color: #F1F5F9;
+}
+
+#header-region * {
+  display: inline;
+  vertical-align: bottom;
+}
+
+#header-region h2, #header-region h3, #header-region div, #header-region ul, #header-region li {
+  display: inline;
+  padding-right: .5em;
+  line-height: 20px;
+  font-size: 10px;
+}
+
+#header-region h2, #header-region h3 {
+  font-weight: bold;
+}
+
+#header-region h2 {
+  font-size: 13px;
+}
+
+#header-region input, #header-region select {
+  background-color: #B4D1F1 !important;
+  border-color: #8EACCE !important;
+  color: #476281 !important;
+}
+
+#footer {
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 37px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #e9ecef;
+  margin: 0 0 10px 0;
+}
+
+.list-actions {
+  font-size:    0.7em;
+  text-align:   right;
+  padding-left: 1em;
+}
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px 7px 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    padding: 5px 5px 5px 15px;
+    font-size: 12px;
+    margin: -7px -7px 0;
+    background-color: #c00;
+    color: #fff;
+  }
+
+  ul li {
+    font-size: 12px;
+    list-style: square;
+  }
+}
+
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-signin
+input[type="password"] {
+    margin-bottom: 10px;
+}
+.form-signin .checkbox {
+    margin-bottom: 10px;
+}
+
+.fieldset {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+th .current {
+  padding-right: 20px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+/*---------------
+th .asc {
+ background-image: image-url('up.gif') 
+}
+
+th .desc {
+ background-image: image-url('down.gif') 
+}
+--------*/
+
+hr {
+    border-top: 2px solid #8b8c8c;
+}

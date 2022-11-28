@@ -3,16 +3,19 @@ include ActionView::Helpers::NumberHelper
 
 class MailRobot < ApplicationMailer
 
-  def confirmation_email(user, hash, host)
-    @url = "#{host}confirm_email/#{hash}"
-    mail(to: user.email, subject: 'Confirm LCYC registration')
+  def confirmation(user, confirmation_token)
+    @user = user
+    @confirmation_token = confirmation_token
+    mail(to: @user.email, subject: 'Confirm LCYC registration')
   end
 
-  def newpw_email(user, host)
-    @url = "#{host}rp/#{user.reset_password_code}"
-    mail(to: user.email, subject: 'Password reset for LCYC')
+  def password_reset(user, password_reset_token)
+    @user = user
+    @password_reset_token = password_reset_token
+    
+    mail to: @user.email, subject: "Password Reset Instructions"
   end
-
+  
   def mailing(person, mailing, host, filtered = nil)
     mailing = Mailing.find(mailing)
     unless filtered
