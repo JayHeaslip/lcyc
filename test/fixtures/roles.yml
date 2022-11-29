@@ -3,7 +3,7 @@ admin:
 
 member:
   name: Member
-  rights: [user_create, user_destroy, boat_update, membership_edit, person_destroy]
+  rights: [user_show, user_edit, user_update, user_create, user_destroy, password_change, boat_update, membership_edit, person_destroy]
 
 BOG:
   name: BOG

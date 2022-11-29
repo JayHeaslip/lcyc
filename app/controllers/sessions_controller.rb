@@ -1,8 +1,11 @@
 class SessionsController < ApplicationController
   before_action :redirect_if_authenticated, only: [:create, :new]
   before_action :authenticate_user!, only: [:destroy]
+  skip_before_action :check_authorization
+
 
   def create
+    logger.info params
     @user = User.authenticate_by(email: params[:email].downcase, password: params[:password])
     if @user
       if @user.unconfirmed?

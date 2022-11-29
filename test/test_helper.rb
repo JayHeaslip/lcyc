@@ -1,4 +1,5 @@
 require 'simplecov'
+SimpleCov.start 'rails'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
@@ -30,12 +31,10 @@ class ActiveSupport::TestCase
 
   def login(user, remember_user: nil)
     post login_path, params: {
-      user: {
-        email: user.email,
-        password: user.password,
-        remember_me: remember_user == true ? 1 : 0
-      }
-    }
+           email: user.email,
+           password: user.password,
+           remember_me: remember_user == true ? 1 : 0
+         }
   end
 
   def logout

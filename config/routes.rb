@@ -2,12 +2,17 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root :to => "admin#index"
 
+  get "sign_up", to: "users#new"
+  post "sign_up", to: "users#create"
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
   get "login", to: "sessions#new"
   
   resources :confirmations, only: [:create, :edit, :new], param: :confirmation_token
   resources :passwords, only: [:create, :edit, :new, :update], param: :password_reset_token
+  get "change_password", to: "passwords#change"
+  post "change_password", to: "passwords#change"
+  
   resources :unsubscribe, only: [:show, :update]
   
   resources :quickbooks do

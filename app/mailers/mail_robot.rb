@@ -13,7 +13,7 @@ class MailRobot < ApplicationMailer
     @user = user
     @password_reset_token = password_reset_token
     
-    mail to: @user.email, subject: "Password Reset Instructions"
+    mail to: @user.email, subject: "LCYC Password Reset Instructions"
   end
   
   def mailing(person, mailing, host, filtered = nil)

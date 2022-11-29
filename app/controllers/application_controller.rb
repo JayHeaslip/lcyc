@@ -3,15 +3,25 @@ class ApplicationController < ActionController::Base
   
   protect_from_forgery with: :exception
 
-  before_action :authenticate_user! # check_authentication, :check_authorization, :breadcrumbs
+  before_action :authenticate_user!, :check_authorization, :breadcrumbs
 
   private
 
   def check_authorization
-    if Current.user.role?('Admin')
+    logger.info "Current.user is #{Current.user.email}"
+    if Current.user.nil?
+      return false
+    elsif Current.user.role?('Admin')
+      logger.info "Current.user is Admin"
       return true
     else
-      unless Current.user.roles.detect do |role|
+      logger.info "Roles"
+      Current.user.roles.each do |r|
+        logger.info r.name
+      end
+      logger.info "action #{action_name}"
+      logger.info "controller #{self.class.controller_path}"
+      unless Current.user&.roles.detect do |role|
                role.rights.detect do |right|
                  right.action == action_name && right.controller == self.class.controller_path
                end

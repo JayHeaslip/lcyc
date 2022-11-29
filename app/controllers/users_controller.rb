@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:edit, :destroy, :update]
+  before_action :authenticate_user!, only: [:show, :edit, :destroy, :update]
   before_action :redirect_if_authenticated, only: [:new, :create], unless: -> {Current.user&.admin? }
 
   def index
@@ -23,9 +23,11 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    @user.set_roles(current_user, params[:role_ids])
     @user.person = Person.find_by_EmailAddress(@user.email)
-    @user.confirmed_at = Time.now if params[:email_confirmed]
+    if Current.user.admin?
+      @user.confirmed_at = Time.now if params[:email_confirmed]
+      @user.set_roles(current_user, params[:role_ids])
+    end
     if @user.save
       flash[:success] = 'User was successfully created.'
       if @user.confirmed_at
@@ -45,7 +47,10 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    @user.role_ids = params[:role_ids] if current_user.role?('Admin')
+    if Current.user.admin?
+      @user.confirmed_at = Time.now if params[:email_confirmed]
+      @user.set_roles(current_user, params[:role_ids])
+    end
     if @user.update(user_params)
       flash[:success] = 'User was successfully updated.'
       if current_user.role?('Admin')

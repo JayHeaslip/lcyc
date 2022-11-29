@@ -38,34 +38,35 @@ class UsersControllerTest2 < ActionDispatch::IntegrationTest
   test "update invalid user" do
     @update[:password_confirmation] = 'passwor1'
     patch user_url(@user),params: { user: @update}
-    assert_response :success
+    assert_response :unprocessable_entity
   end
     
   test "edit current password" do
-    get editpw_user_url(@user)
+    get change_password_url(@user)
     assert_response :success
   end
     
   test "update current password" do
-    post updatepw_user_url(@user), params: { old_password: 'passwor2',
+    post change_password_url(@user), params: { current_password: 'passwor2',
                                             password: 'password',
                                             password_confirmation: 'password' }
     assert_redirected_to root_url
   end
     
   test "update current password incorrect old password" do
-    post updatepw_user_url(@user), params: { old_password: 'passwor3',
+    post change_password_url(@user), params: { current_password: 'passwor3',
                                             password: 'password',
                                             password_confirmation: 'password' }
-    assert_response :success
-    assert_equal "Incorrect old password", flash.now[:error]
+    assert_response :unprocessable_entity
+    assert_equal "Incorrect current password", flash.now[:alert]
   end
 
   test "update current password invalid new password" do
-    post updatepw_user_url(@user), params: { old_password: 'passwor2',
+    post change_password_url(@user), params: { old_password: 'passwor2',
                                             password: 'password',
                                             password_confirmation: 'passwor1' }
-    assert_response :success
+    assert_response :unprocessable_entity
+    assert_equal "Incorrect current password", flash.now[:alert]
   end
     
   test "should not delete an user" do

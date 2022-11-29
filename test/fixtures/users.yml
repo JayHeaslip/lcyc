@@ -1,0 +1,70 @@
+one:
+  firstname: dave
+  lastname: dave
+  email: dave@abc.com
+  password_digest: <%= BCrypt::Password.create('passwor1') %>
+  confirmed_at: <%= Time.now %>
+  roles: [admin]
+
+two:  
+  firstname: bob
+  lastname: bob
+  email: bob@abc.com
+  password_digest: <%= BCrypt::Password.create('passwor2') %>
+  confirmed_at: <%= Time.now %>
+  roles: [BOG, member]
+  person: bob
+
+three:  
+  firstname: jim
+  lastname: jim
+  email: jim@abc.com
+  password_digest: <%= BCrypt::Password.create('passwor3') %>
+  confirmed_at: nil
+  roles: [member]
+  confirmed_at: <%= Time.now %>
+  person: jim
+
+four:  
+  firstname: steve
+  lastname: steve
+  email: steve@abc.com
+  password_digest: <%= BCrypt::Password.create('passwor1') %>
+  confirmed_at: <%= Time.now %>
+  roles: [member]
+  person: jim
+
+not_confirmed:  
+  firstname: steve
+  lastname: steve
+  email: unconfirmed@abc.com
+  password_digest: <%= BCrypt::Password.create('passwor4') %>
+  roles: [member]
+  person: jim
+
+expired:  
+  firstname: steve
+  lastname: steve
+  email: tim@abc.com
+  password_digest: <%= BCrypt::Password.create('passwor5') %>
+  confirmed_at: nil
+  roles: [member]
+  person: jim
+
+barb2:  
+  firstname: barb
+  lastname: barb
+  email: barb2@abc.com
+  password_digest: <%= BCrypt::Password.create('passwor2') %>
+  confirmed_at: <%= Time.now %>
+  roles: [BOG, member]
+  person: barb2
+
+no_member_email:  
+  firstname: gary
+  lastname: barb
+  email: gary@abc.com
+  password_digest: <%= BCrypt::Password.create('passwor2') %>
+  confirmed_at: <%= Time.now %>
+  roles: [admin]
+

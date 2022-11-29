@@ -1,3 +1,23 @@
+password_change:
+  name: PasswordsController.change
+  controller: passwords
+  action: change
+
+user_show:
+  name: UsersController.show
+  controller: users
+  action: show
+
+user_edit:
+  name: UsersController.edit
+  controller: users
+  action: edit
+
+user_update:
+  name: UsersController.update
+  controller: users
+  action: update
+
 user_create:
   name: UsersController.create
   controller: users

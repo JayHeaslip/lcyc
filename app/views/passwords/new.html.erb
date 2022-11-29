@@ -1,0 +1,16 @@
+<%= form_with url: passwords_path do |f| %>
+  <div class="row ms-2">
+    <h4>Enter the email you use to sign in:</h4>
+  </div>
+  <div class="row ms-2">
+    <span class="has-float-label" >
+      <%= f.email_field :email, id: "email", class: "form-control" %>
+      <label for="email">Email</label>
+    </span>
+  </div>
+  <div class="row">
+    <div class="ms-3 mt-3 col-sm-10">
+      <button type="submit"class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+<% end %>
