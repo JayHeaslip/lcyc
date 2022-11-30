@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  before_action :redirect_if_authenticated, only: [:create, :new]
+  #before_action :redirect_if_authenticated, only: [:create, :new]
   before_action :authenticate_user!, only: [:destroy]
   skip_before_action :check_authorization
 
@@ -29,5 +29,6 @@ class SessionsController < ApplicationController
   end
 
   def new
+    reset_session
   end
 end

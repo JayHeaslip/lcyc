@@ -12,7 +12,7 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
       email: 'bob2@abc.com',
       password:  'password',
       password_confirmation:  'password',
-      email_confirmed: true
+      confirmed_at: Time.now
     }
 
     #exists in people but not in users
@@ -59,7 +59,7 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
   end
     
   test "create an user" do
-    post users_url,params: { user: @new, role_ids: @role_ids }
+    post users_url,params: { user: @new, email_confirmed: true, role_ids: @role_ids }
     assert_redirected_to users_url
     assert_equal flash[:success],'User was successfully created.'
   end

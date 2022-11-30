@@ -49,6 +49,7 @@ module Authentication
   end
 
   def user_signed_in?
+    logger.info "Current user #{Current.user&.email}"
     Current.user.present?
   end
 

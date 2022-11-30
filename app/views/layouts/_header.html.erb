@@ -8,12 +8,12 @@
 	<li class="nav-item">
           <a class="nav-link active" href="/">Home</a>
 	</li>
-	<% if user_signed_in? && current_user.role?('Member') %>
+	<% if user_signed_in? && Current.user&.role?('Member') %>
 	<li class="nav-item">
-	  <a class="nav-link" href=<%= "#{membership_path(current_user.membership)}" %>>My Club Info</a>
+	  <a class="nav-link" href=<%= "#{membership_path(Current.user.membership)}" %>>My Club Info</a>
 	</li>
         <% end %>
-	<% if user_signed_in? && current_user.roles?(['Admin', 'BOG']) %>
+	<% if user_signed_in? && Current.user&.roles?(['Admin', 'BOG']) %>
 	<li class="nav-item dropdown">
 	  <a class="nav-link dropdown-toggle" href="#" id="navbarMembershipDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Memberships</a>
 	  <ul class="dropdown-menu" aria-labelledby="navbarMembershipDropdown">
@@ -63,7 +63,7 @@
 	  </ul>
 	</li>
         <% end %>
-	<% if current_user && current_user.role?('Admin') %>
+	<% if Current.user&.role?('Admin') %>
 	<li class="nav-item dropdown">
 	  <a class="nav-link dropdown-toggle" href="#" id="navbarAdminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
 	  <ul class="dropdown-menu" aria-labelledby="navbarAdminDropdown">
@@ -78,10 +78,10 @@
       <% if user_signed_in? %>
       <ul class="navbar-nav">
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarProfileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" ><%= current_user.email %> <span class="caret"></span></a>
+        <a class="nav-link dropdown-toggle" href="#" id="navbarProfileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" ><%= Current.user.email %> <span class="caret"></span></a>
         <ul class="dropdown-menu" aria-labelledby="navbarProfileDropdown">
-          <li><%= link_to "Profile", user_path(current_user), class: "dropdown-item" %></li>
-          <li><%= link_to "Change Password", change_password_path(current_user), class: "dropdown-item" %></li>
+          <li><%= link_to "Profile", user_path(Current.user), class: "dropdown-item" %></li>
+          <li><%= link_to "Change Password", change_password_path(Current.user), class: "dropdown-item" %></li>
           <li><%= button_to "Logout", logout_path, method: :delete, class: "btn btn-link dropdown-item" %></li>
         </ul>
       </li>

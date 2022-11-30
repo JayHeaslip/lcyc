@@ -8,19 +8,12 @@ class ApplicationController < ActionController::Base
   private
 
   def check_authorization
-    logger.info "Current.user is #{Current.user.email}"
     if Current.user.nil?
+      redirect_to login_path
       return false
     elsif Current.user.role?('Admin')
-      logger.info "Current.user is Admin"
       return true
     else
-      logger.info "Roles"
-      Current.user.roles.each do |r|
-        logger.info r.name
-      end
-      logger.info "action #{action_name}"
-      logger.info "controller #{self.class.controller_path}"
       unless Current.user&.roles.detect do |role|
                role.rights.detect do |right|
                  right.action == action_name && right.controller == self.class.controller_path

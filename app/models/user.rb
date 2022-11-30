@@ -83,15 +83,6 @@ class User < ApplicationRecord
     not (self.roles.map {|r| r.name} & roles).empty?
   end
 
-  def set_roles(current_user, role_ids)
-    if current_user and current_user.role?('Admin')
-      self.role_ids = role_ids
-    else
-      self.roles << Role.find_by_name('Member')
-      self.person = Person.find_by_EmailAddress(self.email)
-    end
-  end
-
   def membership
     Person.find_by_EmailAddress(self.email).membership.id
   end

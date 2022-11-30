@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!, only: [:show, :edit, :destroy, :update]
   before_action :redirect_if_authenticated, only: [:new, :create], unless: -> {Current.user&.admin? }
+  skip_before_action :check_authorization, only: [:new, :create]
 
   def index
     if params[:role_id]
@@ -24,17 +25,16 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @user.person = Person.find_by_EmailAddress(@user.email)
-    if Current.user.admin?
-      @user.confirmed_at = Time.now if params[:email_confirmed]
-      @user.set_roles(current_user, params[:role_ids])
-    end
+    @user.roles << Role.find_by_name('Member') if @user.person
+    update_admin_fields(params)
     if @user.save
-      flash[:success] = 'User was successfully created.'
       if @user.confirmed_at
+        flash[:success] = 'User was successfully created.'
         redirect_to users_path
       else
+        flash[:notice] = 'Check your email for confirmation instructions.'
         @user.send_confirmation_email!
-        redirect_to registration_info_user_path(@user)
+        redirect_to login_path
       end
     else
       render :new, status: :unprocessable_entity
@@ -47,10 +47,7 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    if Current.user.admin?
-      @user.confirmed_at = Time.now if params[:email_confirmed]
-      @user.set_roles(current_user, params[:role_ids])
-    end
+    update_admin_fields(params)
     if @user.update(user_params)
       flash[:success] = 'User was successfully updated.'
       if current_user.role?('Admin')
@@ -91,21 +88,15 @@ class UsersController < ApplicationController
 
   private
 
-  def set_current_user
-    if current_user.role?('Admin')
-      @user = User.find(params[:id])
-    else
-      @user = current_user
-    end
-  end
-
-  def host
-    request.url.gsub(/users.*/,'')
-  end
-
   def user_params
     permitted = [:firstname, :lastname, :email, :password, :password_confirmation]
     params.require(:user).permit(permitted)
   end
-  
+
+  def update_admin_fields(params)
+    if Current.user&.admin?
+      @user.confirmed_at = Time.now if params[:email_confirmed]
+      @user.role_ids = params[:role_ids]
+    end
+  end
 end

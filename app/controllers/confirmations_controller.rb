@@ -1,14 +1,15 @@
 class ConfirmationsController < ApplicationController
 
   before_action :redirect_if_authenticated, only: [:create, :new]
-  skip_before_action :authenticate_user!, only: [:edit]
+  skip_before_action :authenticate_user!
+  skip_before_action :check_authorization 
 
   def create
     @user = User.find_by(email: params[:user][:email].downcase)
 
     if @user.present? && @user.unconfirmed?
       @user.send_confirmation_email!
-      redirect_to root_path, notice: "Check your email for confirmation instructions."
+      redirect_to login_path, notice: "Check your email for confirmation instructions."
     else
       redirect_to new_confirmation_path, alert: "We could not find a user with that email or that email has already been confirmed."
     end
@@ -18,8 +19,7 @@ class ConfirmationsController < ApplicationController
     @user = User.find_signed(params[:confirmation_token], purpose: :confirm_email)
     if @user.present? && @user.unconfirmed?
       if @user.confirm!
-        login @user
-        redirect_to root_path, notice: "Your account has been confirmed."
+        redirect_to login_path, notice: "Your account has been confirmed."
       else
         redirect_to new_confirmation_path, alert: "Something went wrong."
       end
