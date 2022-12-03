@@ -1,6 +1,7 @@
 class PasswordsController < ApplicationController
   before_action :redirect_if_authenticated, except: [:change]
   skip_before_action :authenticate_user!, except: [:change]
+  skip_before_action :check_authorization, except: [:change]
 
   def create
     @user = User.find_by(email: params[:email].downcase)
@@ -33,10 +34,11 @@ class PasswordsController < ApplicationController
     if request.post?
       if User.authenticate_by(email: @user.email, password: params[:current_password])
         if @user.update(password_params)
-          flash[:notice] = "Password updated"
+          flash[:success] = "Password updated"
           redirect_to helpers.back_link(1)
         else
           flash.now[:alert] = @user.errors.full_messages.to_sentence
+          render :change, status: :unprocessable_entity
         end
       else
         flash.now[:alert] = "Incorrect current password"

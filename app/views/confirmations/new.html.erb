@@ -1,0 +1,5 @@
+<h4>Re-enter your email to get a new confirmation code</h4>
+<%= form_with model: @user, url: confirmations_path do |form| %>
+  <%= form.email_field :email, required: true, class: "form-control" %>
+  <%= form.submit "Confirm Email", class: "btn mt-2 btn-primary" %>
+<% end %>

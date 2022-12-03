@@ -3,6 +3,11 @@ require "test_helper"
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @confirmed_user = User.create!(firstname: 'bob', lastname: 'bob', email: "confirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: Time.current)
+    @unconfirmed_user = User.create!(firstname: 'bob', lastname: 'bob', email: "unconfirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: nil)
+
+    @member = users(:three)
+    @user = users(:two)
+    @admin = users(:one)
   end
 
   test "should load sign up page for anonymous users" do
@@ -27,6 +32,21 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test "should not show unconfirmed user" do
+    get user_url(@unconfirmed_user)
+    assert_redirected_to login_url
+  end
+
+  test "should not edit unconfirmed user" do
+    get edit_user_url(@unconfirmed_user)
+    assert_redirected_to login_url
+  end
+    
+  test "should not update unconfirmed user" do
+    patch user_url(@unconfirmed_user),params: { user: @update, role_ids: @role_ids }
+    assert_redirected_to login_url
+  end
+
   test "should create user and send confirmation instructions" do
     assert_difference("User.count", 1) do
       assert_emails 1 do
@@ -42,7 +62,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       end
     end
 
-    assert_redirected_to root_path
+    assert_redirected_to login_path
     assert_not_nil flash[:notice]
   end
 
@@ -60,95 +80,66 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
              }
       end
     end
+    assert_response :unprocessable_entity
+  end
+
+  test "should not get index" do
+    login_as @member, 'passwor3'
+    get users_url
+    assert_redirected_to root_url
+    assert_not_nil flash[:alert]
+  end
+    
+  test "should list current user" do
+    login_as @member, 'passwor3'
+    get user_path(@member)
+    assert_response :success
   end
 
   test "should get edit if authorized" do
-    login(@confirmed_user)
+    login_as @member, 'passwor3'
 
-    get account_path
+    get edit_user_path(@member)
     assert_response :ok
   end
 
   test "should redirect unauthorized user from editing account" do
-    get account_path
+    get edit_user_path(@unconfirmed_user)
     assert_redirected_to login_path
     assert_not_nil flash[:alert]
   end
 
-  test "should edit email" do
-    unconfirmed_email = "unconfirmed_user@example.com"
-    current_email = @confirmed_user.email
+  test "should edit user" do
+    current_first = @member.firstname
 
-    login(@confirmed_user)
-
-    assert_emails 1 do
-      put account_path, params: {
-            user: {
-              unconfirmed_email: unconfirmed_email,
-              current_password: "password"
-            }
-          }
-    end
-
-    assert_not_nil flash[:notice]
-    assert_equal current_email, @confirmed_user.reload.email
-  end
-
-  test "should not edit email if current_password is incorrect" do
-    unconfirmed_email = "unconfirmed_user@example.com"
-    current_email = @confirmed_user.email
-
-    login(@confirmed_user)
-
-    assert_no_emails do
-      put account_path, params: {
-            user: {
-              unconfirmed_email: unconfirmed_email,
-              current_password: "wrong_password"
-            }
-          }
-    end
-
-    assert_not_nil flash[:notice]
-    assert_equal current_email, @confirmed_user.reload.email
-  end
-
-  test "should update password" do
-    login(@confirmed_user)
+    login_as @member, 'passwor3'
 
     put account_path, params: {
           user: {
-            current_password: "password",
-            password: "new_password",
-            password_confirmation: "new_password"
+            firstname: 'Tom'
           }
         }
-
-    assert_redirected_to root_path
+    
     assert_not_nil flash[:notice]
+    assert_not_equal current_first, @member.reload.firstname
   end
 
-  test "should not update password if current_password is incorrect" do
-    login(@confirmed_user)
-
-    put account_path, params: {
-          user: {
-            current_password: "wrong_password",
-            password: "new_password",
-            password_confirmation: "new_password"
-          }
-        }
-
+  test "update invalid user" do
+    login_as @member, 'passwor3'
+    patch user_url(@member), params: { user: {firstname: '', lastname: @member.lastname}}
     assert_response :unprocessable_entity
   end
 
-  test "should delete user" do
-    login(@confirmed_user)
-
-    delete account_path(@confirmed_user)
-
-    assert_nil current_user
+  test "should not delete an user" do
+    login_as @member, 'passwor3'
+    delete user_path(@user)
     assert_redirected_to root_path
-    assert_not_nil flash[:notice]
+    assert_not_nil flash[:alert]
   end
+    
+  test "should not remove a role from an user" do
+  end
+
+
+
 end

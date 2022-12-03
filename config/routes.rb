@@ -4,6 +4,10 @@ Rails.application.routes.draw do
 
   get "sign_up", to: "users#new"
   post "sign_up", to: "users#create"
+  get "account", to: "users#edit"
+  put "account", to: "users#update"
+  resources :users
+  
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
   get "login", to: "sessions#new"
@@ -25,12 +29,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users do
-    member do
-      get  :registration_info
-      post :resend_email
-    end
-  end
   
   resources :roles, :except => [:new] do
     resources :users do
@@ -115,7 +113,13 @@ Rails.application.routes.draw do
       post :send_bills
     end
   end
-  
+
+  resources :active_sessions, only: [:destroy] do
+    collection do
+      delete "destroy_all"
+    end
+  end
+
   resources :binnacles do
     member do
       get :email

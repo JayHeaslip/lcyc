@@ -11,7 +11,7 @@ class ConfirmationsController < ApplicationController
       @user.send_confirmation_email!
       redirect_to login_path, notice: "Check your email for confirmation instructions."
     else
-      redirect_to new_confirmation_path, alert: "We could not find a user with that email or that email has already been confirmed."
+      redirect_to new_confirmation_path, alert: "We could not find an user with that email or that email has already been confirmed."
     end
   end
 

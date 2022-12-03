@@ -9,20 +9,22 @@ class ApplicationController < ActionController::Base
 
   def check_authorization
     if Current.user.nil?
+      flash[:alert] = "Please login."
       redirect_to login_path
-      return false
+      false
     elsif Current.user.role?('Admin')
-      return true
+      true
     else
       unless Current.user&.roles.detect do |role|
                role.rights.detect do |right|
                  right.action == action_name && right.controller == self.class.controller_path
                end
              end
-        
-        flash[:error] = "You are not authorized to view the page you requested."
+        flash[:alert] = "You are not authorized to view the page you requested."
         redirect_to helpers.back_link(1)
-        return false
+        false
+      else
+        true
       end
     end
   end

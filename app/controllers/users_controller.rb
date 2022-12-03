@@ -23,6 +23,7 @@ class UsersController < ApplicationController
   end
 
   def create
+    logger.info params
     @user = User.new(user_params)
     @user.person = Person.find_by_EmailAddress(@user.email)
     @user.roles << Role.find_by_name('Member') if @user.person
@@ -32,9 +33,8 @@ class UsersController < ApplicationController
         flash[:success] = 'User was successfully created.'
         redirect_to users_path
       else
-        flash[:notice] = 'Check your email for confirmation instructions.'
         @user.send_confirmation_email!
-        redirect_to login_path
+        redirect_to login_path, notice: 'Check your email for confirmation instructions.'
       end
     else
       render :new, status: :unprocessable_entity
@@ -42,15 +42,23 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id])
+    if current_user.admin?
+      @user = User.find(params[:id])
+    else
+      @user = current_user
+    end
   end
 
   def update
-    @user = User.find(params[:id])
+    if current_user.admin?
+      @user = User.find(params[:id])
+    else
+      @user = current_user
+    end
     update_admin_fields(params)
     if @user.update(user_params)
-      flash[:success] = 'User was successfully updated.'
-      if current_user.role?('Admin')
+      flash[:notice] = 'User was successfully updated.'
+      if current_user.admin?
         redirect_to users_path
       else
         redirect_to user_path(@user)
@@ -65,17 +73,6 @@ class UsersController < ApplicationController
     flash[:notice] = "Removed #{u.email}"
     u.destroy
     redirect_to users_path
-  end
-
-  def registration_info
-    @user = User.find(params[:id])
-  end
-
-  def resend_email
-    @user = User.find(params[:id])
-    @user.send_confirmation_email!
-    flash[:success] = "Confirmation email was resent."
-    redirect_to registration_info_user_path(@user)
   end
 
   def rmrole
