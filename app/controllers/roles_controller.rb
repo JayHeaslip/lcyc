@@ -6,20 +6,12 @@ class RolesController < ApplicationController
 
   def show
     @role = Role.find(params[:id])
-    @controller_tree = {}
-    @role.rights.each do |r|
-      @controller_tree[r.controller] ||= {}
-      @controller_tree[r.controller][r.action] = true
-    end
+    generate_controller_tree
   end
 
   def edit
     @role = Role.find(params[:id])
-    @controller_tree = {}
-    @role.rights.each do |r|
-      @controller_tree[r.controller] ||= {}
-      @controller_tree[r.controller][r.action] = true
-    end
+    generate_controller_tree
     # creates a tree of controllers with the actions for each controller
     # top level is hash of controllers
     #  next level is an array of actions
@@ -50,4 +42,14 @@ class RolesController < ApplicationController
     redirect_to roles_path
   end
 
+  private
+
+  def generate_controller_tree
+    @controller_tree = {}
+    @role.rights.each do |r|
+      @controller_tree[r.controller] ||= {}
+      @controller_tree[r.controller][r.action] = true
+    end
+  end
+  
 end

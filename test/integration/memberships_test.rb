@@ -95,6 +95,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "display member edit form" do
+    logout
     login_as(users(:three), 'passwor3')
     get edit_membership_url(@membership2)
     assert_response :success
@@ -102,6 +103,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "display invalid member edit form" do
+    logout
     login_as(users(:three), 'passwor3')
     get edit_membership_url(@membership)
     assert_redirected_to root_path

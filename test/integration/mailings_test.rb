@@ -83,6 +83,7 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "send bills no member email" do
+    logout
     login_as(users(:barb2), 'passwor2')
     post send_bills_mailing_url(@mailing), params: {test: true}
     assert_redirected_to root_path
@@ -122,6 +123,7 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "send test mailing no email" do
+    logout
     login_as(users(:no_member_email), 'passwor2')
     post send_email_mailing_url(@mailing), params: {test: true}
     assert_equal "Current user's email not found in membership database", flash[:error]

@@ -65,6 +65,12 @@ class MembershipsController < ApplicationController
 
   def edit
     @membership = Membership.includes(:people, :boats, :initiation_installments).find(params[:id])
+    logger.info "Current user roles:"
+    logger.info Current.user.email
+    logger.info @membership.MailingName
+    Current.user.roles do |r|
+      logger.info r.name
+    end
   end
 
   def update

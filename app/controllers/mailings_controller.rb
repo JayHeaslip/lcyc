@@ -1,7 +1,7 @@
 
 class MailingsController < ApplicationController
 
-  skip_before_action :check_authentication, :check_authorization, only: [:deliver_mail]
+  skip_before_action :authenticate_user!, :check_authorization, only: [:deliver_mail]
   
   def index
     @mailings = Mailing.sorted

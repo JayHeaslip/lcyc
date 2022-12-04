@@ -1,6 +1,6 @@
 class UnsubscribeController < ApplicationController
 
-  skip_before_action :check_authentication
+  skip_before_action :authenticate_user!
   skip_before_action :check_authorization
 
   def show

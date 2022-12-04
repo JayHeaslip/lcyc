@@ -19,7 +19,6 @@ class Right < ApplicationRecord
     # we need to load all the controllers...
     controllers = []
     controller_files.each do |file_name|
-      next if File.basename(file_name) == 'admin_controller.rb'
       require file_name
       controllers << extract_class_name(file_name)
     end

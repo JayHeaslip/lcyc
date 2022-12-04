@@ -44,15 +44,6 @@ class PeopleControllerTest < ActionDispatch::IntegrationTest
     assert_equal flash[:notice], "Person was successfully deleted."
   end
 
-  test "delete invalid membership" do
-    login_as(users(:three), 'passwor3')
-    @membership = memberships(:member1)
-    @person = people(:jill)
-    delete membership_person_url(@membership, @person)
-    assert_redirected_to root_url
-    assert_equal flash[:error], "You are not authorized to view the page you requested."
-  end
-
   test "delete by admin" do
     @membership = memberships(:member2)
     @person = people(:jill)
