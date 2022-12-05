@@ -11,7 +11,6 @@ class MailingsController < ApplicationController
     @mailing = Mailing.find(params[:id])
     @test = true
     @filter_emails = false
-    check_delayed_job
   end
 
   def new
@@ -19,7 +18,6 @@ class MailingsController < ApplicationController
     @mailing.replyto = current_user.email
     @mailing.html = true
     @committees = ['All'].concat(Committee.names)
-    check_delayed_job
   end
 
   def create
@@ -29,7 +27,7 @@ class MailingsController < ApplicationController
       flash[:notice] = "Success."
       redirect_to mailing_path(@mailing)
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -46,104 +44,13 @@ class MailingsController < ApplicationController
       redirect_to mailing_path(@mailing)
     else
       @committees = ['All'].concat(Committee.names)
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     Mailing.destroy(params[:id])
     redirect_to mailings_path
-  end
-
-  def new_billing
-    @mailing = Mailing.new
-    @mailing.replyto = current_user.email
-    @mailing.html = true
-    @mailing.subject = "unused"
-  end
-
-  def create_billing
-    @mailing = Mailing.new(mailing_params)
-    @mailing.subject = "unused"
-    if @mailing.save
-      flash[:notice] = "Success."
-      redirect_to billing_mailing_path(@mailing)
-    else
-      render :new_billing
-    end
-  end
-
-  def edit_billing
-    @mailing = Mailing.find(params[:id])
-  end
-
-  def update_billing
-    @mailing = Mailing.find(params[:id])
-    @mailing.attributes = mailing_params
-    if @mailing.save
-      flash[:notice] = "Success."
-      redirect_to billing_mailing_path(@mailing)
-    else
-      render :edit_billing
-    end
-  end
-
-  def billing
-    @mailing = Mailing.find(params[:id])
-    @test = true
-    check_delayed_job
-  end
-  
-  def send_bills
-    @mailing = Mailing.find(params[:id])
-    flashes = ""
-    if params[:test]
-      p = Person.find_by_EmailAddress(current_user.email)
-      members = [p.membership]
-    else
-      members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
-    end
-
-    members.each_with_index do |m, i|
-      logger.info "Generating bill for #{m.MailingName}"
-      dues = Membership.dues(m)
-      mooring_fees = m.calculate_mooring_fee
-      drysail_fee = m.calculate_drysail_fee
-      initiation = m.calculate_initiation_installment
-      member = m.people.where('MemberType = "Member"').first
-      email = nil
-      if member.EmailAddress && member.EmailAddress != ""
-        email = member.EmailAddress
-      else
-        partner = m.people.where('MemberType = "Partner"').first
-        if partner && partner.EmailAddress && partner.EmailAddress != ""
-          email = partner.EmailAddress
-        end
-      end
-
-      if email.nil?
-        logger.info "Note: bill was not sent for #{m.MailingName}, no valid email"
-        flashes += "Note: bill was not sent for #{m.MailingName}, no valid email<br/>"
-      elsif m.paid
-        logger.info "#{m.MailingName} was marked as paid"
-      else
-        if Rails.env == 'development' || Rails.env == 'test'
-          MailRobot.send_bills(params[:id].to_i, email, 
-                               m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
-                               m.Status, m.mooring_num, m.drysail_num, dues, mooring_fees, drysail_fee, initiation).deliver
-        else
-          MailRobot.delay(run_at: i.minutes.from_now).send_bills(params[:id].to_i, email, 
-                                                                 m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
-                                                                 m.Status, m.mooring_num, m.drysail_num, dues, mooring_fees, drysail_fee, initiation)
-        end
-      end
-    end
-    if flashes != ''
-      flash[:notice] = flashes
-    else
-      flash[:notice] = "Sending bills."
-    end
-    redirect_to root_path
   end
   
   def send_email
@@ -187,18 +94,18 @@ class MailingsController < ApplicationController
   def deliver_mail(people, mailing, host, filtered)
     logger.info "Delivering mail from #{host}"
     people.each_with_index do |id, i|
-      begin
+     # begin
         person = Person.find(id)
         person.generate_email_hash if person.email_hash.nil?
 	#hr = (i/60)
         if Rails.env == 'development' || Rails.env == 'test'
           MailRobot.mailing(person, mailing, host, filtered).deliver
         else
-          MailRobot.delay(run_at: (i*30).seconds.from_now).mailing(person, mailing, host,filtered)
+          MailRobot.mailing(person, mailing, host, filtered).deliver_later(wait_until: (i*30).seconds.from_now)
         end
-      rescue
-        logger.info "Person not found: #{id}"
-      end
+      #rescue
+      #  logger.info "Person not found: #{id}"
+      #end
     end
   end
   
@@ -209,8 +116,7 @@ class MailingsController < ApplicationController
   end
 
   def mailing_params
-    params.require(:mailing).permit(:committee, :subject, :replyto, :body, :html,
-                                    attachments_attributes: Attachment.attribute_names.map(&:to_sym).push(:_destroy).push(:pdf))
+    params.require(:mailing).permit(:committee, :subject, :replyto, :content)
 
   end
 

@@ -12,19 +12,21 @@
     </template>
     
     <template data-dynamic-form-target="boatTemplate">
-	<%= f.fields_for :boats, Boat.new, child_index: 'NEW_RECORD' do |boat_fields| %>
-	    <%= render "boats/form", f: boat_fields %>
-	<% end %>
+      <%= f.fields_for :boats, Boat.new, child_index: 'NEW_RECORD' do |boat_fields| %>
+	<%= render "boats/form", f: boat_fields %>
+      <% end %>
     </template>
     
-    <div class="row">
+    <% if @membership.errors.any? %>
+      <div class="row">
 	<h3><%= @membership.errors.count %> errors prohibited this membership from being saved:</h3>
 	<ul>
-	    <% @membership.errors.full_messages.each do |message| %>
-		<li><%= message %></li>
-	    <% end %>
+	  <% @membership.errors.full_messages.each do |message| %>
+	    <li><%= message %></li>
+	  <% end %>
 	</ul>
-    </div>
+      </div>
+    <% end %>
     
     <%= render partial: "form_member_update1", locals: { f: f} %>
     <%= render partial: "form_membership_update", locals: { f: f} %>

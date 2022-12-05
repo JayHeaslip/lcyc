@@ -1,0 +1,3 @@
+install libvips or image processing
+install redis for sidqkiq
+start up sidekiq, "bundle exec sidekiq" to process mail

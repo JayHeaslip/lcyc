@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   get "change_password", to: "passwords#change"
   post "change_password", to: "passwords#change"
   
-  resources :unsubscribe, only: [:show, :update]
+  get 'unsubscribe/:id', to: "unsubscribe#update"
   
   resources :quickbooks do
     collection do
@@ -103,14 +103,8 @@ Rails.application.routes.draw do
   end
 
   resources :mailings do
-    get :new_billing, on: :collection
-    post :create_billing, on: :collection
     member do
-      get :billing
       post :send_email
-      get :edit_billing
-      patch :update_billing
-      post :send_bills
     end
   end
 

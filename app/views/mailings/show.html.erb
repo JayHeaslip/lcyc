@@ -2,33 +2,30 @@
   <p><label>Committee: </label><%=h @mailing.committee %></p>
   <p><label>Subject: </label><%=h @mailing.subject %></p>
   <p><label>Reply To: </label><%=h @mailing.replyto %></p>
-  <% if @mailing.html %>
-  <iframe src="/preview/<%= @mailing.id %>" height="600" width="650"></iframe>
-  <% else %>
-  <%= content_tag(:p, h(@mailing.body)) %>
-  <% end %>
-
-  <h4>Attachments</h4>
-  <% @mailing.attachments.each do |a| %>
-  <p><label>Filename: </label><%= link_to(a.pdf_file_name, a.pdf.url) %></p>
-  <% end %>    
   <br/>
+  <hr>
+  <%= @mailing.content %>
+  <hr>
   <br/>
   
   <%= form_tag send_email_mailing_path(@mailing) do %>
-  <div class="form-row form-check mr-4 pb-2">
-    <%= check_box_tag :test, :test, @test, class: "form-check-input" %>
-    <label for="test" class="form-check-label">Test?</label>
-  </div>
-  <div class="form-row form-check mr-4 pb-2">
-    <%= check_box_tag :filter_emails, :filter_emails, @filter_emails, class: "form-check-input" %>
-    <label for="filter_emails" class="form-check-label">Filter Emails?</label>
-  </div>
-  <p class='font-italic'>When Filter Emails? is checked, email will only be sent to people who have the select_email field set to true.</p>
-  <div class="form-group row mt-3">
-    <div class="col-sm-3">
-      <button type="submit" class="btn btn-primary">Email</button> | <%= link_to 'Edit', edit_mailing_path(@mailing) %> | <%= link_to "Mailings", mailings_path %>
+    <div class="row form-check ms-4 pb-2">
+      <span>
+	<label for="test" class="form-check-label">Test?</label>
+	<%= check_box_tag :test, :test, @test, class: "form-check-input" %>
+      </span>
     </div>
-  </div>
+    <div class="row form-check ms-4 pb-2">
+      <span>
+	<label for="filter_emails" class="form-check-label">Filter Emails?</label>
+	<%= check_box_tag :filter_emails, :filter_emails, @filter_emails, class: "form-check-input" %>
+      </span>
+    </div>
+    <p class='font-italic font-sm'>When Filter Emails? is checked, email will only be sent to people who have the select_email field set to true.</p>
+    <div class="form-group row mt-3">
+      <div class="col-sm-3">
+	<button type="submit" class="btn btn-primary">Email</button> | <%= link_to 'Edit', edit_mailing_path(@mailing) %> | <%= link_to "Mailings", mailings_path %>
+      </div>
+    </div>
   <% end %>
 </div>

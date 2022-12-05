@@ -45,17 +45,5 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-
-  def check_delayed_job
-    begin
-      pid = File.open("#{Rails.root}.tmp/pids/delayed_job.pid").readline.chop.to_i
-      psout = %x{ps -p #{pid}}
-    rescue
-      psout = ""
-    end
-    if Rails.env != "test"
-      system("cd #{Rails.root}; RAILS_ENV=#{Rails.env} bundle exec bin/delayed_job start") unless psout.include?('ruby')
-    end
-  end
       
 end

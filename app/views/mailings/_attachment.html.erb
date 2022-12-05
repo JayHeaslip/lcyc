@@ -1,9 +1,9 @@
 <div class="attachment">
-  <div class="form-row pb-2">
+  <div class="row pb-2">
     <% if f.object.new_record? %>
-    <%= f.file_field :pdf, size: 60 %>
+      <%= f.file_field :pdf, size: 60 %>
     <% else %>
-    <p><%= f.object.pdf_file_name %></p>
+      <p><%= f.object.pdf_file_name %></p>
     <% end %>
     <%= f.hidden_field :_destroy %>
     <%= link_to 'Delete Attachment', '#', class: 'remove_attachment col-offset-6' %>
