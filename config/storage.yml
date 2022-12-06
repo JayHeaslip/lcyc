@@ -9,5 +9,5 @@ test:
 google:
   service: GCS
   project: lcyc-370614
-  credentials: <%= Rails.application.credentials.gcskey.as_json %>
+  credentials: <%= Rails.root.join("config/secrets/attachments.json") %>
   bucket: members_lcyc_info

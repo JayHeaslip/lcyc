@@ -6,10 +6,10 @@ gem "sprockets-rails"
 gem "prawn"
 gem 'matrix'
 gem "bcrypt", "~> 3.1.7"  # for user password
-gem "google-cloud-storage", require: false
 gem "image_processing", ">= 1.2"
 gem "sidekiq", "< 7"
 gem "redis"
+gem "google-cloud-storage", "~> 1.11", require: false
 
 # for dreamhost
 gem 'mysql2'
