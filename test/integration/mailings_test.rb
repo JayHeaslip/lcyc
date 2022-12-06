@@ -37,7 +37,7 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
 
   test "create bad" do
     post mailings_url, params: {mailing: {body: 'test'}}
-    assert_response :success
+    assert_response :unprocessable_entity
   end
 
   test "edit" do
@@ -53,46 +53,12 @@ class MailingsControllerTest < ActionDispatch::IntegrationTest
 
   test "update bad" do
     patch mailing_url(@mailing), params: {mailing: {subject: ' ', body: 'test22'}}
-    assert_response :success
+    assert_response :unprocessable_entity
   end
 
   test "delete" do
     delete mailing_url(@mailing)
     assert_redirected_to mailings_url
-  end
-
-  test "billings" do
-    get billing_mailing_url(@mailing)
-    assert_response :success
-  end
-
-  test "send bills" do
-    assert_difference 'ActionMailer::Base.deliveries.size', +5 do
-      post send_bills_mailing_url(@mailing)
-    end
-
-    bill = ActionMailer::Base.deliveries.last
-    assert_equal '[LCYC] Annual Dues', bill.subject
-    
-    assert_redirected_to root_path
-  end
-
-  test "send bills test" do
-    post send_bills_mailing_url(@mailing), params: {test: true}
-    assert_redirected_to root_path
-  end
-
-  test "send bills no member email" do
-    logout
-    login_as(users(:barb2), 'passwor2')
-    post send_bills_mailing_url(@mailing), params: {test: true}
-    assert_redirected_to root_path
-  end
-
-  test "send bills no email" do
-    post send_bills_mailing_url(@mailing)
-    assert_equal 'Note: bill was not sent for Joe No email, no valid email<br/>',flash[:notice]
-    assert_redirected_to root_path
   end
 
   test "send mailing" do

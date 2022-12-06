@@ -5,13 +5,17 @@ class UnsubscribeController < ApplicationController
 
   def update
     @person = Person.find_by_email_hash(params[:id])
-    @person.subscribe_general = false
-    if @person.save(:validate => false)
-      flash[:notice] = "You have unsubscribed." 
-      redirect_to root_path
+    if @person
+      @person.subscribe_general = false
+      if @person.save(:validate => false)
+        flash[:notice] = "You have unsubscribed." 
+      else
+        flash[:alert] = "There was a problem unsubscribing."
+      end
     else
-      flash[:alert] = "There was a problem unsubscribing."
+      flash[:alert] = "Email address not found."
     end
+    redirect_to root_path
   end
 
 end

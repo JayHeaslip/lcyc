@@ -23,13 +23,15 @@ class CommitteesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "unsubscribe bad hash" do
-    get unsubscribe_url('1234')
+    logout
+    get '/unsubscribe/1234'
     assert_redirected_to root_url
-    assert_equal flash[:notice], "Email address not found."
+    assert_equal flash[:alert], "Email address not found."
   end
 
   test "unsubscribe" do
-    patch unsubscribe_url('2345')
+    logout
+    get '/unsubscribe/2345'
     assert_redirected_to root_url
     assert_equal flash[:notice], "You have unsubscribed."
   end
