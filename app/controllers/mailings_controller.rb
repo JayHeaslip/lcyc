@@ -24,7 +24,7 @@ class MailingsController < ApplicationController
     @mailing = Mailing.new(mailing_params)
     @committees = ['All'].concat(Committee.names)
     if @mailing.save
-      flash[:notice] = "Success."
+      flash[:success] = "Success."
       redirect_to mailing_path(@mailing)
     else
       render :new, status: :unprocessable_entity
@@ -40,7 +40,7 @@ class MailingsController < ApplicationController
     @mailing = Mailing.find(params[:id])
     @mailing.attributes = mailing_params
     if @mailing.save
-      flash[:notice] = "Success."
+      flash[:success] = "Success."
       redirect_to mailing_path(@mailing)
     else
       @committees = ['All'].concat(Committee.names)
