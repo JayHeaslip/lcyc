@@ -1,6 +1,7 @@
 
 class MailingsController < ApplicationController
-
+  include ActiveStorage::SetCurrent
+  
   skip_before_action :authenticate_user!, :check_authorization, only: [:deliver_mail]
   
   def index
@@ -77,10 +78,10 @@ class MailingsController < ApplicationController
         @mailing.sent_at = Time.now
         @mailing.save
       end
-      
+
       unless people.empty?
         people_ids = people.to_a.map {|p| p.id}
-        self.deliver_mail(people_ids, params[:id].to_i, host, @filter_emails)
+        self.deliver_mail(people_ids, @mailing, host, @filter_emails)
         flash[:notice] = "Delivering mail."
         redirect_to mailings_path
       end

@@ -17,14 +17,13 @@ class MailRobot < ApplicationMailer
   end
   
   def mailing(person, mailing, host, filtered = nil)
-    mailing = Mailing.find(mailing)
     unless filtered
       tag = '[LCYC] '
     else
       tag = ''
     end
-    @content = mailing.content
     @url = "#{host}unsubscribe/#{person.email_hash}"
+    @content = mailing.content
     mail(to: person.EmailAddress,
          from: 'LCYC Announcements <lcyc@members.lcyc.info>',
          reply_to: mailing.replyto,
