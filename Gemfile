@@ -7,9 +7,7 @@ gem "prawn"
 gem 'matrix'
 gem "bcrypt", "~> 3.1.7"  # for user password
 gem "image_processing", ">= 1.2"
-gem "sidekiq", "< 7"
-gem "redis"
-gem "google-cloud-storage", "~> 1.11", require: false
+gem "delayed_job"
 
 # for dreamhost
 gem 'mysql2'

@@ -55,11 +55,12 @@ class MailingsController < ApplicationController
   end
   
   def send_email
-    last_email_sent_time = Mailing.order(sent_at: :desc).first.sent_at
     @mailing = Mailing.find(params[:id])
 
-    # it's been at least 23 hours since we sent a blast
+    # check if it's been at least 23 hours since we sent a blast
+    last_email_sent_time = Mailing.order(sent_at: :desc).first.sent_at
     last_email_sent_time = Time.now - 1.day if last_email_sent_time.nil?
+
     if params[:test] || (Time.now > (last_email_sent_time + 23.hours))  
       @filter_emails = !params[:filter_emails].nil?
       people = Person.email_list(@mailing.committee, @filter_emails)
@@ -71,7 +72,7 @@ class MailingsController < ApplicationController
           people = []
           redirect_to mailings_path
         else
-          people = [p]   #,p2]*120
+          people = [p]
           logger.info "Test email address: #{p.EmailAddress}"
         end
       else
@@ -95,15 +96,13 @@ class MailingsController < ApplicationController
   def deliver_mail(people, mailing, host, filtered)
     logger.info "Delivering mail from #{host}"
     people.each_with_index do |id, i|
-     # begin
-        person = Person.find(id)
-        person.generate_email_hash if person.email_hash.nil?
-	#hr = (i/60)
-        if Rails.env == 'development' || Rails.env == 'test'
-          MailRobot.mailing(person, mailing, host, filtered).deliver
-        else
-          MailRobot.mailing(person, mailing, host, filtered).deliver_later(wait_until: (i*30).seconds.from_now)
-        end
+      person = Person.find(id)
+      person.generate_email_hash if person.email_hash.nil?
+      if Rails.env == 'development' || Rails.env == 'test'
+        MailRobot.mailing(person, mailing, host, filtered).deliver
+      else
+        MailRobot.mailing(person, mailing, host, filtered).deliver_later(wait_until: (i*30).seconds.from_now)
+      end
       #rescue
       #  logger.info "Person not found: #{id}"
       #end
