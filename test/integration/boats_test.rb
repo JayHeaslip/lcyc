@@ -42,7 +42,7 @@ class BoatsControllerTest < ActionDispatch::IntegrationTest
   
   test "update bad mooring" do
     patch boat_url(@boat), params: {boat: {Name: 'new name', mooring_num: 99}}
-    assert_response :success
+    assert_response :unprocessable_entity
   end
   
   test "member update" do
@@ -64,7 +64,7 @@ class BoatsControllerTest < ActionDispatch::IntegrationTest
   
   test "bad update" do
     patch boat_url(@boat), params: {boat: {Name: '', Mfg_Size: ''}}
-    assert_response :success
+    assert_response :unprocessable_entity
   end
   
   test "associate" do

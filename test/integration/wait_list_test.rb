@@ -50,7 +50,7 @@ class WaitListEntriesControllerTest < ActionDispatch::IntegrationTest
 
   test "update bad mooring" do
     patch mooring_update_wait_list_entry_url(@wl), params: {mooring: 200}
-    assert_response :success
+    assert_response :unprocessable_entity
     assert_select "div p", "Total : 2"
   end
 

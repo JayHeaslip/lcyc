@@ -143,7 +143,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
                        Status: 'Active'                       
                      }
                   }
-    assert_response :success
+    assert_response :unprocessable_entity
   end
 
   test "wait list add" do

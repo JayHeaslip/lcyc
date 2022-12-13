@@ -12,6 +12,6 @@ class UserTest < ApplicationSystemTestCase
     fill_in "password", with: "password"
     fill_in "password_confirmation", with: "password"
     click_on "Register"
-    assert_text "User was successfully created."
+    assert_text "Check your email for confirmation instructions."
   end
 end
