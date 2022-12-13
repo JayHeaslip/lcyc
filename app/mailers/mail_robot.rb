@@ -2,7 +2,7 @@
 include ActionView::Helpers::NumberHelper
 
 class MailRobot < ApplicationMailer
-
+  
   def confirmation(user, confirmation_token)
     @user = user
     @confirmation_token = confirmation_token
@@ -16,7 +16,8 @@ class MailRobot < ApplicationMailer
     mail to: @user.email, subject: "LCYC Password Reset Instructions"
   end
   
-  def mailing(person, mailing, host, filtered = nil)
+  def mailing(url_options, person, mailing, host, filtered = nil)
+    ActiveStorage::Current.url_options = url_options    
     unless filtered
       tag = '[LCYC] '
     else

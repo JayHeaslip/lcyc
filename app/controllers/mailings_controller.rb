@@ -12,6 +12,7 @@ class MailingsController < ApplicationController
     @mailing = Mailing.find(params[:id])
     @test = true
     @filter_emails = false
+    check_delayed_job
   end
 
   def new
@@ -19,6 +20,7 @@ class MailingsController < ApplicationController
     @mailing.replyto = current_user.email
     @mailing.html = true
     @committees = ['All'].concat(Committee.names)
+    check_delayed_job
   end
 
   def create
@@ -81,31 +83,25 @@ class MailingsController < ApplicationController
       end
 
       unless people.empty?
-        people_ids = people.to_a.map {|p| p.id}
-        self.deliver_mail(people_ids, @mailing, host, @filter_emails)
+        deliver_mail(people, @mailing, host, @filter_emails)
         flash[:notice] = "Delivering mail."
         redirect_to mailings_path
       end
     else
       formatted_time = (last_email_sent_time+23.hours).strftime("%m/%d/%Y at %I:%M %p")
       flash[:error] = "You've sent a mailing within the last 23 hours, please wait until #{formatted_time} to send an email"
-      render :show
+      render :show, status: :unprocessable_entity
     end
   end
 
   def deliver_mail(people, mailing, host, filtered)
-    logger.info "Delivering mail from #{host}"
-    people.each_with_index do |id, i|
-      person = Person.find(id)
+    people.each_with_index do |person, i|
       person.generate_email_hash if person.email_hash.nil?
-      if Rails.env == 'development' || Rails.env == 'test'
-        MailRobot.mailing(person, mailing, host, filtered).deliver
+      if Rails.env == 'test'
+        MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver
       else
-        MailRobot.mailing(person, mailing, host, filtered).deliver_later(wait_until: (i*30).seconds.from_now)
+        MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver_later(wait_until: (i*30).seconds.from_now)
       end
-      #rescue
-      #  logger.info "Person not found: #{id}"
-      #end
     end
   end
   

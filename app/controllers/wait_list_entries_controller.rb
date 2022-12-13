@@ -30,13 +30,13 @@ class WaitListEntriesController < ApplicationController
       @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Inactive', 'Senior'], mooring_num: nil).order("LastName")
       wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
       @memberships -= wait_list_memberships
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
   def edit
     @wait_list_entry = WaitListEntry.find(params[:id])
-    render :edit
+    render :edit, status: :unprocessable_entity
   end
 
   def update
@@ -46,7 +46,7 @@ class WaitListEntriesController < ApplicationController
       flash[:notice] = 'Wait list entry was successfully updated.'
       redirect_to wait_list_entries_path
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -80,7 +80,7 @@ class WaitListEntriesController < ApplicationController
       #wait_list_accepted = WaitListEntry.includes(:membership).where("memberships.Status = 'Accepted'").order("memberships.application_date")
       #@wait_list_entries = @wait_list_entries.to_a.concat(wait_list_accepted)
       flash[:error] = 'Problem assigning mooring.'
-      render :index
+      render :index, status: :unprocessable_entity
     end
   end
 

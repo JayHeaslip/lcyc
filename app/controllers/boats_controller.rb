@@ -34,7 +34,7 @@ class BoatsController < ApplicationController
       flash[:notice] = "Successfully updated boat."
       redirect_to boat_path(@boat)
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -51,7 +51,7 @@ class BoatsController < ApplicationController
     else
       @memberships = Membership.active - @boat.memberships
       puts @boat.errors.full_messages
-      render :associate
+      render :associate, status: :unprocessable_entity
     end
   end
 

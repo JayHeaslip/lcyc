@@ -86,7 +86,7 @@ class MembershipsController < ApplicationController
       flash[:notice] = 'Membership was successfully updated.'
       redirect_to membership_path(@membership)
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -118,7 +118,7 @@ class MembershipsController < ApplicationController
       redirect_to membership_path(@membership)
     else
       @boats = Boat.order(:Name) - @membership.boats
-      render :associate
+      render :associate, status: :unprocessable_entity
     end
   end
 
