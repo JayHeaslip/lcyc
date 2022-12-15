@@ -3,10 +3,12 @@ ruby "3.1.2"
 
 gem "rails", "~> 7.0.4"
 gem "sprockets-rails"
+
+#used to generate labels
 gem "prawn"
+
 gem "matrix"
 gem "bcrypt", "~> 3.1.7"  # for user password
-gem "image_processing", ">= 1.2"
 gem "delayed_job"
 gem "delayed_job_active_record"
 gem "daemons"

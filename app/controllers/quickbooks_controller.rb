@@ -134,12 +134,15 @@ class QuickbooksController < ApplicationController
       count = 0
       members.each do |m|
         logger.info "mailing name: #{m.MailingName}"
+        partner_email = m.people.where('MemberType = "Partner"').EmailAddress.first
+        qbm["PrimaryEmailAddr"] = partner_email if qbm["PrimaryEmailAddr"].nil?
         qbm = @api.get(:customer, ["DisplayName", m.MailingName])
         invoice = {
-                   "CustomerRef": {"value": qbm["Id"] },
+                    "CustomerRef": {"value": qbm["Id"] },
                    "AllowOnlineACHPayment": true,
                    "BillEmail": qbm["PrimaryEmailAddr"],
-                   "DueDate": "#{Time.now.year}-12-31"
+                   "DueDate": "#{Time.now.year}-12-31",
+                   "BillEmailCc": partner_email
         }
         invoice["Line"] = generate_line_items(m, params[:test])
         response = @api.create(:invoice, payload: invoice)

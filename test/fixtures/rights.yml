@@ -38,6 +38,11 @@ membership_edit:
   controller: memberships
   action: edit
   
+membership_update:
+  name: MembershipsController.update
+  controller: memberships
+  action: update
+  
 person_destroy:
   name: PeopleController.destroy
   controller: people

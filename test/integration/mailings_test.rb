@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MailingsControllerTest < ActionDispatch::IntegrationTest
+class MailingsIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)

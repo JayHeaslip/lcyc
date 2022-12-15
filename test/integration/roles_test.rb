@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class RolesControllerTest < ActionDispatch::IntegrationTest
+class RolesIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)

@@ -1,3 +1,5 @@
-install libvips or image processing
-install redis for sidqkiq
-start up sidekiq, "bundle exec sidekiq" to process mail
+
+remove libvips or image processing
+remove redis, idqkiq
+
+remove model/table pdf , attachment, binnacle

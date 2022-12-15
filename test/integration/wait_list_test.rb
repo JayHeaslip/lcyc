@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class WaitListEntriesControllerTest < ActionDispatch::IntegrationTest
+class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)

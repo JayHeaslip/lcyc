@@ -171,7 +171,7 @@ class MembershipsController < ApplicationController
 
   def labels
     session[:breadcrumbs] = request.path
-    @label_options = ["All", "Binnacle", "No Email", "Workday"]
+    @label_options = ["All", "No Email", "Workday"]
   end
 
   def download_labels
@@ -181,8 +181,6 @@ class MembershipsController < ApplicationController
       members = Membership.members
     when 'No Email'
       members = Membership.mail_hardcopy
-    when 'Binnacle'
-      members = Membership.binnacle_hardcopy
     when 'Workday'
       members = Membership.all_active
       workday = true

@@ -18,11 +18,7 @@ class MailRobot < ApplicationMailer
   
   def mailing(url_options, person, mailing, host, filtered = nil)
     ActiveStorage::Current.url_options = url_options    
-    unless filtered
-      tag = '[LCYC] '
-    else
-      tag = ''
-    end
+    tag = '[LCYC] '
     @url = "#{host}unsubscribe/#{person.email_hash}"
     @content = mailing.content
     mail(to: person.EmailAddress,

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MembershipsControllerTest < ActionDispatch::IntegrationTest
+class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)
@@ -188,11 +188,6 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   
   test "generate no email labels" do
     post download_labels_memberships_url, params: {labels: 'No Email'}
-    assert_response :success
-  end
-  
-  test "generate binnacle labels" do
-    post download_labels_memberships_url, params: {labels: 'Binnacle'}
     assert_response :success
   end
   

@@ -15,10 +15,6 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :roles
 
-  def member
-    errors.messages[:email] << " does not exist in the membership database" if self.person.nil? && !self.role?('Admin')
-  end
-
   def admin?
     role?('Admin')
   end

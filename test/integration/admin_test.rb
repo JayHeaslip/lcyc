@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class AdminControllerTest < ActionDispatch::IntegrationTest
+class AdminIntegrationTest < ActionDispatch::IntegrationTest
 
   test "login with remember me" do
     post login_url, params: {email: users(:two).email , password: 'passwor2', remember_me: '1'}

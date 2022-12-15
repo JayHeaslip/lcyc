@@ -76,6 +76,12 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_nil current_user
   end
 
+  test "should handle unknown user" do
+    post login_path, params: { email: "unknown@example.com", password: "abcdefg"}
+    assert_equal "Incorrect email or password.", flash[:alert]
+    assert_response :unprocessable_entity
+  end
+
   test "should logout and delete current active session if authenticated" do
     login @confirmed_user
 

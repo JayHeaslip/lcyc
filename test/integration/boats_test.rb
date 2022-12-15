@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class BoatsControllerTest < ActionDispatch::IntegrationTest
+class BoatsIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)
