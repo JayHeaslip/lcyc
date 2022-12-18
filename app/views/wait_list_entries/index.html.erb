@@ -1,60 +1,53 @@
 <h2>Mooring Wait List</h2>
+<p>Note: if a mooring is assigned, this may indicate that they share a mooring with another member.  They must be removed from the shared mooring before they can be assigned their own mooring.
+</p>
 
 <p><b>Total : </b><%= @wait_list_entries.length %></p>
 <br/>
 
-<table class="table table-sm">
+<table class="table table-sm table-striped">
   <thead class="thead-light">
     <tr>
-      <th>Name</th>
-      <th>Status</th>
-      <th>Date</th>
-      <th>Home Phone</th>
-      <th>Work Phone</th>
-      <th>Cell Phone</th>
-      <th>Email Address</th>
-      <th>Mooring</th>
+      <th class="col-sm-2">Name</th>
+      <th class="th-sm">Status</th>
+      <th class="th-sm">Date</th>
+      <th class="th-sm">Boat Type</th>
+      <th class="th-sm">Notes</th>
+      <th class="th-sm">Mooring</th>
       <th class="col-sm-left"></th>
     </tr>
   </thead>
   <tbody>
     <% for wle in @wait_list_entries %>
-    <% m = wle.membership %>
-    <% p = wl_member(m) %>
-    <tr>
-      <td><%= link_to m.MailingName, membership_path(m) %></td>
-      <td><%= m.Status %></td>
-      <td class="text-nowrap"><%= wle.date %></td>
-      <td class="text-nowrap"><%= p.HomePhone if p %></td>
-      <td class="text-nowrap"><%= p.WorkPhone if p %></td>
-      <td class="text-nowrap"><%= p.CellPhone if p %></td>
-      <td class="text-nowrap"><%= p.EmailAddress if p %></td>
-      <% if mooring_assigned?(m) %>
-      <td><%= m.mooring_num %></td>
-      <td class="text-nowrap">
-	<span class="list-actions">
-	  <%= link_to 'Edit', edit_wait_list_entry_path(wle) %>
-	  <br/>
-          <%= link_to 'Remove from list', wle,
-              data: {confirm:'Are you sure?'},
-              method: :delete %>
-        </span>
-       </td>
-      <% else %>
-      <td>-</td>
-      <td class="text-nowrap">
-	<span class="list-actions">
-	  <%= link_to 'Edit', edit_wait_list_entry_path(wle) %>
-	  <br/>
-          <%= link_to "Assign", assign_wait_list_entry_path(wle) %>
-	  <br/>
-          <%= link_to 'Remove from list', wle,
-              data: {confirm: 'Are you sure?'},
-              method: :delete %>
-        </span>
-      </td>
-      <% end %>
-    </tr>
+      <% m = wle.membership %>
+      <% p = wl_member(m) %>
+      <% boat = wl_boat_type(m) %>
+      <tr>
+	<td><%= link_to m.MailingName, membership_path(m) %></td>
+	<td><%= m.Status %></td>
+	<td class="text-nowrap"><%= wle.date %></td>
+	<td class="text-nowrap"><%= boat %></td>
+	<td class="text"><%= wle.notes %></td>
+	<% if mooring_assigned?(m) %>
+	  <td><%= m.mooring_num %></td>
+	  <td class="text-nowrap list-actions">
+	    <%= link_to 'Edit', edit_wait_list_entry_path(wle) %>
+	    <br/>
+            <%= link_to 'Remove from list', wle,
+		 data: {turbo_method: 'delete', turbo_confirm: 'Are you sure?'} %>
+	  </td>
+	<% else %>
+	  <td>-</td>
+	  <td class="text-nowrap list-actions">
+	    <%= link_to 'Edit', edit_wait_list_entry_path(wle) %>
+	    <br/>
+            <%= link_to "Assign", assign_wait_list_entry_path(wle) %>
+	    <br/>
+            <%= link_to 'Remove from list', wle,
+	     data: {turbo_method: 'delete', turbo_confirm: 'Are you sure?'} %>
+	  </td>
+	<% end %>
+      </tr>
     <% end %>
   </tbody>
 </table>

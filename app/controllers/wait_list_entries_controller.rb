@@ -2,8 +2,6 @@ class WaitListEntriesController < ApplicationController
 
   def index
     @wait_list_entries = WaitListEntry.joins(:membership).where("memberships.Status IN ('Active', 'Accepted', 'Associate', 'Inactive', 'Senior')").order("date")
-    #wait_list_accepted = WaitListEntry.includes(:membership).where("memberships.Status = 'Accepted'").order("memberships.application_date")
-    #@wait_list_entries = @wait_list_entries.to_a.concat(wait_list_accepted)
   end
 
   def new
@@ -36,12 +34,18 @@ class WaitListEntriesController < ApplicationController
 
   def edit
     @wait_list_entry = WaitListEntry.find(params[:id])
-    render :edit, status: :unprocessable_entity
   end
 
   def update
     @wait_list_entry = WaitListEntry.find(params[:id])
     @wait_list_entry.attributes = wait_list_params
+    unless params[:force_wld]
+      if @wait_list_entry.membership.Status == 'Accepted' then
+        @wait_list_entry.date = @wait_list_entry.membership.application_date
+      else
+        @wait_list_entry.date = @wait_list_entry.membership.active_date
+      end
+    end
     if @wait_list_entry.save
       flash[:notice] = 'Wait list entry was successfully updated.'
       redirect_to wait_list_entries_path
@@ -77,9 +81,7 @@ class WaitListEntriesController < ApplicationController
       redirect_to wait_list_entries_path
     else
       @wait_list_entries = WaitListEntry.joins(:membership).where("memberships.Status IN ('Active', 'Accepted', 'Associate', 'Inactive', 'Senior')").order("date")
-      #wait_list_accepted = WaitListEntry.includes(:membership).where("memberships.Status = 'Accepted'").order("memberships.application_date")
-      #@wait_list_entries = @wait_list_entries.to_a.concat(wait_list_accepted)
-      flash[:error] = 'Problem assigning mooring.'
+      flash[:alert] = 'Problem assigning mooring.'
       render :index, status: :unprocessable_entity
     end
   end
@@ -87,7 +89,7 @@ class WaitListEntriesController < ApplicationController
   private
 
   def wait_list_params
-    params.require(:wait_list_entry).permit(:date, :membership_id)
+    params.require(:wait_list_entry).permit(:date, :membership_id, :notes)
   end
 
 end

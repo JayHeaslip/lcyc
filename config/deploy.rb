@@ -8,7 +8,7 @@ set :repo_url, "https://github.com/JayHeaslip/lcyc.git"
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/home/odziozo/rails5/lcyc"
+set :deploy_to, "/home/odziozo/rails7/lcyc"
 #set :deploy_via, :remote_cache
 
 # Default value for :format is :airbrussh.
@@ -40,7 +40,7 @@ set :keep_releases, 8
 # set :ssh_options, verify_host_key: :secure
 
 # install in system directory to simplify things
-set :bundle_path, "/home/odziozo/.rvm/gems/ruby-2.7.2@global"
+set :bundle_path, "/home/odziozo/.rvm/gems/ruby-3.1.2@global"
 set :passenger_restart_with_touch, true
 
 # only restart delayed_job for production

@@ -1,0 +1,26 @@
+<div class="row">
+  <label for="date" class="col-form-label-sm col-sm-2 pt-1">Wait list date:</label>
+  <div class="col-sm-3">
+    <%= f.date_select :date, include_blank: true, order: [:month, :day, :year], start_year: 1960, end_year: 1+Time.now.year, class: 'form-control' %>
+  </div>
+  <div class="ml-4 col-sm-3">
+    <span>
+      <%= check_box_tag :force_wld, :force_wld, @force_wld, class: "form-check-input" %>
+      <label for="html" class="form-check-label">Force wait list date</label>
+    </span>
+  </div>
+  <p>Note: For Active, Senior and Associate members the wait list date will normally be set to the active date; for Accepted members the wait list date will normally be set to the approval date.  This can be overridden to be set to the date above by selecting the checkbox.
+    </p>
+</div>
+<div class="row" >
+  <span class="has-float-label col-sm-12">
+    <%= f.text_area :notes, id: "notes", class: "form-control", placeholder: " " %>
+    <label for="notes">Notes</label>
+  </span>
+</div>
+<div class="row">
+  <div class="col-sm-3 pt-3">
+    <button type="submit" class="btn btn-primary"><%= button %></button> | <%= link_to 'Back', wait_list_entries_path %>
+  </div>
+</div>
+

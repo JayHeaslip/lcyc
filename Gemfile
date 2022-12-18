@@ -7,8 +7,10 @@ gem "sprockets-rails"
 #used to generate labels
 gem "prawn"
 
-gem "matrix"
-gem "bcrypt", "~> 3.1.7"  # for user password
+# for user password
+gem "bcrypt", "~> 3.1.7"  
+
+# for sending emails in the background
 gem "delayed_job"
 gem "delayed_job_active_record"
 gem "daemons"
@@ -33,6 +35,7 @@ gem "bootsnap", require: false
 
 gem "sassc-rails"
 
+# fro QB interface
 gem "qbo_api"
 gem "rack-oauth2"
 

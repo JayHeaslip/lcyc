@@ -1,24 +1,12 @@
 <h2>Edit Wait List Entry</h2>
 
 <%= form_for @wait_list_entry do |f| %>
-<div class="form-row">
-  <div class="form-group col-sm-4">
-    <label for="Membership" class="col-form-label pt-0">Membership:</label>
-    <div>
+  <div class="row">
+    <label for="Membership" class="col-form-label col-sm-2 pt-2">Membership:</label>
+    <div class="col-sm-4">
       <p><%= @wait_list_entry.membership.MailingName %></p>
     </div>
   </div>
-  <div class="form-group col-sm-3">
-    <label for="date" class="col-form-label pt-0">Wait list date:</label>
-    <div class="">
-      <%= f.date_select :date, include_blank: true, order: [:month, :day, :year], start_year: 1960, end_year: 1+Time.now.year, class: 'form-control' %>
-    </div>
-  </div>
-</div>
-<div class="form-group row">
-  <div class="col-sm-3 pt-3">
-    <button type="submit" class="btn btn-primary">Update</button> | <%= link_to 'Back', wait_list_entries_path %>
-  </div>
-</div>
+  <%= render partial: "form", locals: {f: f, button: "Update"} %>
 <% end %>
 

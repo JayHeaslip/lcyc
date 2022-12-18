@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_05_124822) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_16_113252) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -58,24 +58,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_124822) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
-  end
-
-  create_table "attachments", id: :integer, charset: "latin1", force: :cascade do |t|
-    t.integer "mailing_id", null: false
-    t.string "filename"
-    t.integer "size"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.string "content_type"
-    t.string "pdf_file_name"
-    t.string "pdf_content_type"
-    t.integer "pdf_file_size"
-    t.datetime "pdf_updated_at", precision: nil
-  end
-
-  create_table "binnacles", id: :integer, charset: "latin1", force: :cascade do |t|
-    t.date "publication_date"
-    t.text "body"
   end
 
   create_table "boats", id: :integer, charset: "latin1", force: :cascade do |t|
@@ -132,9 +114,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_124822) do
     t.string "Name"
   end
 
-  create_table "currentseason", primary_key: "Year", id: :integer, default: nil, charset: "latin1", force: :cascade do |t|
-  end
-
   create_table "delayed_jobs", id: :integer, charset: "latin1", force: :cascade do |t|
     t.integer "priority", default: 0
     t.integer "attempts", default: 0
@@ -148,15 +127,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_124822) do
     t.datetime "updated_at", precision: nil
     t.string "queue"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
-  end
-
-  create_table "events", id: :integer, charset: "utf8mb3", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "place"
-    t.datetime "date", precision: nil
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.date "deadline"
   end
 
   create_table "initiation_installments", charset: "utf8mb3", force: :cascade do |t|
@@ -236,19 +206,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_124822) do
     t.index ["mooring_num"], name: "mooring_num"
   end
 
-  create_table "pdfs", id: :integer, charset: "latin1", force: :cascade do |t|
-    t.integer "binnacle_id", null: false
-    t.string "content_type"
-    t.string "filename"
-    t.integer "size"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.string "pdf_file_name"
-    t.string "pdf_content_type"
-    t.integer "pdf_file_size"
-    t.datetime "pdf_updated_at", precision: nil
-  end
-
   create_table "people", id: :integer, charset: "latin1", force: :cascade do |t|
     t.integer "MembershipID", null: false
     t.string "MemberType", limit: 10
@@ -289,16 +246,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_124822) do
     t.index ["id"], name: "id1"
   end
 
-  create_table "reservations", id: :integer, charset: "utf8mb3", force: :cascade do |t|
-    t.integer "number"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.string "firstname"
-    t.string "lastname"
-    t.string "email"
-    t.integer "event_id"
-  end
-
   create_table "rights", id: :integer, charset: "latin1", force: :cascade do |t|
     t.string "name"
     t.string "controller"
@@ -319,21 +266,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_124822) do
     t.integer "user_id"
   end
 
-  create_table "signups", id: :integer, charset: "latin1", force: :cascade do |t|
-    t.string "name"
-    t.string "type"
-    t.date "date"
-    t.integer "leader_id"
-    t.integer "need"
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-  end
-
-  create_table "signups_users", id: false, charset: "latin1", force: :cascade do |t|
-    t.integer "signup_id"
-    t.integer "user_id"
-  end
-
   create_table "users", id: :integer, charset: "latin1", force: :cascade do |t|
     t.string "email"
     t.datetime "created_at", precision: nil
@@ -348,7 +280,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_05_124822) do
 
   create_table "wait_list_entries", id: :integer, charset: "latin1", force: :cascade do |t|
     t.date "date"
-    t.string "notes"
+    t.text "notes"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.integer "membership_id"

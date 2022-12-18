@@ -27,7 +27,7 @@
         <% end %>
       <% end %>
       <td><span class="list-actions"><%= link_to 'Unassign', unassign_membership_path(membership),
-					 data: {confirm: 'Are you sure?'}, method: :post %>
+					 data: {turbo_confirm: 'Are you sure?', turbo_method: :post} %>
 	</span>
       </td>
     </tr>
