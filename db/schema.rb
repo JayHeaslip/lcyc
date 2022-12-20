@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_16_113252) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_19_121724) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -75,8 +75,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_16_113252) do
     t.datetime "updated_at", precision: nil
     t.string "location", limit: 12
     t.integer "mooring_num"
+    t.bigint "mooring_id"
     t.index ["Mfg_Size"], name: "Mfg_Size"
     t.index ["id"], name: "id"
+    t.index ["mooring_id"], name: "index_boats_on_mooring_id"
   end
 
   create_table "boats_memberships", id: false, charset: "latin1", force: :cascade do |t|
@@ -185,7 +187,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_16_113252) do
     t.integer "drysail_num"
     t.text "notes"
     t.date "resignation_date"
+    t.bigint "mooring_id"
     t.index ["Boat"], name: "Boat"
+    t.index ["mooring_id"], name: "index_memberships_on_mooring_id"
   end
 
   create_table "memberstatus", id: :integer, charset: "latin1", force: :cascade do |t|
@@ -196,14 +200,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_16_113252) do
     t.string "Type"
   end
 
-  create_table "moorings", primary_key: "mooring_num", id: :integer, default: 0, charset: "latin1", force: :cascade do |t|
+  create_table "moorings", id: :integer, default: 0, charset: "latin1", force: :cascade do |t|
     t.integer "Rating"
     t.string "Field", limit: 3
     t.string "Location", limit: 3
     t.integer "Depth"
     t.string "Type", limit: 50
     t.text "Notes", size: :long
-    t.index ["mooring_num"], name: "mooring_num"
+    t.index ["id"], name: "mooring_num"
   end
 
   create_table "people", id: :integer, charset: "latin1", force: :cascade do |t|

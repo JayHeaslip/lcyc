@@ -38,11 +38,20 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :moorings, only: [:index] do
+    collection do
+      get :unassigned
+    end
+    member do
+      post :unassign
+    end
+
+  end
+  
   resources :memberships do
     collection do
-      get  :moorings
+      get :list
       get  :drysail
-      get  :unassigned_moorings
       get  :labels
       post :download_labels
       get  :spreadsheets
@@ -58,7 +67,6 @@ Rails.application.routes.draw do
       get :associate
       post :save_association
       post :unassign
-      post :unassign_drysail
     end
     resources :people
     resources :boats

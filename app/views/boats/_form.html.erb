@@ -53,10 +53,9 @@
 	<%= f.select :location, ['Mooring', 'Parking Lot'], {include_blank: true} %>
     </div>
     <div class="col-sm-1">
-      <span class="has-float-label">
-      <%= f.text_field :mooring_num, id: :mooring_num, class: "form-control", placeholder: " " %>
-	  <label for="sail_num">Mooring#</label>
-      </span>
+      <div class="form-group col-sm-1">
+	<p>Mooring #<%= @boat.mooring&.id %>
+      </div>
     </div>
   </div>
   <button type="button" data-action="dynamic-form#remove_boat", class="btn btn-link">Remove boat</button>

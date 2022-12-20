@@ -91,7 +91,7 @@ class BoatsController < ApplicationController
 
   def boat_params
     params.require(:boat).permit(:Mfg_Size, :Type, :Name, :Length,
-                                 :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring_num)
+                                 :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring)
   end
   
 end

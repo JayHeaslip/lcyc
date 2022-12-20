@@ -70,10 +70,7 @@
       </div>
     </div>
     <div class="form-group col-sm-1">
-      <span class="has-float-label">
-      <%= f.text_field :mooring_num, id: :mooring_num, class: "form-control", placeholder: " " %>
-      <label for="sail_num">Mooring#</label>
-      </span>
+      <p>Mooring #<%= @boat.mooring&.id %>
     </div>
   </div>
   <hr>

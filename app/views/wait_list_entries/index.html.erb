@@ -20,7 +20,6 @@
   <tbody>
     <% for wle in @wait_list_entries %>
       <% m = wle.membership %>
-      <% p = wl_member(m) %>
       <% boat = wl_boat_type(m) %>
       <tr>
 	<td><%= link_to m.MailingName, membership_path(m) %></td>
@@ -28,25 +27,17 @@
 	<td class="text-nowrap"><%= wle.date %></td>
 	<td class="text-nowrap"><%= boat %></td>
 	<td class="text"><%= wle.notes %></td>
-	<% if mooring_assigned?(m) %>
-	  <td><%= m.mooring_num %></td>
-	  <td class="text-nowrap list-actions">
-	    <%= link_to 'Edit', edit_wait_list_entry_path(wle) %>
-	    <br/>
-            <%= link_to 'Remove from list', wle,
-		 data: {turbo_method: 'delete', turbo_confirm: 'Are you sure?'} %>
-	  </td>
-	<% else %>
-	  <td>-</td>
-	  <td class="text-nowrap list-actions">
-	    <%= link_to 'Edit', edit_wait_list_entry_path(wle) %>
-	    <br/>
+	<td><%= m.mooring&.id %></td>
+	<td class="text-nowrap list-actions">
+	  <%= link_to 'Edit', edit_wait_list_entry_path(wle) %>
+	  <br/>
+	  <% unless m.mooring&.id %>
             <%= link_to "Assign", assign_wait_list_entry_path(wle) %>
 	    <br/>
-            <%= link_to 'Remove from list', wle,
+	    <% end %>
+          <%= link_to 'Remove from list', wle,
 	     data: {turbo_method: 'delete', turbo_confirm: 'Are you sure?'} %>
-	  </td>
-	<% end %>
+	</td>
       </tr>
     <% end %>
   </tbody>

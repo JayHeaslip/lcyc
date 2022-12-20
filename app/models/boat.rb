@@ -3,6 +3,7 @@ require 'csv'
 class Boat < ApplicationRecord
 
   has_and_belongs_to_many :memberships
+  belongs_to :mooring
 
   validate :name_or_mfg?
   validate :mooring

@@ -12,8 +12,11 @@ clean up database (resigned members, boats with no owners, etc., users that are 
 
 non-transparent updates
 -------------------------------------------------------------------
+fix membership filter field, make it trigger on change
+restructure membership controller
+	    add drysail controller
+
 add a fees table to be used in generating bills (active dues, senior dues, mooring fee, etc.)
-fix mooring (make it a mooring table, instead of a membership field)
 add updated_by field
 remove unused fields in attachment table
 make committe/person a has relationship

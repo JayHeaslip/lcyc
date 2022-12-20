@@ -27,17 +27,13 @@ module ApplicationHelper
     nil
   end
 
-  def link_to_add_attachment(name, f, association, **args)
-    new_object = f.object.send(association).klass.new
-    id = new_object.object_id
-    attachment_fields = f.fields_for(association, new_object, child_index: id) do |builder|
-      render(association.to_s.singularize, f: builder)
-    end
-    link_to(name, '#', class: "add_attachment " + args[:class], data: {id: id, attachment_fields: attachment_fields.gsub("\n", "")})
-  end
-
-  def read_only_not(roles)
-    current_user.roles?(roles) ? false : true
-  end
+  ##def link_to_add_attachment(name, f, association, **args)
+  ##  new_object = f.object.send(association).klass.new
+  ##  id = new_object.object_id
+  ##  attachment_fields = f.fields_for(association, new_object, child_index: id) do |builder|
+  ##    render(association.to_s.singularize, f: builder)
+  ##  end
+  ##  link_to(name, '#', class: "add_attachment " + args[:class], data: {id: id, attachment_fields: attachment_fields.gsub("\n", "")})
+  ##end
 
 end

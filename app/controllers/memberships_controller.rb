@@ -4,7 +4,7 @@ require 'prawn/measurement_extensions'
 class MembershipsController < ApplicationController
 
   helper_method :sort_column, :sort_direction, :mooring_sort_column
-  before_action :get_membership, except: [:index, :moorings, :unassigned_moorings, :new_drysail,
+  before_action :get_membership, except: [:index, :list, :new_drysail,
                                           :assign_drysail, :drysail, :new, :create, :destroy, 
                                           :labels, :download_labels,
                                           :spreadsheets, :download_spreadsheet, :initiation_report]
@@ -78,9 +78,9 @@ class MembershipsController < ApplicationController
     current_status = @membership.Status
     @membership.attributes = membership_params
     @membership.change_status_date = Time.now.strftime("%Y-%m-%d") if current_status != @membership.Status
-    unless @membership.Status.in? ['Active', 'Life', 'Associate']
-      flash[:alert] = 'Mooring removed due to membership category' if !@membership.mooring_num.nil?
-      @membership.mooring_num = nil
+    unless @membership.mooring_eligible
+      flash[:alert] = 'Mooring removed due to membership category update' if !@membership.mooring.nil?
+      @membership.mooring = nil
     end
     if @membership.save
       flash[:notice] = 'Membership was successfully updated.'
@@ -122,12 +122,6 @@ class MembershipsController < ApplicationController
     end
   end
 
-  def moorings
-    session[:breadcrumbs] = request.path
-    @memberships = Membership.where('memberships.mooring_num is not NULL').includes(:boats)
-    @memberships = @memberships.order(mooring_sort_column + " " + sort_direction)
-  end
-
   def new_drysail
     dry_sail_memberships = Membership.where('memberships.drysail_num is not NULL')
     @memberships = Membership.active - dry_sail_memberships
@@ -151,10 +145,16 @@ class MembershipsController < ApplicationController
   end
 
   def unassign
-    m = Membership.find(params[:id])
-    m.mooring_num = nil
-    m.save!
-    redirect_to moorings_memberships_path
+    @membership = Membership.find(params[:id])
+    mooring = @membership.mooring_id
+    @membership.mooring_id = nil
+    if @membership.save
+      flash[:notice] = "Mooring ##{mooring} unassigned."
+    else
+      flash[:alert] = "Problem unassigning mooring ##{mooring}."
+    end
+    logger.info @membership.errors.full_messages.to_sentence
+    redirect_to moorings_path
   end
 
   def unassign_drysail
@@ -237,9 +237,9 @@ class MembershipsController < ApplicationController
     Membership.column_names.include?(params[:sort]) ? params[:sort] : "LastName"
   end
   
-  def mooring_sort_column
-    Membership.column_names.include?(params[:sort]) ? params[:sort] : "mooring_num"
-  end
+  #def mooring_sort_column
+  #  Membership.column_names.include?(params[:sort]) ? params[:sort] : "mooring_num"
+  #end
   
   def drysail_sort_column
     Membership.column_names.include?(params[:sort]) ? params[:sort] : "drysail_num"
@@ -322,7 +322,7 @@ class MembershipsController < ApplicationController
 
   def membership_params
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
-                                       :State, :Zip, :Country, :Status, :MemberSince, :mooring_num,
+                                       :State, :Zip, :Country, :Status, :MemberSince, :mooring,
                                        :application_date, :active_date, :resignation_date, :initiation,
                                        :paid, :skip_mooring, :installments, :initiation_fee, :drysail_num, :notes,
                                        people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),

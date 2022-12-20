@@ -247,7 +247,7 @@ class QuickbooksController < ApplicationController
       mooring_fee_value = @api.get(:item, ["Name", "Mooring Fee"])["Id"]
       line_items << {
         "Amount": mooring_fee,
-        "Description": "Mooring \##{m.mooring_num}",
+        "Description": "Mooring \##{m.mooring&.id}",
         "DetailType": "SalesItemLineDetail",
         "SalesItemLineDetail": {
                                  "ItemRef": {
@@ -262,7 +262,7 @@ class QuickbooksController < ApplicationController
       mooring_replacement_fee_value = @api.get(:item, ["Name", "Mooring Replacement Fee"])["Id"]
       line_items << {
         "Amount": mooring_replacement_fee,
-        "Description": "Mooring \##{m.mooring_num}",
+        "Description": "Mooring \##{m.mooring&.id}",
         "DetailType": "SalesItemLineDetail",
         "SalesItemLineDetail": {
                                  "ItemRef": {

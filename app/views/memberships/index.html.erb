@@ -1,48 +1,22 @@
 <div>
   <h2>Memberships</h2>
-
+  
   <fieldset class="fieldset form-group">
-  <legend><small>Filter</small></legend>
-  <%= form_tag memberships_path, method: :get, class: 'form-inline' do %>
-  <label class="my-1 mr-2">Last name:</label>
-  <%= text_field_tag :lastname, @lastname, size: 8, class:"form-control" %>
-  <label class="my-1 ml-2 mr-2">Member Since:</label>
-  <%= select_tag :operator, options_for_select(['=', '<', '>'], @operator) %>
-  <%= text_field_tag :since, @since, size: 4 %>
-  <label class="my-1 ml-2 mr-2">Status:</label>
-  <%= select_tag :status, options_for_select(@status_options, @selected_status), multiple: true, size: 3 %>
-  <button type ="submit" class="btn btn-primary ml-2 my-1 mr-2">Search</button> | <%= link_to "Show All", memberships_path, class: 'ml-2' %>						     
-  <p>Hold the Ctrl key down for multiple select on the Status field.</p>
-  <% end %>
+    <legend><small>Filter</small></legend>
+    <%= form_tag memberships_path, method: :get, class: 'form-inline' do %>
+      <label class="my-1 mr-2">Last name:</label>
+      <%= text_field_tag :lastname, @lastname, size: 8, class:"form-control" %>
+      <label class="my-1 ml-2 mr-2">Member Since:</label>
+      <%= select_tag :operator, options_for_select(['=', '<', '>'], @operator) %>
+      <%= text_field_tag :since, @since, size: 4 %>
+      <label class="my-1 ml-2 mr-2">Status:</label>
+      <%= select_tag :status, options_for_select(@status_options, @selected_status), multiple: true, size: 3 %>
+      <button type ="submit" class="btn btn-primary ml-2 my-1 mr-2">Search</button> | <%= link_to "Show All", memberships_path, class: 'ml-2' %>						     
+      <p>Hold the Ctrl key down for multiple select on the Status field.</p>
+    <% end %>
   </fieldset>
   
-<p><b>Total : </b><%= @memberships.length %></p>
-<table class="table table-sm table-striped">
-  <thead class="thead-light">
-    <tr>
-      <th><%= sortable "LastName", "Last Name" %></th>
-      <th><%= sortable "MailingName", "Mailing Name" %></th>
-      <th><%= sortable "MemberSince", "Member Since" %></th>
-      <th><%= sortable "Status", "Status" %></th>
-      <th><%= sortable "Status Changed", "updated_at" %></th>
-      <th><%= sortable "mooring_num", "Mooring#" %></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% for membership in @memberships %>
-    <tr scope="row">
-      <td><%= link_to membership.LastName, membership %>
-      <td><%= membership.MailingName %></td>
-      <td><%= membership.MemberSince %></td>
-      <td><%= membership.Status %></td>
-      <td><%= membership.change_status_date %></td>
-      <td><%= membership.mooring_num %></td>
-      <td class="list-actions">
-	<%= button_to 'Delete', membership_path(membership), method: :delete, class: "btn btn-link" %>
-      </td>
-    </tr>
-    <% end %>
-    <tbody>
-</table>
+  <p><b>Total : </b><%= @memberships.length %></p>
 </div>
+
+<%= render "memberships", memberships: @memberships %>

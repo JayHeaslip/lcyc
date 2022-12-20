@@ -18515,15 +18515,14 @@ th .current {
   background-position: right center;
 }
 
-/*---------------
 th .asc {
- background-image: image-url('up.gif') 
+  background-image: url("/assets/up.gif");
 }
 
 th .desc {
- background-image: image-url('down.gif') 
+  background-image: url("/assets/down.gif");
 }
---------*/
+
 hr {
   border-top: 2px solid #8b8c8c;
 }

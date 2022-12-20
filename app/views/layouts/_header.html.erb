@@ -8,10 +8,10 @@
 	<li class="nav-item">
           <a class="nav-link active" href="/">Home</a>
 	</li>
-	<% if user_signed_in? && Current.user&.role?('Member') %>
-	<li class="nav-item">
-	  <a class="nav-link" href=<%= "#{membership_path(Current.user.membership)}" %>>My Club Info</a>
-	</li>
+	<% if user_signed_in? && Current.user.role?('Member') %>
+	  <li class="nav-item">
+	    <a class="nav-link" href=<%= "#{membership_path(Current.user.membership)}" %>>My Club Info</a>
+	  </li>
         <% end %>
 	<% if user_signed_in? && Current.user&.roles?(['Admin', 'BOG']) %>
 	<li class="nav-item dropdown">
@@ -30,7 +30,7 @@
 	  <a class="nav-link dropdown-toggle" href="#" id="navbarHarborDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Harbor</a>
 	  <ul class="dropdown-menu" aria-labelledby="navbarHarborDropdown">
             <li><%= link_to "Boats", boats_path, class: "dropdown-item" %></li>
-            <li><%= link_to "Moorings", moorings_memberships_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Moorings", moorings_path, class: "dropdown-item" %></li>
             <li><hr class="dropdown-divider"></li>
 	    <li><%= link_to "Dry Sail List", drysail_memberships_path, class: "dropdown-item" %></li>
             <li><%= link_to "Dry Sail Assignment", new_drysail_memberships_path, class: "dropdown-item" %></li>
@@ -38,7 +38,7 @@
             <li><%= link_to "Waiting List", wait_list_entries_path, class: "dropdown-item" %></li>
             <li><%= link_to "New Wait List Entry", new_wait_list_entry_path, class: "dropdown-item" %></li>
             <li><hr class="dropdown-divider"></li>
-            <li><%= link_to "Unassigned Moorings", unassigned_moorings_memberships_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Unassigned Moorings", unassigned_moorings_path, class: "dropdown-item" %></li>
 	  </ul>
 	</li>
 	<li class="nav-item dropdown">

@@ -5,7 +5,7 @@ class WaitListEntriesController < ApplicationController
   end
 
   def new
-    @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Inactive', 'Senior'], mooring_num: nil).order("LastName")
+    @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Inactive', 'Senior'], mooring: nil).order("LastName")
     wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
     @memberships -= wait_list_memberships
     @wait_list_entry = WaitListEntry.new
@@ -25,7 +25,7 @@ class WaitListEntriesController < ApplicationController
       flash[:notice] = 'Wait list entry was successfully created.'
       redirect_to wait_list_entries_path
     else
-      @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Inactive', 'Senior'], mooring_num: nil).order("LastName")
+      @memberships = Membership.where(Status: ['Accepted', 'Active', 'Associate', 'Inactive', 'Senior'], mooring: nil).order("LastName")
       wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
       @memberships -= wait_list_memberships
       render :new, status: :unprocessable_entity
@@ -63,16 +63,21 @@ class WaitListEntriesController < ApplicationController
   def assign
     @wait_list_entry = WaitListEntry.find(params[:id])
     @membership = @wait_list_entry.membership
-    @moorings = Membership.unassigned_moorings
+    if @membership.mooring_eligible 
+      @moorings = Mooring.unassigned.map { |e| e.id }
+    else
+      flash[:alert] = "#{@membership.MailingName} is not eligible for a mooring."
+      redirect_to wait_list_entries_path
+    end
   end
 
   def mooring_update
     @wait_list_entry = WaitListEntry.find(params[:id])
     @membership = @wait_list_entry.membership
-    @membership.mooring_num = params[:mooring].to_i
+    @membership.mooring = Mooring.find(params[:mooring])
     boat = @membership.boats.first
     if @membership.boats.length == 1
-      boat.mooring_num = @membership.mooring_num 
+      boat.mooring = @membership.mooring
       boat.location = "Mooring"
     end
     if @membership.save

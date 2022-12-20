@@ -14,6 +14,9 @@ class Membership < ApplicationRecord
   has_many :initiation_installments, dependent: :destroy
   accepts_nested_attributes_for :initiation_installments, allow_destroy: true,
                                 reject_if: proc { |a| a['amount'].blank? }
+
+  # a membership can only have one mooring
+  belongs_to :mooring, optional: true
   
   has_and_belongs_to_many :boats
   accepts_nested_attributes_for :boats, allow_destroy: true,
@@ -28,7 +31,7 @@ class Membership < ApplicationRecord
   validates :State, presence: true, length: { is: 2}
   validates :Zip, presence: true, length: { maximum: 12 }
   validates :Status, presence: true
-  validates :mooring_num, allow_nil: true, inclusion: { in: (0..155) }
+  #validates :mooring_num, allow_nil: true, inclusion: { in: (0..155) }
   validates :drysail_num, allow_nil: true, inclusion: { in: (1..12) }
   validate :check_type, if: Proc.new {|m| !m.people.empty?}
   validate :ensure_people, if: Proc.new {|m| m.people.empty?}
@@ -61,17 +64,16 @@ class Membership < ApplicationRecord
     errors.add :base, "There can be at most one 'Partner'" if self.count_type('Partner') > 1
   end
 
+  def mooring_eligible
+    self.Status.in? ['Active', 'Life', 'Associate']
+  end
+  
   def ensure_people
     errors.add :base, "You must have a Member in the list of people"
   end
 
   def count_type(type)
     self.people.inject(0) { |cnt, p| cnt + (p.MemberType == type ? 1 : 0) }
-  end
-
-  def self.binnacle_hardcopy
-    m = Membership.members.joins(:people)
-    m.where('email_binnacle is false or (people.MemberType = "Member" and (people.EmailAddress is null or people.EmailAddress = ""))').group(:id).order(:LastName)
   end
 
   def self.mail_hardcopy
@@ -88,13 +90,6 @@ class Membership < ApplicationRecord
   #return boat on mooring owned by the membership
   def drysailed_boat
     self.boats.select {|b| b.location == 'Parking Lot'}[0]
-  end
-
-  def self.unassigned_moorings
-    club_moorings = (1..155).to_a
-    #club_moorings.delete(142) # club mooring (for Dunn)
-    membership_moorings = Membership.where('mooring_num is not NULL').map {|m| m.mooring_num}
-    club_moorings - membership_moorings
   end
 
   def self.dues(m)

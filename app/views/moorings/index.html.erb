@@ -1,0 +1,29 @@
+<table class="table table-sm table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>Last Name</th>
+      <th>MailingName</th>
+      <th>Mooring#</th>
+      <th>Boat Name</th>
+      <th>Boat Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for mooring in @moorings %>
+      <% for membership in mooring.memberships %>
+	<tr scope="row">
+	  <td><%= link_to membership.LastName, membership %></td>
+	  <td><%= membership.MailingName %></td>
+	  <td><%= mooring.id %></td>
+          <td><%= mooring.boat&.Name %></td>
+          <td><%= mooring.boat&.Mfg_Size %></td>
+	  <td>
+	    <span class="list-actions"><%= link_to 'Unassign', unassign_membership_path(membership),
+					data: {turbo_confirm: "Unassigning ##{mooring.id}, are you sure?", turbo_method: :post} %>
+	    </span>
+	  </td>
+	</tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
