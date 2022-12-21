@@ -4,8 +4,8 @@
 
 import { application } from "./application"
 
-import DynamicFormController from "./dynamic_form_controller"
-application.register("dynamic-form", DynamicFormController)
-
 import ChildHideController from "./child_hide_controller"
 application.register("child-hide", ChildHideController)
+
+import DynamicFormController from "./dynamic_form_controller"
+application.register("dynamic-form", DynamicFormController)

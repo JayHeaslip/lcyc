@@ -18398,7 +18398,7 @@ body {
 
 #header #logo {
   position: absolute;
-  top: -8px;
+  top: 2px;
 }
 
 #logo a, #logo a:visited, #logo a:hover {
@@ -18505,8 +18505,12 @@ body {
 }
 
 .fieldset {
-  border: 1px solid #ccc;
-  padding: 10px;
+  border: 2px solid #ccc;
+  padding: 0px;
+}
+
+#legend {
+  margin-bottom: -2.5rem;
 }
 
 th .current {

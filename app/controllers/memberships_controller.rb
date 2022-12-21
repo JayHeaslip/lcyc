@@ -12,8 +12,7 @@ class MembershipsController < ApplicationController
 
   def index
     @status_options = %w(Accepted Active Associate Honorary Inactive Life Resigned Senior)
-    params[:status] = ['Active', 'Associate', 'Honorary', 'Life', 'Senior'] if params[:status].blank?
-    #  https://www.colby.so/posts/filtering-tables-with-rails-and-hotwire
+    params[:status] ||= ['Active', 'Associate', 'Honorary', 'Life', 'Senior']
     @memberships = filter_memberships(params)
     @memberships = @memberships.order(sort_column + " " + sort_direction)
     @lastname = params[:lastname]

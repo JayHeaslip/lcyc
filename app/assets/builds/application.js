@@ -6250,6 +6250,27 @@
   application.debug = true;
   window.Stimulus = application;
 
+  // app/javascript/controllers/child_hide_controller.js
+  var ChildHideController = class extends Controller {
+    hide(e2) {
+      e2.preventDefault();
+      console.log(e2.currentTarget.value);
+      console.log(e2.currentTarget.closest(".person"));
+      var elements = e2.currentTarget.closest(".person").getElementsByClassName("child-hide");
+      console.log(elements);
+      if (e2.currentTarget.value === "Child") {
+        for (const elem of elements) {
+          elem.hidden = true;
+        }
+      } else {
+        for (const elem of elements) {
+          elem.hidden = false;
+        }
+      }
+    }
+  };
+  __publicField(ChildHideController, "targets", ["hide_added"]);
+
   // app/javascript/controllers/dynamic_form_controller.js
   var DynamicFormController = class extends Controller {
     add_person(e2) {
@@ -6333,30 +6354,9 @@
     }
   });
 
-  // app/javascript/controllers/child_hide_controller.js
-  var ChildHideController = class extends Controller {
-    hide(e2) {
-      e2.preventDefault();
-      console.log(e2.currentTarget.value);
-      console.log(e2.currentTarget.closest(".person"));
-      var elements = e2.currentTarget.closest(".person").getElementsByClassName("child-hide");
-      console.log(elements);
-      if (e2.currentTarget.value === "Child") {
-        for (const elem of elements) {
-          elem.hidden = true;
-        }
-      } else {
-        for (const elem of elements) {
-          elem.hidden = false;
-        }
-      }
-    }
-  };
-  __publicField(ChildHideController, "targets", ["hide_added"]);
-
   // app/javascript/controllers/index.js
-  application.register("dynamic-form", DynamicFormController);
   application.register("child-hide", ChildHideController);
+  application.register("dynamic-form", DynamicFormController);
 
   // node_modules/@popperjs/core/lib/index.js
   var lib_exports = {};
@@ -16819,8 +16819,8 @@
       this.value = this.defaultValue;
     }
   };
-  var En = { VERSION: "2.0.2", config: W, core: oi, models: Ri, views: Si, controllers: mn, observers: pn, operations: fn2, elements: Object.freeze({ __proto__: null, TrixEditorElement: Sn, TrixToolbarElement: bn }), filters: Object.freeze({ __proto__: null, Filter: di, attachmentGalleryFilter: gi }) };
-  window.Trix = En, setTimeout(function() {
+  var En = { VERSION: "2.0.3", config: W, core: oi, models: Ri, views: Si, controllers: mn, observers: pn, operations: fn2, elements: Object.freeze({ __proto__: null, TrixEditorElement: Sn, TrixToolbarElement: bn }), filters: Object.freeze({ __proto__: null, Filter: di, attachmentGalleryFilter: gi }) };
+  Object.assign(En, Ri), window.Trix = En, setTimeout(function() {
     customElements.get("trix-toolbar") || customElements.define("trix-toolbar", bn), customElements.get("trix-editor") || customElements.define("trix-editor", Sn);
   }, 0);
 
