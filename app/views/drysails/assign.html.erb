@@ -1,0 +1,14 @@
+<h2><%= "Assigning dry sail spot ##{@drysail.id}" %></h2>
+
+<%= form_for @drysail, method: :patch do %>
+  <div class="row">
+    <label for="Membership" class="col-form-label pt-0">Membership:</label>
+    <div class="col-sm-4">
+      <%= select_tag :membership, options_from_collection_for_select(@memberships, :id, :MailingName) %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3 pt-3">
+      <button type="submit" class="btn btn-primary">Assign</button>
+    </div>
+<% end %>

@@ -42,16 +42,18 @@ Rails.application.routes.draw do
     collection do
       get :unassigned
     end
-    member do
-      post :unassign
-    end
+  end 
 
+  resources :drysails, only: [:index, :update] do
+    member do
+      get :assign
+    end
   end
   
+ 
   resources :memberships do
     collection do
       get :list
-      get  :drysail
       get  :labels
       post :download_labels
       get  :spreadsheets
@@ -67,6 +69,7 @@ Rails.application.routes.draw do
       get :associate
       post :save_association
       post :unassign
+      post :unassign_drysail
     end
     resources :people
     resources :boats
@@ -121,15 +124,5 @@ Rails.application.routes.draw do
       delete "destroy_all"
     end
   end
-
-  resources :binnacles do
-    member do
-      get :email
-      post :send_email
-    end
-  end
-
-  resources :preview, :only => [:show]
-  resources :binnacle_preview, :only => [:show]
 
 end

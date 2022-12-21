@@ -4,8 +4,8 @@ require 'prawn/measurement_extensions'
 class MembershipsController < ApplicationController
 
   helper_method :sort_column, :sort_direction, :mooring_sort_column
-  before_action :get_membership, except: [:index, :list, :new_drysail,
-                                          :assign_drysail, :drysail, :new, :create, :destroy, 
+  before_action :get_membership, except: [:index, :list, 
+                                          :new, :create, :destroy, 
                                           :labels, :download_labels,
                                           :spreadsheets, :download_spreadsheet, :initiation_report]
   before_action :authorize, only: [:edit, :update, :associate, :save_association, :rmboat]
@@ -35,14 +35,10 @@ class MembershipsController < ApplicationController
 
   def create
     @membership = Membership.new(membership_params)
-    logger.info "Creating membership #{@membership}"
     if @membership.save
       flash[:notice] = 'Membership was successfully created.'
       redirect_to wl_membership_path(@membership)
     else
-      if @membership.errors.any?
-        logger.info "#{@membership.errors.count} error prohibited this membership from being saved"
-      end
       render :new, status: :unprocessable_entity
     end      
   end
@@ -64,12 +60,6 @@ class MembershipsController < ApplicationController
 
   def edit
     @membership = Membership.includes(:people, :boats, :initiation_installments).find(params[:id])
-    logger.info "Current user roles:"
-    logger.info Current.user.email
-    logger.info @membership.MailingName
-    Current.user.roles do |r|
-      logger.info r.name
-    end
   end
 
   def update
@@ -81,6 +71,7 @@ class MembershipsController < ApplicationController
       flash[:alert] = 'Mooring removed due to membership category update' if !@membership.mooring.nil?
       @membership.mooring = nil
     end
+    @membership.update_drysail_and_mooring
     if @membership.save
       flash[:notice] = 'Membership was successfully updated.'
       redirect_to membership_path(@membership)
@@ -121,27 +112,6 @@ class MembershipsController < ApplicationController
     end
   end
 
-  def new_drysail
-    dry_sail_memberships = Membership.where('memberships.drysail_num is not NULL')
-    @memberships = Membership.active - dry_sail_memberships
-    @available_dry_sail =  (1..12).to_a - dry_sail_memberships.map {|m| m.drysail_num }
-  end
-
-  def assign_drysail
-    membership = Membership.find(params[:membership])
-    membership.drysail_num = params[:drysail_num]
-    if membership.save 
-      redirect_to drysail_memberships_path
-    else
-      redirect_to new_drysail_memberships_path
-    end
-  end
-
-  def drysail
-    session[:breadcrumbs] = request.path
-    @memberships = Membership.where('memberships.drysail_num is not NULL').includes(:boats)
-    @memberships = @memberships.order(drysail_sort_column + " " + sort_direction)
-  end
 
   def unassign
     @membership = Membership.find(params[:id])
@@ -152,20 +122,14 @@ class MembershipsController < ApplicationController
     else
       flash[:alert] = "Problem unassigning mooring ##{mooring}."
     end
-    logger.info @membership.errors.full_messages.to_sentence
     redirect_to moorings_path
   end
 
   def unassign_drysail
     m = Membership.find(params[:id])
-    m.drysail_num = nil
+    m.drysail = nil
     m.save!
-    redirect_to drysail_memberships_path
-  end
-
-  def unassigned_moorings
-    session[:breadcrumbs] = request.path
-    @moorings = Membership.unassigned_moorings
+    redirect_to drysails_path
   end
 
   def labels
@@ -220,7 +184,6 @@ class MembershipsController < ApplicationController
   def authorize
     if not current_user.roles?(%w(Admin Membership Harbormaster)) #BOG
       if current_user.membership && current_user.membership != params[:id].to_i
-        logger.info "current #{current_user.membership.class}, id #{params[:id].class}"
         flash[:error] = "You are not authorized to view the page you requested."
         request.env["HTTP_REFERER" ] ? (redirect_to :back) : (redirect_to root_path)
         return false
@@ -235,10 +198,6 @@ class MembershipsController < ApplicationController
   def sort_column
     Membership.column_names.include?(params[:sort]) ? params[:sort] : "LastName"
   end
-  
-  #def mooring_sort_column
-  #  Membership.column_names.include?(params[:sort]) ? params[:sort] : "mooring_num"
-  #end
   
   def drysail_sort_column
     Membership.column_names.include?(params[:sort]) ? params[:sort] : "drysail_num"
@@ -262,7 +221,7 @@ class MembershipsController < ApplicationController
             p.bounding_box [b.top_left[0]+indent, b.top_left[1]], width: b.width, height: b.height-indent do
               m = list[page*30 + 3*i + j]
               overflow = generate_text(p, m, b.width, workday) if not m.nil?
-              logger.info "#{m.MailingName} overflowed: |#{overflow}|" if overflow && overflow != ""
+              logger.error "#{m.MailingName} overflowed: |#{overflow}|" if overflow && overflow != ""
             end
             #p.stroke do
             #  p.rectangle(b.top_left, b.width, b.height)

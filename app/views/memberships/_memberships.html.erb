@@ -19,7 +19,7 @@
 	    <td><%= membership.MailingName %></td>
 	    <td><%= membership.MemberSince %></td>
 	    <td><%= membership.Status %></td>
-	    <td><%= membership.mooring_num %></td>
+	    <td><%= membership.mooring&.id %></td>
 	    <td class="list-actions">
 	      <%= link_to 'Delete', membership, data: { turbo_confirm: 'Are you sure?'}, turbo_method: :delete %>
 	    </td>

@@ -104,8 +104,11 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
     assert_redirected_to wait_list_entries_url
   end
 
-  test "update bad mooring" do
-    patch mooring_update_wait_list_entry_url(@wl), params: {mooring: 200}
+  test "update mooring bad membership" do
+    @membership = @wl.membership
+    @membership.LastName = ""
+    @membership.save(validate: false)
+    patch mooring_update_wait_list_entry_url(@wl), params: {mooring: 100}
     assert_response :unprocessable_entity
     assert_select "div p", "Total : 2"
   end

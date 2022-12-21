@@ -12,10 +12,15 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     @boat2 = boats(:boat2)
   end
 
+  test "get admin" do
+    get root_url
+    assert_response :success
+  end
+  
   test "get_index" do
     get memberships_url
     assert_response :success
-    assert_select "fieldset + p", "Total : 7"
+    assert_select "p", "Total : 7"
   end
 
   test "show_membership" do
@@ -227,21 +232,9 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
   
-  test "show moorings" do
-    get moorings_memberships_url
-    assert_select "h2", "Moorings"
-    assert_response :success
-  end
-
-  test "show unassigned moorings" do
-    get unassigned_moorings_memberships_url
-    assert_select "h2", "Unassigned Moorings"
-    assert_response :success
-  end
-  
   test "unassign a moorings" do
     post unassign_membership_url(@membership)
-    assert_redirected_to moorings_memberships_path
+    assert_redirected_to moorings_path
   end
   
 end  

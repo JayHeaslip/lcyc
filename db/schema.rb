@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_19_121724) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_21_193627) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -76,7 +76,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_121724) do
     t.string "location", limit: 12
     t.integer "mooring_num"
     t.bigint "mooring_id"
+    t.bigint "drysail_id"
     t.index ["Mfg_Size"], name: "Mfg_Size"
+    t.index ["drysail_id"], name: "index_boats_on_drysail_id"
     t.index ["id"], name: "id"
     t.index ["mooring_id"], name: "index_boats_on_mooring_id"
   end
@@ -129,6 +131,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_121724) do
     t.datetime "updated_at", precision: nil
     t.string "queue"
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "drysails", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "membership_id"
+    t.index ["membership_id"], name: "index_drysails_on_membership_id"
   end
 
   create_table "initiation_installments", charset: "utf8mb3", force: :cascade do |t|
