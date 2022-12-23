@@ -1,15 +1,20 @@
 boat1:
   Mfg_Size: 'J29'
   Name: "Hello"
+  memberships: member1
+  location: "Mooring"
+  mooring: mooring2
   
 boat2:
   Mfg_Size: 'J80'
   Name: "Hello2"
+  location: "Mooring"
+  mooring: mooring1
 
 boat3:
   Mfg_Size: 'J120'
   Name: "Hello3"
   
-boat3:
+boat4:
   Mfg_Size: 'J200'
   

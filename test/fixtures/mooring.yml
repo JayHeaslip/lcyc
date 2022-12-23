@@ -1,2 +1,6 @@
-one:
+mooring1:
+  Depth: 20
+
+mooring2:
   id: 100
+  

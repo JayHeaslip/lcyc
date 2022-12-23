@@ -9,6 +9,8 @@ member1:
   application_date: '2002-02-02'
   active_date: '2010-02-02'
   MemberSince: 2001
+  boats: boat2
+  mooring: mooring1
 
 member2:
   LastName: 'Smith'
@@ -32,7 +34,8 @@ member3:
   Status: 'Active'
   MemberSince: 2001
   Status: 'Active'
-  mooring_num: 100
+  mooring: mooring2
+  boats: boat1
 
 member4:
   LastName: 'Smith'

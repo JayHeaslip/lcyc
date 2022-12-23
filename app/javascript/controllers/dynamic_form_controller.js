@@ -51,6 +51,7 @@ Controller {
     remove_person (e) {
 	e.preventDefault()
 
+	console.log("calling remove person");
 	// can't delete the last one
 	if (this.element.getElementsByClassName("dynamic-form-person").length > 1) {
 	    const wrapper = e.currentTarget.closest(this.personWrapperSelectorValue)

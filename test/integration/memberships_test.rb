@@ -51,7 +51,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
 
     @m = Membership.find_by_LastName('Doe_unique')
     assert_redirected_to wl_membership_url(@m)
-    assert_equal flash[:notice], 'Membership was successfully created.'
+    assert_equal flash[:success], 'Membership was successfully created.'
   end
 
   test "create bad " do
@@ -90,7 +90,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
 
     @m = Membership.find_by_LastName('Doe_unique')
     assert_redirected_to wl_membership_url(@m)
-    assert_equal flash[:notice], 'Membership was successfully created.'
+    assert_equal flash[:success], 'Membership was successfully created.'
   end
   
   test "display edit form" do
@@ -132,7 +132,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
                      }
                   }
     assert_redirected_to membership_url(@membership.id)
-    assert_equal flash[:notice], "Membership was successfully updated."
+    assert_equal flash[:success], "Membership was successfully updated."
   end
 
   test "bad membership" do
@@ -151,20 +151,46 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
   end
 
+  test "update membership from active to senior" do
+    patch membership_url(@membership),
+          params: {membership:
+                     {
+                       LastName: 'Bob',
+                       StreetAddress: '123 Main St',
+                       City: 'Burlington',
+                       State: 'VT',
+                       Zip: '05401',
+                       MemberSince: '1974',
+                       Status: 'Senior',
+                       people_attributes: [{FirstName: 'Jill', LastName: 'Doe',
+                                             Committee1: 'Dock', MemberType: 'Partner'}]
+                       
+                     }
+                  }
+    assert_redirected_to membership_url(@membership.id)
+    assert_equal flash[:alert], "Mooring removed due to membership category update."
+    assert_equal flash[:success], "Membership was successfully updated."
+  end
+
   test "wait list add" do
     post wladd_membership_url(@membership)
     assert_redirected_to membership_url(@membership)
   end
   
-  test "remove bost from membership" do
+  test "remove last membership from boat" do
     delete rmboat_boat_membership_url(@boat2, @membership)
-    assert_redirected_to boat_url(@boat2)
+    assert_redirected_to boats_url
+  end
+  
+  test "remove a moored boat with multiple owners from membership that owns the mooring" do
+    delete rmboat_boat_membership_url(@boat, @membership)
+    assert_redirected_to boat_url(@boat)
   end
   
   test "delete membership" do
     delete membership_url(@membership)
     assert_redirected_to memberships_url
-    assert_equal flash[:notice], "Membership was successfully deleted."
+    assert_equal flash[:success], "Membership was successfully deleted."
   end
 
   test "associate a boat form" do
@@ -175,7 +201,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
 
   test "save boat association" do
     post save_association_membership_url(@membership),
-         params: {membership: {boats: @boat.id}, id: @membership.id}
+         params: {membership: {boats: @boat2.id}, id: @membership.id}
     assert_redirected_to membership_url(@membership.id)
     assert_equal flash[:notice], "Saved association."
   end

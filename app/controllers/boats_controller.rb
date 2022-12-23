@@ -49,6 +49,7 @@ class BoatsController < ApplicationController
     @boat = Boat.find(params[:id])
     @boat.memberships << Membership.find(params[:boat][:memberships].to_i)
     if @boat.save
+      flash[:notice] = "Saved association."
       redirect_to boat_path(@boat)
     else
       @memberships = Membership.active - @boat.memberships

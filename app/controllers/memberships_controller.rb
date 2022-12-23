@@ -27,16 +27,10 @@ class MembershipsController < ApplicationController
     @membership.application_date = Time.now
   end
 
-  def add_person
-    @membership = Membership.find(params[:id])
-    @membership.people << person.new
-    render "people"
-  end
-
   def create
     @membership = Membership.new(membership_params)
     if @membership.save
-      flash[:notice] = 'Membership was successfully created.'
+      flash[:success] = 'Membership was successfully created.'
       redirect_to wl_membership_path(@membership)
     else
       render :new, status: :unprocessable_entity
@@ -68,12 +62,12 @@ class MembershipsController < ApplicationController
     @membership.attributes = membership_params
     @membership.change_status_date = Time.now.strftime("%Y-%m-%d") if current_status != @membership.Status
     unless @membership.mooring_eligible
-      flash[:alert] = 'Mooring removed due to membership category update' if !@membership.mooring.nil?
+      flash[:alert] = 'Mooring removed due to membership category update.' if !@membership.mooring.nil?
       @membership.mooring = nil
     end
     @membership.update_drysail_and_mooring
     if @membership.save
-      flash[:notice] = 'Membership was successfully updated.'
+      flash[:success] = 'Membership was successfully updated.'
       redirect_to membership_path(@membership)
     else
       render :edit, status: :unprocessable_entity
@@ -83,7 +77,7 @@ class MembershipsController < ApplicationController
   def destroy
     @membership  = Membership.find(params[:id])
     @membership.delete
-    flash[:notice] = 'Membership was successfully deleted.'
+    flash[:success] = 'Membership was successfully deleted.'
     redirect_to memberships_path
   end
 
@@ -99,10 +93,12 @@ class MembershipsController < ApplicationController
     @boat.memberships.delete(@membership)
     flash[:notice] = "#{@membership.LastName} removed from boat"
     if @boat.memberships.empty?
-      flash[:notice] += ", boat deleted"
+      flash[:notice] += ", boat deleted."
       @boat.delete
+      redirect_to boats_path
+    else
+      redirect_to boat_path(@boat)
     end
-    redirect_to boat_path(@boat)
   end
 
   def associate
@@ -137,8 +133,14 @@ class MembershipsController < ApplicationController
 
   def unassign_drysail
     m = Membership.find(params[:id])
+    drysail = @membership.drysail
     m.drysail = nil
     m.save!
+    if @membership.save
+      flash[:notice] = "Dry sail spot ##{drysail.id} unassigned."
+    else
+      flash[:alert] = "Problem unassigning dry sail spot ##{drysail.id}."
+    end
     redirect_to drysails_path
   end
 

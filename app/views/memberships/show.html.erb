@@ -101,11 +101,6 @@
 	<td><%= person.EmailAddress %></td>
 	<td><%= person.Committee1 %></td>
 	<td><%= person.BirthYear %></td>
-	<td class="list-actions">
-	  <% if person.MemberType != 'Member' %>
-          <%= link_to "Delete", membership_person_path(@membership,person), data: {confirm: "Are you sure?"}, method: :delete %>
-          <% end %>
-	</td>
       </tr>
       <% end %>
     </tbody>

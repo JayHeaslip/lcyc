@@ -6294,6 +6294,7 @@
     }
     remove_person(e2) {
       e2.preventDefault();
+      console.log("calling remove person");
       if (this.element.getElementsByClassName("dynamic-form-person").length > 1) {
         const wrapper = e2.currentTarget.closest(this.personWrapperSelectorValue);
         if (wrapper.dataset.newRecord === "true") {

@@ -19,12 +19,6 @@ class BoatsIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "destroy no membership" do
-    get boats_url
-    delete boat_url(@boat)
-    assert_redirected_to boats_url
-  end
-
   test "destroy membership" do
     get membership_url(@membership)
     delete membership_boat_url(@membership, @boat)

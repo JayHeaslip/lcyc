@@ -74,7 +74,7 @@ class Membership < ApplicationRecord
         b.drysail = self.drysail
       elsif b.location == "Mooring" && b.mooring_id.nil?
         # put on mooring unless member already has a boat on mooring
-        b.mooring = self.mooring unless self.mooring.boat
+        b.mooring = self.mooring unless self.mooring&.boat
       end
     end
   end

@@ -35,11 +35,6 @@
       <td><%= boat.Length %></td>
       <td><%= boat.Draft %></td>
       <td><%= boat.mooring_id %></td>
-      <td>
-	<span class="list-actions"><%= link_to 'Delete', locals[:membership] ? membership_boat_path(locals[:membership],boat) : boat,
-				       data: {turbo_confirm: 'Are you sure?', turbo_method: :delete } %>
-	</span>
-      </td>
     </tr>
     <% end %>
   </tbody>

@@ -3,6 +3,9 @@ class PeopleController < ApplicationController
   before_action :get_membership, only: [:destroy]
   before_action :authorize, only: [:destroy]
 
+  def show
+  end
+  
   def select_committee
   end
   
