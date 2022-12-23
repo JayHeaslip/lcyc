@@ -82,7 +82,7 @@ class MembershipsController < ApplicationController
 
   def destroy
     @membership  = Membership.find(params[:id])
-    @membership.destroy
+    @membership.delete
     flash[:notice] = 'Membership was successfully deleted.'
     redirect_to memberships_path
   end
@@ -90,8 +90,18 @@ class MembershipsController < ApplicationController
   def rmboat
     @boat = Boat.find(params[:boat_id])
     @membership = Membership.find(params[:id])
+    # if the membership has the mooring the boat is on
+    # remove the boat from the mooring
+    if @membership.mooring && (@membership.mooring.id == @boat.mooring_id)
+      @boat.location = ''
+      @boat_mooring_id = nil
+    end
     @boat.memberships.delete(@membership)
     flash[:notice] = "#{@membership.LastName} removed from boat"
+    if @boat.memberships.empty?
+      flash[:notice] += ", boat deleted"
+      @boat.delete
+    end
     redirect_to boat_path(@boat)
   end
 
@@ -115,12 +125,12 @@ class MembershipsController < ApplicationController
 
   def unassign
     @membership = Membership.find(params[:id])
-    mooring = @membership.mooring_id
-    @membership.mooring_id = nil
+    mooring = @membership.mooring
+    @membership.mooring = nil
     if @membership.save
-      flash[:notice] = "Mooring ##{mooring} unassigned."
+      flash[:notice] = "Mooring ##{mooring.id} unassigned."
     else
-      flash[:alert] = "Problem unassigning mooring ##{mooring}."
+      flash[:alert] = "Problem unassigning mooring ##{mooring.id}."
     end
     redirect_to moorings_path
   end

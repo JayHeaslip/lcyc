@@ -14,13 +14,14 @@ class BoatsController < ApplicationController
 
   def destroy
     @boat = Boat.find(params[:id])
-    if @membership
-      @membership.boats.delete(@boat)
-      @boat.destroy if @boat.memberships.empty?
+    if @boat.memberships.size > 1
+      @membership = Membership.find(params[:membership_id])
+      @membership.boats = @membership.boats - [@boat]
+      @membership.save
     else
-      @boat.destroy
+      @boat.delete
     end
-    redirect_to @membership ? membership_path(@membership) : boats_path
+    redirect_to helpers.back_link(1)
   end
 
   def edit
@@ -30,6 +31,7 @@ class BoatsController < ApplicationController
   def update
     @boat = Boat.find(params[:id])
     @boat.attributes = boat_params
+    @boat.update_drysail_and_mooring
     if @boat.save
       flash[:notice] = "Successfully updated boat."
       redirect_to boat_path(@boat)
@@ -91,7 +93,7 @@ class BoatsController < ApplicationController
 
   def boat_params
     params.require(:boat).permit(:Mfg_Size, :Type, :Name, :Length,
-                                 :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring)
+                                 :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring_id)
   end
   
 end

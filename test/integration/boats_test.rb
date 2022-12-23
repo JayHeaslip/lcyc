@@ -20,11 +20,13 @@ class BoatsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "destroy no membership" do
+    get boats_url
     delete boat_url(@boat)
     assert_redirected_to boats_url
   end
 
   test "destroy membership" do
+    get membership_url(@membership)
     delete membership_boat_url(@membership, @boat)
     assert_redirected_to membership_url(@membership)
   end
@@ -38,11 +40,6 @@ class BoatsIntegrationTest < ActionDispatch::IntegrationTest
     patch boat_url(@boat), params: {boat: {Name: 'new name'}}
     assert_equal "Successfully updated boat.", flash[:notice]
     assert_redirected_to boat_url(@boat)
-  end
-  
-  test "update bad mooring" do
-    patch boat_url(@boat), params: {boat: {Name: 'new name', mooring_num: 99}}
-    assert_response :unprocessable_entity
   end
   
   test "member update" do

@@ -1,7 +1,7 @@
 require 'csv'
 
 class Person < ApplicationRecord
-  belongs_to :membership, foreign_key: 'MembershipID'
+  belongs_to :membership, foreign_key: 'MembershipID', optional: true
   has_one :user
 
   validates_presence_of :LastName, :FirstName, :MemberType

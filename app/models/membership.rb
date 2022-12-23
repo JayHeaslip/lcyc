@@ -7,7 +7,8 @@ class Membership < ApplicationRecord
   @@Mooring_fee = 80
   @@Mooring_replacement_fee = 120
   @@Drysail_Fee = 100
-  
+
+  before_destroy :destroy_boats
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
   accepts_nested_attributes_for :people, allow_destroy: true,
                                 reject_if: proc { |a| a['FirstName'].blank? }
@@ -69,11 +70,11 @@ class Membership < ApplicationRecord
 
   def update_drysail_and_mooring
     self.boats.each do |b|
-      b.drysail = b.mooring = nil
-      if b.location == "Parking Lot"
+      if b.location == "Parking Lot" && b.drysail_id.nil?
         b.drysail = self.drysail
-      elsif b.location == "Mooring"
-        b.mooring = self.mooring
+      elsif b.location == "Mooring" && b.mooring_id.nil?
+        # put on mooring unless member already has a boat on mooring
+        b.mooring = self.mooring unless self.mooring.boat
       end
     end
   end
@@ -115,7 +116,7 @@ class Membership < ApplicationRecord
                   HomePhone MN MW MC ME Partner Children)
         for m in members
           info = [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status, 
-                  m.MemberSince, m.mooring.id].concat(m.boat_info)
+                  m.MemberSince, m.mooring ? m.mooring.id : ''].concat(m.boat_info)
           info = info.concat(m.member_info)
           info = info.concat(m.partner_info)
           info = info.concat(m.children_info)
@@ -246,6 +247,13 @@ class Membership < ApplicationRecord
     end
   end
 
-  
+  #delete boats if this membership is the only one listed as having it
+  def destroy_boats
+    boats.each do |b|
+      if b.memberships.size == 1
+        b.delete
+      end
+    end
+  end
 
 end

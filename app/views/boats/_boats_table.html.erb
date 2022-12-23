@@ -7,7 +7,7 @@
       <th><%= sortable "Type" %></th>
       <th><%= sortable "Length" %></th>
       <th><%= sortable "Draft" %></th>
-      <th><%= sortable "mooring&.id", "Mooring" %></th>
+      <th><%= sortable "mooring_id", "Mooring" %></th>
       <% else %>
       <th>Name</th>
       <th>Mfg/Size</th>
@@ -34,10 +34,10 @@
       <td><%= boat.Type %></td>
       <td><%= boat.Length %></td>
       <td><%= boat.Draft %></td>
-      <td><%= boat.mooring&.id %></td>
+      <td><%= boat.mooring_id %></td>
       <td>
-	<span class="list-actions"><%= link_to 'Delete', locals[:membership] ? membership_boat_path(locals[:membership],boat) : boat_path(boat),
-				       data: {confirm: 'Are you sure?'}, method: :delete %>
+	<span class="list-actions"><%= link_to 'Delete', locals[:membership] ? membership_boat_path(locals[:membership],boat) : boat,
+				       data: {turbo_confirm: 'Are you sure?', turbo_method: :delete } %>
 	</span>
       </td>
     </tr>

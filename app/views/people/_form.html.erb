@@ -1,77 +1,77 @@
 <div class="dynamic-form-person" data-new-record="<%= f.object.new_record? %>">
-    <%= content_tag(:div, class: "person") do %>
-	<div class="row mb-1">
-	    <div class="col-sm-2">
-		<span>
-		    <label for="Type">Type:</label>
-		    <%= f.collection_select :MemberType, MemberType.all, :Type, :Type, {}, {'data-action': "child-hide#hide"} %>
-		</span>
-	    </div>
-	    <div class="col-sm-2">
-		<span class="has-float-label">
-		    <%= f.text_field :FirstName, id: :FirstName, class: "form-control", placeholder: " " %>
-		    <label for="FirstName">First Name</label>
-		</span>
-	    </div>
-	    <div class="col-sm-2">
-		<span class="has-float-label">
-		    <%= f.text_field :LastName, id: :LastName, class: "form-control", placeholder: " " %>
-		    <label for="LastName">Last Name</label>
-		</span>
-	    </div>
-	    <div class="col-sm-2">
-		<span class="has-float-label">
-		    <%= f.text_field :BirthYear, id: :BirthYear, class: "form-control", placeholder: " " %>
-		    <label  for="BirthYear">Birth Year</label>
-		</span>
-	    </div>
-	    <% unless f.object.MemberType == 'Child' %>
-		<div class="col-sm-4 child-hide">
-		    <span class="has-float-label">
-			<%= f.text_field :EmailAddress, id: :EmailAddress, class: "form-control", placeholder: " " %>
-			<label for="EmailAddress">Email</label>
-		    </span>
-		</div>
-	    <% end %>
+  <%= content_tag(:div, class: "person") do %>
+    <div class="row mb-1">
+      <div class="col-sm-2">
+	<span>
+	  <label for="Type">Type:</label>
+	  <%= f.collection_select :MemberType, MemberType.all, :Type, :Type, {}, {'data-action': "child-hide#hide"} %>
+	</span>
+      </div>
+      <div class="col-sm-2">
+	<span class="has-float-label">
+	  <%= f.text_field :FirstName, id: :FirstName, class: "form-control", placeholder: " " %>
+	  <label for="FirstName">First Name</label>
+	</span>
+      </div>
+      <div class="col-sm-2">
+	<span class="has-float-label">
+	  <%= f.text_field :LastName, id: :LastName, class: "form-control", placeholder: " " %>
+	  <label for="LastName">Last Name</label>
+	</span>
+      </div>
+      <div class="col-sm-2">
+	<span class="has-float-label">
+	  <%= f.text_field :BirthYear, id: :BirthYear, class: "form-control", placeholder: " " %>
+	  <label  for="BirthYear">Birth Year</label>
+	</span>
+      </div>
+      <% unless f.object.MemberType == 'Child' %>
+	<div class="col-sm-4 child-hide">
+	  <span class="has-float-label">
+	    <%= f.text_field :EmailAddress, id: :EmailAddress, class: "form-control", placeholder: " " %>
+	    <label for="EmailAddress">Email</label>
+	  </span>
 	</div>
-	
-	<% unless f.object.MemberType == 'Child' %>
-	    <div class="row mb-1 child-hide">
-		<div class="col-sm mb-1">
-		    <span class="has-float-label">
-			<%= f.text_field :HomePhone, id: :HomePhone, class: "form-control", placeholder: " " %>
-			<label for="HomePhone">Home Phone</label>
-		    </span>
-		</div>
-		<div class="col-sm mb-1">
-		    <span class="has-float-label">
-			<%= f.text_field :WorkPhone, id: :WorkPhone, class: "form-control", placeholder: " " %>
-			<label for="WorkPhone">Work Phone</label>
-		    </span>
-		</div>
-		<div class="col-sm mb-1">
-		    <span class="has-float-label">
-			<%= f.text_field :CellPhone, id: :CellPhone, class: "form-control", placeholder: " " %>
+      <% end %>
+    </div>
+    
+    <% unless f.object.MemberType == 'Child' %>
+      <div class="row mb-1 child-hide">
+	<div class="col-sm mb-1">
+	  <span class="has-float-label">
+	    <%= f.text_field :HomePhone, id: :HomePhone, class: "form-control", placeholder: " " %>
+	    <label for="HomePhone">Home Phone</label>
+	  </span>
+	</div>
+	<div class="col-sm mb-1">
+	  <span class="has-float-label">
+	    <%= f.text_field :WorkPhone, id: :WorkPhone, class: "form-control", placeholder: " " %>
+	    <label for="WorkPhone">Work Phone</label>
+	  </span>
+	</div>
+	<div class="col-sm mb-1">
+	  <span class="has-float-label">
+	    <%= f.text_field :CellPhone, id: :CellPhone, class: "form-control", placeholder: " " %>
 			<label for="CellPhone">Cell Phone</label>
-		    </span>
-		</div>
-		<div class="col-sm-4">
-		    <label for="Committee", class="col-form-label">Committee:</label>
-		    <%= f.collection_select :Committee1, Committee.all, :Name, :Name, class: "form-control", include_blank: true %>
-		    </inline>
-		</div>
-	    </div>
-	<% end %>
-	<div class="mb-1">
-	    <% unless f.object.MemberType == 'Child' %>
-		<div class="form-check mr-4 child-hide">
-		    <%= f.check_box :subscribe_general, class: "form-check-input" %>
-		    <label for="subscribe_general" class="form-check-label">Subscribe</label>
-		</div>
-	    <% end %>
+	  </span>
 	</div>
-	<button type="button" data-action="dynamic-form#remove_person", class="btn btn-link">Remove person</button>
-	<%= f.hidden_field :_destroy %>	
-	<hr/>
+	<div class="col-sm-4">
+	  <label for="Committee", class="col-form-label">Committee:</label>
+	  <%= f.collection_select :Committee1, Committee.all, :Name, :Name, class: "form-control", include_blank: true %>
+		    </inline>
+	</div>
+      </div>
     <% end %>
+    <div class="mb-1">
+      <% unless f.object.MemberType == 'Child' %>
+	<div class="form-check mr-4 child-hide">
+	  <%= f.check_box :subscribe_general, class: "form-check-input" %>
+	  <label for="subscribe_general" class="form-check-label">Subscribe</label>
+	</div>
+      <% end %>
+    </div>
+    <button type="button" data-action="dynamic-form#remove_person", class="btn btn-link">Remove person</button>
+    <%= f.hidden_field :_destroy %>	
+    <hr/>
+  <% end %>
 </div>

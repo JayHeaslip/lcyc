@@ -1,7 +1,6 @@
 boat1:
   Mfg_Size: 'J29'
   Name: "Hello"
-  mooring_num: 100
   
 boat2:
   Mfg_Size: 'J80'

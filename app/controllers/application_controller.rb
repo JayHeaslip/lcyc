@@ -36,13 +36,12 @@ class ApplicationController < ActionController::Base
   end
   
   def breadcrumbs
-    unless session[:breadcrumbs].nil?
-      url = request.path
-      if url == "/"
-        session[:breadcrumbs] = "/"
-      else
-        session[:breadcrumbs] = session[:breadcrumbs] + ", " + url
-      end
+    url = request.path
+    session[:breadcrumbs] ||= '/'
+    if url == "/"
+      session[:breadcrumbs] = "/"
+    else
+      session[:breadcrumbs] = session[:breadcrumbs] + ", " + url
     end
   end
 

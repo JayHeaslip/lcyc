@@ -3,7 +3,6 @@ TODO items
 make sure ./cronjob runs ok, only need to run on production
 on switch to production, kill delayed job, then restart and check
 allow BOG to People#select_commitee, People#committee, Committees#download_spreadsheet
-add validation to drysail_num (1..12), allow nil
 
 tasks
 ------------------------------------------
@@ -12,7 +11,8 @@ clean up database (resigned members, boats with no owners, etc., users that are 
 
 non-transparent updates
 -------------------------------------------------------------------
-fix membership filter field, make it trigger on change
+fix memebrship filter/sort (persist filter options)
+removed unused database fields (mooring_num, drysail_num)
 restructure membership controller
 	    add drysail controller
 
