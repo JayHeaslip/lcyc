@@ -3,7 +3,7 @@ bob:
   LastName: bob
   FirstName: bob
   EmailAddress: bob@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member1) %>
+  membership: member1
   Committee1: Boats
 
 jim:  
@@ -11,7 +11,7 @@ jim:
   LastName: jim
   FirstName: jim
   EmailAddress: jim@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member2) %>
+  membership: member2
   Committee1: Boats
 
 jill:  
@@ -19,7 +19,7 @@ jill:
   LastName: jim
   FirstName: jill
   EmailAddress: jill@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member2) %>
+  membership: member2
   Committee1: Boats
 
 tom:  
@@ -27,7 +27,7 @@ tom:
   LastName: tom
   FirstName: tom
   EmailAddress: tom@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member2) %>
+  membership: member2
   Committee1: Boats
 
 john:  
@@ -35,7 +35,7 @@ john:
   LastName: john
   FirstName: john
   EmailAddress: john@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member3) %>
+  membership: member3
   Committee1: Boats
 
 sue:  
@@ -43,7 +43,7 @@ sue:
   LastName: john
   FirstName: Sue
   EmailAddress: suejohn@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member3) %>
+  membership: member3
   Committee1: Boats
 
 billy:  
@@ -51,22 +51,21 @@ billy:
   LastName: john
   FirstName: billy
   BirthYear: 2010
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member3) %>
+  membership: member3
 
 bobby:  
   MemberType: Child
   LastName: john
   FirstName: bobby
   BirthYear: 2011
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member3) %>
-
+  membership: member3
   
 bill:  
   MemberType: Member
   LastName: bil
   FirstName: bill
   EmailAddress: bill@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member4) %>
+  membership: member4
   Committee1: Docks
   email_hash: 2345
   
@@ -75,7 +74,7 @@ dave:
   LastName: dave
   FirstName: dave
   EmailAddress: dave@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member5) %>
+  membership: member5
   Committee1: Docks
   
 barb:  
@@ -83,21 +82,21 @@ barb:
   LastName: dave2
   FirstName: barb
   EmailAddress: barb@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:member5) %>
+  membership: member5
   Committee1: Docks
   
 dave2:  
   MemberType: Member
   LastName: dave
   FirstName: dave
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:no_member_email) %>
+  membership: no_member_email
   
 barb2:  
   MemberType: Partner
   LastName: dave
   FirstName: barb
   EmailAddress: barb2@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:no_member_email) %>
+  membership: no_member_email
   Committee1: Docks
   
 jim2:  
@@ -105,13 +104,13 @@ jim2:
   LastName: dave
   FirstName: jim
   EmailAddress: jim2@abc.com
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:paid) %>
+  membership: paid
   Committee1: Docks
 
 joe:  
   MemberType: Member
   LastName: dave
   FirstName: joe
-  MembershipID: <%= ActiveRecord::FixtureSet.identify(:noemail) %>
+  membership: noemail
   Committee1: Docks
   

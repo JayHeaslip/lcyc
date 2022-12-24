@@ -200,8 +200,9 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "save boat association" do
+    @boat3 = boats(:boat3)
     post save_association_membership_url(@membership),
-         params: {membership: {boats: @boat2.id}, id: @membership.id}
+         params: {membership: {boats: @boat3.id}, id: @membership.id}
     assert_redirected_to membership_url(@membership.id)
     assert_equal flash[:notice], "Saved association."
   end
