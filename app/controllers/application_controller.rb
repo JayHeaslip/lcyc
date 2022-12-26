@@ -43,6 +43,7 @@ class ApplicationController < ActionController::Base
     else
       session[:breadcrumbs] = session[:breadcrumbs] + ", " + url
     end
+    logger.info session[:breadcrumbs]
   end
 
   def check_delayed_job

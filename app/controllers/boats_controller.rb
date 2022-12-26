@@ -27,9 +27,9 @@ class BoatsController < ApplicationController
   end
 
   def update
-    @boat = Boat.find(params[:id])
+    @boat = Boat.includes(:memberships).find(params[:id])
     @boat.attributes = boat_params
-    @boat.update_drysail_and_mooring
+    flash[:alert] = @boat.update_drysail_and_mooring
     if @boat.save
       flash[:notice] = "Successfully updated boat."
       redirect_to boat_path(@boat)
@@ -45,7 +45,9 @@ class BoatsController < ApplicationController
 
   def save_association
     @boat = Boat.find(params[:id])
-    @boat.memberships << Membership.find(params[:boat][:memberships])
+    @membership = Membership.find(params[:boat][:memberships])
+    @boat.memberships << @membership
+    @membership.mooring = @boat.mooring if @boat.location == "Mooring"
     if @boat.save
       flash[:notice] = "Saved association."
       redirect_to boat_path(@boat)

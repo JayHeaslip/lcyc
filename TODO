@@ -11,16 +11,22 @@ clean up database (resigned members, boats with no owners, etc., users that are 
 
 non-transparent updates
 -------------------------------------------------------------------
+fix breadcrumbs
 check each role
+assign a shared mooring - associate another member with the boat
+show additional fields in mooring index (depth?)
+allow edit of mooring?
+sortable mooring/depth on mooring index
 remove get_membership, authorize functions
 fix membership filter/sort (persist filter options)
 
 removed unused database fields (mooring_num, drysail_num)
 
+
+
 add a fees table to be used in generating bills (active dues, senior dues, mooring fee, etc.)
 add updated_by field
 remove unused fields in attachment table
-make committe/person a has relationship
 create hierarchy of roles (Member->BOG-> [Membership, Harbormaster, Communications])
     add parent to each role
     showing - display ancestor rights in a different color

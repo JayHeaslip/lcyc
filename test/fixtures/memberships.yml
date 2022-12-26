@@ -82,6 +82,7 @@ paid:
   application_date: 02-03-2018
   Status: 'Active'
   MemberSince: 2001
+  mooring: mooring4
   paid: true
   
 noemail:

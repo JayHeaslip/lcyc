@@ -23,7 +23,7 @@
     <% for boat in locals[:boats_array] %>
     <tr>
       <% if locals[:membership] %>
-      <td><%= boat.Name %></td>
+      <td><%= link_to boat.Name, boat_path(boat) %></td>
       <td><%= boat.Mfg_Size %></td>
       <% elsif boat.Name.blank? %>
       <td><%= boat.Name %></td>

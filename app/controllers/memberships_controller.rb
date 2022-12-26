@@ -65,12 +65,11 @@ class MembershipsController < ApplicationController
       flash[:alert] = 'Mooring removed due to membership category update.' if !@membership.mooring.nil?
       @membership.mooring = nil
     end
-    flash[:alert] = ''
     @membership.boats.each do |b|
-      logger.info "return value #{@membership.update_drysail_and_mooring(b)}"
-      #flash[:alert] += @membership.update_drysail_and_mooring(b)
+      flash[:alert] = (flash[:alert] || '') + @membership.update_drysail_and_mooring(b)
     end
     if @membership.save
+      flash[:alert] = nil if flash[:alert].blank?
       flash[:success] = 'Membership was successfully updated.'
       redirect_to membership_path(@membership)
     else
@@ -112,7 +111,9 @@ class MembershipsController < ApplicationController
 
   def save_association
     @membership = Membership.find(params[:id])
-    @membership.boats << Boat.find(params[:membership][:boats])
+    @boat = Boat.find(params[:membership][:boats])
+    @membership.boats << @boat
+    @membership.mooring = @boat.mooring if @boat.location == "Mooring"
     if @membership.save
       flash[:notice] = 'Saved association.'
       redirect_to membership_path(@membership)

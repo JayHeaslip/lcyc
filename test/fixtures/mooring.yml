@@ -6,4 +6,7 @@ mooring2:
 
 mooring3:
   id: 100
+
+mooring4:
+  Depth: 2
   

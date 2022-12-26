@@ -7,7 +7,6 @@ class Boat < ApplicationRecord
   belongs_to :drysail, optional: true
 
   validate :name_or_mfg?
-  #validate :mooring
   validates_uniqueness_of :Name, scope: :Mfg_Size, allow_blank: true
   validates_uniqueness_of :Mfg_Size, scope: :Name, allow_blank: true 
 
@@ -17,11 +16,6 @@ class Boat < ApplicationRecord
     end
   end
   
-  # make sure mooring assigned to boat belongs to one of the boat memberships
-  def mooring
-    errors.add(:base, "Mooring does not belong to any of the boat owners") if !valid_mooring?
-  end
-
   def selection_string
     name = (self.Name && self.Name != '') ? self.Name : "(no name)"
     [name, self.Mfg_Size].join(" ")
@@ -40,30 +34,28 @@ class Boat < ApplicationRecord
   end
 
   def update_drysail_and_mooring
-    moored = false
-    self.memberships.each do |m|
-      if self.location == "Parking Lot" && self.drysail_id.nil?
-        self.drysail = m.drysail
-      elsif self.location == "Mooring" && self.mooring.nil?
-        # put on members mooring unless member already has a boat on mooring
-        if m.mooring
-          self.mooring = m.mooring unless m.mooring.boat
-          moored = true
-        end
+    if location == '' || location.nil?
+      nil
+    elsif location == "Mooring" && mooring.nil?
+      available_mooring = Membership.mooring_available(memberships)
+      logger.info "available mooring: #{available_mooring.id}"
+      if available_mooring
+        self.mooring = available_mooring
+        nil
+      else
+        location = ''
+        return "Mooring not available for boat.\n"
+      end
+    elsif location == "Parking Lot" && drysail.nil?
+      available_drysail = Membership.drysail_available(memberships)
+      if available_drysail
+        self.drysail = available_drysail
+        nil
+      else
+        location = ''
+        return "Drysail spot not available for boat.\n"
       end
     end
-    flash[:alert] = "Boat owner(s) do not have a mooring" if !moored && self.location == "Mooring"
   end
 
-  private
-
-  def valid_mooring?
-    valid_moorings = self.memberships.map {|m| m.mooring_num}
-    if self.mooring_num and not valid_moorings.include?(self.mooring_num)
-      return false
-    else
-      return true
-    end
-  end
-  
 end

@@ -3,9 +3,9 @@
 <table class="table table-sm table-striped">
   <thead class="thead-light">
     <tr>
-      <th>Last Name</th>
       <th>MailingName</th>
       <th>Mooring#</th>
+      <th>Depth</th>
       <th>Boat Name</th>
       <th>Boat Type</th>
     </tr>
@@ -14,9 +14,9 @@
     <% for mooring in @moorings %>
       <% for membership in mooring.memberships %>
 	<tr scope="row">
-	  <td><%= link_to membership.LastName, membership %></td>
-	  <td><%= membership.MailingName %></td>
+	  <td><%= link_to membership.MailingName, membership %></td>
 	  <td><%= mooring.id %></td>
+	  <td><%= mooring.Depth %></td>
           <td><%= mooring.boat&.Name %></td>
           <td><%= mooring.boat&.Mfg_Size %></td>
 	  <td>

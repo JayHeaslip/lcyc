@@ -152,7 +152,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "update membership from active to senior" do
-    patch membership_url(@membership),
+    patch membership_url(memberships(:paid)),
           params: {membership:
                      {
                        LastName: 'Bob',
@@ -167,7 +167,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
                        
                      }
                   }
-    assert_redirected_to membership_url(@membership.id)
+    assert_redirected_to membership_url(memberships(:paid))
     assert_equal flash[:alert], "Mooring removed due to membership category update."
     assert_equal flash[:success], "Membership was successfully updated."
   end
