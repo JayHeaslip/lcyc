@@ -55,6 +55,9 @@
     <div class="col-sm-2">
       Mooring #<%= f.object.mooring_id %>
     </div>
+    <div class="col-sm-2">
+      Drysail #<%= f.object.drysail %>
+    </div>
   </div>
   <button type="button" data-action="dynamic-form#remove_boat", class="btn btn-link">Remove boat</button>
   <%= f.hidden_field :_destroy %>

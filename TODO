@@ -11,10 +11,11 @@ clean up database (resigned members, boats with no owners, etc., users that are 
 
 non-transparent updates
 -------------------------------------------------------------------
-fix memebrship filter/sort (persist filter options)
+check each role
+remove get_membership, authorize functions
+fix membership filter/sort (persist filter options)
+
 removed unused database fields (mooring_num, drysail_num)
-restructure membership controller
-	    add drysail controller
 
 add a fees table to be used in generating bills (active dues, senior dues, mooring fee, etc.)
 add updated_by field

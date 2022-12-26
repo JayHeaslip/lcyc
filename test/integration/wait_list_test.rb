@@ -7,13 +7,14 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
     login_as(admin, 'passwor1')
     @membership = memberships(:member1)
     @wl = wait_list_entries(:wl2)
+    @badwl = wait_list_entries(:wl3)
     @wlaccepted = wait_list_entries(:wl1)
   end
 
   test "get entries" do
     get wait_list_entries_url
     assert_response :success
-    assert_select "div p", "Total : 2"
+    assert_select "div p", "Total : 4"
   end
 
   test "new entry" do
@@ -93,8 +94,14 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "label", "Assigning mooring for: Very Long Mailing Name & another long part"
   end
 
+  test "assign ineligible" do
+    get assign_wait_list_entry_url(@badwl)
+    assert_equal "Old Joe is not eligible for a mooring.", flash[:alert]
+    assert_redirected_to wait_list_entries_path
+  end
+
   test "update mooring" do
-    patch mooring_update_wait_list_entry_url(@wl), params: {mooring: 100}
+    patch mooring_update_wait_list_entry_url(wait_list_entries(:wl4)), params: {mooring: 100}
     assert_redirected_to wait_list_entries_url
   end
 
@@ -110,7 +117,7 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
     @membership.save(validate: false)
     patch mooring_update_wait_list_entry_url(@wl), params: {mooring: 100}
     assert_response :unprocessable_entity
-    assert_select "div p", "Total : 2"
+    assert_select "div p", "Total : 4"
   end
 
 end  

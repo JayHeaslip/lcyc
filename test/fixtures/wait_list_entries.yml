@@ -3,4 +3,10 @@ wl1:
 
 wl2:
   membership: member1
+
+wl3:
+  membership: senior
+
+wl4:
+  membership: member5
   

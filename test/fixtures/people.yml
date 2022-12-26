@@ -114,3 +114,10 @@ joe:
   membership: noemail
   Committee1: Docks
   
+oldjoe:  
+  MemberType: Member
+  LastName: dave
+  FirstName: joe
+  membership: senior
+  Committee1: Docks
+  

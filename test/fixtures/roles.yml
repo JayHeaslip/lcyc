@@ -8,3 +8,7 @@ member:
 BOG:
   name: BOG
   rights: [user_create, user_destroy]
+
+membership:
+  name: Membership
+  rights: [boat_update, membership_edit, membership_update, person_destroy]

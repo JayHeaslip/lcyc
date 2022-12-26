@@ -3,22 +3,22 @@
   
   <fieldset class="fieldset my-0 col-12 bg-light">
     <legend id="legend" class="mb-n4"><small>Filter</small></legend>
-    <%= form_tag memberships_path, method: :get, data: { turbo_frame: "memberships"} do %>
+    <%= form_with url: memberships_path, method: :get, data: { turbo_frame: "memberships"} do |f| %>
       <div class="row g-3 align-items-center">
 	<label class="col-auto col-form-label col-form-label-sm" for="lastname">Last Name:</label>
 	<div class="col-sm-1">
-	  <%= text_field_tag :lastname, @lastname, id: "lastname", size: 2, class: "form-control form-control-sm" %>
+	  <%= f.text_field :lastname, id: "lastname", size: 2, class: "form-control form-control-sm" %>
 	</div>
 	<label class="col-auto col-form-label col-form-label-sm" for="since">Member Since:</label>
 	<div class="col-auto">
 	  <%= select_tag :operator, options_for_select(['=', '<', '>'], @operator) %>
 	</div>
 	<div class="col-auto">
-	  <%= text_field_tag :since, @since, id: "since", size: 2, class: "form-control form-control-sm" %>
+	  <%= f.text_field :since, id: "since", size: 2, class: "form-control form-control-sm" %>
 	</div>
 	<label class="col-auto col-form-label col-form-label-sm">Status:</label>
 	<div class="col-auto">
-	  <%= select_tag :status, options_for_select(@status_options, @selected_status), multiple: true, size: 3 %>
+	  <%= select_tag :status, options_for_select(@status_options, @selected_status), multiple: true, size: 3, class: "form-control form-control-sm" %>
 	</div>
 	<div class="col-auto">
 	  <button type ="submit" class="btn btn-primary ml-2 my-1 mr-2">Search</button> | <%= link_to "Reset", memberships_path, class: 'ms-2' %>

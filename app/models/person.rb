@@ -2,6 +2,7 @@ require 'csv'
 
 class Person < ApplicationRecord
   belongs_to :membership, foreign_key: 'MembershipID', optional: true
+  belongs_to :committee, optional: true
   has_one :user
 
   validates_presence_of :LastName, :FirstName, :MemberType
@@ -82,12 +83,7 @@ class Person < ApplicationRecord
     end
   end
 
-  def self.committee_spreadsheet(committee)
-    unless committee == "All"
-      people = Person.active.where(MemberType: ['Member', 'Partner']).committee(committee).order(:LastName)
-    else
-      people = Person.active.where(MemberType: ['Member', 'Partner']).order(:LastName)
-    end
+  def self.committee_spreadsheet(people)
     CSV.generate(col_sep: ",") do |csv|
       csv << %w(FirstName LastName HomePhone WorkPhone CellPhone EmailAddress Committee)
       people.each do |p|

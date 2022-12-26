@@ -40,14 +40,19 @@ class Boat < ApplicationRecord
   end
 
   def update_drysail_and_mooring
+    moored = false
     self.memberships.each do |m|
       if self.location == "Parking Lot" && self.drysail_id.nil?
         self.drysail = m.drysail
-      elsif self.location == "Mooring" && self.mooring_id.nil?
-        # put on mooring unless member already has a boat on mooring
-        self.mooring = m.mooring unless m.mooring.boat
+      elsif self.location == "Mooring" && self.mooring.nil?
+        # put on members mooring unless member already has a boat on mooring
+        if m.mooring
+          self.mooring = m.mooring unless m.mooring.boat
+          moored = true
+        end
       end
     end
+    flash[:alert] = "Boat owner(s) do not have a mooring" if !moored && self.location == "Mooring"
   end
 
   private

@@ -19,9 +19,15 @@ class BoatsIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "destroy membership" do
+  test "destroy boat" do
     get membership_url(@membership)
     delete membership_boat_url(@membership, @boat)
+    assert_redirected_to membership_url(@membership)
+  end
+
+  test "destroy boat, last membership" do
+    get membership_url(@membership)
+    delete membership_boat_url(memberships(:member5), boats(:boat3))
     assert_redirected_to membership_url(@membership)
   end
 
@@ -42,15 +48,6 @@ class BoatsIntegrationTest < ActionDispatch::IntegrationTest
     patch boat_url(@boat), params: {boat: {Name: 'new name'}}
     assert_equal "Successfully updated boat.", flash[:notice]
     assert_redirected_to boat_url(@boat)
-  end
-  
-  test "member authorize check" do
-    logout
-    login_as(users(:three), 'passwor3')
-    @boat = boats(:boat1)
-    patch boat_url(@boat), params: {boat: {Name: 'new name'}}
-    assert_equal "You are not authorized to view the page you requested.", flash[:error]
-    assert_redirected_to root_path
   end
   
   test "bad update" do

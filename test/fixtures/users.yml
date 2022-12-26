@@ -34,6 +34,15 @@ four:
   roles: [member]
   person: jim
 
+membership:  
+  firstname: steve
+  lastname: steve
+  email: steve2@abc.com
+  password_digest: <%= BCrypt::Password.create('passwor1') %>
+  confirmed_at: <%= Time.now %>
+  roles: [membership]
+  person: jim
+
 not_confirmed:  
   firstname: steve
   lastname: steve

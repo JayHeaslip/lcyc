@@ -1,8 +1,0 @@
-<h2 class="mt-3 mb-3"><%= @committee %> Committee</h2>
-<div>
-  <%= form_tag download_spreadsheet_committee_path(@committee) do %>
-  <button type="submit" class="btn btn-primary">Download as a spreadsheet</button> | <%= link_to 'Back', select_committee_people_path %>
-  <% end %>
-</div>
-
-<%= render 'committee_list' %>

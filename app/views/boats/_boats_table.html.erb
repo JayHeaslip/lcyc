@@ -15,6 +15,7 @@
       <th>Length</th>
       <th>Draft</th>
       <th>Mooring</th>
+      <th>Drysail</th>
       <% end %>
     </tr>
   </thead>
@@ -35,6 +36,7 @@
       <td><%= boat.Length %></td>
       <td><%= boat.Draft %></td>
       <td><%= boat.mooring_id %></td>
+      <td><%= boat.drysail&.id %></td>
     </tr>
     <% end %>
   </tbody>

@@ -20,7 +20,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   test "get_index" do
     get memberships_url
     assert_response :success
-    assert_select "p", "Total : 7"
+    assert_select "p", "Total : 8"
   end
 
   test "show_membership" do
@@ -259,9 +259,26 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
   
-  test "unassign a moorings" do
+  test "generate resigned spreadsheet" do
+    post download_spreadsheet_memberships_url, params: {spreadsheet: 'Resigned'}
+    assert_response :success
+  end
+
+  test "unassign a mooring" do
     post unassign_membership_url(@membership)
+    assert_equal "Mooring #261007983 unassigned.", flash[:notice]
     assert_redirected_to moorings_path
+  end
+  
+  test "unassign a drysail" do
+    post unassign_drysail_membership_url(@membership)
+    assert_equal "Dry sail spot #1 unassigned.", flash[:notice]
+    assert_redirected_to drysails_path
+  end
+  
+  test "generate an initiation report" do
+    get initiation_report_memberships_url
+    assert_select "h2", "Initiation installments due"
   end
   
 end  

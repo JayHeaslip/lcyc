@@ -65,7 +65,11 @@ class MembershipsController < ApplicationController
       flash[:alert] = 'Mooring removed due to membership category update.' if !@membership.mooring.nil?
       @membership.mooring = nil
     end
-    @membership.update_drysail_and_mooring
+    flash[:alert] = ''
+    @membership.boats.each do |b|
+      logger.info "return value #{@membership.update_drysail_and_mooring(b)}"
+      #flash[:alert] += @membership.update_drysail_and_mooring(b)
+    end
     if @membership.save
       flash[:success] = 'Membership was successfully updated.'
       redirect_to membership_path(@membership)
@@ -76,7 +80,7 @@ class MembershipsController < ApplicationController
 
   def destroy
     @membership  = Membership.find(params[:id])
-    @membership.delete
+    @membership.destroy
     flash[:success] = 'Membership was successfully deleted.'
     redirect_to memberships_path
   end
@@ -94,7 +98,7 @@ class MembershipsController < ApplicationController
     flash[:notice] = "#{@membership.LastName} removed from boat"
     if @boat.memberships.empty?
       flash[:notice] += ", boat deleted."
-      @boat.delete
+      @boat.destroy
       redirect_to boats_path
     else
       redirect_to boat_path(@boat)
@@ -108,12 +112,13 @@ class MembershipsController < ApplicationController
 
   def save_association
     @membership = Membership.find(params[:id])
-    @membership.boats << Boat.find(params[:membership][:boats].to_i)
+    @membership.boats << Boat.find(params[:membership][:boats])
     if @membership.save
       flash[:notice] = 'Saved association.'
       redirect_to membership_path(@membership)
     else
       @boats = Boat.order(:Name) - @membership.boats
+      flash[:alert] = "Error saving association."
       render :associate, status: :unprocessable_entity
     end
   end
@@ -121,21 +126,20 @@ class MembershipsController < ApplicationController
 
   def unassign
     @membership = Membership.find(params[:id])
-    mooring = @membership.mooring
+    mooring_id = @membership.mooring_id
     @membership.mooring = nil
     if @membership.save
-      flash[:notice] = "Mooring ##{mooring.id} unassigned."
+      flash[:notice] = "Mooring ##{mooring_id} unassigned."
     else
-      flash[:alert] = "Problem unassigning mooring ##{mooring.id}."
+      flash[:alert] = "Problem unassigning mooring ##{mooring_id}."
     end
     redirect_to moorings_path
   end
 
   def unassign_drysail
-    m = Membership.find(params[:id])
+    @membership1 = Membership.find(params[:id])
     drysail = @membership.drysail
-    m.drysail = nil
-    m.save!
+    @membership.drysail = nil
     if @membership.save
       flash[:notice] = "Dry sail spot ##{drysail.id} unassigned."
     else
@@ -209,10 +213,6 @@ class MembershipsController < ApplicationController
 
   def sort_column
     Membership.column_names.include?(params[:sort]) ? params[:sort] : "LastName"
-  end
-  
-  def drysail_sort_column
-    Membership.column_names.include?(params[:sort]) ? params[:sort] : "drysail_num"
   end
   
   def sort_direction

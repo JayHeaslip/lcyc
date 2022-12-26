@@ -10,6 +10,7 @@ class DrysailsController < ApplicationController
     @drysail = Drysail.find(params[:id])
     @drysail.membership = Membership.find(params[:membership])
     if @drysail.save
+      flash[:success] = "Assigned dry sail spot ##{@drysail.id}."
       redirect_to drysails_path
     else
       flash[:alert] = "Problem assiging dry sail spot"

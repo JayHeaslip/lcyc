@@ -11,18 +11,6 @@ class PeopleIntegrationTest < ActionDispatch::IntegrationTest
     @boat2 = boats(:boat2)
   end
 
-  test "get_committee" do
-    get select_committee_people_url
-    assert_response :success
-    assert_select "h2", "Committee Members"
-  end
-
-  test "show_committee" do
-    get select_committee_people_url
-    assert_response :success
-    assert_select "h2", "Committee Members"
-  end
-
   test "unsubscribe bad hash" do
     logout
     get '/unsubscribe/1234'
@@ -37,8 +25,8 @@ class PeopleIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal flash[:notice], "You have unsubscribed."
   end
 
-  test "delete" do
-    login_as(users(:three), 'passwor3')
+  test "delete by membership" do
+    login_as(users(:membership), 'passwor1')
     @membership = memberships(:member2)
     @person = people(:jill)
     delete membership_person_url(@membership, @person)

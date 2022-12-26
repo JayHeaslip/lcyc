@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_21_193627) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_25_212305) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -252,8 +252,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_21_193627) do
     t.string "email_hash"
     t.boolean "subscribe_general", default: true
     t.boolean "select_email", default: false
+    t.bigint "committee_id"
     t.index ["MembershipID"], name: "MembershipID"
     t.index ["MembershipID"], name: "id"
+    t.index ["committee_id"], name: "index_people_on_committee_id"
     t.index ["id"], name: "id1"
   end
 

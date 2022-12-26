@@ -5,21 +5,19 @@
 	    <label for="MemberSince">Member Since</label>
 	</span>
     </div>
+    <label for="Status" class="col-form-label pt-0 col-auto">Status:</label>
     <div class="col-sm-2">
-	<span>
-	    <label for="Status" class="col-form-label pt-0 col-sm-4">Status:</label>
-	    <% if current_user.roles?(%w(Admin Membership)) %>
-		<%= f.collection_select :Status, Memberstatus.order(:Status), :Status, :Status, class: "form-control" %>
-	    <% else %>
-		<%= @membership.Status %>
-	    <% end %>
-	</span>
+      <% if current_user.roles?(%w(Admin Membership)) %>
+	<%= f.collection_select :Status, Memberstatus.order(:Status), :Status, :Status, class: "form-control" %>
+      <% else %>
+	<%= @membership.Status %>
+      <% end %>
     </div>
     <div class="col-sm-3">
       <p>Mooring #<%= @membership.mooring&.id %></p>
     </div>
     <div class="col-sm-3">
-      <p>Dry Sail #</p>
+      <p>Dry Sail #<%= @membership.drysail&.id %></p>
     </div>
 </div>
 

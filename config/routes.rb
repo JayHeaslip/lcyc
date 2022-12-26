@@ -6,18 +6,19 @@ Rails.application.routes.draw do
   post "sign_up", to: "users#create"
   get "account", to: "users#edit"
   put "account", to: "users#update"
-  resources :users
-  
+
+  get "login", to: "sessions#new"
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
-  get "login", to: "sessions#new"
+
+  get "change_password", to: "passwords#change"
+  post "change_password", to: "passwords#change"
+  get 'unsubscribe/:id', to: "unsubscribe#update"
+
+  resources :users
   
   resources :confirmations, only: [:create, :edit, :new], param: :confirmation_token
   resources :passwords, only: [:create, :edit, :new, :update], param: :password_reset_token
-  get "change_password", to: "passwords#change"
-  post "change_password", to: "passwords#change"
-  
-  get 'unsubscribe/:id', to: "unsubscribe#update"
   
   resources :quickbooks do
     collection do
@@ -50,7 +51,6 @@ Rails.application.routes.draw do
     end
   end
   
- 
   resources :memberships do
     collection do
       get :list
@@ -59,7 +59,6 @@ Rails.application.routes.draw do
       get  :spreadsheets
       post :download_spreadsheet
       get  :initiation_report
-      get  :new_drysail
       post :assign_drysail
       post :add_person
     end
@@ -75,22 +74,16 @@ Rails.application.routes.draw do
     resources :boats
   end
 
-  resources :people, only: [] do
-    collection do
-      get :select_committee
-      post :committee
-    end
-  end
-
-  resources :people, only: [], param: :index do
-    member do
-      delete '(:id)' => "people#destroy", as: ""
-    end
-  end
+  resources :people, only: [:destroy]
 
   resources :committees, only: [] do
+    collection do
+      get :select
+      get :list
+      get :download_all
+    end
     member do
-      post :download_spreadsheet
+      get :download
     end
   end
   

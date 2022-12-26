@@ -10,7 +10,7 @@ member1:
   active_date: '2010-02-02'
   MemberSince: 2001
   boats: boat2
-  mooring: mooring1
+  mooring: mooring2
 
 member2:
   LastName: 'Smith'
@@ -58,6 +58,8 @@ member5:
   application_date: 02-03-2018
   Status: 'Active'
   MemberSince: 2001
+  boats: boat3
+  mooring: mooring3
   
 no_member_email:
   LastName: 'Smith'
@@ -91,6 +93,17 @@ noemail:
   Zip: 05482
   application_date: 02-03-2018
   Status: 'Active'
+  MemberSince: 2001
+  
+senior:
+  LastName: 'Smith'
+  MailingName: 'Old Joe'
+  StreetAddress: '123 Maple St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  application_date: 02-03-2018
+  Status: 'Senior'
   MemberSince: 2001
   
   

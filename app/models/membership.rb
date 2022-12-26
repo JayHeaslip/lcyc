@@ -68,15 +68,50 @@ class Membership < ApplicationRecord
     self.Status.in? ['Active', 'Life', 'Associate']
   end
 
-  def update_drysail_and_mooring
-    self.boats.each do |b|
-      if b.location == "Parking Lot" && b.drysail_id.nil?
-        b.drysail = self.drysail
-      elsif b.location == "Mooring" && b.mooring_id.nil?
-        # put on mooring unless member already has a boat on mooring
-        b.mooring = self.mooring unless self.mooring&.boat
+  def update_drysail_and_mooring(boat)
+    if boat.location == ""
+      nil
+    elsif boat.location == "Mooring" && boat.mooring.nil?
+      # does one of the boat owners have a mooring?
+      mooring = Membership.mooring_available(boat.memberships)
+      if mooring
+        boat.mooring = mooring
+        ''
+      else
+        boat.location = ""
+        return "Mooring not available for boat.\n"
       end
+    elsif boat.location == "Parking Lot" && boat.drysail.nil?
+      logger.info "parking lot"
+      # does one of the boat owners have a drysail spot? 
+      drysail = Membership.drysail_available(boat.memberships)
+      if drysail
+        boat.drysail = drysail
+        logger.info "returning nil"
+        ''
+      else
+        boat.location = ""
+        logger.info "alert"
+        return "Drysail spot not available for boat.\n"
+      end
+    end      
+      
+  end
+  
+  # return first available mooring from an array of memberships
+  def self.mooring_available(memberships)
+    memberships.each do |m|
+      return m.mooring if m.mooring&.boat.nil?
     end
+    nil
+  end
+  
+  # return first available drysail spot from an array of memberships
+  def self.drysail_available(memberships)
+    memberships.each do |m|
+      return m.drysail if m.drysail&.boat.nil?
+    end
+    nil
   end
   
   def ensure_people
