@@ -23,7 +23,6 @@ class UsersController < ApplicationController
   end
 
   def create
-    logger.info params
     @user = User.new(user_params)
     @user.person = Person.find_by_EmailAddress(@user.email)
     @user.roles << Role.find_by_name('Member') if @user.person

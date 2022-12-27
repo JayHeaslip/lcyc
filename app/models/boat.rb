@@ -38,12 +38,11 @@ class Boat < ApplicationRecord
       nil
     elsif location == "Mooring" && mooring.nil?
       available_mooring = Membership.mooring_available(memberships)
-      logger.info "available mooring: #{available_mooring.id}"
       if available_mooring
         self.mooring = available_mooring
         nil
       else
-        location = ''
+        self.location = ''
         return "Mooring not available for boat.\n"
       end
     elsif location == "Parking Lot" && drysail.nil?
@@ -52,10 +51,10 @@ class Boat < ApplicationRecord
         self.drysail = available_drysail
         nil
       else
-        location = ''
+        self.location = ''
         return "Drysail spot not available for boat.\n"
       end
-    end
+    end 
   end
 
 end

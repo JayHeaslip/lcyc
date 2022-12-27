@@ -7,5 +7,5 @@
       <%= f.select :spreadsheet, options_for_select(@spreadsheet_options, @spreadsheet), {}, class: "form-control" %>
     </div>
   </div>
-  <%= f.submit "Generate", class: "btn btn-primary" %> | <%= link_to 'Back', back_link(1) %>
+  <%= f.submit "Generate", class: "btn btn-primary" %> | <%= link_to 'Back', url_for(:back) %>
 <% end %>

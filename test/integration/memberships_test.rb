@@ -20,7 +20,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   test "get_index" do
     get memberships_url
     assert_response :success
-    assert_select "p", "Total : 8"
+    assert_select "p", "Total : 9"
   end
 
   test "show_membership" do

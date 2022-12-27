@@ -6,7 +6,7 @@
       <%= f.select :labels, options_for_select(@label_options, @labels), {}, class: "form-control" %>
     </div>
   </div>
-  <%= f.submit "Generate", class: "btn btn-primary" %> | <%= link_to 'Back', back_link(1) %>
+  <%= f.submit "Generate", class: "btn btn-primary" %> | <%= link_to 'Back', url_for(:back) %>
 <% end %>
 
 <p class="small mt-3">Note: When printing these labels, make sure "Page Scaling" is set to "None".</p>

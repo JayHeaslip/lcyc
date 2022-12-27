@@ -120,4 +120,11 @@ oldjoe:
   FirstName: joe
   membership: senior
   Committee1: Docks
+
+mem10:  
+  MemberType: Member
+  LastName: dave
+  FirstName: joe
+  membership: member10
+  Committee1: Docks
   

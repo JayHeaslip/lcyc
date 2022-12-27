@@ -130,16 +130,6 @@ class Membership < ApplicationRecord
     mail_memberships - email_memberships # remove memberships who get an email
   end
 
-  #return boat on mooring owned by the membership
-  def moored_boat
-    self.boats.select {|b| b.mooring == self.mooring}[0]
-  end
-
-  #return boat on mooring owned by the membership
-  def drysailed_boat
-    self.boats.select {|b| b.location == 'Parking Lot'}[0]
-  end
-
   def self.dues(m)
     @@Dues[m.Status.to_sym] || 0
   end

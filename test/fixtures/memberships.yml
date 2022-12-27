@@ -9,7 +9,6 @@ member1:
   application_date: '2002-02-02'
   active_date: '2010-02-02'
   MemberSince: 2001
-  boats: boat2
   mooring: mooring2
 
 member2:
@@ -106,6 +105,20 @@ senior:
   application_date: 02-03-2018
   Status: 'Senior'
   MemberSince: 2001
+  
+member10:
+  LastName: 'Mem10'
+  MailingName: 'Mem10'
+  StreetAddress: '123 Maple St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  application_date: 02-03-2018
+  Status: 'Active'
+  MemberSince: 2001
+  mooring: mooring10
+  boats: boat10
+  
   
   
   
