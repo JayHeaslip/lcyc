@@ -20,15 +20,16 @@ class BoatsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "destroy boat" do
+    @request.env['HTTP_REFERER'] = "http://test.com/membership/#{@membership.id}"
     get membership_url(@membership)
-    delete membership_boat_url(@membership, @boat)
+    delete membership_boat_url(@membership, @boat), headers: {'HTTP_REFERER': membership_url(@membership) }
     assert_redirected_to membership_url(@membership)
   end
 
   test "destroy boat, last membership" do
     get membership_url(@membership)
-    delete membership_boat_url(memberships(:member5), boats(:boat3))
-    assert_redirected_to membership_url(@membership)
+    delete membership_boat_url(memberships(:member5), boats(:boat3)), headers: {'HTTP_REFERER': membership_url(memberships(:member5)) }
+    assert_redirected_to membership_url(memberships(:member5))
   end
 
   test "edit" do

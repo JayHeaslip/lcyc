@@ -11,15 +11,17 @@ class BoatsController < ApplicationController
   end
 
   def destroy
+    logger.info "referrer #{request.referrer}"
     @boat = Boat.find(params[:id])
     if @boat.memberships.size > 1
       @membership = Membership.find(params[:membership_id])
       @membership.boats = @membership.boats - [@boat]
       @membership.save
     else
+      flash[:notice] = "Boat deleted."
       @boat.delete
     end
-    redirect_to helpers.back_link(1)
+    redirect_to request.referrer
   end
 
   def edit

@@ -150,7 +150,6 @@ class MembershipsController < ApplicationController
   end
 
   def labels
-    session[:breadcrumbs] = request.path
     @label_options = ["All", "No Email", "Workday"]
   end
 
@@ -169,7 +168,6 @@ class MembershipsController < ApplicationController
   end
 
   def spreadsheets
-    session[:breadcrumbs] = request.path
     @spreadsheet_options = ["Billing", "Log Members", "Log Fleet",
                             "Log Partner Xref", "Member Cards/Workday Checklist", "Resigned"]
   end

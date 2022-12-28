@@ -7,15 +7,6 @@ module ApplicationHelper
     link_to title, request.params.merge(sort: column, direction: direction), {class: css_class}
   end
 
-  def back_link(i)
-    if session[:breadcrumbs].nil?
-      root_path
-    else
-      path = session[:breadcrumbs].split(", ")
-      path[-1-i] || root_path
-    end
-  end
-
   def bootstrap_class_for flash_type
     { success: "alert-success", error: "alert-danger", alert: "alert-warning", notice: "alert-info" }[flash_type.to_sym] || flash_type.to_s
   end

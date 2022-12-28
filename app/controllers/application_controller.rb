@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   
   protect_from_forgery with: :exception
 
-  before_action :authenticate_user!, :check_authorization, :breadcrumbs
+  before_action :authenticate_user!, :check_authorization
 
   private
 
@@ -21,27 +21,11 @@ class ApplicationController < ActionController::Base
                end
              end
         flash[:alert] = "You are not authorized to view the page you requested."
-        redirect_to helpers.back_link(1)
+        redirect_to request.referrer
         false
       else
         true
       end
-    end
-  end
-
-  def pop_back_link
-    links = session[:breadcrumbs].split(",")
-    links.pop
-    session[:breadcrumbs] = links.join(",")
-  end
-  
-  def breadcrumbs
-    url = request.path
-    session[:breadcrumbs] ||= '/'
-    if url == "/"
-      session[:breadcrumbs] = "/"
-    else
-      session[:breadcrumbs] = session[:breadcrumbs] + ", " + url
     end
   end
 

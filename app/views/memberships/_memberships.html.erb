@@ -21,7 +21,7 @@
 	    <td><%= membership.Status %></td>
 	    <td><%= membership.mooring&.id %></td>
 	    <td class="list-actions">
-	      <%= link_to 'Delete', membership, data: { turbo_confirm: 'Are you sure?'}, turbo_method: :delete %>
+	      <%= link_to 'Delete', membership, data: { turbo_confirm: 'Are you sure?', turbo_method: :delete} %>
 	    </td>
         </tr>
       <% end %>

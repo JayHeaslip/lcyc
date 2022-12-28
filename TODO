@@ -11,8 +11,6 @@ clean up database (resigned members, boats with no owners, etc., users that are 
 
 non-transparent updates
 -------------------------------------------------------------------
-0) finish coverage of membership & person models
-1) fix breadcrumbs
 2) fix membership filter/sort (persist filter options)
 3) sortable mooring/depth on mooring index
 4) add treasurer role
