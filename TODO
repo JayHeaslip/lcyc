@@ -11,24 +11,30 @@ clean up database (resigned members, boats with no owners, etc., users that are 
 
 non-transparent updates
 -------------------------------------------------------------------
-0) finish coverage of membership & person models
-1) fix breadcrumbs
-2) fix membership filter/sort (persist filter options)
-3) sortable mooring/depth on mooring index
-4) add treasurer role
 5) test flows with roles
+   save rights for later reload
 6) regenerate migrations
+   reload old database & check
 7) write script to run after migrations to fix everything up
+   update_membership_mooring.rb
+   update_membership_drysail.rb
+   update_person_committee.rb
+   add_treasurer_role.rb
+   Right.synchronize_with_controllers then reload rights
+   cleanup boats/assign mooring & drysail
+   check Member role for every user
+7.5) Check mail template   
 8) check with Doug on viewing old mail
-9) automatically check descendant roles/view all descendant roles?
+8.5) Deploy
+10) Add log info update email
 
-
-remove unused database fields (mooring_num, drysail_num)
-
-add a fees table to be used in generating bills (active dues, senior dues, mooring fee, etc.)
-add updated_by field
-remove unused fields in attachment table
-create hierarchy of roles (Member->BOG-> [Membership, Harbormaster, Communications])
+later
+-----------
+1) remove unused database fields (mooring_num, drysail_num)
+2) add a fees table to be used in generating bills (active dues, senior dues, mooring fee, etc.)
+3) add updated_by field
+4) automatically check descendant roles/view all descendant roles?
+   create hierarchy of roles (Member->BOG-> [Membership, Harbormaster, Communications])
     add parent to each role
     showing - display ancestor rights in a different color
     editing - display ancestor rights by making checkbox read only
@@ -40,7 +46,11 @@ create hierarchy of roles (Member->BOG-> [Membership, Harbormaster, Communicatio
 
 Done
 ----------------------------------------------------------------------
-assign a shared mooring - associate another member with the boat
+2) fix membership filter/sort (persist filter options)
+3) sortable mooring/depth on mooring index
+4) add treasurer role
+   assign a shared mooring - associate another member with the boat
+
 deploy
 -----------
 git branches for staging: master

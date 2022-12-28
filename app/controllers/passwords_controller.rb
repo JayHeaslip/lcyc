@@ -35,7 +35,7 @@ class PasswordsController < ApplicationController
       if User.authenticate_by(email: @user.email, password: params[:current_password])
         if @user.update(password_params)
           flash[:success] = "Password updated"
-          redirect_to helpers.back_link(1)
+          redirect_to session[:referrer]
         else
           flash.now[:alert] = @user.errors.full_messages.to_sentence
           render :change, status: :unprocessable_entity
@@ -44,6 +44,8 @@ class PasswordsController < ApplicationController
         flash.now[:alert] = "Incorrect current password"
         render :change, status: :unprocessable_entity
       end
+    else
+      session[:referrer] = request.referrer
     end
   end
   

@@ -1,6 +1,6 @@
 <h2>Generate a spreadsheet</h2>
 <p>Note: these are tab separated files.</p>
-<%= form_with url: download_spreadsheet_memberships_path do |f| %>
+<%= form_with url: download_spreadsheet_memberships_path, data: { turbo: false } do |f| %>
   <div class="row mb-2" >
     <label class="col-auto col-form-label">Type:</label>
     <div class="col-sm-3">

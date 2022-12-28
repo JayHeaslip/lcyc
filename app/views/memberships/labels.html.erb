@@ -1,5 +1,5 @@
 <h2>Generate Labels (Avery 5160)</h2>
-<%= form_with url: download_labels_memberships_path do |f| %>
+<%= form_with url: download_labels_memberships_path, data: { turbo: false } do |f| %>
   <div class="row mb-3">
     <label class="col-auto col-form-label">Type:</label>
     <div class="col-sm-3">

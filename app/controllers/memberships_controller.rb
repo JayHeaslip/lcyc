@@ -150,7 +150,6 @@ class MembershipsController < ApplicationController
   end
 
   def labels
-    session[:breadcrumbs] = request.path
     @label_options = ["All", "No Email", "Workday"]
   end
 
@@ -169,7 +168,6 @@ class MembershipsController < ApplicationController
   end
 
   def spreadsheets
-    session[:breadcrumbs] = request.path
     @spreadsheet_options = ["Billing", "Log Members", "Log Fleet",
                             "Log Partner Xref", "Member Cards/Workday Checklist", "Resigned"]
   end
@@ -248,8 +246,16 @@ class MembershipsController < ApplicationController
 
   def generate_text(p,m, width, workday)
     if p.width_of(m.MailingName) > width # need to split mailing name
-      sp = m.MailingName.split('&')
-      mn = sp[0] + "&\n" + p.indent(5) {sp[1]}
+      if m.MailingName.index(' & ') 
+        sp = m.MailingName.split(' & ')
+        mn = sp[0] + " &\n" + p.indent(5) {sp[1]}
+      elsif m.MailingName.index(' and ') 
+        sp = m.MailingName.split(' and ')
+        mn = sp[0] + " &\n" + p.indent(5) {sp[1]}
+      else
+        #truncate
+        mn = m.MailingName.slice(0,width-1)
+      end
     else 
       mn = m.MailingName
     end

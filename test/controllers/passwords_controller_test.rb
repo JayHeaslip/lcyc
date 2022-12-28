@@ -40,6 +40,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     @user = users(:three)
     login_as(@user, 'passwor3')
 
+    get change_password_path, headers: {'HTTP_REFERER': root_url}
     post change_password_path, params: {
            current_password: "passwor3",
            password: "new_password",

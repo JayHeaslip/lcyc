@@ -27,7 +27,7 @@ class RolesController < ApplicationController
     @role = Role.find(params[:id])
     rights= params[:right_ids]
     @role.rights.clear
-    rights.each do |right|
+    rights&.each do |right|
         right= Right.find(right)
         @role.rights << right
     end

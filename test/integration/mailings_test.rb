@@ -88,11 +88,11 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal "You've sent a mailing within the last 23 hours, please wait until #{formatted_time} to send an email",flash[:error]
   end
 
-  test "send test mailing no email" do
+  test "send test mailing non-member email" do
     logout
     login_as(users(:no_member_email), 'passwor2')
     post send_email_mailing_url(@mailing), params: {test: true}
-    assert_equal "Current user's email not found in membership database", flash[:error]
+    assert_equal "Delivering mail.", flash[:notice]
     assert_redirected_to mailings_url
   end
 

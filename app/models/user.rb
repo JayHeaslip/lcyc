@@ -70,17 +70,18 @@ class User < ApplicationRecord
 
   #Return true if user has the given role
   def role?(role)
-    roles.find_by_name(role)? true : false
+    roles.find_by_name(role)? true : false if roles
   end
 
   #Return true if user has at least one of the given roles
   def roles?(roles) 
     #array intersect
-    not (self.roles.map {|r| r.name} & roles).empty?
+    not (self&.roles.map {|r| r.name} & roles).empty?
   end
 
   def membership
-    Person.find_by_EmailAddress(self.email).membership.id
+    p = Person.find_by_EmailAddress(self.email)
+    p.membership.id if p
   end
   
   private

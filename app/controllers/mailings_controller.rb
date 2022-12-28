@@ -68,15 +68,12 @@ class MailingsController < ApplicationController
       people = Person.email_list(@mailing.committee, @filter_emails)
       people.each {|e| logger.info "General email: #{e.EmailAddress}" }
       if params[:test]
-        p = Person.find_by_EmailAddress(current_user.email)
+        p = Person.find_by_EmailAddress(Current.user.email)
         if p.nil?
-          flash[:error] = "Current user's email not found in membership database"
-          people = []
-          redirect_to mailings_path
-        else
-          people = [p]
-          logger.info "Test email address: #{p.EmailAddress}"
+          p = add_as_nonmember(Current.user.email)
         end
+        people = [p]
+        logger.info "Test email address: #{p.EmailAddress}"
       else
         @mailing.sent_at = Time.now
         @mailing.save
@@ -116,4 +113,17 @@ class MailingsController < ApplicationController
 
   end
 
+  def add_as_nonmember(email)
+    m = Membership.where(Status: 'Non-member').first
+    if m.nil?
+      m = Membership.new(Status: 'Non-member')
+      m.save(validate: false)
+    end
+    p = Person.new(EmailAddress: email,
+                 subscribe_general: false,
+                 MemberType: 'MailList',
+                 MembershipID: m.id)
+    p.save(validate: false)
+    return p
+  end
 end

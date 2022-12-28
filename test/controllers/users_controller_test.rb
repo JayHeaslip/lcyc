@@ -85,7 +85,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "should not get index" do
     login_as @member, 'passwor3'
-    get users_url
+    get users_url, headers: {'HTTP_REFERER': root_url}
     assert_redirected_to root_url
     assert_not_nil flash[:alert]
   end
@@ -132,7 +132,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "should not delete an user" do
     login_as @member, 'passwor3'
-    delete user_path(@user)
+    delete user_path(@user), headers: {'HTTP_REFERER': root_url}
     assert_redirected_to root_path
     assert_not_nil flash[:alert]
   end

@@ -1,9 +1,9 @@
 <%= form_with url: change_password_path(@user), method: :post do |form| %>
-  <h3>Enter current password:</h3>
+  <h4>Enter current password:</h4>
   <div class="row mb-2" >
-    <%= form.label :current_password, class: "col-sm-2" %>
+    <%= form.label :current_password, class: "col-sm-2 col-form-label" %>
     <%= form.password_field :current_password, required: true, class: "col-sm-3" %>
   </div>
-  <h3>Enter new password:</h3>
+  <h4>Enter new password:</h4>
   <%= render "form", form: form %>
 <% end %>

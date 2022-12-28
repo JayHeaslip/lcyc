@@ -22,7 +22,7 @@ class CommitteesController < ApplicationController
   def download
     @committee = Committee.includes(:people).find(params[:id])
     content = Person.committee_spreadsheet(@committee.people)
-    send_data(content, type: "text/csv", disposition: 'attachment', filename: "#{@committee.Name}_committee.csv")
+    send_data(content, type: "text/csv", filename: "#{@committee.Name}_committee.csv")
   end
 
 end
