@@ -7,7 +7,7 @@
     </div>
     <label for="Status" class="col-form-label pt-0 col-auto">Status:</label>
     <div class="col-sm-2">
-      <% if current_user.roles?(%w(Admin Membership)) %>
+      <% if Current.user.roles?(%w(Admin Membership)) %>
 	<%= f.collection_select :Status, Memberstatus.order(:Status), :Status, :Status, class: "form-control" %>
       <% else %>
 	<%= @membership.Status %>
@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<% if current_user.roles?(%w(Admin Membership)) %>
+<% if Current.user.roles?(%w(Admin Membership)) %>
     <div class="row">
 	<div class="col-sm-3">
 	    <label for="application_date" class="col-form-label pt-0">Approval Date:</label>

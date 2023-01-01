@@ -32,6 +32,8 @@ class RolesController < ApplicationController
         @role.rights << right
     end
     flash[:notice] = "#{@role.name} role was successfully updated." if @role.save
+    logger.info @role.errors.full_messages.to_sentence
+    logger.info flash[:notice]
     redirect_to roles_path
   end
 

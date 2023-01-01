@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates_presence_of     :firstname, :lastname
   validates_length_of       :password, minimum: 6,    if: :validate_password?
 
-  has_and_belongs_to_many :roles
+  belongs_to :role
 
   def admin?
     role?('Admin')
@@ -70,13 +70,12 @@ class User < ApplicationRecord
 
   #Return true if user has the given role
   def role?(role)
-    roles.find_by_name(role)? true : false if roles
+    self.role&.name == role
   end
 
-  #Return true if user has at least one of the given roles
+  #Return true if user has one of the given roles
   def roles?(roles) 
-    #array intersect
-    not (self&.roles.map {|r| r.name} & roles).empty?
+    roles.include?(self.role&.name)
   end
 
   def membership

@@ -3,20 +3,26 @@ class ApplicationController < ActionController::Base
   
   protect_from_forgery with: :exception
 
-  before_action :authenticate_user!, :check_authorization
+  before_action :authenticate_user!
+  before_action :check_authorization
 
   private
 
   def check_authorization
-    if Current.user.nil?
-      flash[:alert] = "Please login."
-      redirect_to login_path
-      false
-    elsif Current.user.role?('Admin')
+    logger.info "admin #{current_user.admin?}"
+    if current_user.admin?
       true
     else
-      unless Current.user&.roles.detect do |role|
-               role.rights.detect do |right|
+      roles = [Current.user.role]
+      # at most, 2 levels of hierarchy in the roles
+      roles << Current.user.role.parent if Current.user.role.parent
+      detect = roles.detect do |r|
+        r.rights.detect do |right|
+          right.action == action_name && right.controller == self.class.controller_path
+        end
+      end
+      unless roles.detect do |r|
+               r.rights.detect do |right|
                  right.action == action_name && right.controller == self.class.controller_path
                end
              end

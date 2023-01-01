@@ -12,3 +12,6 @@ BOG:
 membership:
   name: Membership
   rights: [boat_update, membership_edit, membership_update, person_destroy]
+
+nonmember:
+  name: Non-member

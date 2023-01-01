@@ -2,8 +2,8 @@ require "test_helper"
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @unconfirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "unconfirmed_user@example.com", password: "password", password_confirmation: "password")
-    @confirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "confirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: Time.current)
+    @unconfirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "unconfirmed_user@example.com", password: "password", password_confirmation: "password", role: roles(:BOG))
+    @confirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "confirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: Time.current, role: roles(:BOG))
   end
 
   test "should get login if anonymous" do

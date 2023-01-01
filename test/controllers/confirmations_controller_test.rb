@@ -2,8 +2,9 @@ require "test_helper"
 
 class ConfirmationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @confirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "confirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: 1.week.ago)
-    @unconfirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "unconfirmed_user@example.com", password: "password", password_confirmation: "password")
+    @confirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "confirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: 1.week.ago, role: roles(:member))
+    @unconfirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "unconfirmed_user@example.com",
+                                     password: "password", password_confirmation: "password", role: roles(:member))
   end
 
   test "should confirm unconfirmed user" do

@@ -27,7 +27,7 @@
       </span>
     </div>
   </div>
-  <% if new || (current_user && current_user.role?('Admin')) %>
+  <% if new || (Current.user && Current.user.admin?) %>
     <div class="row mb-2">
       <div class="col-sm-4">
 	<span class="has-float-label" >
@@ -53,7 +53,7 @@
       </div>
     </div>
   <% end %>
-  <% if current_user && current_user.role?('Admin') %>
+  <% if Current.user && Current.user.admin? %>
     <div class="row offset-sm-1 mb-3">
       <div class="form-check mr-4 col-sm-10">
 	<%= check_box_tag :email_confirmed, value="1", false, class: "form-check-input" %>
@@ -62,15 +62,10 @@
     </div>
     <div class="row ms-1 mb-2">
       <div class="col-sm-1">
-	<label>Roles:</label>
+	<label>Role:</label>
       </div>
       <div class="col-sm-4">
-	<% for role in Role.order(:name) %>
-	  <div class="form-check mr-4 col-sm-10">
-	    <%= check_box_tag "role_ids[]", role.id, user.roles.include?(role), class: "form-check-input" %>
-	    <label class="form-check-label"><%= role.name %></label>
-	  </div>
-	<% end %>
+	<%= f.select :role_id, Role.all.collect { |r| [r.name, r.id] } %>
       </div>
     </div>
     </div>  

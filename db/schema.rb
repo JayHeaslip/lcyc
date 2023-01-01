@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_25_212305) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_01_200150) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -272,11 +272,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_25_212305) do
 
   create_table "roles", id: :integer, charset: "latin1", force: :cascade do |t|
     t.string "name"
-  end
-
-  create_table "roles_users", id: false, charset: "latin1", force: :cascade do |t|
-    t.integer "role_id"
-    t.integer "user_id"
+    t.bigint "parent_id"
+    t.index ["parent_id"], name: "index_roles_on_parent_id"
   end
 
   create_table "users", id: :integer, charset: "latin1", force: :cascade do |t|
@@ -288,7 +285,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_25_212305) do
     t.integer "person_id"
     t.string "password_digest"
     t.datetime "confirmed_at"
+    t.bigint "role_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["role_id"], name: "index_users_on_role_id"
   end
 
   create_table "wait_list_entries", id: :integer, charset: "latin1", force: :cascade do |t|

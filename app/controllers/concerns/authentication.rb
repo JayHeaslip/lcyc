@@ -8,6 +8,7 @@ module Authentication
   end
 
   def authenticate_user!
+    logger.info "calling auth user"
     store_location
     redirect_to login_path, alert: "You need to login to access that page." unless user_signed_in?
   end

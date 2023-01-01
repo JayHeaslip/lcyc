@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, only: [:show, :edit, :destroy, :update]
   before_action :redirect_if_authenticated, only: [:new, :create], unless: -> {Current.user&.admin? }
+  skip_before_action :authenticate_user!, only: [:new, :create]
   skip_before_action :check_authorization, only: [:new, :create]
 
   def index
@@ -25,7 +25,11 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @user.person = Person.find_by_EmailAddress(@user.email)
-    @user.roles << Role.find_by_name('Member') if @user.person
+    if @user.person
+      @user.role = Role.find_by_name('Member')
+    else
+      @user.role = Role.find_by_name('Non-member')
+    end
     update_admin_fields(params)
     if @user.save
       if @user.confirmed_at
@@ -41,23 +45,23 @@ class UsersController < ApplicationController
   end
 
   def edit
-    if current_user.admin?
+    if Current.user.admin?
       @user = User.find(params[:id])
     else
-      @user = current_user
+      @user = Current.user
     end
   end
 
   def update
-    if current_user.admin?
+    if Current.user.admin?
       @user = User.find(params[:id])
     else
-      @user = current_user
+      @user = Current.user
     end
     update_admin_fields(params)
     if @user.update(user_params)
       flash[:notice] = 'User was successfully updated.'
-      if current_user.admin?
+      if Current.user.admin?
         redirect_to users_path
       else
         redirect_to user_path(@user)
@@ -92,7 +96,7 @@ class UsersController < ApplicationController
   def update_admin_fields(params)
     if Current.user&.admin?
       @user.confirmed_at = Time.now if params[:email_confirmed]
-      @user.role_ids = params[:role_ids]
+      @user.role = Role.find(params[:user][:role_id])
     end
   end
 end

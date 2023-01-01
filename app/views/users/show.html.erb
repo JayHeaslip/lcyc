@@ -14,19 +14,17 @@
       <td><b>Email: </b></td>
       <td><%= @user.email %></td>
     </tr>
-    <% unless @user.roles.nil? %>
+    <% unless @user.role.nil? %>
       <tr class="compact">
-	<td><b>Roles: </b></td>
-	<% for role in @user.roles.sort {|a,b| a.name <=> b.name} %>
-	  <td><%= role.name %></td>
-	<% end %>
+	<td><b>Role: </b></td>
+	<td><%= @user.role.name %></td>
       </tr>
     <% end %>
   </table>
 
   <p>
     <%= link_to 'Edit', edit_user_path(@user) %>
-    <% if current_user&.role?('Admin') %>
+    <% if Current.user.admin? %>
       | <%= link_to 'Back', users_path %>
     <% end %>
   </p>

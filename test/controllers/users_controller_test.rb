@@ -2,8 +2,8 @@ require "test_helper"
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @confirmed_user = User.create!(firstname: 'bob', lastname: 'bob', email: "confirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: Time.current)
-    @unconfirmed_user = User.create!(firstname: 'bob', lastname: 'bob', email: "unconfirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: nil)
+    @confirmed_user = User.create!(firstname: 'bob', lastname: 'bob', email: "confirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: Time.current, role: roles(:BOG))
+    @unconfirmed_user = User.create!(firstname: 'bob', lastname: 'bob', email: "unconfirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: nil, role: roles(:BOG))
 
     @member = users(:three)
     @user = users(:two)

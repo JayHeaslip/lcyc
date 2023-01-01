@@ -17,7 +17,7 @@ class MailingsController < ApplicationController
 
   def new
     @mailing = Mailing.new
-    @mailing.replyto = current_user.email
+    @mailing.replyto = Current.user.email
     @mailing.html = true
     @committees = ['All'].concat(Committee.names)
     check_delayed_job

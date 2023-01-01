@@ -4,11 +4,6 @@ require 'prawn/measurement_extensions'
 class MembershipsController < ApplicationController
 
   helper_method :sort_column, :sort_direction, :mooring_sort_column
-  before_action :get_membership, except: [:index, :list, 
-                                          :new, :create, :destroy, 
-                                          :labels, :download_labels,
-                                          :spreadsheets, :download_spreadsheet, :initiation_report]
-  before_action :authorize, only: [:edit, :update, :associate, :save_association, :rmboat]
 
   def index
     @status_options = %w(Accepted Active Associate Honorary Inactive Life Resigned Senior)
@@ -41,6 +36,7 @@ class MembershipsController < ApplicationController
   end
 
   def wladd
+    @membership = Membership.find(params[:id])
     @wl = WaitListEntry.new
     @wl.membership = @membership
     @wl.date = @membership.application_date
@@ -49,6 +45,7 @@ class MembershipsController < ApplicationController
   end
 
   def show
+    @membership = Membership.find(params[:id])
     @membership.people.sort
   end
 
@@ -138,7 +135,7 @@ class MembershipsController < ApplicationController
   end
 
   def unassign_drysail
-    @membership1 = Membership.find(params[:id])
+    @membership = Membership.find(params[:id])
     drysail = @membership.drysail
     @membership.drysail = nil
     if @membership.save
@@ -185,30 +182,6 @@ class MembershipsController < ApplicationController
   end
   
   private
-
-  def get_membership
-    if current_user.roles?(%w(Admin BOG Membership))
-      @membership = Membership.find(params[:id])
-    else
-      @membership = Membership.find(current_user.membership)
-    end
-  end
-  
-  # required because BOG is allowed to look at other membership data, but not alter it
-  # for the Member role get_membership covers this
-  def authorize
-    if not current_user.roles?(%w(Admin Membership Harbormaster)) #BOG
-      if current_user.membership && current_user.membership != params[:id].to_i
-        flash[:error] = "You are not authorized to view the page you requested."
-        request.env["HTTP_REFERER" ] ? (redirect_to :back) : (redirect_to root_path)
-        return false
-      else
-        return true
-      end
-    else
-      return true
-    end
-  end
 
   def sort_column
     Membership.column_names.include?(params[:sort]) ? params[:sort] : "LastName"

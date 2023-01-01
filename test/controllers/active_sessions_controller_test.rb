@@ -3,8 +3,7 @@ require "test_helper"
 class ActiveSessionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @admin = Role.find_by_name("Admin")
-    @confirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "confirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: Time.current)
-    @confirmed_user.roles << @admin
+    @confirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "confirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: Time.current, role: @admin)
   end
 
   test "should destroy all active sessions" do

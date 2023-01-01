@@ -12,7 +12,7 @@ clean up database (resigned members, boats with no owners, etc., users that are 
 non-transparent updates
 -------------------------------------------------------------------
 5) test flows with roles
-   save rights for later reload
+   save rights for later reload - seed?
 5.5) have only 1 role to check, make [Membership, Communications, Treasurer, Harbormaster] a superset of the BOG role
 6) regenerate migrations
    reload old database & check
