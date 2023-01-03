@@ -11,10 +11,10 @@ class Right < ApplicationRecord
   # Right.synchronize_with_controllers
   
   def self.synchronize_with_controllers
-    # Load all the controller files (except application, admin, unsubscribe, passwords, sessions, active_sessions)
+    # Load all the controller files (except application, admin, confirmations, unsubscribe, passwords, sessions, active_sessions)
     controller_files = Dir[Rails.root.to_s + "/app/controllers/*_controller.rb"].reject do |e|
-      e =~ /\/application_controller.rb/ || e =~ /\/admin_controller.rb/ || e =~ /\/unsubscribe_controller.rb/ ||
-      e =~ /\/passwords_controller.rb/ || e =~ /\/sessions_controller.rb/ || e =~ /\/active_sessions_controller.rb/
+      e =~ /\/application_controller.rb/ || e =~ /\/admin_controller.rb/ || e =~ /\/unsubscribe_controller.rb/ || e =~ /\/confirmations_controller.rb/ ||
+      e =~ /\/passwords_controller.rb/ || e =~ /\/sessions_controller.rb/ || e =~ /\/active_sessions_controller.rb/ || e =~ /\/roles_controller.rb/
     end
     
     # we need to load all the controllers...

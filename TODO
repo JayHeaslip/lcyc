@@ -13,7 +13,6 @@ non-transparent updates
 -------------------------------------------------------------------
 5) test flows with roles
    save rights for later reload - seed?
-5.5) have only 1 role to check, make [Membership, Communications, Treasurer, Harbormaster] a superset of the BOG role
 6) regenerate migrations
    reload old database & check
 7) write script to run after migrations to fix everything up
@@ -51,6 +50,7 @@ Done
 3) sortable mooring/depth on mooring index
 4) add treasurer role
    assign a shared mooring - associate another member with the boat
+5.5) have only 1 role to check, make [Membership, Communications, Treasurer, Harbormaster] a superset of the BOG role
 
 deploy
 -----------

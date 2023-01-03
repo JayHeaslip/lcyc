@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby "3.1.2"
+ruby "3.2.0"
 
 gem "rails", "~> 7.0.4"
 gem "sprockets-rails", require: 'sprockets/railtie'
@@ -35,7 +35,7 @@ gem "bootsnap", require: false
 
 gem "sassc-rails"
 
-# fro QB interface
+# for QB interface
 gem "qbo_api"
 gem "rack-oauth2"
 

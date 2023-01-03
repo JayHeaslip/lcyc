@@ -52,13 +52,12 @@
 	<div class="col-sm mb-1">
 	  <span class="has-float-label">
 	    <%= f.text_field :CellPhone, id: :CellPhone, class: "form-control", placeholder: " " %>
-			<label for="CellPhone">Cell Phone</label>
+	    <label for="CellPhone">Cell Phone</label>
 	  </span>
 	</div>
-	<div class="col-sm-4">
-	  <label for="Committee", class="col-form-label">Committee:</label>
+	<label for="Committee", class="col-auto col-form-label">Committee:</label>
+	<div class="col-sm-2 mt-1">
 	  <%= f.collection_select :Committee1, Committee.all, :Name, :Name, class: "form-control", include_blank: true %>
-		    </inline>
 	</div>
       </div>
     <% end %>

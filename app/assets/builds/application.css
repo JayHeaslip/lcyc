@@ -18530,3 +18530,11 @@ th .desc {
 hr {
   border-top: 2px solid #8b8c8c;
 }
+
+.bg-BOG {
+  background-color: #e9ecef;
+}
+
+.bg-Membership {
+  background-color: #adb5bd;
+}

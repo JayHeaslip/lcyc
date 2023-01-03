@@ -34,10 +34,4 @@ class RolesIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal flash[:notice], "#{@role.name} role was successfully updated."
   end
 
-  test "delete role" do
-    delete role_url(@role)
-    assert_redirected_to roles_url
-    assert_equal flash[:notice], "Deleted #{@role.name} role."
-  end
-
 end  

@@ -66,7 +66,7 @@ class MembershipsController < ApplicationController
       flash[:alert] = (flash[:alert] || '') + @membership.update_drysail_and_mooring(b)
     end
     if @membership.save
-      flash[:alert] = nil if flash[:alert].blank?
+      flash.delete(:alert) if flash[:alert].blank?
       flash[:success] = 'Membership was successfully updated.'
       redirect_to membership_path(@membership)
     else

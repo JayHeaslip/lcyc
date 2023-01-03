@@ -194,7 +194,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_01_200150) do
     t.integer "drysail_num"
     t.text "notes"
     t.date "resignation_date"
-    t.bigint "mooring_id"
+    t.integer "mooring_id"
     t.index ["Boat"], name: "Boat"
     t.index ["mooring_id"], name: "index_memberships_on_mooring_id"
   end
@@ -272,7 +272,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_01_200150) do
 
   create_table "roles", id: :integer, charset: "latin1", force: :cascade do |t|
     t.string "name"
-    t.bigint "parent_id"
+    t.integer "parent_id"
     t.index ["parent_id"], name: "index_roles_on_parent_id"
   end
 
@@ -303,4 +303,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_01_200150) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "initiation_installments", "memberships"
   add_foreign_key "memberships", "boats", column: "Boat", name: "memberships_ibfk_1", on_delete: :nullify
+  add_foreign_key "memberships", "moorings"
+  add_foreign_key "roles", "roles", column: "parent_id"
 end

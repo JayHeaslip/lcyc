@@ -6,7 +6,7 @@ class FixMooring < ActiveRecord::Migration[7.0]
     end
     
     change_table :memberships do |t|
-      t.belongs_to :mooring, index: true, null: true
+      t.belongs_to :mooring, type: :integer, index: true, null: true
     end
     
     add_foreign_key :memberships, :moorings

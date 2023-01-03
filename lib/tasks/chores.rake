@@ -39,7 +39,7 @@ namespace :chores do
 
   desc "Dump roles/rights"
   task dump_rights: :environment do
-    Role.find(:all).each do |role|
+    Role.all.each do |role|
       File.open("#{Rails.root}/#{role.name}.rights","w") do |f|
         role.rights.each do |r|
           f.puts "\"#{r.controller}\",\"#{r.action}\""
@@ -74,6 +74,7 @@ namespace :chores do
   task load_rights: :environment do
     Dir.glob("#{Rails.root}/*.rights").each do |f|
       role = Role.find_by_name(File.basename(f,".rights"))
+      role.rights = []
       File.open(f).each do |l|
         if l =~ /"(\S+)","(\S+)"/
           right = Right.find_by_controller_and_action($1,$2)

@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   end
 
   
-  resources :roles, :except => [:new] do
+  resources :roles, :except => [:new, :destroy] do
     resources :users do
       member do
         delete :rmrole
