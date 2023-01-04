@@ -11,22 +11,11 @@ clean up database (resigned members, boats with no owners, etc., users that are 
 
 non-transparent updates
 -------------------------------------------------------------------
-5) test flows with roles
-   save rights for later reload - seed?
-6) regenerate migrations
-   reload old database & check
-7) write script to run after migrations to fix everything up
-   update_membership_mooring.rb
-   update_membership_drysail.rb
-   update_person_committee.rb
-   add_treasurer_role.rb
-   Right.synchronize_with_controllers then reload rights
-   cleanup boats/assign mooring & drysail
-   check Member role for every user
 7.5) Check mail template   
 8) check with Doug on viewing old mail
-8.5) Deploy
 10) Add log info update email
+11) Add active session index
+12) Check log info
 
 later
 -----------
@@ -51,6 +40,19 @@ Done
 4) add treasurer role
    assign a shared mooring - associate another member with the boat
 5.5) have only 1 role to check, make [Membership, Communications, Treasurer, Harbormaster] a superset of the BOG role
+5) test flows with roles
+   save rights for later reload - seed?
+6) regenerate migrations
+   reload old database & check
+7) write script to run after migrations to fix everything up
+   update_membership_mooring.rb
+   update_membership_drysail.rb
+   update_person_committee.rb
+   add_treasurer_role.rb
+   Right.synchronize_with_controllers then reload rights
+   cleanup boats/assign mooring & drysail
+   check Member role for every user
+8.5) Deploy
 
 deploy
 -----------
