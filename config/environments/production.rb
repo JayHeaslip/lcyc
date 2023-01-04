@@ -95,9 +95,6 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  cfg = YAML::load(IO.read("#{config.root}/config/database.yml"))
-  gmailpw = cfg['gmailpw']
-
   config.action_mailer.default_url_options = { host: "members.lcyc.info" }
 
   config.action_mailer.smtp_settings = {
@@ -105,7 +102,7 @@ Rails.application.configure do
 	 :port        	       => 587,
 	 :domain      	       => 'members.lcyc.info',
 	 :user_name   	       => 'lcyc@members.lcyc.info',
-	 :password    	       => gmailpw,
+	 :password    	       => Rails.application.credentials.gmailpw,
 	 :authentication       => 'plain',
          :enable_starttls_auto => true
   }
