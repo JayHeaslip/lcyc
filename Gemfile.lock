@@ -327,6 +327,7 @@ DEPENDENCIES
   ed25519 (~> 1.2)
   jsbundling-rails
   listen (>= 3.0.5, < 3.2)
+  matrix
   mysql2
   prawn
   puma (~> 5.6)
