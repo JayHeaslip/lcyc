@@ -11,7 +11,6 @@ class BoatsController < ApplicationController
   end
 
   def destroy
-    logger.info "referrer #{request.referrer}"
     @boat = Boat.find(params[:id])
     if @boat.memberships.size > 1
       @membership = Membership.find(params[:membership_id])

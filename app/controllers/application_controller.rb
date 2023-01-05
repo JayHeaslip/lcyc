@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
   private
 
   def check_authorization
-    logger.info "admin #{current_user.admin?}"
     if current_user.admin?
       true
     else
