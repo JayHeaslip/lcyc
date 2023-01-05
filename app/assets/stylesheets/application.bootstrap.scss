@@ -1,6 +1,7 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-icons/font/bootstrap-icons';
-@import "float-label";
+@import 'float-label';
+@import 'actiontext';
 
 html {
 position: relative;
@@ -220,5 +221,4 @@ hr {
     background-color: $gray-500;
 }
 
-@import 'actiontext.scss';
 
