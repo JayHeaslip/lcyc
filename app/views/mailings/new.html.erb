@@ -3,7 +3,7 @@
 <%= form_for @mailing, html: {multipart: true}  do |f| %>
   <%= render partial: "form", locals: { f: f } %>
 
-  <div class="form-group row mt-3">
+  <div class="row mt-3">
     <div class="col-sm-3">
       <button type="submit" class="btn btn-primary">Create</button> | <%= link_to 'Back', mailings_path %>
     </div>

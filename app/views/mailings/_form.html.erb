@@ -11,20 +11,20 @@
 </div>
 <% end %>
 <div class="row pb-2">
-  <label for="committee" class="col-form-label pt-0">Committee: </label>
-  <div>
+  <label for="committee" class="col-form-label col-auto pt-0">Committee: </label>
+  <div class="col-sm-3">
     <%= f.select :committee, @committees, class: "form-control" %>
   </div>
 </div>
 <div class="row pb-2">
-  <label for="subject" class="col-form-label col-sm-1">Subject: </label>
-  <div>
-    <%= f.text_field :subject, size: 30, class: "form-control" %>
+  <label for="subject" class="col-form-label col-auto">Subject: </label>
+  <div class="col-sm-4">
+    <%= f.text_field :subject, size: 30, class: "form-control col-sm-3" %>
   </div>
 </div>
 <div class="row pb-2">
-  <label for="subject" class="col-form-label col-sm-1">Reply to: </label>
-  <div>
+  <label for="subject" class="col-form-label col-auto">Reply to: </label>
+  <div class="col-sm-3">
     <%= f.text_field :replyto, size: 30, class: "form-control" %>
   </div>
 </div>
