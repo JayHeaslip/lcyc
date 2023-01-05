@@ -220,7 +220,7 @@ hr {
     background-color: $gray-500;
 }
 
-@import "trix/dist/trix.css";
+@import "trix";
 
 .trix-content .attachment-gallery > action-text-attachment,
 .trix-content .attachment-gallery > .attachment {
