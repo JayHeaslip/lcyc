@@ -27,6 +27,21 @@ class MailRobot < ApplicationMailer
          subject: tag + mailing.subject)
   end
 
+  def loginfo(url_options, to, cc, membership_chair, membership, boat, member, partner, children)
+    ActiveStorage::Current.url_options = url_options
+    @membership_chair = membership_chair
+    @membership = membership
+    @boat = boat
+    @member = member
+    @partner = partner
+    @children = children
+    mail(to: to,
+         cc: cc,
+         from: 'LCYC Announcements <lcyc@members.lcyc.info>',
+         reply_to: 'lcycsecretary@gmail.com',
+         subject: '[LCYC] Log info verification')
+  end
+
   def dbbackup(backup)
     attachments["sqldump.sql.gz"] = File.read(backup)
     mail(to: 'lcycadmin@gmail.com', subject: 'Database backup')

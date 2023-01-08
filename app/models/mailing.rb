@@ -5,5 +5,7 @@ class Mailing < ApplicationRecord
 
   scope :nulls_first, -> { order(Arel.sql("sent_at IS NOT NULL")) }
   scope :sorted, -> { nulls_first.order(sent_at: :desc, created_at: :desc) }
+
+  attr_accessor :membership_chair
   
 end

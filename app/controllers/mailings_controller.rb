@@ -3,6 +3,7 @@ class MailingsController < ApplicationController
   include ActiveStorage::SetCurrent
   
   skip_before_action :authenticate_user!, :check_authorization, only: [:deliver_mail]
+  before_action :check_delayed_job, only: [:new, :show, :loginfo]
   
   def index
     @mailings = Mailing.sorted
@@ -12,7 +13,6 @@ class MailingsController < ApplicationController
     @mailing = Mailing.find(params[:id])
     @test = true
     @filter_emails = false
-    check_delayed_job
   end
 
   def new
@@ -20,7 +20,6 @@ class MailingsController < ApplicationController
     @mailing.replyto = Current.user.email
     @mailing.html = true
     @committees = ['All'].concat(Committee.names)
-    check_delayed_job
   end
 
   def create
@@ -55,6 +54,40 @@ class MailingsController < ApplicationController
     Mailing.destroy(params[:id])
     redirect_to mailings_path
   end
+
+  def loginfo
+    @membership_chair = session[:membership_chair]
+    if request.post?
+      session[:membership_chair] = params[:membership_chair]
+      if params[:test]
+        memberships = [Membership.find(407)]
+      else
+        memberships = Membership.member
+      end
+      memberships.each_with_index do |m, i|
+        if params[:test]
+          to = Current.user.email
+          cc = nil
+        else
+          to = m.people.where('MemberType = "Member"').EmailAddress.first
+          cc = m.people.where('MemberType = "Partner"').EmailAddress.first
+        end
+        partner_info = m.partner_info[0].split("\t")
+        MailRobot.loginfo(ActiveStorage::Current.url_options, to, cc, @membership_chair, m,
+                          m.boat_info, m.member_info, partner_info, m.children_info).deliver_later(wait_until: (i*30).seconds.from_now)
+      end
+      flash[:notice] = "Log info emails sent."
+      redirect_to root_url
+    else
+      @m = Membership.find(407)
+      @boat_info = @m.boat_info
+      @member_info = @m.member_info
+      @partner_info = @m.partner_info[0].split("\t")
+      @children_info = @m.children_info
+      session[:referrer] = request.referrer
+    end
+  end
+
   
   def send_email
     @mailing = Mailing.find(params[:id])
