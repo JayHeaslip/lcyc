@@ -1,6 +1,10 @@
 class ActiveSessionsController < ApplicationController
   before_action :authenticate_user!
 
+  def index
+    @active_sessions = ActiveSession.all
+  end
+  
   def destroy
     @active_session = Current.user.active_sessions.find(params[:id])
     @active_session.destroy

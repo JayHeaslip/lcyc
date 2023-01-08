@@ -1,0 +1,22 @@
+<h2>Active Sessions</h2>
+
+<table class="table table-sm table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>User</th>
+      <th>Updated At</th>
+      <th>Agent</th>
+      <th>IP Address</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for session in @active_sessions %>
+      <tr scope="row">
+	<td><%= User.find(session.user_id)&.email %></td>
+	<td><%= session.updated_at %></td>
+        <td><%= session.user_agent %></td>
+        <td><%= session.ip_address %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

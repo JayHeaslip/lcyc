@@ -114,7 +114,7 @@ Rails.application.routes.draw do
   get "loginfo_mailing", to: "mailings#loginfo"
   post "loginfo_mailing", to: "mailings#loginfo"
 
-  resources :active_sessions, only: [:destroy] do
+  resources :active_sessions, only: [:index, :destroy] do
     collection do
       delete "destroy_all"
     end
