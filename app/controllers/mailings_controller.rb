@@ -58,26 +58,36 @@ class MailingsController < ApplicationController
   def loginfo
     @membership_chair = session[:membership_chair]
     if request.post?
-      session[:membership_chair] = params[:membership_chair]
-      if params[:test]
-        memberships = [Membership.find(407)]
+      if params[:membership_chair].blank?
+        flash.now[:error] = "Membership chair cannot be blank."
+        @m = Membership.find(407)
+        @boat_info = @m.boat_info
+        @member_info = @m.member_info
+        @partner_info = @m.partner_info[0].split("\t")
+        @children_info = @m.children_info
+        render :loginfo, status: :unprocessable_entity
       else
-        memberships = Membership.member
-      end
-      memberships.each_with_index do |m, i|
+        session[:membership_chair] = params[:membership_chair]
         if params[:test]
-          to = Current.user.email
-          cc = nil
+          memberships = [Membership.find(407)]
         else
-          to = m.people.where('MemberType = "Member"').EmailAddress.first
-          cc = m.people.where('MemberType = "Partner"').EmailAddress.first
+          memberships = Membership.member
         end
-        partner_info = m.partner_info[0].split("\t")
-        MailRobot.loginfo(ActiveStorage::Current.url_options, to, cc, @membership_chair, m,
-                          m.boat_info, m.member_info, partner_info, m.children_info).deliver_later(wait_until: (i*30).seconds.from_now)
+        memberships.each_with_index do |m, i|
+          if params[:test]
+            to = Current.user.email
+            cc = nil
+          else
+            to = m.people.where('MemberType = "Member"').EmailAddress.first
+            cc = m.people.where('MemberType = "Partner"').EmailAddress.first
+          end
+          partner_info = m.partner_info[0].split("\t")
+          MailRobot.loginfo(ActiveStorage::Current.url_options, to, cc, @membership_chair, m,
+                            m.boat_info, m.member_info, partner_info, m.children_info).deliver_later(wait_until: (i*30).seconds.from_now)
+        end
+        flash[:notice] = "Log info emails sent."
+        redirect_to root_url
       end
-      flash[:notice] = "Log info emails sent."
-      redirect_to root_url
     else
       @m = Membership.find(407)
       @boat_info = @m.boat_info

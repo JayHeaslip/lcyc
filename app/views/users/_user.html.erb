@@ -56,7 +56,7 @@
   <% if Current.user && Current.user.admin? %>
     <div class="row offset-sm-1 mb-3">
       <div class="form-check mr-4 col-sm-10">
-	<%= check_box_tag :email_confirmed, value="1", false, class: "form-check-input" %>
+	<%= check_box_tag :email_confirmed, value="1", !@user.confirmed_at.nil?, class: "form-check-input" %>
 	<label for="email_confirmed" class="form-check-label">Confirm Email?</label>
       </div>
     </div>

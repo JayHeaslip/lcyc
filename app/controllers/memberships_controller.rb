@@ -33,6 +33,7 @@ class MembershipsController < ApplicationController
   end
 
   def wl
+    @membership = Membership.find(params[:id])
   end
 
   def wladd
@@ -75,7 +76,7 @@ class MembershipsController < ApplicationController
   end
 
   def destroy
-    @membership  = Membership.find(params[:id])
+    @membership = Membership.find(params[:id])
     @membership.destroy
     flash[:success] = 'Membership was successfully deleted.'
     redirect_to memberships_path
@@ -120,7 +121,6 @@ class MembershipsController < ApplicationController
       render :associate, status: :unprocessable_entity
     end
   end
-
 
   def unassign
     @membership = Membership.find(params[:id])
