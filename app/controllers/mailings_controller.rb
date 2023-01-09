@@ -60,18 +60,15 @@ class MailingsController < ApplicationController
     if request.post?
       if params[:membership_chair].blank?
         flash.now[:error] = "Membership chair cannot be blank."
-        @m = Membership.find(407)
-        @boat_info = @m.boat_info
-        @member_info = @m.member_info
-        @partner_info = @m.partner_info[0].split("\t")
-        @children_info = @m.children_info
+        set_loginfo_variables
         render :loginfo, status: :unprocessable_entity
       else
         session[:membership_chair] = params[:membership_chair]
         if params[:test]
-          memberships = [Membership.find(407)]
+          memberships = [Person.find_by_EmailAddress(Current.user.email).membership]
+          memberships = [Membership.find(407)] if memberships.empty?
         else
-          memberships = Membership.member
+          memberships = Membership.members
         end
         memberships.each_with_index do |m, i|
           if params[:test]
@@ -89,11 +86,8 @@ class MailingsController < ApplicationController
         redirect_to root_url
       end
     else
-      @m = Membership.find(407)
-      @boat_info = @m.boat_info
-      @member_info = @m.member_info
-      @partner_info = @m.partner_info[0].split("\t")
-      @children_info = @m.children_info
+      set_loginfo_variables
+      @test = true
       session[:referrer] = request.referrer
     end
   end
@@ -169,4 +163,14 @@ class MailingsController < ApplicationController
     p.save(validate: false)
     return p
   end
+
+  def set_loginfo_variables
+    @m = Person.find_by_EmailAddress(Current.user.email).membership
+    @m = Membership.find(407) if @m.nil?
+    @boat_info = @m.boat_info
+    @member_info = @m.member_info
+    @partner_info = @m.partner_info[0].split("\t")
+    @children_info = @m.children_info
+  end
+    
 end
