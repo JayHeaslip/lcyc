@@ -201,11 +201,11 @@ background-position: right center;
 }
 
 th .asc {
-    background-image: image-url('up.gif')
+    background-image: url('up.gif');
 }
 
 th .desc {
-    background-image: image-url('down.gif')
+    background-image: url('down.gif');
 }
 
 hr {
