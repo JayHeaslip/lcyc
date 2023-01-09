@@ -18519,11 +18519,11 @@ th .current {
 }
 
 th .asc {
-  background-image: asset-url("up.gif");
+  background-image: image-url("up.gif");
 }
 
 th .desc {
-  background-image: asset-url("down.gif");
+  background-image: image-url("down.gif");
 }
 
 hr {
