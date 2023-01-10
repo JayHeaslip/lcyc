@@ -283,4 +283,13 @@ class Membership < ApplicationRecord
     end
   end
 
+  def remove_boat_from_mooring
+    self.boats.each do |b|
+      if b.location == "Mooring"
+        b.location = ""
+        b.mooring = nil
+      end
+    end
+  end
+
 end

@@ -62,6 +62,7 @@ class MembershipsController < ApplicationController
     unless @membership.mooring_eligible
       flash[:alert] = 'Mooring removed due to membership category update.' if !@membership.mooring.nil?
       @membership.mooring = nil
+      @membership.remove_boat_from_mooring
     end
     @membership.boats.each do |b|
       flash[:alert] = (flash[:alert] || '') + @membership.update_drysail_and_mooring(b)
@@ -126,6 +127,7 @@ class MembershipsController < ApplicationController
     @membership = Membership.find(params[:id])
     mooring_id = @membership.mooring_id
     @membership.mooring = nil
+    @membership.remove_boat_from_mooring
     if @membership.save
       flash[:notice] = "Mooring ##{mooring_id} unassigned."
     else
