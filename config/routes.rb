@@ -120,4 +120,6 @@ Rails.application.routes.draw do
     end
   end
 
+  get "summary_report", to: "reports#summary"
+  
 end
