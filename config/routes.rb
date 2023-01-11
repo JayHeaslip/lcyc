@@ -121,5 +121,6 @@ Rails.application.routes.draw do
   end
 
   get "summary_report", to: "reports#summary"
+  get "history_report", to: "reports#history"
   
 end
