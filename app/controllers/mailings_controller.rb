@@ -17,7 +17,7 @@ class MailingsController < ApplicationController
 
   def new
     @mailing = Mailing.new
-    @mailing.replyto = Current.user.email
+    @mailing.replyto = current_user.email
     @mailing.html = true
     @committees = ['All'].concat(Committee.names)
   end
@@ -65,14 +65,14 @@ class MailingsController < ApplicationController
       else
         session[:membership_chair] = params[:membership_chair]
         if params[:test]
-          memberships = [Person.find_by_EmailAddress(Current.user.email).membership]
+          memberships = [Person.find_by_EmailAddress(current_user.email).membership]
           memberships = [Membership.find(407)] if memberships.empty?
         else
           memberships = Membership.members
         end
         memberships.each_with_index do |m, i|
           if params[:test]
-            to = Current.user.email
+            to = current_user.email
             cc = nil
           else
             to = m.people.where('MemberType = "Member"').EmailAddress.first
@@ -105,9 +105,9 @@ class MailingsController < ApplicationController
       people = Person.email_list(@mailing.committee, @filter_emails)
       people.each {|e| logger.info "General email: #{e.EmailAddress}" }
       if params[:test]
-        p = Person.find_by_EmailAddress(Current.user.email)
+        p = Person.find_by_EmailAddress(current_user.email)
         if p.nil?
-          p = add_as_nonmember(Current.user.email)
+          p = add_as_nonmember(current_user.email)
         end
         people = [p]
         logger.info "Test email address: #{p.EmailAddress}"
@@ -165,7 +165,7 @@ class MailingsController < ApplicationController
   end
 
   def set_loginfo_variables
-    @m = Person.find_by_EmailAddress(Current.user.email).membership
+    @m = Person.find_by_EmailAddress(current_user.email).membership
     @m = Membership.find(407) if @m.nil?
     @boat_info = @m.boat_info
     @member_info = @m.member_info

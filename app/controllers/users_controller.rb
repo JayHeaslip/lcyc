@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :redirect_if_authenticated, only: [:new, :create], unless: -> {Current.user&.admin? }
+  before_action :redirect_if_authenticated, only: [:new, :create], unless: -> {current_user&.admin? }
   skip_before_action :authenticate_user!, only: [:new, :create]
   skip_before_action :check_authorization, only: [:new, :create]
 
@@ -45,23 +45,25 @@ class UsersController < ApplicationController
   end
 
   def edit
-    if Current.user.admin?
+    if current_user.admin?
       @user = User.find(params[:id])
+      @active_sessions = @user.active_sessions.order(created_at: :desc)
     else
-      @user = Current.user
+      @user = current_user
+      @active_sessions = @user.active_sessions.order(created_at: :desc)
     end
   end
 
   def update
-    if Current.user.admin?
+    if current_user.admin?
       @user = User.find(params[:id])
     else
-      @user = Current.user
+      @user = current_user
     end
     update_admin_fields(params)
     if @user.update(user_params)
       flash[:notice] = 'User was successfully updated.'
-      if Current.user.admin?
+      if current_user.admin?
         redirect_to users_path
       else
         redirect_to user_path(@user)
@@ -94,7 +96,7 @@ class UsersController < ApplicationController
   end
 
   def update_admin_fields(params)
-    if Current.user&.admin?
+    if current_user&.admin?
       @user.confirmed_at = Time.now if params[:email_confirmed]
       @user.role = Role.find(params[:user][:role_id])
     end

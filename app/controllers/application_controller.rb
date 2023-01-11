@@ -12,9 +12,9 @@ class ApplicationController < ActionController::Base
     if current_user.admin?
       true
     else
-      roles = [Current.user.role]
+      roles = [current_user.role]
       # at most, 2 levels of hierarchy in the roles
-      roles << Current.user.role.parent if Current.user.role.parent
+      roles << current_user.role.parent if current_user.role.parent
       detect = roles.detect do |r|
         r.rights.detect do |right|
           right.action == action_name && right.controller == self.class.controller_path

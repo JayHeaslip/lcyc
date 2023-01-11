@@ -16,9 +16,6 @@
 	<td><%= session.updated_at %></td>
         <td><%= session.user_agent %></td>
         <td><%= session.ip_address %></td>
-	<td class="list-actions">
-	  <%= link_to 'Delete', session, data: { turbo_confirm: 'Are you sure?', turbo_method: :delete} %>
-	</td>
       </tr>
     <% end %>
   </tbody>

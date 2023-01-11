@@ -30,7 +30,7 @@ class PasswordsController < ApplicationController
   end
 
   def change
-    @user = Current.user
+    @user = current_user
     if request.post?
       if User.authenticate_by(email: @user.email, password: params[:current_password])
         if @user.update(password_params)
