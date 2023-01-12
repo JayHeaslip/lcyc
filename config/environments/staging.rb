@@ -51,6 +51,9 @@ Rails.application.configure do
   # when problems arise.
   config.log_level = :debug
 
+    # Store uploaded files on the local file system (see config/storage.yml for options).
+  config.active_storage.service = :local
+
   # Prepend all log lines with the following tags.
   config.log_tags = [
     -> request { request.cookie_jar.signed[:user_email] }
