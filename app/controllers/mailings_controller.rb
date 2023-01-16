@@ -147,7 +147,6 @@ class MailingsController < ApplicationController
 
   def mailing_params
     params.require(:mailing).permit(:committee, :subject, :replyto, :content)
-
   end
 
   def add_as_nonmember(email)
