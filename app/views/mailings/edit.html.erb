@@ -1,11 +1,11 @@
 <h2>Edit Mailing</h2>
 
-<%= form_for @mailing, method: "patch" do |f| %>
+<%= form_with model: @mailing, method: "patch" do |f| %>
   <%= render partial: "form", locals: { f: f } %>
 
   <div class="row mt-3">
     <div class="col-sm-3">
-      <button type="submit" class="btn btn-primary">Update</button> | <%= link_to 'Back', mailing_path(@mailing) %>
+      <%= f.submit "Update", class: "btn btn-primary", data: {disable_with: false} %> | <%= link_to 'Back', mailing_path(@mailing) %>
     </div>
   </div>
 <% end %>

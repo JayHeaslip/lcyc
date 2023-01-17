@@ -1,4 +1,4 @@
-<%= form_for @boat do |f| %>
+<%= form_with model: @boat do |f| %>
 <% if @boat.errors.any? %>
 <div id="error_explanation">
   <h3><%= pluralize(@boat.errors.count, "error") %>

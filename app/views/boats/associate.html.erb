@@ -1,5 +1,5 @@
 <h2>Associate membership with boat</h2>
-<%= form_for :boat, url: save_association_boat_path do |f| %>
+<%= form_with model: @boat, url: save_association_boat_path do |f| %>
 <div class="form-row">
   <p><b>Name: </b><%= @boat.Name %>&nbsp;&nbsp;<b>Mfg_Size: </b><%= @boat.Mfg_Size %></p>
 </div>

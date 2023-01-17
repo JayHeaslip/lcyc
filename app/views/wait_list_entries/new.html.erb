@@ -1,6 +1,6 @@
 <h2>New Wait List Entry</h2>
 
-<%= form_for @wait_list_entry do |f| %>
+<%= form_with model: @wait_list_entry do |f| %>
   <div class="row">
     <label for="Membership" class="col-form-label-sm col-sm-2 pt-2">Membership:</label>
     <div class="col-sm-4">
