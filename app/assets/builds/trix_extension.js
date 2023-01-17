@@ -5339,7 +5339,7 @@
   addEventListener("trix-action-invoke", (event) => {
     if (event.actionName == "x-horizontal-rule") {
       const { editor } = event.target;
-      const attachment = new kn.Attachment({ content: "<hr>", contentType: "application/vnd.trix.horizontal-rule.html" });
+      const attachment = new kn.Attachment({ content: "<hr/>", contentType: "application/vnd.rubyonrails.horizontal-rule.html" });
       editor.insertAttachment(attachment);
     }
   });

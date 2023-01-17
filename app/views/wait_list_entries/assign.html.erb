@@ -1,4 +1,4 @@
-<%= form_for @wait_list_entry, url: mooring_update_wait_list_entry_path(@wait_list_entry) do |f| %>
+<%= form_with model: @wait_list_entry, url: mooring_update_wait_list_entry_path(@wait_list_entry) do |f| %>
 <div class="row">
   <label for="mooring" class="col-form-label pt-0 col-sm-4">Assigning mooring for: <%= @membership.MailingName %></label>
   <div class="col-sm-2">

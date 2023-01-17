@@ -13,7 +13,6 @@ function updateToolbars(event) {
     const html = Trix.config.toolbar.getDefaultHTML();
     console.log("updating toolbar");
     toolbars.forEach((toolbar) => (toolbar.innerHTML = html));
-    
 }
 
 
@@ -73,7 +72,7 @@ function toolbarDefaultHTML() {
 addEventListener("trix-action-invoke", event => {
     if (event.actionName == "x-horizontal-rule") {
 	const { editor } = event.target
-	const attachment = new Trix.Attachment({ content: "<hr>", contentType: "application/vnd.trix.horizontal-rule.html" })
+	const attachment = new Trix.Attachment({ content: "<hr/>", contentType: "application/vnd.rubyonrails.horizontal-rule.html" })
 	editor.insertAttachment(attachment)
     }
 })
