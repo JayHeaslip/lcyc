@@ -6,6 +6,13 @@
   <hr>
   <%= @mailing.content %>
   <hr>
+  <h5>Attachments</h5>
+  <div class="attachment_fields">
+    <% @mailing.pdfs.each do |p| %>
+      <p><%= p.filename %></p>
+    <% end %>
+  </div>
+  
   <br/>
   
   <%= form_with url: send_email_mailing_path(@mailing) do |f| %>

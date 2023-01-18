@@ -1,5 +1,8 @@
 class Mailing < ApplicationRecord
 
+  has_many_attached :pdfs
+  validate :validate_pdfs
+
   validates_presence_of :subject
   has_rich_text :content
 
@@ -7,5 +10,20 @@ class Mailing < ApplicationRecord
   scope :sorted, -> { nulls_first.order(sent_at: :desc, created_at: :desc) }
 
   attr_accessor :membership_chair
+
+  private
+
+  def validate_pdfs
+    return unless pdfs.attached?
+
+    pdfs.each do |pdf|
+      unless pdf.content_type.in?(%w[application/pdf])
+        errors.add(:attachments, 'must be a PDF')
+      end
+      unless pdf.byte_size < 5.megabytes
+        errors.add(:attachments, 'must be less than 5 Megabytes')
+      end
+    end
+  end
   
 end

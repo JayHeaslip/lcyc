@@ -21,6 +21,9 @@ class MailRobot < ApplicationMailer
     tag = '[LCYC] '
     @url = "#{host}unsubscribe/#{person.email_hash}"
     @content = mailing.content
+    mailing.pdfs.each do |p|
+      attachments[p.filename.to_s] = p.download
+    end
     mail(to: person.EmailAddress,
          from: 'LCYC Announcements <lcyc@members.lcyc.info>',
          reply_to: mailing.replyto,
