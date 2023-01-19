@@ -18,6 +18,9 @@ module Lcyc
     config.active_job.queue_adapter = :delayed_job
 
     config.time_zone = "Eastern Time (US & Canada)"
-    
+
+    config.after_initialize do
+      config.action_view.sanitized_allowed_tags = Rails::Html::SafeListSanitizer.allowed_tags.add('u')
+    end
   end
 end

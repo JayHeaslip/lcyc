@@ -63,7 +63,7 @@ set :branch, 'production'
 #     # password: "please use keys"
 #   }
 
-# only restart delayed_job for production
+# only restart delayed_job for staging, production
 after 'deploy:publishing', 'deploy:restart'
 namespace :deploy do
   task :restart do

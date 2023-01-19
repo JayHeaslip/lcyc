@@ -62,3 +62,11 @@ set :current_directory, 'staging'
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
+
+# only restart delayed_job for staging, production
+after 'deploy:publishing', 'deploy:restart'
+namespace :deploy do
+  task :restart do
+    invoke 'delayed_job:restart'
+  end
+end
