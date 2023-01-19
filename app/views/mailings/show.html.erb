@@ -19,13 +19,13 @@
     <div class="row form-check ms-4 pb-2">
       <span>
 	<label for="test" class="form-check-label">Test?</label>
-	<%= f.check_box :test, checked: @test, class: "form-check-input" %>
+	<%= f.check_box :test, {checked: @test, class: "form-check-input"}, true, false %>
       </span>
     </div>
     <div class="row form-check ms-4 pb-2">
       <span>
 	<label for="filter_emails" class="form-check-label">Filter Emails?</label>
-	<%= f.check_box :filter_emails, class: "form-check-input" %>
+	<%= f.check_box :filter_emails, {class: "form-check-input"}, true, false %>
       </span>
     </div>
     <p class='font-italic font-sm'>When Filter Emails? is checked, email will only be sent to people who have the select_email field set to true.</p>

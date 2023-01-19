@@ -1,6 +1,6 @@
 <%= render(partial: "user", object: @user, locals: {url: user_path(@user), new: false, button: "Update"}) %>
-<h5 class="mt-3 mb-3">Current Logins</h5>
 <% if @active_sessions&.any? %> 
+  <h5 class="mt-3 mb-3">Current Logins</h5>
   <%= button_to "Log out of all sessions", destroy_all_active_sessions_path, method: :delete, class: "btn btn-primary" %>
   <table class="ms-3 mt-3">
     <thead>

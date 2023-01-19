@@ -9,6 +9,8 @@
     <% @mailing.pdfs.each do |p| %>
       <p><%= p.filename %></p>
     <% end %>
+    <p>Note: mulitple files can be selected, selections will replace any existing attachments.</p>
+    <%= f.file_field :pdfs,  multiple: true %>
   </div>
 
   <div class="row mt-3">

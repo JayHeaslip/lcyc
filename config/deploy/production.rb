@@ -33,6 +33,7 @@ server 'members.lcyc.info', user: 'odziozo', roles: %w{app db web}
 
 set :stage, 'production'
 set :branch, 'production'
+set :delayed_job_args, '-i 2'
 
 #current directory defaults to current
 

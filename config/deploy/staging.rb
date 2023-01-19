@@ -33,7 +33,7 @@ server 'staging.lcyc.info', user: 'odziozo', roles: %w{app db web}
 
 set :stage, 'staging'
 set :current_directory, 'staging'
-
+set :delayed_job_args, '-i 1'
 
 
 # Custom SSH Options

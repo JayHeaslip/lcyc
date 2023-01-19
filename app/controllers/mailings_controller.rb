@@ -100,10 +100,9 @@ class MailingsController < ApplicationController
     last_email_sent_time = Mailing.order(sent_at: :desc).first.sent_at
     last_email_sent_time = Time.now - 1.day if last_email_sent_time.nil?
 
-    if params[:test] || (Time.now > (last_email_sent_time + 23.hours))  
+    if params[:test] || (Time.now > (last_email_sent_time + 23.hours))
       @filter_emails = !params[:filter_emails].nil?
       people = Person.email_list(@mailing.committee, @filter_emails)
-      people.each {|e| logger.info "General email: #{e.EmailAddress}" }
       if params[:test]
         p = Person.find_by_EmailAddress(current_user.email)
         if p.nil?
@@ -115,12 +114,12 @@ class MailingsController < ApplicationController
         @mailing.sent_at = Time.now
         @mailing.save
       end
-
+      
       unless people.empty?
         deliver_mail(people, @mailing, host, @filter_emails)
         flash[:notice] = "Delivering mail."
-        redirect_to mailings_path
       end
+      redirect_to mailings_path
     else
       formatted_time = (last_email_sent_time+23.hours).strftime("%m/%d/%Y at %I:%M %p")
       flash[:error] = "You've sent a mailing within the last 23 hours, please wait until #{formatted_time} to send an email"

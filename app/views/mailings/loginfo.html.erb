@@ -68,7 +68,7 @@
   <div class="row form-check ms-4 pb-2">
     <span>
       <label for="test" class="form-check-label">Test?</label>
-      <%= f.check_box :test, checked: @test, class: "form-check-input" %>
+      <%= f.check_box :test, {checked: @test, class: "form-check-input"}, true , false %>
     </span>
   </div>
   <div class="row mt-3">
