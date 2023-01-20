@@ -2,82 +2,78 @@ one:
   firstname: dave
   lastname: dave
   email: dave@abc.com
-  salt: salt
-  hashed_password: <%= User.encrypted_password('passwor1', 'salt') %>
-  email_confirmed: true
-  roles: [admin]
+  password_digest: <%= BCrypt::Password.create('passwor1') %>
+  confirmed_at: <%= Time.now %>
+  role: admin
 
 two:  
   firstname: bob
   lastname: bob
   email: bob@abc.com
-  salt: salt
-  hashed_password: <%= User.encrypted_password('passwor2', 'salt') %>
-  email_confirmed: true
-  roles: [BOG, member]
+  password_digest: <%= BCrypt::Password.create('passwor2') %>
+  confirmed_at: <%= Time.now %>
+  role: BOG
   person: bob
 
 three:  
   firstname: jim
   lastname: jim
   email: jim@abc.com
-  salt: salt
-  hashed_password: <%= User.encrypted_password('passwor3', 'salt') %>
-  email_confirmed: false
-  confirmation_hash: 383
-  roles: [member]
-  email_confirmed: true
+  password_digest: <%= BCrypt::Password.create('passwor3') %>
+  confirmed_at: nil
+  role: member
+  confirmed_at: <%= Time.now %>
   person: jim
 
 four:  
   firstname: steve
   lastname: steve
   email: steve@abc.com
-  salt: salt
-  hashed_password: <%= User.encrypted_password('passwor4', 'salt') %>
-  email_confirmed: true
-  reset_password_code: 93939
-  reset_password_code_until: <%= Time.now + 1.hour %>
-  roles: [member]
+  password_digest: <%= BCrypt::Password.create('passwor1') %>
+  confirmed_at: <%= Time.now %>
+  role: member
+  person: jim
+
+membership:  
+  firstname: steve
+  lastname: steve
+  email: steve2@abc.com
+  password_digest: <%= BCrypt::Password.create('passwor1') %>
+  confirmed_at: <%= Time.now %>
+  role: membership
   person: jim
 
 not_confirmed:  
   firstname: steve
   lastname: steve
   email: unconfirmed@abc.com
-  salt: salt
-  hashed_password: <%= User.encrypted_password('passwor4', 'salt') %>
-  roles: [member]
+  password_digest: <%= BCrypt::Password.create('passwor4') %>
+  role: member
   person: jim
 
 expired:  
   firstname: steve
   lastname: steve
   email: tim@abc.com
-  salt: salt
-  hashed_password: <%= User.encrypted_password('passwor5', 'salt') %>
-  email_confirmed: true
-  reset_password_code: 93938
-  reset_password_code_until: <%= Time.now - 2.days %>
-  roles: [member]
+  password_digest: <%= BCrypt::Password.create('passwor5') %>
+  confirmed_at: nil
+  role: member
   person: jim
 
 barb2:  
   firstname: barb
   lastname: barb
   email: barb2@abc.com
-  salt: salt
-  hashed_password: <%= User.encrypted_password('passwor2', 'salt') %>
-  email_confirmed: true
-  roles: [BOG, member]
+  password_digest: <%= BCrypt::Password.create('passwor2') %>
+  confirmed_at: <%= Time.now %>
+  role: BOG
   person: barb2
 
 no_member_email:  
   firstname: gary
   lastname: barb
   email: gary@abc.com
-  salt: salt
-  hashed_password: <%= User.encrypted_password('passwor2', 'salt') %>
-  email_confirmed: true
-  roles: [admin]
+  password_digest: <%= BCrypt::Password.create('passwor2') %>
+  confirmed_at: <%= Time.now %>
+  role: admin
 

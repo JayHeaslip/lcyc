@@ -33,7 +33,7 @@ server 'staging.lcyc.info', user: 'odziozo', roles: %w{app db web}
 
 set :stage, 'staging'
 set :current_directory, 'staging'
-
+set :delayed_job_args, '-i 1'
 
 
 # Custom SSH Options
@@ -62,3 +62,11 @@ set :current_directory, 'staging'
 #     auth_methods: %w(publickey password)
 #     # password: "please use keys"
 #   }
+
+# only restart delayed_job for staging, production
+after 'deploy:publishing', 'deploy:restart'
+namespace :deploy do
+  task :restart do
+    invoke 'delayed_job:restart'
+  end
+end

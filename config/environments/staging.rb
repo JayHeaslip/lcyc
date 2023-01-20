@@ -21,11 +21,11 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  #config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = true
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
-  # config.assets.css_compressor = :sass
+  config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
@@ -45,11 +45,14 @@ Rails.application.configure do
   # config.action_cable.allowed_request_origins = [ 'http://example.com', /http:\/\/example.*/ ]
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
   config.log_level = :debug
+
+    # Store uploaded files on the local file system (see config/storage.yml for options).
+  config.active_storage.service = :local
 
   # Prepend all log lines with the following tags.
   config.log_tags = [
@@ -96,15 +99,14 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  cfg = YAML::load(IO.read("#{config.root}/config/database.yml"))
-  gmailpw = cfg['gmailpw']
-
+  config.action_mailer.default_url_options = { host: "staging.lcyc.info" }
+  
   config.action_mailer.smtp_settings = {
 	 :address     	       => "smtp.gmail.com",
 	 :port        	       => 587,
 	 :domain      	       => 'members.lcyc.info',
 	 :user_name   	       => 'lcyc@members.lcyc.info',
-	 :password    	       => gmailpw,
+	 :password    	       => Rails.application.credentials.gmailpw,
 	 :authentication       => 'plain',
          :enable_starttls_auto => true
   }

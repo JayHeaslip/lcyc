@@ -1,0 +1,6 @@
+<div class="attachment attachment--<%= blob.representable? ? "preview" : "file" %> attachment--<%= blob.filename.extension %>">
+  <% if blob.representable? %>
+    <%= link_to blob.filename, blob.url, class: "link-primary" %>
+  <% end %>
+
+</div>

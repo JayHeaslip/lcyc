@@ -1,4 +1,4 @@
-<%= form_for @boat do |f| %>
+<%= form_with model: @boat do |f| %>
 <% if @boat.errors.any? %>
 <div id="error_explanation">
   <h3><%= pluralize(@boat.errors.count, "error") %>
@@ -12,75 +12,67 @@
 </div>
 <% end %>
 <div class="boat">
-  <div class="form-row">
-    <div class="form-group col-sm-3">
+  <div class="row align-items-center">
+    <div class="col-sm-2">
       <span class="has-float-label">
 	<%= f.text_field :Mfg_Size, id: :Mfg_Size, class: "form-control", placeholder: " " %>
 	<label for="Mfg_Size">Mfg/Size</label>
       </span>
     </div>
-    <div class="form-group row">
-      <label for="Type" class="col-form-label pt-0 col-sm-4">Type:</label>
-      <div class="col-sm-2">
-	<%= f.select :Type, %w{Sail Power}, {include_blank: true} %>
-      </div>
+    <label for="Type" class="col-auto col-form-label pt-0">Type:</label>
+    <div class="col-sm-1">
+      <%= f.select :Type, %w{Sail Power}, {include_blank: true} %>
     </div>
-    <div class="form-group col-sm-3">
+    <div class="col-sm-2">
       <span class="has-float-label">
 	<%= f.text_field :Name, id: :Name, class: "form-control", placeholder: " " %>
 	<label for="Name">Name</label>
       </span>
     </div>
-    <div class="form-group col-sm-1">
+    <div class="col-sm-1">
       <span class="has-float-label">
-      <%= f.text_field :Length, id: :Length, class: "form-control", placeholder: " " %>
-      <label for="Length">Length</label>
+	<%= f.text_field :Length, id: :Length, class: "form-control", placeholder: " " %>
+	<label for="Length">Length</label>
       </span>
     </div>
-    <div class="form-group col-sm-1 mb-1">
+    <div class="col-sm-1 mb-1">
       <span class="has-float-label">
 	<%= f.text_field :Draft, id: :Draft, class: "form-control", placeholder: " " %>
 	<label  for="Draft">Draft</label>
       </span>
     </div>
-    <div class="form-group col-sm-1">
-      <span class="has-float-label">
-      <%= f.text_field :Class, id: :Class, class: "form-control", placeholder: " " %>
-      <label for="Class">Class</label>
-      </span>
-    </div>
   </div>
-  <div class="form-row mb-4">
-    <div class="form-group col-sm-1">
+  <div class="row align-items-center">
+    <div class="col-sm-2">
       <span class="has-float-label">
-      <%= f.text_field :PHRF, id: :Class, class: "form-control", placeholder: " " %>
-      <label for="PHRF">PHRF</label>
+	<%= f.text_field :Class, id: :Class, class: "form-control", placeholder: " " %>
+	<label for="Class">Class</label>
       </span>
     </div>
-    <div class="form-group col-sm-1">
+    <div class="col-sm-2">
       <span class="has-float-label">
-      <%= f.text_field :sail_num, id: :sail_num, class: "form-control", placeholder: " " %>
-      <label for="sail_num">Sail#</label>
+	<%= f.text_field :PHRF, id: :Class, class: "form-control", placeholder: " " %>
+	<label for="PHRF">PHRF</label>
       </span>
     </div>
-    <div class="form-group row">
-      <label for="Type" class="col-form-label pt-0 col-sm-4">Location:</label>
-      <div class="col-sm-2">
-	<%= f.select :location, ['Mooring', 'Parking Lot'], {include_blank: true} %>
-      </div>
-    </div>
-    <div class="form-group col-sm-1">
+    <div class="col-sm-1">
       <span class="has-float-label">
-      <%= f.text_field :mooring_num, id: :mooring_num, class: "form-control", placeholder: " " %>
-      <label for="sail_num">Mooring#</label>
+	<%= f.text_field :sail_num, id: :sail_num, class: "form-control", placeholder: " " %>
+	<label for="sail_num">Sail#</label>
       </span>
     </div>
+    <label for="location" class="col-auto col-form-label pt-0">Location:</label>
+    <div class="col-auto">
+      <%= f.select :location, ['Mooring', 'Parking Lot'], {include_blank: true} %>
+    </div>
+    <div class="col-sm-2">
+      Mooring #<%= @boat.mooring_id %>
+    </div>
+    <hr>
   </div>
-  <hr>
-</div>
-<div class="form-group row mt-3">
+  <div class="row mt-3">
   <div class="col-sm-3">
-    <button type="submit" class="btn btn-primary">Update</button>
+      <button type="submit" class="btn btn-primary">Update</button>
+    </div>
   </div>
-</div>
 <% end %>

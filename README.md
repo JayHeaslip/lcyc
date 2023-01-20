@@ -3,9 +3,9 @@
 This site is for maintaining the membership database for LCYC.
 
 
-* Ruby version - 2.7.2
+* Ruby version - 3.2.0
 
-* To run the test suite: rake test, rake test:system
+* To run the test suite: rails test, rails test:system
 
 * The site uses delayed_job to send email, the daemon will be started when creating email if it's not already running.
 
@@ -14,6 +14,7 @@ This site is for maintaining the membership database for LCYC.
   To deploy the staging version:
   
     * bundle exec cap staging deploy
+    * staging uses the master branch
 
   To deploy the production version:
 
@@ -21,6 +22,9 @@ This site is for maintaining the membership database for LCYC.
   
        * git co production
        * git merge master
+       * modify public/.htaccess --> PassengerAppEnv production
+       * git ci
        * git push origin
+       * production uses the production branch
 
     2. bundle exec cap production deploy

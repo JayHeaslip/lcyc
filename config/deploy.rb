@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.16.0"
+lock "~> 3.17.1"
 
 set :application, "lcyc"
 set :repo_url, "https://github.com/JayHeaslip/lcyc.git"
@@ -8,7 +8,7 @@ set :repo_url, "https://github.com/JayHeaslip/lcyc.git"
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/home/odziozo/rails5/lcyc"
+set :deploy_to, "/home/odziozo/rails7/lcyc"
 #set :deploy_via, :remote_cache
 
 # Default value for :format is :airbrussh.
@@ -22,7 +22,7 @@ set :deploy_to, "/home/odziozo/rails5/lcyc"
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml", "config/secrets.yml"
+append :linked_files, "config/database.yml", "config/master.key"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", ".bundle"
@@ -40,7 +40,7 @@ set :keep_releases, 8
 # set :ssh_options, verify_host_key: :secure
 
 # install in system directory to simplify things
-set :bundle_path, "/home/odziozo/.rvm/gems/ruby-2.7.2@global"
+set :bundle_path, "/home/odziozo/.rvm/gems/ruby-3.2.0@global"
 set :passenger_restart_with_touch, true
 
 # only restart delayed_job for production

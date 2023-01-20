@@ -2,29 +2,27 @@
 include ActionView::Helpers::NumberHelper
 
 class MailRobot < ApplicationMailer
-
-  def confirmation_email(user, hash, host)
-    @url = "#{host}confirm_email/#{hash}"
-    mail(to: user.email, subject: 'Confirm LCYC registration')
+  
+  def confirmation(user, confirmation_token)
+    @user = user
+    @confirmation_token = confirmation_token
+    mail(to: @user.email, subject: 'Confirm LCYC registration')
   end
 
-  def newpw_email(user, host)
-    @url = "#{host}rp/#{user.reset_password_code}"
-    mail(to: user.email, subject: 'Password reset for LCYC')
+  def password_reset(user, password_reset_token)
+    @user = user
+    @password_reset_token = password_reset_token
+    
+    mail to: @user.email, subject: "LCYC Password Reset Instructions"
   end
-
-  def mailing(person, mailing, host, filtered = nil)
-    mailing = Mailing.find(mailing)
-    unless filtered
-      tag = '[LCYC] '
-    else
-      tag = ''
-    end
-    @content = mailing.body
-    filenames = mailing.attachments.map { |a| a.pdf.url(:original, false)}
+  
+  def mailing(url_options, person, mailing, host, filtered = nil)
+    ActiveStorage::Current.url_options = url_options    
+    tag = '[LCYC] '
     @url = "#{host}unsubscribe/#{person.email_hash}"
-    filenames.each do |f|
-      attachments[File.basename(f)] = File.read("#{Rails.root}/public/#{f}")
+    @content = mailing.content
+    mailing.pdfs.each do |p|
+      attachments[p.filename.to_s] = p.download
     end
     mail(to: person.EmailAddress,
          from: 'LCYC Announcements <lcyc@members.lcyc.info>',
@@ -32,40 +30,19 @@ class MailRobot < ApplicationMailer
          subject: tag + mailing.subject)
   end
 
-  def binnacle(email, filenames, binnacle_name, body)
-    @content = body
-    filenames.each do |f|
-      attachments[File.basename(f)] = File.read("#{Rails.root}/public/#{f}")
-    end
-    mail(:to => email, :subject => "LCYC #{binnacle_name}")
-  end
-
-  def send_bills(mailing_id, email, mailingname, streetaddress, city, state, zip, status, mooring, drysail, dues, mooring_fees, drysail_fee, initiation)
-    mailing = Mailing.find(mailing_id)
-    filenames = mailing.attachments.map { |a| a.pdf.url(:original, false)}
-    filenames.each do |f|
-      attachments[File.basename(f)] = File.read("#{Rails.root}/public/#{f}")
-    end
-    @mailingname = mailingname
-    @streetaddress = streetaddress
-    @city = city
-    @state = state
-    @zip = zip
-    @email = email
-    @status = status.sub(/2016/,"")
-    @mooring = mooring
-    @drysail = drysail
-    @dues = number_to_currency(dues).rjust(10)
-    @mooring_fees = number_to_currency(mooring_fees).rjust(10)
-    @drysail_fee = number_to_currency(drysail_fee).rjust(10)
-    @initiation = number_to_currency(initiation).rjust(10)
-    @total = number_to_currency(dues + mooring_fees + drysail_fee + initiation).rjust(10)
-    mail(to: email,
+  def loginfo(url_options, to, cc, membership_chair, membership, boat, member, partner, children)
+    ActiveStorage::Current.url_options = url_options
+    @membership_chair = membership_chair
+    @membership = membership
+    @boat = boat
+    @member = member
+    @partner = partner
+    @children = children
+    mail(to: to,
+         cc: cc,
          from: 'LCYC Announcements <lcyc@members.lcyc.info>',
-         reply_to: mailing.replyto,
-         subject: '[LCYC] ' + 'Annual Dues') do |format|
-      format.html { render layout: 'bills'}
-    end
+         reply_to: 'lcycsecretary@gmail.com',
+         subject: '[LCYC] Log info verification')
   end
 
   def dbbackup(backup)

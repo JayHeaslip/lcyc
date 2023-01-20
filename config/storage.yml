@@ -1,0 +1,14 @@
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+  public: true
+ 
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+ 
+google:
+  service: GCS
+  project: lcyc-370614
+  credentials: <%= Rails.root.join("config/secrets/attachments.json") %>
+  bucket: members_lcyc_info

@@ -1,0 +1,15 @@
+mooring1:
+  Depth: 20
+
+mooring2:
+  Depth: 10
+
+mooring3:
+  id: 100
+
+mooring4:
+  Depth: 2
+  
+mooring10:
+  Depth: 2
+  

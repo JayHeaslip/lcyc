@@ -1,0 +1,22 @@
+<h2>Membership History</h2>
+
+<table class="ms-3 table table-sm table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>Date</th>
+      <% @categories.keys.sort.each do |k| %>
+	<th><%= k %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @dates.sort.each do |date| %>
+      <tr>
+	<td><%= date %></td>
+	<% @categories.keys.sort.each do |k|   %>
+	  <td><%= @categories[k][date] %></td>
+	<% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

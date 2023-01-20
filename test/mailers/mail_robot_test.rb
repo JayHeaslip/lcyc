@@ -20,8 +20,8 @@ class MailRobotTest < ActionMailer::TestCase
   test "mailing" do
     @person = people(:bob)
     @mailing = mailings(:one)
-    
-    email = MailRobot.mailing(@person, @mailing.id, 'www.example.com')
+    url_options = {}
+    email = MailRobot.mailing(url_options, @person, @mailing, 'www.example.com')
 
     assert_emails 1 do
       email.deliver_now

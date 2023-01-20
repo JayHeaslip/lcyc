@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class RightsControllerTest < ActionDispatch::IntegrationTest
+class RightsIntegrationTest < ActionDispatch::IntegrationTest
 
   test "synchronize" do
     Right.synchronize_with_controllers

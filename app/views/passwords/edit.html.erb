@@ -1,0 +1,3 @@
+<%= form_with url: password_path(params[:password_reset_token]), method: :put do |form| %>
+  <%= render "form", form: form %>
+<% end %>

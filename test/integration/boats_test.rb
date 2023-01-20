@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class BoatsControllerTest < ActionDispatch::IntegrationTest
+class BoatsIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)
@@ -19,14 +19,17 @@ class BoatsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "destroy no membership" do
-    delete boat_url(@boat)
-    assert_redirected_to boats_url
+  test "destroy boat" do
+    @request.env['HTTP_REFERER'] = "http://test.com/membership/#{@membership.id}"
+    get membership_url(@membership)
+    delete membership_boat_url(@membership, @boat), headers: {'HTTP_REFERER': membership_url(@membership) }
+    assert_redirected_to membership_url(@membership)
   end
 
-  test "destroy membership" do
-    delete membership_boat_url(@membership, @boat)
-    assert_redirected_to membership_url(@membership)
+  test "destroy boat, last membership" do
+    get membership_url(@membership)
+    delete membership_boat_url(memberships(:member5), boats(:boat3)), headers: {'HTTP_REFERER': membership_url(memberships(:member5)) }
+    assert_redirected_to membership_url(memberships(:member5))
   end
 
   test "edit" do
@@ -40,11 +43,6 @@ class BoatsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to boat_url(@boat)
   end
   
-  test "update bad mooring" do
-    patch boat_url(@boat), params: {boat: {Name: 'new name', mooring_num: 99}}
-    assert_response :success
-  end
-  
   test "member update" do
     login_as(users(:three), 'passwor3')
     @boat = boats(:boat3)
@@ -53,18 +51,9 @@ class BoatsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to boat_url(@boat)
   end
   
-  test "member authorize check" do
-    logout
-    login_as(users(:three), 'passwor3')
-    @boat = boats(:boat1)
-    patch boat_url(@boat), params: {boat: {Name: 'new name'}}
-    assert_equal "You are not authorized to view the page you requested.", flash[:error]
-    assert_redirected_to root_path
-  end
-  
   test "bad update" do
     patch boat_url(@boat), params: {boat: {Name: '', Mfg_Size: ''}}
-    assert_response :success
+    assert_response :unprocessable_entity
   end
   
   test "associate" do

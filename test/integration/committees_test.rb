@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CommitteesControllerTest < ActionDispatch::IntegrationTest
+class CommitteesIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)
@@ -12,52 +12,45 @@ class CommitteesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "download_spreadsheet" do
-    post download_spreadsheet_committee_url('Boats')
+    get download_committee_url(committees(:boats))
     assert_response :success
   end
 
-  test "show_committee" do
-    get select_committee_people_url
+  test "download_all_spreadsheet" do
+    get download_all_committees_url
+    assert_response :success
+  end
+
+  test "get_committee" do
+    get select_committees_url
     assert_response :success
     assert_select "h2", "Committee Members"
   end
 
+  test "show_committee" do
+    get list_committees_url, params: {committee: 'Boats'}
+    assert_response :success
+    assert_select "h2", "Boats Committee"
+  end
+
+  test "show_all_committees" do
+    get list_committees_url, params: {committee: 'All'}
+    assert_response :success
+    assert_select "h2", "Committee listing for all members"
+  end
+
   test "unsubscribe bad hash" do
-    get unsubscribe_url('1234')
+    logout
+    get '/unsubscribe/1234'
     assert_redirected_to root_url
-    assert_equal flash[:notice], "Email address not found."
+    assert_equal flash[:alert], "Email address not found."
   end
 
   test "unsubscribe" do
-    patch unsubscribe_url('2345')
+    logout
+    get '/unsubscribe/2345'
     assert_redirected_to root_url
     assert_equal flash[:notice], "You have unsubscribed."
-  end
-
-  test "delete" do
-    login_as(users(:three), 'passwor3')
-    @membership = memberships(:member2)
-    @person = people(:jill)
-    delete membership_person_url(@membership, @person)
-    assert_redirected_to membership_url(@membership)
-    assert_equal flash[:notice], "Person was successfully deleted."
-  end
-
-  test "delete invalid membership" do
-    login_as(users(:three), 'passwor3')
-    @membership = memberships(:member1)
-    @person = people(:jill)
-    delete membership_person_url(@membership, @person)
-    assert_redirected_to root_url
-    assert_equal flash[:error], "You are not authorized to view the page you requested."
-  end
-
-  test "delete by admin" do
-    @membership = memberships(:member2)
-    @person = people(:jill)
-    delete membership_person_url(@membership, @person)
-    assert_redirected_to membership_url(@membership)
-    assert_equal flash[:notice], "Person was successfully deleted."
   end
 
 end  

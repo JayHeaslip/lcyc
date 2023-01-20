@@ -7,7 +7,8 @@
       <th><%= sortable "Type" %></th>
       <th><%= sortable "Length" %></th>
       <th><%= sortable "Draft" %></th>
-      <th><%= sortable "mooring_num", "Mooring" %></th>
+      <th><%= sortable "mooring_id", "Mooring" %></th>
+      <th><%= sortable "drysail_id", "Drysail" %></th>
       <% else %>
       <th>Name</th>
       <th>Mfg/Size</th>
@@ -15,6 +16,8 @@
       <th>Length</th>
       <th>Draft</th>
       <th>Mooring</th>
+      <th>Drysail</th>
+      <th></th>
       <% end %>
     </tr>
   </thead>
@@ -22,7 +25,7 @@
     <% for boat in locals[:boats_array] %>
     <tr>
       <% if locals[:membership] %>
-      <td><%= boat.Name %></td>
+      <td><%= link_to boat.Name, boat_path(boat) %></td>
       <td><%= boat.Mfg_Size %></td>
       <% elsif boat.Name.blank? %>
       <td><%= boat.Name %></td>
@@ -34,11 +37,10 @@
       <td><%= boat.Type %></td>
       <td><%= boat.Length %></td>
       <td><%= boat.Draft %></td>
-      <td><%= boat.mooring_num %></td>
-      <td>
-	<span class="list-actions"><%= link_to 'Delete', locals[:membership] ? membership_boat_path(locals[:membership],boat) : boat_path(boat),
-				       data: {confirm: 'Are you sure?'}, method: :delete %>
-	</span>
+      <td><%= boat.mooring_id %></td>
+      <td><%= boat.drysail&.id %></td>
+      <td class="list-actions">
+	<%= link_to 'Delete', boat, data: { turbo_confirm: 'Are you sure?', turbo_method: :delete} %>
       </td>
     </tr>
     <% end %>

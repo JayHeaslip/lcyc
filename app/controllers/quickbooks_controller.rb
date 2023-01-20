@@ -134,12 +134,15 @@ class QuickbooksController < ApplicationController
       count = 0
       members.each do |m|
         logger.info "mailing name: #{m.MailingName}"
+        partner_email = m.people.where('MemberType = "Partner"').EmailAddress.first
+        qbm["PrimaryEmailAddr"] = partner_email if qbm["PrimaryEmailAddr"].nil?
         qbm = @api.get(:customer, ["DisplayName", m.MailingName])
         invoice = {
-                   "CustomerRef": {"value": qbm["Id"] },
+                    "CustomerRef": {"value": qbm["Id"] },
                    "AllowOnlineACHPayment": true,
                    "BillEmail": qbm["PrimaryEmailAddr"],
-                   "DueDate": "#{Time.now.year}-12-31"
+                   "DueDate": "#{Time.now.year}-12-31",
+                   "BillEmailCc": partner_email
         }
         invoice["Line"] = generate_line_items(m, params[:test])
         response = @api.create(:invoice, payload: invoice)
@@ -202,7 +205,9 @@ class QuickbooksController < ApplicationController
   end
   
   def update_address(qbm, m)
-    if qbm['BillAddr']['Line1'] != m.StreetAddress
+    if qbm['BillAddr'].nil?
+      return true
+    elsif qbm['BillAddr']['Line1'] != m.StreetAddress
       return true
     elsif qbm['BillAddr']['City'] != m.City
       return true
@@ -242,7 +247,7 @@ class QuickbooksController < ApplicationController
       mooring_fee_value = @api.get(:item, ["Name", "Mooring Fee"])["Id"]
       line_items << {
         "Amount": mooring_fee,
-        "Description": "Mooring \##{m.mooring_num}",
+        "Description": "Mooring \##{m.mooring&.id}",
         "DetailType": "SalesItemLineDetail",
         "SalesItemLineDetail": {
                                  "ItemRef": {
@@ -257,7 +262,7 @@ class QuickbooksController < ApplicationController
       mooring_replacement_fee_value = @api.get(:item, ["Name", "Mooring Replacement Fee"])["Id"]
       line_items << {
         "Amount": mooring_replacement_fee,
-        "Description": "Mooring \##{m.mooring_num}",
+        "Description": "Mooring \##{m.mooring&.id}",
         "DetailType": "SalesItemLineDetail",
         "SalesItemLineDetail": {
                                  "ItemRef": {

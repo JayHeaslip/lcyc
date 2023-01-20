@@ -2,13 +2,24 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root :to => "admin#index"
 
-  
-  match 'admin/login', via: [:get, :post], as: 'login'
-  match 'rp/:hash' => 'users#rp', via: [:get, :patch], as: 'rp'
-  get 'admin/logout'
-  get 'confirm_email/:hash' => 'users#confirm_email', as: 'confirm_email'
+  get "sign_up", to: "users#new"
+  post "sign_up", to: "users#create"
+  get "account", to: "users#edit"
+  put "account", to: "users#update"
 
-  resources :unsubscribe, only: [:show, :update]
+  get "login", to: "sessions#new"
+  post "login", to: "sessions#create"
+  delete "logout", to: "sessions#destroy"
+
+  get "change_password", to: "passwords#change"
+  post "change_password", to: "passwords#change"
+  get 'unsubscribe/:id', to: "unsubscribe#update"
+
+  resources :users
+  
+  resources :confirmations, only: [:create, :edit, :new], param: :confirmation_token
+  resources :passwords, only: [:create, :edit, :new, :update], param: :password_reset_token
+  
   resources :quickbooks do
     collection do
       get :cleanup
@@ -19,20 +30,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :users do
-    collection do
-      get  :forgotpw
-      post :forgotpw
-    end
-    member do
-      get  :registration_info
-      post :resend_email
-      get  :editpw
-      post :updatepw
-    end
-  end
   
-  resources :roles, :except => [:new] do
+  resources :roles, :except => [:new, :destroy] do
     resources :users do
       member do
         delete :rmrole
@@ -40,18 +39,28 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :moorings, only: [:index] do
+    collection do
+      get :unassigned
+    end
+  end 
+
+  resources :drysails, only: [:index, :update] do
+    member do
+      get :assign
+    end
+  end
+  
   resources :memberships do
     collection do
-      get  :moorings
-      get  :drysail
-      get  :unassigned_moorings
+      get :list
       get  :labels
       post :download_labels
       get  :spreadsheets
       post :download_spreadsheet
       get  :initiation_report
-      get  :new_drysail
       post :assign_drysail
+      post :add_person
     end
     member do
       get :wl
@@ -65,16 +74,16 @@ Rails.application.routes.draw do
     resources :boats
   end
 
-  resources :people, only: [] do
-    collection do
-      get :select_committee
-      post :committee
-    end
-  end
+  resources :people, only: [:destroy]
 
   resources :committees, only: [] do
+    collection do
+      get :select
+      get :list
+      get :download_all
+    end
     member do
-      post :download_spreadsheet
+      get :download
     end
   end
   
@@ -98,25 +107,20 @@ Rails.application.routes.draw do
   end
 
   resources :mailings do
-    get :new_billing, on: :collection
-    post :create_billing, on: :collection
     member do
-      get :billing
       post :send_email
-      get :edit_billing
-      patch :update_billing
-      post :send_bills
     end
   end
+  get "loginfo_mailing", to: "mailings#loginfo"
+  post "loginfo_mailing", to: "mailings#loginfo"
+
+  resources :active_sessions, only: [:index, :destroy] do
+    collection do
+      delete "destroy_all"
+    end
+  end
+
+  get "summary_report", to: "reports#summary"
+  get "history_report", to: "reports#history"
   
-  resources :binnacles do
-    member do
-      get :email
-      post :send_email
-    end
-  end
-
-  resources :preview, :only => [:show]
-  resources :binnacle_preview, :only => [:show]
-
 end

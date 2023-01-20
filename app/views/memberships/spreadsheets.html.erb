@@ -1,7 +1,11 @@
 <h2>Generate a spreadsheet</h2>
 <p>Note: these are tab separated files.</p>
-<%= form_tag download_spreadsheet_memberships_path do %>
-<label>Type:</label>
-<%= select_tag :spreadsheet, options_for_select(@spreadsheet_options, @spreadsheet) %>
-<button class="btn btn-primary" type='submit'>Generate</button> | <%= link_to 'Back', back_link(1) %>
+<%= form_with url: download_spreadsheet_memberships_path, data: { turbo: false } do |f| %>
+  <div class="row mb-2" >
+    <label class="col-auto col-form-label">Type:</label>
+    <div class="col-sm-3">
+      <%= f.select :spreadsheet, options_for_select(@spreadsheet_options, @spreadsheet), {}, class: "form-control" %>
+    </div>
+  </div>
+  <%= f.submit "Generate", class: "btn btn-primary" %> | <%= link_to 'Back', url_for(:back) %>
 <% end %>

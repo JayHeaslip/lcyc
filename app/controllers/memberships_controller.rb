@@ -4,15 +4,10 @@ require 'prawn/measurement_extensions'
 class MembershipsController < ApplicationController
 
   helper_method :sort_column, :sort_direction, :mooring_sort_column
-  before_action :get_membership, except: [:index, :moorings, :unassigned_moorings, :new_drysail,
-                                          :assign_drysail, :drysail, :new, :create, :destroy, 
-                                          :labels, :download_labels,
-                                          :spreadsheets, :download_spreadsheet, :initiation_report]
-  before_action :authorize, only: [:edit, :update, :associate, :save_association, :rmboat]
 
   def index
     @status_options = %w(Accepted Active Associate Honorary Inactive Life Resigned Senior)
-    params[:status] = ['Active', 'Associate', 'Honorary', 'Life', 'Senior'] if params[:status].blank?
+    params[:status] ||= ['Active', 'Associate', 'Honorary', 'Life', 'Senior']
     @memberships = filter_memberships(params)
     @memberships = @memberships.order(sort_column + " " + sort_direction)
     @lastname = params[:lastname]
@@ -23,23 +18,26 @@ class MembershipsController < ApplicationController
 
   def new
     @membership = Membership.new
+    @membership.people << Person.new
     @membership.application_date = Time.now
   end
 
   def create
     @membership = Membership.new(membership_params)
     if @membership.save
-      flash[:notice] = 'Membership was successfully created.'
+      flash[:success] = 'Membership was successfully created.'
       redirect_to wl_membership_path(@membership)
     else
-      render action: :new
+      render :new, status: :unprocessable_entity
     end      
   end
 
   def wl
+    @membership = Membership.find(params[:id])
   end
 
   def wladd
+    @membership = Membership.find(params[:id])
     @wl = WaitListEntry.new
     @wl.membership = @membership
     @wl.date = @membership.application_date
@@ -48,6 +46,7 @@ class MembershipsController < ApplicationController
   end
 
   def show
+    @membership = Membership.find(params[:id])
     @membership.people.sort
   end
 
@@ -60,31 +59,48 @@ class MembershipsController < ApplicationController
     current_status = @membership.Status
     @membership.attributes = membership_params
     @membership.change_status_date = Time.now.strftime("%Y-%m-%d") if current_status != @membership.Status
-    unless @membership.Status.in? ['Active', 'Life', 'Associate']
-      flash[:alert] = 'Mooring removed due to membership category' if !@membership.mooring_num.nil?
-      @membership.mooring_num = nil
+    unless @membership.mooring_eligible
+      flash[:alert] = 'Mooring removed due to membership category update.' if !@membership.mooring.nil?
+      @membership.mooring = nil
+      @membership.remove_boat_from_mooring
+    end
+    @membership.boats.each do |b|
+      flash[:alert] = (flash[:alert] || '') + @membership.update_drysail_and_mooring(b)
     end
     if @membership.save
-      flash[:notice] = 'Membership was successfully updated.'
+      flash.delete(:alert) if flash[:alert].blank?
+      flash[:success] = 'Membership was successfully updated.'
       redirect_to membership_path(@membership)
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @membership  = Membership.find(params[:id])
+    @membership = Membership.find(params[:id])
     @membership.destroy
-    flash[:notice] = 'Membership was successfully deleted.'
+    flash[:success] = 'Membership was successfully deleted.'
     redirect_to memberships_path
   end
 
   def rmboat
     @boat = Boat.find(params[:boat_id])
     @membership = Membership.find(params[:id])
+    # if the membership has the mooring the boat is on
+    # remove the boat from the mooring
+    if @membership.mooring && (@membership.mooring.id == @boat.mooring_id)
+      @boat.location = ''
+      @boat_mooring_id = nil
+    end
     @boat.memberships.delete(@membership)
     flash[:notice] = "#{@membership.LastName} removed from boat"
-    redirect_to boat_path(@boat)
+    if @boat.memberships.empty?
+      flash[:notice] += ", boat deleted."
+      @boat.destroy
+      redirect_to boats_path
+    else
+      redirect_to boat_path(@boat)
+    end
   end
 
   def associate
@@ -94,66 +110,46 @@ class MembershipsController < ApplicationController
 
   def save_association
     @membership = Membership.find(params[:id])
-    @membership.boats << Boat.find(params[:membership][:boats].to_i)
+    @boat = Boat.find(params[:membership][:boats])
+    @membership.boats << @boat
+    @membership.mooring = @boat.mooring if @boat.location == "Mooring"
     if @membership.save
       flash[:notice] = 'Saved association.'
       redirect_to membership_path(@membership)
     else
       @boats = Boat.order(:Name) - @membership.boats
-      render :associate
+      flash[:alert] = "Error saving association."
+      render :associate, status: :unprocessable_entity
     end
-  end
-
-  def moorings
-    session[:breadcrumbs] = request.path
-    @memberships = Membership.where('memberships.mooring_num is not NULL').includes(:boats)
-    @memberships = @memberships.order(mooring_sort_column + " " + sort_direction)
-  end
-
-  def new_drysail
-    dry_sail_memberships = Membership.where('memberships.drysail_num is not NULL')
-    @memberships = Membership.active - dry_sail_memberships
-    @available_dry_sail =  (1..12).to_a - dry_sail_memberships.map {|m| m.drysail_num }
-  end
-
-  def assign_drysail
-    membership = Membership.find(params[:membership])
-    membership.drysail_num = params[:drysail_num]
-    if membership.save 
-      redirect_to drysail_memberships_path
-    else
-      redirect_to new_drysail_memberships_path
-    end
-  end
-
-  def drysail
-    session[:breadcrumbs] = request.path
-    @memberships = Membership.where('memberships.drysail_num is not NULL').includes(:boats)
-    @memberships = @memberships.order(drysail_sort_column + " " + sort_direction)
   end
 
   def unassign
-    m = Membership.find(params[:id])
-    m.mooring_num = nil
-    m.save!
-    redirect_to moorings_memberships_path
+    @membership = Membership.find(params[:id])
+    mooring_id = @membership.mooring_id
+    @membership.mooring = nil
+    @membership.remove_boat_from_mooring
+    if @membership.save
+      flash[:notice] = "Mooring ##{mooring_id} unassigned."
+    else
+      flash[:alert] = "Problem unassigning mooring ##{mooring_id}."
+    end
+    redirect_to moorings_path
   end
 
   def unassign_drysail
-    m = Membership.find(params[:id])
-    m.drysail_num = nil
-    m.save!
-    redirect_to drysail_memberships_path
-  end
-
-  def unassigned_moorings
-    session[:breadcrumbs] = request.path
-    @moorings = Membership.unassigned_moorings
+    @membership = Membership.find(params[:id])
+    drysail = @membership.drysail
+    @membership.drysail = nil
+    if @membership.save
+      flash[:notice] = "Dry sail spot ##{drysail.id} unassigned."
+    else
+      flash[:alert] = "Problem unassigning dry sail spot ##{drysail.id}."
+    end
+    redirect_to drysails_path
   end
 
   def labels
-    session[:breadcrumbs] = request.path
-    @label_options = ["All", "Binnacle", "No Email", "Workday"]
+    @label_options = ["All", "No Email", "Workday"]
   end
 
   def download_labels
@@ -163,8 +159,6 @@ class MembershipsController < ApplicationController
       members = Membership.members
     when 'No Email'
       members = Membership.mail_hardcopy
-    when 'Binnacle'
-      members = Membership.binnacle_hardcopy
     when 'Workday'
       members = Membership.all_active
       workday = true
@@ -173,7 +167,6 @@ class MembershipsController < ApplicationController
   end
 
   def spreadsheets
-    session[:breadcrumbs] = request.path
     @spreadsheet_options = ["Billing", "Log Members", "Log Fleet",
                             "Log Partner Xref", "Member Cards/Workday Checklist", "Resigned"]
   end
@@ -192,41 +185,8 @@ class MembershipsController < ApplicationController
   
   private
 
-  def get_membership
-    if current_user.roles?(%w(Admin BOG Membership))
-      @membership = Membership.find(params[:id])
-    else
-      @membership = Membership.find(current_user.membership)
-    end
-  end
-  
-  # required because BOG is allowed to look at other membership data, but not alter it
-  # for the Member role get_membership covers this
-  def authorize
-    if not current_user.roles?(%w(Admin Membership Harbormaster)) #BOG
-      if current_user.membership && current_user.membership != params[:id].to_i
-        logger.info "current #{current_user.membership.class}, id #{params[:id].class}"
-        flash[:error] = "You are not authorized to view the page you requested."
-        request.env["HTTP_REFERER" ] ? (redirect_to :back) : (redirect_to root_path)
-        return false
-      else
-        return true
-      end
-    else
-      return true
-    end
-  end
-
   def sort_column
     Membership.column_names.include?(params[:sort]) ? params[:sort] : "LastName"
-  end
-  
-  def mooring_sort_column
-    Membership.column_names.include?(params[:sort]) ? params[:sort] : "mooring_num"
-  end
-  
-  def drysail_sort_column
-    Membership.column_names.include?(params[:sort]) ? params[:sort] : "drysail_num"
   end
   
   def sort_direction
@@ -247,7 +207,7 @@ class MembershipsController < ApplicationController
             p.bounding_box [b.top_left[0]+indent, b.top_left[1]], width: b.width, height: b.height-indent do
               m = list[page*30 + 3*i + j]
               overflow = generate_text(p, m, b.width, workday) if not m.nil?
-              logger.info "#{m.MailingName} overflowed: |#{overflow}|" if overflow && overflow != ""
+              logger.error "#{m.MailingName} overflowed: |#{overflow}|" if overflow && overflow != ""
             end
             #p.stroke do
             #  p.rectangle(b.top_left, b.width, b.height)
@@ -261,8 +221,16 @@ class MembershipsController < ApplicationController
 
   def generate_text(p,m, width, workday)
     if p.width_of(m.MailingName) > width # need to split mailing name
-      sp = m.MailingName.split('&')
-      mn = sp[0] + "&\n" + p.indent(5) {sp[1]}
+      if m.MailingName.index(' & ') 
+        sp = m.MailingName.split(' & ')
+        mn = sp[0] + " &\n" + p.indent(5) {sp[1]}
+      elsif m.MailingName.index(' and ') 
+        sp = m.MailingName.split(' and ')
+        mn = sp[0] + " &\n" + p.indent(5) {sp[1]}
+      else
+        #truncate
+        mn = m.MailingName.slice(0,width-1)
+      end
     else 
       mn = m.MailingName
     end
@@ -306,7 +274,7 @@ class MembershipsController < ApplicationController
 
   def membership_params
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
-                                       :State, :Zip, :Country, :Status, :MemberSince, :mooring_num,
+                                       :State, :Zip, :Country, :Status, :MemberSince, :mooring,
                                        :application_date, :active_date, :resignation_date, :initiation,
                                        :paid, :skip_mooring, :installments, :initiation_fee, :drysail_num, :notes,
                                        people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),

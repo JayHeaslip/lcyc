@@ -1,0 +1,19 @@
+<h2>Membership Summary</h2>
+
+<table class="table table-sm table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>Category</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @categories.each do |k,v| %>
+      <tr>
+	<td><%= k %></td>
+	<td><%= v %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<p>Total: <%= @total %></p>

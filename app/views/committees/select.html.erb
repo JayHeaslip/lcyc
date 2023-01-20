@@ -1,0 +1,7 @@
+<h2 class="mb-3">Committee Members</h2>
+<div>
+  <%= form_with url: list_committees_path, method: :get do |f| %>
+    <%= select_tag :committee, options_for_select(["All"].concat(Committee.names), @committee) %>
+    <%= f.submit "Show", class: "btn btn-primary" %>
+  <% end %>
+</div>

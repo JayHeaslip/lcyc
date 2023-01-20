@@ -1,6 +1,12 @@
 wl1:
-  membership_id: <%= ActiveRecord::FixtureSet.identify(:member4) %>
+  membership: member4
 
 wl2:
-  membership_id: <%= ActiveRecord::FixtureSet.identify(:member1) %>
+  membership: member1
+
+wl3:
+  membership: senior
+
+wl4:
+  membership: member5
   

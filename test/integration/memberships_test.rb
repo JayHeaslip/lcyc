@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MembershipsControllerTest < ActionDispatch::IntegrationTest
+class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)
@@ -12,10 +12,15 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     @boat2 = boats(:boat2)
   end
 
+  test "get admin" do
+    get root_url
+    assert_response :success
+  end
+  
   test "get_index" do
     get memberships_url
     assert_response :success
-    assert_select "fieldset + p", "Total : 7"
+    assert_select "p", "Total : 9"
   end
 
   test "show_membership" do
@@ -46,7 +51,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
 
     @m = Membership.find_by_LastName('Doe_unique')
     assert_redirected_to wl_membership_url(@m)
-    assert_equal flash[:notice], 'Membership was successfully created.'
+    assert_equal flash[:success], 'Membership was successfully created.'
   end
 
   test "create bad " do
@@ -62,7 +67,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
                                       people_attributes: [{FirstName: 'John', LastName: 'Doe',
                                              Committee1: 'Boats', MemberType: 'Partner'}]}}
                                    
-    assert_response :success
+    assert_response 422
     assert_select "h2", "New membership"
   end
 
@@ -85,7 +90,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
 
     @m = Membership.find_by_LastName('Doe_unique')
     assert_redirected_to wl_membership_url(@m)
-    assert_equal flash[:notice], 'Membership was successfully created.'
+    assert_equal flash[:success], 'Membership was successfully created.'
   end
   
   test "display edit form" do
@@ -95,18 +100,20 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "display member edit form" do
+    logout
     login_as(users(:three), 'passwor3')
     get edit_membership_url(@membership2)
     assert_response :success
     assert_select "h2", "Edit membership"
   end
 
-  test "display invalid member edit form" do
-    login_as(users(:three), 'passwor3')
-    get edit_membership_url(@membership)
-    assert_redirected_to root_path
-    assert_equal flash[:error], "You are not authorized to view the page you requested."
-  end
+  ##test "display invalid member edit form" do
+  ##  logout
+  ##  login_as(users(:three), 'passwor3')
+  ##  get edit_membership_url(@membership)
+  ##  assert_redirected_to root_path
+  ##  assert_equal flash[:error], "You are not authorized to view the page you requested."
+  ##end
 
   test "update membership" do
     patch membership_url(@membership),
@@ -125,7 +132,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
                      }
                   }
     assert_redirected_to membership_url(@membership.id)
-    assert_equal flash[:notice], "Membership was successfully updated."
+    assert_equal flash[:success], "Membership was successfully updated."
   end
 
   test "bad membership" do
@@ -141,7 +148,28 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
                        Status: 'Active'                       
                      }
                   }
-    assert_response :success
+    assert_response :unprocessable_entity
+  end
+
+  test "update membership from active to senior" do
+    patch membership_url(memberships(:paid)),
+          params: {membership:
+                     {
+                       LastName: 'Bob',
+                       StreetAddress: '123 Main St',
+                       City: 'Burlington',
+                       State: 'VT',
+                       Zip: '05401',
+                       MemberSince: '1974',
+                       Status: 'Senior',
+                       people_attributes: [{FirstName: 'Jill', LastName: 'Doe',
+                                             Committee1: 'Dock', MemberType: 'Partner'}]
+                       
+                     }
+                  }
+    assert_redirected_to membership_url(memberships(:paid))
+    assert_equal flash[:alert], "Mooring removed due to membership category update."
+    assert_equal flash[:success], "Membership was successfully updated."
   end
 
   test "wait list add" do
@@ -149,15 +177,20 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to membership_url(@membership)
   end
   
-  test "remove bost from membership" do
+  test "remove last membership from boat" do
     delete rmboat_boat_membership_url(@boat2, @membership)
-    assert_redirected_to boat_url(@boat2)
+    assert_redirected_to boats_url
+  end
+  
+  test "remove a moored boat with multiple owners from membership that owns the mooring" do
+    delete rmboat_boat_membership_url(@boat, @membership)
+    assert_redirected_to boat_url(@boat)
   end
   
   test "delete membership" do
     delete membership_url(@membership)
     assert_redirected_to memberships_url
-    assert_equal flash[:notice], "Membership was successfully deleted."
+    assert_equal flash[:success], "Membership was successfully deleted."
   end
 
   test "associate a boat form" do
@@ -167,8 +200,9 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "save boat association" do
+    @boat3 = boats(:boat3)
     post save_association_membership_url(@membership),
-         params: {membership: {boats: @boat.id}, id: @membership.id}
+         params: {membership: {boats: @boat3.id}, id: @membership.id}
     assert_redirected_to membership_url(@membership.id)
     assert_equal flash[:notice], "Saved association."
   end
@@ -186,11 +220,6 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   
   test "generate no email labels" do
     post download_labels_memberships_url, params: {labels: 'No Email'}
-    assert_response :success
-  end
-  
-  test "generate binnacle labels" do
-    post download_labels_memberships_url, params: {labels: 'Binnacle'}
     assert_response :success
   end
   
@@ -230,21 +259,26 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
   
-  test "show moorings" do
-    get moorings_memberships_url
-    assert_select "h2", "Moorings"
+  test "generate resigned spreadsheet" do
+    post download_spreadsheet_memberships_url, params: {spreadsheet: 'Resigned'}
     assert_response :success
   end
 
-  test "show unassigned moorings" do
-    get unassigned_moorings_memberships_url
-    assert_select "h2", "Unassigned Moorings"
-    assert_response :success
+  test "unassign a mooring" do
+    post unassign_membership_url(@membership)
+    assert_equal "Mooring #261007983 unassigned.", flash[:notice]
+    assert_redirected_to moorings_path
   end
   
-  test "unassign a moorings" do
-    post unassign_membership_url(@membership)
-    assert_redirected_to moorings_memberships_path
+  test "unassign a drysail" do
+    post unassign_drysail_membership_url(@membership)
+    assert_equal "Dry sail spot #1 unassigned.", flash[:notice]
+    assert_redirected_to drysails_path
+  end
+  
+  test "generate an initiation report" do
+    get initiation_report_memberships_url
+    assert_select "h2", "Initiation installments due"
   end
   
 end  

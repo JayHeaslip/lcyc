@@ -2,6 +2,7 @@ require 'csv'
 
 class Person < ApplicationRecord
   belongs_to :membership, foreign_key: 'MembershipID', optional: true
+  belongs_to :committee, optional: true
   has_one :user
 
   validates_presence_of :LastName, :FirstName, :MemberType
@@ -43,13 +44,6 @@ class Person < ApplicationRecord
     end
   end
 
-  def self.binnacle_emails
-    alternates = Membership.members.where('email_binnacle is true and alternate_email is not null').map {|m| m.alternate_email}
-    email_binnacle = Person.members.where('MemberType = "Member" and EmailAddress is not null and EmailAddress != "" and memberships.email_binnacle is true and memberships.alternate_email is null')
-    email_binnacle.to_a.concat(Person.members.where('MemberType = "Partner" and EmailAddress is not null and EmailAddress != "" and memberships.email_partner_binnacle is true'))
-    alternates + email_binnacle.map {|p| p.EmailAddress}
-  end
-  
   def self.email_list(cmte = 'All', filter = false)
     if cmte == 'All'
       if filter
@@ -89,12 +83,11 @@ class Person < ApplicationRecord
     end
   end
 
-  def self.committee_spreadsheet(committee)
-    people = Person.active.where(MemberType: ['Member', 'Partner']).committee(committee).order(:LastName)
+  def self.committee_spreadsheet(people)
     CSV.generate(col_sep: ",") do |csv|
-      csv << %w(FirstName LastName HomePhone WorkPhone CellPhone EmailAddress)
+      csv << %w(FirstName LastName HomePhone WorkPhone CellPhone EmailAddress Committee)
       people.each do |p|
-        csv << [p.LastName, p.FirstName, p.HomePhone, p.WorkPhone, p.CellPhone, p.EmailAddress]
+        csv << [p.LastName, p.FirstName, p.HomePhone, p.WorkPhone, p.CellPhone, p.EmailAddress, p.Committee1]
       end
     end
   end

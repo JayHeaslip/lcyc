@@ -7,13 +7,18 @@ class Membership < ApplicationRecord
   @@Mooring_fee = 80
   @@Mooring_replacement_fee = 120
   @@Drysail_Fee = 100
-  
+
+  before_destroy :destroy_boats
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
   accepts_nested_attributes_for :people, allow_destroy: true,
                                 reject_if: proc { |a| a['FirstName'].blank? }
   has_many :initiation_installments, dependent: :destroy
   accepts_nested_attributes_for :initiation_installments, allow_destroy: true,
                                 reject_if: proc { |a| a['amount'].blank? }
+
+  # a membership can only have one mooring
+  belongs_to :mooring, optional: true
+  has_one :drysail
   
   has_and_belongs_to_many :boats
   accepts_nested_attributes_for :boats, allow_destroy: true,
@@ -28,8 +33,6 @@ class Membership < ApplicationRecord
   validates :State, presence: true, length: { is: 2}
   validates :Zip, presence: true, length: { maximum: 12 }
   validates :Status, presence: true
-  validates :mooring_num, allow_nil: true, inclusion: { in: (0..155) }
-  validates :drysail_num, allow_nil: true, inclusion: { in: (1..12) }
   validate :check_type, if: Proc.new {|m| !m.people.empty?}
   validate :ensure_people, if: Proc.new {|m| m.people.empty?}
   validate :member_since, if: Proc.new {|m| m.Status != 'Accepted'}
@@ -61,6 +64,58 @@ class Membership < ApplicationRecord
     errors.add :base, "There can be at most one 'Partner'" if self.count_type('Partner') > 1
   end
 
+  def mooring_eligible
+    self.Status.in? ['Active', 'Life', 'Associate']
+  end
+
+  ## returns a string for flash
+  def update_drysail_and_mooring(boat)
+    if boat.location == "" || boat.location.nil?
+      boat.mooring = nil
+      boat.drysail = nil
+      ''
+    elsif boat.location == "Mooring" && boat.mooring.nil?
+      # does one of the boat owners have a mooring?
+      mooring = Membership.mooring_available(boat.memberships)
+      if mooring
+        boat.mooring = mooring
+        ''
+      else
+        boat.location = ""
+        return "Mooring not available for boat.\n"
+      end
+    elsif boat.location == "Parking Lot" && boat.drysail.nil?
+      # does one of the boat owners have a drysail spot? 
+      drysail = Membership.drysail_available(boat.memberships)
+      if drysail
+        boat.drysail = drysail
+        ''
+      else
+        boat.location = ""
+        return "Drysail spot not available for boat.\n"
+      end
+    else
+      ''
+    end      
+      
+  end
+  
+  # return first available mooring from an array of memberships
+  def self.mooring_available(memberships)
+    memberships.each do |m|
+      return m.mooring if m.mooring&.boat.nil?
+    end
+    nil
+  end
+  
+  # return first available drysail spot from an array of memberships
+  def self.drysail_available(memberships)
+    memberships.each do |m|
+      return m.drysail if m.drysail&.boat.nil?
+    end
+    nil
+  end
+  
   def ensure_people
     errors.add :base, "You must have a Member in the list of people"
   end
@@ -69,32 +124,10 @@ class Membership < ApplicationRecord
     self.people.inject(0) { |cnt, p| cnt + (p.MemberType == type ? 1 : 0) }
   end
 
-  def self.binnacle_hardcopy
-    m = Membership.members.joins(:people)
-    m.where('email_binnacle is false or (people.MemberType = "Member" and (people.EmailAddress is null or people.EmailAddress = ""))').group(:id).order(:LastName)
-  end
-
   def self.mail_hardcopy
     email_memberships = Person.members.where('subscribe_general is true and EmailAddress is not null and EmailAddress != ""').map{|p| p.membership}.uniq
     mail_memberships = Person.members.where('subscribe_general is false or EmailAddress is null or EmailAddress = ""').map{|p| p.membership}.uniq
     mail_memberships - email_memberships # remove memberships who get an email
-  end
-
-  #return boat on mooring owned by the membership
-  def moored_boat
-    self.boats.select {|b| b.mooring_num == self.mooring_num}[0]
-  end
-
-  #return boat on mooring owned by the membership
-  def drysailed_boat
-    self.boats.select {|b| b.location == 'Parking Lot'}[0]
-  end
-
-  def self.unassigned_moorings
-    club_moorings = (1..155).to_a
-    #club_moorings.delete(142) # club mooring (for Dunn)
-    membership_moorings = Membership.where('mooring_num is not NULL').map {|m| m.mooring_num}
-    club_moorings - membership_moorings
   end
 
   def self.dues(m)
@@ -110,7 +143,7 @@ class Membership < ApplicationRecord
                   HomePhone MN MW MC ME Partner Children)
         for m in members
           info = [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status, 
-                  m.MemberSince, m.mooring_num].concat(m.boat_info)
+                  m.MemberSince, m.mooring ? m.mooring.id : ''].concat(m.boat_info)
           info = info.concat(m.member_info)
           info = info.concat(m.partner_info)
           info = info.concat(m.children_info)
@@ -146,7 +179,7 @@ class Membership < ApplicationRecord
           initiation_due = m.calculate_initiation_installment
           total = dues + mooring_fee + initiation_due + drysail_fee
           csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\x09", m.Country, m.Status, 
-                  m.mooring_num, m.drysail_num, email, dues, initiation_due, mooring_fee, drysail_fee, total]
+                  m.mooring&.id, m.drysail&.id, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end
     end
@@ -183,11 +216,11 @@ class Membership < ApplicationRecord
   
   def boat_info
     #get moored boat name & type
-    if self.mooring_num && self.mooring_num != ''
-      boat = self.boats.where(["location = 'Mooring' AND mooring_num = ? ", self.mooring_num]).first
+    if self.mooring
+      boat = self.boats.where("location = 'Mooring'").first
       boat = self.boats.first if boat.nil?
     else
-        boat = self.boats.first
+      boat = self.boats.first
     end
     if boat
       [boat.Name, boat.Mfg_Size]
@@ -218,7 +251,7 @@ class Membership < ApplicationRecord
   end
 
   def calculate_mooring_fee
-    if (mooring_num && mooring_num != "" && !skip_mooring)
+    if (mooring && !skip_mooring)
       @@Mooring_fee
     else
       0
@@ -226,7 +259,7 @@ class Membership < ApplicationRecord
   end
 
   def calculate_mooring_replacement_fee
-    if (mooring_num && mooring_num != "" && !skip_mooring)
+    if (mooring && !skip_mooring)
       @@Mooring_replacement_fee
     else
       0
@@ -234,10 +267,28 @@ class Membership < ApplicationRecord
   end
 
   def calculate_drysail_fee
-    if (drysail_num && mooring_num != "")
+    if (drysail)
       @@Drysail_Fee
     else
       0
+    end
+  end
+
+  #delete boats if this membership is the only one listed as having it
+  def destroy_boats
+    boats.each do |b|
+      if b.memberships.size == 1
+        b.delete
+      end
+    end
+  end
+
+  def remove_boat_from_mooring
+    self.boats.each do |b|
+      if b.location == "Mooring"
+        b.location = ""
+        b.mooring = nil
+      end
     end
   end
 

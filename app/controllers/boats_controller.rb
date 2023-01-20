@@ -1,8 +1,6 @@
 class BoatsController < ApplicationController
 
   helper_method :sort_column, :sort_direction
-  before_action :get_membership, except: [:index, :associate, :save_association]
-  before_action :authorize, except: [:index, :associate, :save_association]
 
   def index
     @boats = Boat.order(sort_column + " " + sort_direction)
@@ -14,13 +12,15 @@ class BoatsController < ApplicationController
 
   def destroy
     @boat = Boat.find(params[:id])
-    if @membership
-      @membership.boats.delete(@boat)
-      @boat.destroy if @boat.memberships.empty?
+    if @boat.memberships.size > 1
+      @membership = Membership.find(params[:membership_id])
+      @membership.boats = @membership.boats - [@boat]
+      @membership.save
     else
-      @boat.destroy
+      flash[:notice] = "Boat deleted."
+      @boat.delete
     end
-    redirect_to @membership ? membership_path(@membership) : boats_path
+    redirect_to request.referrer
   end
 
   def edit
@@ -28,13 +28,14 @@ class BoatsController < ApplicationController
   end
 
   def update
-    @boat = Boat.find(params[:id])
+    @boat = Boat.includes(:memberships).find(params[:id])
     @boat.attributes = boat_params
+    flash[:alert] = @boat.update_drysail_and_mooring
     if @boat.save
       flash[:notice] = "Successfully updated boat."
       redirect_to boat_path(@boat)
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -45,41 +46,20 @@ class BoatsController < ApplicationController
 
   def save_association
     @boat = Boat.find(params[:id])
-    @boat.memberships << Membership.find(params[:boat][:memberships].to_i)
+    @membership = Membership.find(params[:boat][:memberships])
+    @boat.memberships << @membership
+    @membership.mooring = @boat.mooring if @boat.location == "Mooring"
     if @boat.save
+      flash[:notice] = "Saved association."
       redirect_to boat_path(@boat)
     else
       @memberships = Membership.active - @boat.memberships
       puts @boat.errors.full_messages
-      render :associate
+      render :associate, status: :unprocessable_entity
     end
   end
 
   private
-
-  def get_membership
-    if params[:membership_id]  
-      @membership = Membership.includes(:boats).find(params[:membership_id])
-      @authorized_memberships = [@membership]
-    else
-      @membership = nil
-      @authorized_memberships = Boat.find(params[:id]).memberships
-    end
-  end
-
-  def authorize
-    if not current_user.roles?(%w(Admin Membership Harbormaster)) 
-      if @authorized_memberships.map {|m| m.id}.include?(current_user.membership)
-        return true
-      else
-        flash[:error] = "You are not authorized to view the page you requested."
-        request.env["HTTP_REFERER" ] ? (redirect_to :back) : (redirect_to root_path)
-        return false
-      end
-    else
-      return true  #Admin/Membership/Harbormaster
-    end
-  end
 
   def sort_column
     Boat.column_names.include?(params[:sort]) ? params[:sort] : "Name"
@@ -91,7 +71,7 @@ class BoatsController < ApplicationController
 
   def boat_params
     params.require(:boat).permit(:Mfg_Size, :Type, :Name, :Length,
-                                 :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring_num)
+                                 :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring_id)
   end
   
 end

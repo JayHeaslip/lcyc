@@ -1,11 +1,11 @@
-<%= form_for @wait_list_entry, url: mooring_update_wait_list_entry_path(@wait_list_entry) do |f| %>
-<div class="form-group row">
+<%= form_with model: @wait_list_entry, url: mooring_update_wait_list_entry_path(@wait_list_entry) do |f| %>
+<div class="row">
   <label for="mooring" class="col-form-label pt-0 col-sm-4">Assigning mooring for: <%= @membership.MailingName %></label>
   <div class="col-sm-2">
     <%= select_tag(:mooring, options_for_select(@moorings, params[:mooring])) %>
   </div>
 </div>
-<div class="form-group row mt-3">
+<div class="row mt-3">
   <div class="col-sm-3">
     <button type="submit" class="btn btn-primary">Assign</button> | <%= link_to 'Back', wait_list_entries_path %>
   </div>

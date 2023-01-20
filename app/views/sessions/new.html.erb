@@ -1,0 +1,20 @@
+<%= form_with url: login_url, class: "form-signin" do |f| %>
+  <h2 class="form-signin-heading">Please login</h2>
+  <label for="email" class="sr-only">Email</label>
+  <%= f.text_field :email, class: "form-control", placeholder: "Email" %>
+  <label for="password" class="sr-only">Password</label>
+  <%= f.password_field :password, class: "form-control", placeholder: "Password" %>
+  <div class="checkbox">
+    <%= f.check_box :remember_me, class: "form-check-input" %>
+    <label class="form-check-label" >Remember me?</label>
+  </div>
+  <%= f.submit "Login", class: "btn btn-primary btn-block" %>
+  <div class="mt-2">
+    <%= link_to "Forgot password?", new_password_path %>
+  </div>
+  <div class="mt-2">
+    <%= link_to "Create an account", sign_up_path %>
+  </div>
+
+<% end %>
+  

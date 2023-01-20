@@ -1,7 +1,9 @@
 
 class MailingsController < ApplicationController
-
-  skip_before_action :check_authentication, :check_authorization, only: [:deliver_mail]
+  include ActiveStorage::SetCurrent
+  
+  skip_before_action :authenticate_user!, :check_authorization, only: [:deliver_mail]
+  before_action :check_delayed_job, only: [:new, :show, :loginfo]
   
   def index
     @mailings = Mailing.sorted
@@ -11,7 +13,6 @@ class MailingsController < ApplicationController
     @mailing = Mailing.find(params[:id])
     @test = true
     @filter_emails = false
-    check_delayed_job
   end
 
   def new
@@ -19,17 +20,16 @@ class MailingsController < ApplicationController
     @mailing.replyto = current_user.email
     @mailing.html = true
     @committees = ['All'].concat(Committee.names)
-    check_delayed_job
   end
 
   def create
     @mailing = Mailing.new(mailing_params)
     @committees = ['All'].concat(Committee.names)
     if @mailing.save
-      flash[:notice] = "Success."
+      flash[:success] = "Success."
       redirect_to mailing_path(@mailing)
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -42,11 +42,11 @@ class MailingsController < ApplicationController
     @mailing = Mailing.find(params[:id])
     @mailing.attributes = mailing_params
     if @mailing.save
-      flash[:notice] = "Success."
+      flash[:success] = "Success."
       redirect_to mailing_path(@mailing)
     else
       @committees = ['All'].concat(Committee.names)
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -55,149 +55,85 @@ class MailingsController < ApplicationController
     redirect_to mailings_path
   end
 
-  def new_billing
-    @mailing = Mailing.new
-    @mailing.replyto = current_user.email
-    @mailing.html = true
-    @mailing.subject = "unused"
-  end
-
-  def create_billing
-    @mailing = Mailing.new(mailing_params)
-    @mailing.subject = "unused"
-    if @mailing.save
-      flash[:notice] = "Success."
-      redirect_to billing_mailing_path(@mailing)
-    else
-      render :new_billing
-    end
-  end
-
-  def edit_billing
-    @mailing = Mailing.find(params[:id])
-  end
-
-  def update_billing
-    @mailing = Mailing.find(params[:id])
-    @mailing.attributes = mailing_params
-    if @mailing.save
-      flash[:notice] = "Success."
-      redirect_to billing_mailing_path(@mailing)
-    else
-      render :edit_billing
-    end
-  end
-
-  def billing
-    @mailing = Mailing.find(params[:id])
-    @test = true
-    check_delayed_job
-  end
-  
-  def send_bills
-    @mailing = Mailing.find(params[:id])
-    flashes = ""
-    if params[:test]
-      p = Person.find_by_EmailAddress(current_user.email)
-      members = [p.membership]
-    else
-      members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
-    end
-
-    members.each_with_index do |m, i|
-      logger.info "Generating bill for #{m.MailingName}"
-      dues = Membership.dues(m)
-      mooring_fees = m.calculate_mooring_fee
-      drysail_fee = m.calculate_drysail_fee
-      initiation = m.calculate_initiation_installment
-      member = m.people.where('MemberType = "Member"').first
-      email = nil
-      if member.EmailAddress && member.EmailAddress != ""
-        email = member.EmailAddress
+  def loginfo
+    @membership_chair = session[:membership_chair]
+    if request.post?
+      if params[:membership_chair].blank?
+        flash.now[:error] = "Membership chair cannot be blank."
+        set_loginfo_variables
+        render :loginfo, status: :unprocessable_entity
       else
-        partner = m.people.where('MemberType = "Partner"').first
-        if partner && partner.EmailAddress && partner.EmailAddress != ""
-          email = partner.EmailAddress
-        end
-      end
-
-      if email.nil?
-        logger.info "Note: bill was not sent for #{m.MailingName}, no valid email"
-        flashes += "Note: bill was not sent for #{m.MailingName}, no valid email<br/>"
-      elsif m.paid
-        logger.info "#{m.MailingName} was marked as paid"
-      else
-        if Rails.env == 'development' || Rails.env == 'test'
-          MailRobot.send_bills(params[:id].to_i, email, 
-                               m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
-                               m.Status, m.mooring_num, m.drysail_num, dues, mooring_fees, drysail_fee, initiation).deliver
+        session[:membership_chair] = params[:membership_chair]
+        if params[:test]
+          memberships = [Person.find_by_EmailAddress(current_user.email).membership]
+          memberships = [Membership.find(407)] if memberships.empty?
         else
-          MailRobot.delay(run_at: i.minutes.from_now).send_bills(params[:id].to_i, email, 
-                                                                 m.MailingName, m.StreetAddress, m.City, m.State, m.Zip,
-                                                                 m.Status, m.mooring_num, m.drysail_num, dues, mooring_fees, drysail_fee, initiation)
+          memberships = Membership.members
         end
+        memberships.each_with_index do |m, i|
+          if params[:test]
+            to = current_user.email
+            cc = nil
+          else
+            to = m.people.where('MemberType = "Member"').EmailAddress.first
+            cc = m.people.where('MemberType = "Partner"').EmailAddress.first
+          end
+          partner_info = m.partner_info[0].split("\t")
+          MailRobot.loginfo(ActiveStorage::Current.url_options, to, cc, @membership_chair, m,
+                            m.boat_info, m.member_info, partner_info, m.children_info).deliver_later(wait_until: (i*30).seconds.from_now)
+        end
+        flash[:notice] = "Log info emails sent."
+        redirect_to root_url
       end
-    end
-    if flashes != ''
-      flash[:notice] = flashes
     else
-      flash[:notice] = "Sending bills."
+      set_loginfo_variables
+      @test = true
+      session[:referrer] = request.referrer
     end
-    redirect_to root_path
   end
+
   
   def send_email
-    last_email_sent_time = Mailing.order(sent_at: :desc).first.sent_at
     @mailing = Mailing.find(params[:id])
 
-    # it's been at least 23 hours since we sent a blast
+    # check if it's been at least 23 hours since we sent a blast
+    last_email_sent_time = Mailing.order(sent_at: :desc).first.sent_at
     last_email_sent_time = Time.now - 1.day if last_email_sent_time.nil?
-    if params[:test] || (Time.now > (last_email_sent_time + 23.hours))  
+
+    if params[:test] || (Time.now > (last_email_sent_time + 23.hours))
       @filter_emails = !params[:filter_emails].nil?
       people = Person.email_list(@mailing.committee, @filter_emails)
-      people.each {|e| logger.info "General email: #{e.EmailAddress}" }
       if params[:test]
         p = Person.find_by_EmailAddress(current_user.email)
         if p.nil?
-          flash[:error] = "Current user's email not found in membership database"
-          people = []
-          redirect_to mailings_path
-        else
-          people = [p]   #,p2]*120
-          logger.info "Test email address: #{p.EmailAddress}"
+          p = add_as_nonmember(current_user.email)
         end
+        people = [p]
+        logger.info "Test email address: #{p.EmailAddress}"
       else
         @mailing.sent_at = Time.now
         @mailing.save
       end
       
       unless people.empty?
-        people_ids = people.to_a.map {|p| p.id}
-        self.deliver_mail(people_ids, params[:id].to_i, host, @filter_emails)
+        deliver_mail(people, @mailing, host, @filter_emails)
         flash[:notice] = "Delivering mail."
-        redirect_to mailings_path
       end
+      redirect_to mailings_path
     else
       formatted_time = (last_email_sent_time+23.hours).strftime("%m/%d/%Y at %I:%M %p")
       flash[:error] = "You've sent a mailing within the last 23 hours, please wait until #{formatted_time} to send an email"
-      render :show
+      render :show, status: :unprocessable_entity
     end
   end
 
   def deliver_mail(people, mailing, host, filtered)
-    logger.info "Delivering mail from #{host}"
-    people.each_with_index do |id, i|
-      begin
-        person = Person.find(id)
-        person.generate_email_hash if person.email_hash.nil?
-	#hr = (i/60)
-        if Rails.env == 'development' || Rails.env == 'test'
-          MailRobot.mailing(person, mailing, host, filtered).deliver
-        else
-          MailRobot.delay(run_at: (i*30).seconds.from_now).mailing(person, mailing, host,filtered)
-        end
-      rescue
-        logger.info "Person not found: #{id}"
+    people.each_with_index do |person, i|
+      person.generate_email_hash if person.email_hash.nil?
+      if Rails.env == 'test'
+        MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver
+      else
+        MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver_later(wait_until: (i*30).seconds.from_now)
       end
     end
   end
@@ -209,9 +145,30 @@ class MailingsController < ApplicationController
   end
 
   def mailing_params
-    params.require(:mailing).permit(:committee, :subject, :replyto, :body, :html,
-                                    attachments_attributes: Attachment.attribute_names.map(&:to_sym).push(:_destroy).push(:pdf))
-
+    params.require(:mailing).permit(:committee, :subject, :replyto, :content, pdfs: [])
   end
 
+  def add_as_nonmember(email)
+    m = Membership.where(Status: 'Non-member').first
+    if m.nil?
+      m = Membership.new(Status: 'Non-member')
+      m.save(validate: false)
+    end
+    p = Person.new(EmailAddress: email,
+                 subscribe_general: false,
+                 MemberType: 'MailList',
+                 MembershipID: m.id)
+    p.save(validate: false)
+    return p
+  end
+
+  def set_loginfo_variables
+    @m = Person.find_by_EmailAddress(current_user.email).membership
+    @m = Membership.find(407) if @m.nil?
+    @boat_info = @m.boat_info
+    @member_info = @m.member_info
+    @partner_info = @m.partner_info[0].split("\t")
+    @children_info = @m.children_info
+  end
+    
 end

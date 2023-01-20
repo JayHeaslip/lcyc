@@ -1,8 +1,12 @@
 <h2>Generate Labels (Avery 5160)</h2>
-<%= form_tag download_labels_memberships_path do %>
-<label>Type</label>
-<%= select_tag :labels, options_for_select(@label_options, @labels) %>
-<button type='submit' class='btn btn-primary'>Generate</button> | <%= link_to 'Back', back_link(1) %>
+<%= form_with url: download_labels_memberships_path, data: { turbo: false } do |f| %>
+  <div class="row mb-3">
+    <label class="col-auto col-form-label">Type:</label>
+    <div class="col-sm-3">
+      <%= f.select :labels, options_for_select(@label_options, @labels), {}, class: "form-control" %>
+    </div>
+  </div>
+  <%= f.submit "Generate", class: "btn btn-primary" %> | <%= link_to 'Back', url_for(:back) %>
 <% end %>
 
 <p class="small mt-3">Note: When printing these labels, make sure "Page Scaling" is set to "None".</p>

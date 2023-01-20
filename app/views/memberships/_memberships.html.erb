@@ -1,0 +1,32 @@
+<%= turbo_frame_tag "memberships" do %>
+  <p class="mt-2"><b>Total : </b><%= @memberships.length %></p>
+  
+  <table class="table table-sm table-striped">
+    <thead class="thead-light">
+      <tr>
+	<th><%= sortable "LastName", "Last Name" %></th>
+	<th><%= sortable "MailingName", "Mailing Name" %></th>
+	<th><%= sortable "MemberSince", "Member Since" %></th>
+	<th><%= sortable "Status", "Status" %></th>
+	<th><%= sortable "change_status_date", "Status Changed" %></th>
+	<th><%= sortable "mooring_num", "Mooring#" %></th>
+      </tr>
+    </thead>
+    
+    <tbody class="text-gray-700">
+      <% memberships.each do |membership| %>
+        <tr scope="row">
+	  <td><%= link_to membership.LastName, membership %>
+	    <td><%= membership.MailingName %></td>
+	    <td><%= membership.MemberSince %></td>
+	    <td><%= membership.Status %></td>
+	    <td><%= membership.change_status_date %></td>
+	    <td><%= membership.mooring&.id %></td>
+	    <td class="list-actions">
+	      <%= link_to 'Delete', membership, data: { turbo_confirm: 'Are you sure?', turbo_method: :delete} %>
+	    </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

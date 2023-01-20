@@ -1,0 +1,38 @@
+<table class="table table-sm table-striped">
+  <thead class="thead-light">
+    <tr>
+      <th>Dry Sail #</th>
+      <th>Membership</th>
+      <th>Boat Name</th>
+      <th>Boat Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% for drysail in @drysails %>
+      <tr scope="row">
+	<td><%= drysail.id %></td>
+	<% if drysail.membership %>
+	  <td><%= link_to drysail.membership&.MailingName, drysail.membership %></td>
+	<% else %>
+	  <td></td>
+	<% end %>
+	<% if drysail.boat %>
+ 	  <td><%= link_to drysail.boat.Name, drysail.boat %></td>
+ 	  <td><%= link_to drysail.boat.Mfg_Size, drysail.boat %></td>
+	<% else %>
+	  <td></td>
+	  <td></td>
+	<% end %>
+	<% if drysail.membership %>
+	  <td><span class="list-actions"><%= link_to 'Unassign', unassign_drysail_membership_path(drysail.membership),
+					  data: {turbo_confirm: 'Are you sure?', turbo_method: :post} %>
+	  </span>
+	  </td>
+	<% else %>
+	  <td><span class="list-actions"><%= link_to 'Assign', assign_drysail_path(drysail) %>
+	  </td>
+	<% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

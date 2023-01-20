@@ -1,6 +1,6 @@
 <h2>Mailings</h2>
 
-<table class="table table-sm">
+<table class="ms-4 table table-sm">
   <thead class="thead-light">
     <tr>
       <th>Subject</th>
@@ -10,14 +10,15 @@
   </thead>
   <tbody>
     <%- for mailing in @mailings %>
-    <tr>
-      <td><%= mailing.subject %>
-      <td><%= mailing.created_at %>
-      <td><%= mailing.sent_at %>
-      <td class="list-actions">
-	<%= link_to 'Show', mailing_path(mailing) %><br/>
-	<%= link_to 'Delete', mailing, data: {confirm: 'Are you sure?'}, method: :delete %>
-    </tr>
+      <tr>
+	<td><%= mailing.subject %></td>
+	<td><%= mailing.created_at %></td>
+	<td><%= mailing.sent_at %></td>
+	<td class="list-actions">
+	  <%= link_to 'Show', mailing_path(mailing) %><br/>
+	  <%= link_to 'Delete', mailing, data: {turbo_method: 'delete', turbo_confirm: 'Are you sure?'} %>
+	</td>
+      </tr>
     <% end %>
   </tbody>
 </table>

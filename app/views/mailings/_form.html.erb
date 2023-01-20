@@ -10,31 +10,24 @@
   </ul>
 </div>
 <% end %>
-<div class="form-row pb-2">
-  <label for="committee" class="col-form-label pt-0">Committee: </label>
-  <div>
+<div class="row pb-2">
+  <label for="committee" class="col-form-label col-auto pt-0">Committee: </label>
+  <div class="col-sm-3">
     <%= f.select :committee, @committees, class: "form-control" %>
   </div>
 </div>
-<div class="form-row pb-2">
-  <label for="subject" class="col-form-label col-sm-1">Subject: </label>
-  <div>
-    <%= f.text_field :subject, size: 30, class: "form-control" %>
+<div class="row pb-2">
+  <label for="subject" class="col-form-label col-auto">Subject: </label>
+  <div class="col-sm-4">
+    <%= f.text_field :subject, size: 30, class: "form-control col-sm-3" %>
   </div>
 </div>
-<div class="form-row pb-2">
-  <label for="subject" class="col-form-label col-sm-1">Reply to: </label>
-  <div>
+<div class="row pb-2">
+  <label for="subject" class="col-form-label col-auto">Reply to: </label>
+  <div class="col-sm-3">
     <%= f.text_field :replyto, size: 30, class: "form-control" %>
   </div>
 </div>
-<div class="form-row pb-2">
-  <label for="subject" class="col-form-label col-sm-1">Body: </label>
-  <div>
-    <%= f.text_area :body, size: "80x25", class: "form-control" %>
-  </div>
-</div>
-<div class="form-row form-check mr-4 pb-2">
-  <%= f.check_box :html, class: "form-check-input" %>
-  <label for="html" class="form-check-label">HTML?</label>
+<div class="row ms-3 pb-2">
+  <%= f.rich_text_area :content %>
 </div>

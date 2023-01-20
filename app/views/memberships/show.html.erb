@@ -25,7 +25,7 @@
 	<td><b>Country:</b></td><td><%= @membership.Country %></td>
       </tr>
       <tr>
-	<td><b>Mooring #:</b></td><td><%= @membership.mooring_num %></td>
+	<td><b>Mooring #:</b></td><td><%= @membership.mooring&.id %></td>
       </tr>
       <tr>
 	<td><b>Dry Sail #:</b></td><td><%= @membership.drysail_num %></td>
@@ -101,11 +101,6 @@
 	<td><%= person.EmailAddress %></td>
 	<td><%= person.Committee1 %></td>
 	<td><%= person.BirthYear %></td>
-	<td class="list-actions">
-	  <% if person.MemberType != 'Member' %>
-          <%= link_to "Delete", membership_person_path(@membership,person), data: {confirm: "Are you sure?"}, method: :delete %>
-          <% end %>
-	</td>
       </tr>
       <% end %>
     </tbody>

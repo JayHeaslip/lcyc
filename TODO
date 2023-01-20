@@ -3,7 +3,6 @@ TODO items
 make sure ./cronjob runs ok, only need to run on production
 on switch to production, kill delayed job, then restart and check
 allow BOG to People#select_commitee, People#committee, Committees#download_spreadsheet
-add validation to drysail_num (1..12), allow nil
 
 tasks
 ------------------------------------------
@@ -12,12 +11,19 @@ clean up database (resigned members, boats with no owners, etc., users that are 
 
 non-transparent updates
 -------------------------------------------------------------------
-add a fees table to be used in generating bills (active dues, senior dues, mooring fee, etc.)
-fix mooring (make it a mooring table, instead of a membership field)
-add updated_by field
-remove unused fields in attachment table
-make committe/person a has relationship
-create hierarchy of roles (Member->BOG-> [Membership, Harbormaster, Communications])
+7.5) Check mail template   
+8) check with Doug on viewing old mail
+10) Add log info update email
+11) Add active session index
+12) Check log info
+
+later
+-----------
+1) remove unused database fields (mooring_num, drysail_num)
+2) add a fees table to be used in generating bills (active dues, senior dues, mooring fee, etc.)
+3) add updated_by field
+4) automatically check descendant roles/view all descendant roles?
+   create hierarchy of roles (Member->BOG-> [Membership, Harbormaster, Communications])
     add parent to each role
     showing - display ancestor rights in a different color
     editing - display ancestor rights by making checkbox read only
@@ -29,6 +35,25 @@ create hierarchy of roles (Member->BOG-> [Membership, Harbormaster, Communicatio
 
 Done
 ----------------------------------------------------------------------
+2) fix membership filter/sort (persist filter options)
+3) sortable mooring/depth on mooring index
+4) add treasurer role
+   assign a shared mooring - associate another member with the boat
+5.5) have only 1 role to check, make [Membership, Communications, Treasurer, Harbormaster] a superset of the BOG role
+5) test flows with roles
+   save rights for later reload - seed?
+6) regenerate migrations
+   reload old database & check
+7) write script to run after migrations to fix everything up
+   update_membership_mooring.rb
+   update_membership_drysail.rb
+   update_person_committee.rb
+   add_treasurer_role.rb
+   Right.synchronize_with_controllers then reload rights
+   cleanup boats/assign mooring & drysail
+   check Member role for every user
+8.5) Deploy
+
 deploy
 -----------
 git branches for staging: master

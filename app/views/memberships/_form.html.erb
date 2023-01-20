@@ -1,46 +1,63 @@
-<%= form_for @membership do |f| %>
-<% if @membership.errors.any? %>
-<div id="error_explanation">
-  <h3><%= pluralize(@membership.errors.count, "error") %>
-    prohibited this membership from being saved:</h3>
-  
-  <ul>
-    <% @membership.errors.full_messages.each do |message| %>
-    <li><%= message %></li>
+<%= form_with model: @membership, data: {controller: 'dynamic-form'} do |f| %>
+    <template data-dynamic-form-target="installmentTemplate">
+	<%= f.fields_for :initiation_installments, InitiationInstallment.new, child_index: 'NEW_RECORD' do |ii_fields| %>
+	    <%= render "initiation_installment", f: ii_fields %>
+	<% end %>
+    </template>
+
+    <template data-dynamic-form-target="personTemplate">
+	<%= f.fields_for :people, Person.new, child_index: 'NEW_RECORD' do |person_fields| %>
+	    <%= render "people/form", f: person_fields %>
+	<% end %>
+    </template>
+    
+    <template data-dynamic-form-target="boatTemplate">
+      <%= f.fields_for :boats, Boat.new, child_index: 'NEW_RECORD' do |boat_fields| %>
+	<%= render "boats/form", f: boat_fields %>
+      <% end %>
+    </template>
+    
+    <% if @membership.errors.any? %>
+      <div class="row">
+	<h3><%= @membership.errors.count %> errors prohibited this membership from being saved:</h3>
+	<ul>
+	  <% @membership.errors.full_messages.each do |message| %>
+	    <li><%= message %></li>
+	  <% end %>
+	</ul>
+      </div>
     <% end %>
-  </ul>
-</div>
-<% end %>
-
-<%= render partial: "form_member_update1", locals: { f: f} %>
-<%= render partial: "form_membership_update", locals: { f: f} %>
-
-<h4>People</h4>
-<hr>
-<div class="person_fields">
-  <%= f.fields_for :people do |f| %>
-  <%= render 'person', f: f %>
-  <% end %>
-</div>
-
-<%= link_to_add_person('Add person', f, :people, class: 'btn btn-primary mb-3') %>
-
-<h4>Boat</h4>
-<hr>
-<div class="boat_fields">
-  <%= f.fields_for :boats do |f| %>
-  <%= render 'boat', f: f %>
-  <% end %>
-</div>
-
-<%= link_to_add_boat('Add boat', f, :boats, class: 'btn btn-primary') %>
-
-<div class="form-group row mt-4">
-  <div class="mr-4">
-    <button type="submit" class="btn btn-primary"><%= button %></button> 
-    <% if button == "Update Membership" %>
-    | <%= link_to 'Back', membership_url(@membership) %>
-    <% end %>
-  </div> 
-</div>
+    
+    <%= render partial: "form_member_update1", locals: { f: f} %>
+    <%= render partial: "form_membership_update", locals: { f: f} %>
+    
+    <h4>People</h4>
+    <hr>
+    <div id="people" class="ms-4" data-controller="child-hide">
+	<%= f.fields_for :people do |person_fields| %>
+	    <%= render "people/form", f: person_fields %>
+	<% end %>
+	
+	<div data-dynamic-form-target="person"></div>
+	<button type="button" data-action="dynamic-form#add_person", class="btn btn-primary mb-3">Add person</button>
+    </div>
+    
+    <h4>Boat</h4>
+    <hr>
+    <div class="boat_fields ms-4">
+	<%= f.fields_for :boats do |f| %>
+	    <%= render 'boats/form', f: f %>
+	<% end %>
+	<div data-dynamic-form-target="boat"></div>
+	<button type="button" data-action="dynamic-form#add_boat", class="btn btn-primary mb-3">Add boat</button>
+    </div>
+    
+    <div class="form-group row mt-4">
+	<div class="mr-4">
+	    <button type="submit" class="btn btn-primary"><%= button %></button> 
+	    <% if button == "Update Membership" %>
+		| <%= link_to 'Back', membership_url(@membership) %>
+	    <% end %>
+	</div> 
+    </div>
 <% end %>

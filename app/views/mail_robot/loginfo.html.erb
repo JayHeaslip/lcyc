@@ -1,0 +1,53 @@
+<p>Please review the following information. This will be used for your listing in the next LCYC log. If you need to make updates or corrections, please send an email to our Membership chair, <%= @membership_chair %>, at lcycsecretary@gmail.com.</p>
+<p>Note: Children are only listed if they are under 24 years old, see Article
+  II, Section 1 (b) of the Bylaws.</p>
+<hr/>
+<table width="500" class="ms-4">
+  <tr>
+    <td><bold><%= @membership.LastName %></bold></td>
+    <td><bold>Member Since: </bold><%= @membership.MemberSince %></td>
+  </tr>
+  <tr>
+    <td><%= @membership.MailingName %></bold></td>
+    <td><bold>Status: </bold><%= @membership.Status %></td>
+  </tr>
+  <tr>
+    <td><%= @membership.StreetAddress %></bold></td>
+    <td><bold>Mooring: </bold><%= @membership.mooring&.id %></td>
+  </tr>
+  <tr>
+    <td><%= @membership.City %>, <%= @membership.State %>&nbsp;&nbsp;&nbsp;<%= @membership.Zip %></bold></td>
+    <td><bold>Boat Name: </bold><%= @boat[0] %></td>
+  </tr>
+  <tr>
+    <td>Home Phone: <%= @member[0] %></td>
+    <td>Type: <%= @boat[1] %></td>
+  </tr>
+</table>
+<hr/>
+<table width="500" class="ms-4">
+  <tr>
+    <th>Name</th>
+    <th>Work Phone</th>
+    <th>Cell Phone</th>
+    <th>Email Address</th>
+  </tr>
+  <tr>
+    <td><%= @member[1] %></td>
+    <td><%= @member[2] %></td>
+    <td><%= @member[3] %></td>
+    <td><%= @member[4] %></td>
+  </tr>
+  <tr>
+    <td><%= @partner[0] %></td>
+    <td><%= @partner[1] %></td>
+    <td><%= @partner[2] %></td>
+    <td><%= @partner[3] %></td>
+  </tr>
+  <tr>
+    <td><%= @children[0] %></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>

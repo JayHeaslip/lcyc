@@ -1,31 +1,28 @@
 class CommitteesController < ApplicationController
 
-  before_action :authorize
-
-  def download_spreadsheet
-    @committee = params[:id] || 'Boats'
-    content = Person.committee_spreadsheet(@committee)
-    send_data(content, type: "text/csv", filename: "#{@committee}_committee.csv")
+  def select
   end
-
-  private
-
-  def get_membership
-    @membership = Membership.find(params[:membership_id])
-  end
-
-  def authorize
-    if not current_user.roles?(%w(Admin Membership)) #BOG
-      if current_user.membership && current_user.membership != params[:membership_id].to_i
-        flash[:error] = "You are not authorized to view the page you requested."
-        request.env["HTTP_REFERER"] ? (redirect_to :back) : (redirect_to root_path)
-        return false
-      else
-        return true
-      end
+  
+  def list
+    unless params[:committee] == "All"
+      @committee = Committee.includes(:people).find_by_Name(params[:committee] || 'Boats')
+      @people = @committee.people
     else
-      return true  #Admin & Membership
+      @committee = "All"
+      @people = Person.active.where(MemberType: ['Member', 'Partner']).order(:LastName)
     end
+  end
+
+  def download_all
+    @people = Person.active.where(MemberType: ['Member', 'Partner']).order(:LastName)
+    content = Person.committee_spreadsheet(@people)
+    send_data(content, type: "text/csv", filename: "All_committees.csv")
+  end
+
+  def download
+    @committee = Committee.includes(:people).find(params[:id])
+    content = Person.committee_spreadsheet(@committee.people)
+    send_data(content, type: "text/csv", filename: "#{@committee.Name}_committee.csv")
   end
 
 end
