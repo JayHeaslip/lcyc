@@ -40,7 +40,7 @@ class QuickbooksController < ApplicationController
     session[:state] = SecureRandom.uuid
 
     client = oauth2_client
-    redirect_to client.authorization_uri(scope: 'com.intuit.quickbooks.accounting', state: session[:state])
+    redirect_to client.authorization_uri(scope: 'com.intuit.quickbooks.accounting', state: session[:state]), allow_other_host: true
   end
 
   def new
@@ -157,9 +157,13 @@ class QuickbooksController < ApplicationController
   private
   
   def oauth2_client
-    client_id = Rails.application.secrets.OAUTH_CONSUMER_KEY
-    client_secret = Rails.application.secrets.OAUTH_CONSUMER_SECRET
-    redirect_uri = Rails.application.secrets.REDIRECT_URI
+    client_id = Rails.application.credentials.OAUTH_CONSUMER_KEY
+    client_secret = Rails.application.credentials.OAUTH_CONSUMER_SECRET
+    if Rails.env == "staging"
+      redirect_uri = Rails.application.credentials.staging.REDIRECT_URI
+    else
+      redirect_uri = Rails.application.credentials.production.REDIRECT_URI
+    end
     logger.info "redirect uri is #{redirect_uri}"
     
     Rack::OAuth2::Client.new(
