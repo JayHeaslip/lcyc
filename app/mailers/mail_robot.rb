@@ -37,11 +37,17 @@ class MailRobot < ApplicationMailer
     @member = member
     @partner = partner
     @children = children
-    mail(to: to,
-      cc: cc,
-      from: "LCYC Announcements <lcyc@members.lcyc.info>",
-      reply_to: "lcycsecretary@gmail.com",
-      subject: "[LCYC] Log info verification")
+    logger.info "mailing to #{to}"
+    logger.info @membership.MailingName
+    to = cc if to.nil?
+
+    if to
+      mail(to: to,
+        cc: cc,
+        from: "LCYC Announcements <lcyc@members.lcyc.info>",
+        reply_to: "lcycsecretary@gmail.com",
+        subject: "[LCYC] Log info verification")
+    end
   end
 
   def dbbackup(backup)
