@@ -21,9 +21,9 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   test "should login and create active session if confirmed" do
     assert_difference("@confirmed_user.active_sessions.count") do
       post login_path, params: {
-             email: @confirmed_user.email,
-             password: @confirmed_user.password
-           }
+        email: @confirmed_user.email,
+        password: @confirmed_user.password
+      }
     end
     assert_redirected_to root_path
     assert_equal @confirmed_user, current_user
@@ -33,10 +33,10 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_nil cookies[:remember_token]
 
     post login_path, params: {
-           email: @confirmed_user.email,
-           password: @confirmed_user.password,
-           remember_me: 1
-         }
+      email: @confirmed_user.email,
+      password: @confirmed_user.password,
+      remember_me: 1
+    }
 
     assert_not_nil current_user
     assert_not_nil cookies[:remember_token]
@@ -59,9 +59,9 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should not login if unconfirmed" do
     post login_path, params: {
-           email: @unconfirmed_user.email,
-           password: @unconfirmed_user.password
-         }
+      email: @unconfirmed_user.email,
+      password: @unconfirmed_user.password
+    }
     assert_equal "Incorrect email or password.", flash[:alert]
     assert_nil current_user
     assert_redirected_to new_confirmation_path
@@ -69,15 +69,15 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test "should handle invalid login" do
     post login_path, params: {
-           email: @confirmed_user.email,
-           password: "foo"
-         }
+      email: @confirmed_user.email,
+      password: "foo"
+    }
     assert_not_nil flash[:alert]
     assert_nil current_user
   end
 
   test "should handle unknown user" do
-    post login_path, params: { email: "unknown@example.com", password: "abcdefg"}
+    post login_path, params: {email: "unknown@example.com", password: "abcdefg"}
     assert_equal "Incorrect email or password.", flash[:alert]
     assert_response :unprocessable_entity
   end

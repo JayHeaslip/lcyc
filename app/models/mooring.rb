@@ -1,5 +1,4 @@
 class Mooring < ApplicationRecord
-
   # needed because a mooring may belong to multiple memberships
   has_many :memberships
 

@@ -1,10 +1,9 @@
-require 'test_helper'
+require "test_helper"
 
 class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
-
   setup do
     admin = users(:one)
-    login_as(admin, 'passwor1')
+    login_as(admin, "passwor1")
     @membership = memberships(:member1)
     @wl = wait_list_entries(:wl2)
     @badwl = wait_list_entries(:wl3)
@@ -26,20 +25,20 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
   test "create entry" do
     @membership = memberships(:member2)
     post wait_list_entries_url, params: {wait_list_entry: {membership_id: @membership.id}}
-    assert_redirected_to  wait_list_entries_url
-    assert_equal flash[:notice], 'Wait list entry was successfully created.'
+    assert_redirected_to wait_list_entries_url
+    assert_equal flash[:notice], "Wait list entry was successfully created."
     @wl = WaitListEntry.last
-    assert_equal Date.new(2009,2,2), @wl.date
+    assert_equal Date.new(2009, 2, 2), @wl.date
   end
 
   test "create entry accepted member" do
     @wl = WaitListEntry.new
     @membership = memberships(:member4)
     post wait_list_entries_path, params: {wait_list_entry: {membership_id: @membership.id, notes: "New note"}}
-    assert_redirected_to  wait_list_entries_path
-    assert_equal flash[:notice], 'Wait list entry was successfully created.'
+    assert_redirected_to wait_list_entries_path
+    assert_equal flash[:notice], "Wait list entry was successfully created."
     @wl = WaitListEntry.last
-    assert_equal Date.new(2018,3,2), @wl.date
+    assert_equal Date.new(2018, 3, 2), @wl.date
     assert_equal @wl.notes, "New note"
   end
 
@@ -57,16 +56,16 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
 
   test "update entry" do
     patch wait_list_entry_path(@wl), params: {wait_list_entry: {membership_id: @membership.id, notes: "Note"}}
-    assert_redirected_to  wait_list_entries_path
-    assert_equal flash[:notice], 'Wait list entry was successfully updated.'
+    assert_redirected_to wait_list_entries_path
+    assert_equal flash[:notice], "Wait list entry was successfully updated."
   end
 
   test "update entry forced date" do
-    patch wait_list_entry_path(@wl), params: {force_wld: true, wait_list_entry: {membership_id: @membership.id, notes: "Note", date: '02-11-1995'}}
-    assert_redirected_to  wait_list_entries_path
-    assert_equal flash[:notice], 'Wait list entry was successfully updated.'
+    patch wait_list_entry_path(@wl), params: {force_wld: true, wait_list_entry: {membership_id: @membership.id, notes: "Note", date: "02-11-1995"}}
+    assert_redirected_to wait_list_entries_path
+    assert_equal flash[:notice], "Wait list entry was successfully updated."
     @wl = WaitListEntry.find(ActiveRecord::FixtureSet.identify(:wl2))
-    assert_equal @wl.date, Date.new(1995,11,2)
+    assert_equal @wl.date, Date.new(1995, 11, 2)
   end
 
   test "update unvalid entry date" do
@@ -76,16 +75,16 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
 
   test "update entry accepted member" do
     patch wait_list_entry_path(@wlaccepted), params: {wait_list_entry: {membership_id: @wlaccepted.membership_id, notes: "Updated note"}}
-    assert_redirected_to  wait_list_entries_path
-    assert_equal flash[:notice], 'Wait list entry was successfully updated.'
+    assert_redirected_to wait_list_entries_path
+    assert_equal flash[:notice], "Wait list entry was successfully updated."
     @wl = WaitListEntry.find(ActiveRecord::FixtureSet.identify(:wl1))
-    assert_equal Date.new(2018,3,2), @wl.date
+    assert_equal Date.new(2018, 3, 2), @wl.date
     assert_equal @wl.notes, "Updated note"
   end
 
   test "delete entry" do
     delete wait_list_entry_url(@wl)
-    assert_redirected_to  wait_list_entries_url
+    assert_redirected_to wait_list_entries_url
   end
 
   test "assign entry" do
@@ -119,5 +118,4 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
     assert_select "div p", "Total : 4"
   end
-
-end  
+end

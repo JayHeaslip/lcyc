@@ -1,29 +1,28 @@
-require 'digest/sha1'
+require "digest/sha1"
 
 class User < ApplicationRecord
-
   attr_accessor :current_password
   has_secure_password
   has_many :active_sessions, dependent: :destroy
   before_save :downcase_email
-  
+
   belongs_to :person, optional: true
 
   validates :email, format: {with: URI::MailTo::EMAIL_REGEXP}, presence: true, uniqueness: true
-  validates_presence_of     :firstname, :lastname
-  validates_length_of       :password, minimum: 6,    if: :validate_password?
+  validates_presence_of :firstname, :lastname
+  validates_length_of :password, minimum: 6, if: :validate_password?
 
   belongs_to :role
 
   def admin?
-    role?('Admin')
+    role?("Admin")
   end
-  
+
   def self.authenticate_by(attributes)
     passwords, identifiers = attributes.to_h.partition do |name, value|
       !has_attribute?(name) && has_attribute?("#{name}_digest")
     end.map(&:to_h)
-    
+
     raise ArgumentError, "One or more password arguments are required" if passwords.empty?
     raise ArgumentError, "One or more finder arguments are required" if identifiers.empty?
     if (record = find_by(identifiers))
@@ -33,7 +32,7 @@ class User < ApplicationRecord
       nil
     end
   end
-  
+
   def confirm!
     if unconfirmed?
       update_columns(confirmed_at: Time.current)
@@ -41,19 +40,19 @@ class User < ApplicationRecord
       false
     end
   end
-  
+
   def confirmed?
     confirmed_at.present?
   end
-  
+
   def unconfirmed?
     !confirmed?
   end
-  
+
   def generate_confirmation_token
     signed_id expires_in: 1.hour, purpose: :confirm_email
   end
-  
+
   def generate_password_reset_token
     signed_id expires_in: 1.hour, purpose: :reset_password
   end
@@ -68,31 +67,30 @@ class User < ApplicationRecord
     MailRobot.password_reset(self, password_reset_token).deliver_now
   end
 
-  #Return true if user has the given role
+  # Return true if user has the given role
   def role?(role)
     self.role&.name == role
   end
 
-  #Return true if user has one of the given roles
-  def roles?(roles) 
-    roles.include?(self.role&.name)
+  # Return true if user has one of the given roles
+  def roles?(roles)
+    roles.include?(role&.name)
   end
 
   def membership
-    p = Person.find_by_EmailAddress(self.email)
-    p.membership.id if p
+    p = Person.find_by_EmailAddress(email)
+    p&.membership&.id
   end
-  
+
   private
 
   def downcase_email
     self.email = email.downcase
   end
-  
+
   # Assert whether or not the password validations should be performed. Always on new records, only on existing
   # records if the .password attribute isn't blank.
   def validate_password?
-    self.new_record? ? true : !self.password.blank?
+    new_record? ? true : !password.blank?
   end
-
 end

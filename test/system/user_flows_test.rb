@@ -1,11 +1,10 @@
-require 'application_system_test_case'
+require "application_system_test_case"
 
 class UserTest < ApplicationSystemTestCase
-
   test "register" do
     visit root_path
     click_on "Create an account"
-    #take_screenshot
+    # take_screenshot
     fill_in "firstname", with: "john"
     fill_in "lastname", with: "john"
     fill_in "email", with: "john@abc.com"

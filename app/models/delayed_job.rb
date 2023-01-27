@@ -1,3 +1,2 @@
-class DelayedJob  < ActiveRecord::Base
-
+class DelayedJob < ActiveRecord::Base
 end

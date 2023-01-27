@@ -1,7 +1,6 @@
-require 'test_helper'
+require "test_helper"
 
 class RightsIntegrationTest < ActionDispatch::IntegrationTest
-
   test "synchronize" do
     Right.synchronize_with_controllers
   end
@@ -11,5 +10,4 @@ class RightsIntegrationTest < ActionDispatch::IntegrationTest
     r.save
     Right.synchronize_with_controllers
   end
-
-end  
+end

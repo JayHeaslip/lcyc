@@ -1,5 +1,4 @@
 class Mailing < ApplicationRecord
-
   has_many_attached :pdfs
   validate :validate_pdfs
 
@@ -18,12 +17,11 @@ class Mailing < ApplicationRecord
 
     pdfs.each do |pdf|
       unless pdf.content_type.in?(%w[application/pdf])
-        errors.add(:attachments, 'must be a PDF')
+        errors.add(:attachments, "must be a PDF")
       end
       unless pdf.byte_size < 5.megabytes
-        errors.add(:attachments, 'must be less than 5 Megabytes')
+        errors.add(:attachments, "must be less than 5 Megabytes")
       end
     end
   end
-  
 end

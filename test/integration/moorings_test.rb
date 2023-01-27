@@ -1,10 +1,9 @@
-require 'test_helper'
+require "test_helper"
 
 class MooringsIntegrationTest < ActionDispatch::IntegrationTest
-
   setup do
     admin = users(:one)
-    login_as(admin, 'passwor1')
+    login_as(admin, "passwor1")
     @membership = memberships(:member1)
     @membership2 = memberships(:member2)
     @membership3 = memberships(:member3)
@@ -23,5 +22,4 @@ class MooringsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "h2", "Unassigned Moorings"
     assert_response :success
   end
-  
 end
