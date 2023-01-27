@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  root :to => "admin#index"
+  root to: "admin#index"
 
   get "sign_up", to: "users#new"
   post "sign_up", to: "users#create"
@@ -13,13 +13,13 @@ Rails.application.routes.draw do
 
   get "change_password", to: "passwords#change"
   post "change_password", to: "passwords#change"
-  get 'unsubscribe/:id', to: "unsubscribe#update"
+  get "unsubscribe/:id", to: "unsubscribe#update"
 
   resources :users
-  
+
   resources :confirmations, only: [:create, :edit, :new], param: :confirmation_token
   resources :passwords, only: [:create, :edit, :new, :update], param: :password_reset_token
-  
+
   resources :quickbooks do
     collection do
       get :cleanup
@@ -30,8 +30,7 @@ Rails.application.routes.draw do
     end
   end
 
-  
-  resources :roles, :except => [:new, :destroy] do
+  resources :roles, except: [:new, :destroy] do
     resources :users do
       member do
         delete :rmrole
@@ -43,22 +42,22 @@ Rails.application.routes.draw do
     collection do
       get :unassigned
     end
-  end 
+  end
 
   resources :drysails, only: [:index, :update] do
     member do
       get :assign
     end
   end
-  
+
   resources :memberships do
     collection do
       get :list
-      get  :labels
+      get :labels
       post :download_labels
-      get  :spreadsheets
+      get :spreadsheets
       post :download_spreadsheet
-      get  :initiation_report
+      get :initiation_report
       post :assign_drysail
       post :add_person
     end
@@ -86,7 +85,7 @@ Rails.application.routes.draw do
       get :download
     end
   end
-  
+
   resources :boats do
     member do
       get :associate
@@ -98,8 +97,8 @@ Rails.application.routes.draw do
       end
     end
   end
-    
-  resources :wait_list_entries, :except => [:show] do
+
+  resources :wait_list_entries, except: [:show] do
     member do
       get :assign
       patch :mooring_update
@@ -122,5 +121,4 @@ Rails.application.routes.draw do
 
   get "summary_report", to: "reports#summary"
   get "history_report", to: "reports#history"
-  
 end

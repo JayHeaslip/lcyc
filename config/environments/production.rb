@@ -11,7 +11,7 @@ Rails.application.configure do
   config.eager_load = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local = false
   config.action_controller.perform_caching = true
 
   # Attempt to read encrypted secrets from `config/secrets.yml.enc`.
@@ -21,7 +21,7 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
   # Compress JavaScripts and CSS.
   config.assets.css_compressor = :sass
@@ -52,10 +52,10 @@ Rails.application.configure do
 
   # Prepend all log lines with the following tags.
   config.log_tags = [
-    -> request { request.cookie_jar.signed[:user_email] }
+    ->(request) { request.cookie_jar.signed[:user_email] }
   ]
 
-    # Store uploaded files on the local file system (see config/storage.yml for options).
+  # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
   # Use a different cache store in production.
@@ -85,9 +85,9 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
   # Do not dump schema after migrations.
@@ -98,18 +98,17 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { host: "members.lcyc.info" }
+  config.action_mailer.default_url_options = {host: "members.lcyc.info"}
 
   config.action_mailer.smtp_settings = {
-	 :address     	       => "smtp.gmail.com",
-	 :port        	       => 587,
-	 :domain      	       => 'members.lcyc.info',
-	 :user_name   	       => 'lcyc@members.lcyc.info',
-	 :password    	       => Rails.application.credentials.gmailpw,
-	 :authentication       => 'plain',
-         :enable_starttls_auto => true
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "members.lcyc.info",
+    user_name: "lcyc@members.lcyc.info",
+    password: Rails.application.credentials.gmailpw,
+    authentication: "plain",
+    enable_starttls_auto: true
   }
 
   config.active_storage.service = :local
-  
 end

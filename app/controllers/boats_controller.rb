@@ -1,5 +1,4 @@
 class BoatsController < ApplicationController
-
   helper_method :sort_column, :sort_direction
 
   def index
@@ -64,14 +63,13 @@ class BoatsController < ApplicationController
   def sort_column
     Boat.column_names.include?(params[:sort]) ? params[:sort] : "Name"
   end
-  
+
   def sort_direction
-    %w(asc desc).include?(params[:direction]) ? params[:direction] : "asc"
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
   def boat_params
     params.require(:boat).permit(:Mfg_Size, :Type, :Name, :Length,
-                                 :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring_id)
+      :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring_id)
   end
-  
 end

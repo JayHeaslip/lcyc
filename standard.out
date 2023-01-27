@@ -1,0 +1,339 @@
+  app/mailers/application_mailer.rb:2:10: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/application_mailer.rb:4:17: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/application_mailer.rb:4:64: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/application_mailer.rb:5:17: Style/Proc: Use `proc` instead of `Proc.new`.
+  app/mailers/application_mailer.rb:6:1: Layout/EmptyLinesAroundClassBody: Extra empty line detected at class body end.
+  app/mailers/mail_robot.rb:1:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  app/mailers/mail_robot.rb:2:1: Style/MixinUsage: `include` is used at the top level. Use inside `class` or `module`.
+  app/mailers/mail_robot.rb:5:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  app/mailers/mail_robot.rb:9:36: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/mail_robot.rb:15:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  app/mailers/mail_robot.rb:18:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  app/mailers/mail_robot.rb:20:53: Layout/TrailingWhitespace: Trailing whitespace detected.
+  app/mailers/mail_robot.rb:21:11: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/mail_robot.rb:28:10: Layout/ArgumentAlignment: Use one level of indentation for arguments following the first line of a multi-line method call.
+  app/mailers/mail_robot.rb:28:16: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/mail_robot.rb:29:10: Layout/ArgumentAlignment: Use one level of indentation for arguments following the first line of a multi-line method call.
+  app/mailers/mail_robot.rb:30:10: Layout/ArgumentAlignment: Use one level of indentation for arguments following the first line of a multi-line method call.
+  app/mailers/mail_robot.rb:42:10: Layout/ArgumentAlignment: Use one level of indentation for arguments following the first line of a multi-line method call.
+  app/mailers/mail_robot.rb:43:10: Layout/ArgumentAlignment: Use one level of indentation for arguments following the first line of a multi-line method call.
+  app/mailers/mail_robot.rb:43:16: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/mail_robot.rb:44:10: Layout/ArgumentAlignment: Use one level of indentation for arguments following the first line of a multi-line method call.
+  app/mailers/mail_robot.rb:44:20: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/mail_robot.rb:45:10: Layout/ArgumentAlignment: Use one level of indentation for arguments following the first line of a multi-line method call.
+  app/mailers/mail_robot.rb:45:19: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/mail_robot.rb:50:14: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/mail_robot.rb:50:46: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  app/mailers/mail_robot.rb:52:1: Layout/EmptyLinesAroundClassBody: Extra empty line detected at class body end.
+  boat_cleanup.rb:2:60: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  boat_cleanup.rb:3:6: Layout/MultilineOperationIndentation: Use 4 (not 3) spaces for indenting a condition in an `if` statement spanning multiple lines.
+  boat_cleanup.rb:3:36: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  boat_cleanup.rb:3:80: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config.ru:3:18: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/application.rb:1:18: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/application.rb:3:9: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/application.rb:23:99: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/boot.rb:1:5: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/boot.rb:1:44: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/boot.rb:3:9: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy.rb:12:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  config/deploy.rb:59:1: Layout/TrailingEmptyLines: 1 trailing blank lines detected.
+  config/deploy/production.rb:10:8: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/production.rb:10:35: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/production.rb:10:53: Style/PercentLiteralDelimiters: `%w`-literals should be delimited by `[` and `]`.
+  config/deploy/production.rb:24:1: Layout/EmptyLines: Extra blank line detected.
+  config/deploy/production.rb:25:1: Layout/EmptyLines: Extra blank line detected.
+  config/deploy/production.rb:34:13: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/production.rb:35:14: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/production.rb:36:24: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/production.rb:38:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  config/deploy/production.rb:68:7: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/production.rb:68:28: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/production.rb:71:12: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/staging.rb:10:8: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/staging.rb:10:35: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/staging.rb:10:53: Style/PercentLiteralDelimiters: `%w`-literals should be delimited by `[` and `]`.
+  config/deploy/staging.rb:24:1: Layout/EmptyLines: Extra blank line detected.
+  config/deploy/staging.rb:25:1: Layout/EmptyLines: Extra blank line detected.
+  config/deploy/staging.rb:34:13: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/staging.rb:35:25: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/staging.rb:36:24: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/staging.rb:38:1: Layout/EmptyLines: Extra blank line detected.
+  config/deploy/staging.rb:67:7: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/staging.rb:67:28: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/deploy/staging.rb:70:12: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environment.rb:2:18: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/development.rb:52:47: Layout/SpaceInsideHashLiteralBraces: Space inside { detected.
+  config/environments/development.rb:52:65: Layout/SpaceInsideHashLiteralBraces: Space inside } detected.
+  config/environments/development.rb:54:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/development.rb:54:3: Layout/FirstHashElementIndentation: Use 2 spaces for indentation in a hash, relative to the start of the line where the left curly brace is.
+  config/environments/development.rb:54:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/development.rb:54:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/development.rb:55:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/development.rb:55:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/development.rb:55:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/development.rb:56:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/development.rb:56:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/development.rb:56:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/development.rb:56:27: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/development.rb:57:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/development.rb:57:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/development.rb:57:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/development.rb:57:27: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/development.rb:58:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/development.rb:58:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/development.rb:58:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/development.rb:59:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/development.rb:59:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/development.rb:59:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/development.rb:59:25: Layout/SpaceAroundOperators: Operator `=>` should be surrounded by a single space.
+  config/environments/development.rb:59:28: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/development.rb:60:10: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/development.rb:60:10: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/development.rb:69:1: Layout/EmptyLines: Extra blank line detected.
+  config/environments/development.rb:82:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/environments/production.rb:14:37: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/environments/production.rb:24:43: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/production.rb:55:7: Layout/SpaceInLambdaLiteral: Do not use spaces between `->` and `(` in lambda literals.
+  config/environments/production.rb:55:8: Style/StabbyLambdaParentheses: Wrap stabby lambda arguments with parentheses.
+  config/environments/production.rb:58:5: Layout/CommentIndentation: Incorrect indentation detected (column 4 instead of 2).
+  config/environments/production.rb:88:11: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/environments/production.rb:88:50: Style/GlobalStdStream: Use `$stdout` instead of `STDOUT`.
+  config/environments/production.rb:90:18: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/environments/production.rb:101:47: Layout/SpaceInsideHashLiteralBraces: Space inside { detected.
+  config/environments/production.rb:101:73: Layout/SpaceInsideHashLiteralBraces: Space inside } detected.
+  config/environments/production.rb:104:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/production.rb:104:3: Layout/FirstHashElementIndentation: Use 2 spaces for indentation in a hash, relative to the start of the line where the left curly brace is.
+  config/environments/production.rb:104:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/production.rb:104:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/production.rb:105:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/production.rb:105:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/production.rb:105:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/production.rb:106:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/production.rb:106:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/production.rb:106:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/production.rb:106:27: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/production.rb:107:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/production.rb:107:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/production.rb:107:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/production.rb:107:27: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/production.rb:108:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/production.rb:108:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/production.rb:108:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/production.rb:109:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/production.rb:109:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/production.rb:109:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/production.rb:109:25: Layout/SpaceAroundOperators: Operator `=>` should be surrounded by a single space.
+  config/environments/production.rb:109:28: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/production.rb:110:10: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/production.rb:110:10: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/production.rb:114:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/environments/staging.rb:14:37: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/environments/staging.rb:24:3: Layout/LeadingCommentSpace: Missing space after `#`.
+  config/environments/staging.rb:54:5: Layout/CommentIndentation: Incorrect indentation detected (column 4 instead of 2).
+  config/environments/staging.rb:59:7: Layout/SpaceInLambdaLiteral: Do not use spaces between `->` and `(` in lambda literals.
+  config/environments/staging.rb:59:8: Style/StabbyLambdaParentheses: Wrap stabby lambda arguments with parentheses.
+  config/environments/staging.rb:89:11: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/environments/staging.rb:89:50: Style/GlobalStdStream: Use `$stdout` instead of `STDOUT`.
+  config/environments/staging.rb:91:18: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/environments/staging.rb:102:47: Layout/SpaceInsideHashLiteralBraces: Space inside { detected.
+  config/environments/staging.rb:102:73: Layout/SpaceInsideHashLiteralBraces: Space inside } detected.
+  config/environments/staging.rb:103:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/environments/staging.rb:105:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/staging.rb:105:3: Layout/FirstHashElementIndentation: Use 2 spaces for indentation in a hash, relative to the start of the line where the left curly brace is.
+  config/environments/staging.rb:105:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/staging.rb:105:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/staging.rb:106:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/staging.rb:106:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/staging.rb:106:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/staging.rb:107:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/staging.rb:107:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/staging.rb:107:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/staging.rb:107:27: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/staging.rb:108:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/staging.rb:108:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/staging.rb:108:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/staging.rb:108:27: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/staging.rb:109:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/staging.rb:109:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/staging.rb:109:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/staging.rb:110:1: Layout/IndentationStyle: Tab detected in indentation.
+  config/environments/staging.rb:110:3: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/staging.rb:110:3: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/staging.rb:110:25: Layout/SpaceAroundOperators: Operator `=>` should be surrounded by a single space.
+  config/environments/staging.rb:110:28: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/staging.rb:111:10: Layout/HashAlignment: Align the keys of a hash literal if they span more than one line.
+  config/environments/staging.rb:111:10: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/environments/staging.rb:113:1: Layout/EmptyLinesAroundBlockBody: Extra empty line detected at block body end.
+  config/environments/test.rb:18:5: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/test.rb:22:37: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/environments/test.rb:43:47: Layout/SpaceInsideHashLiteralBraces: Space inside { detected.
+  config/environments/test.rb:43:54: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/environments/test.rb:43:67: Layout/SpaceInsideHashLiteralBraces: Space inside } detected.
+  config/initializers/assets.rb:4:43: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/initializers/assets.rb:9:58: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/initializers/delayed_job_config.rb:2:59: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/initializers/delayed_job_config.rb:2:66: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/initializers/delayed_job_config.rb:10:1: Layout/TrailingEmptyLines: 1 trailing blank lines detected.
+  config/initializers/quickbooks.rb:1:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  config/initializers/quickbooks.rb:5:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  config/initializers/quickbooks.rb:7:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  config/initializers/quickbooks.rb:9:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  config/puma.rb:7:21: Style/RedundantFetchBlock: Use `fetch("RAILS_MAX_THREADS", 5)` instead of `fetch("RAILS_MAX_THREADS") { 5 }`.
+  config/puma.rb:12:5: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/puma.rb:12:17: Style/RedundantFetchBlock: Use `fetch("PORT", 3000)` instead of `fetch("PORT") { 3000 }`.
+  config/routes.rb:3:8: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/routes.rb:16:7: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/routes.rb:19:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/routes.rb:22:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/routes.rb:33:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/routes.rb:34:21: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/routes.rb:46:6: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/routes.rb:53:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/routes.rb:57:10: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/routes.rb:59:10: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/routes.rb:61:10: Layout/ExtraSpacing: Unnecessary spacing detected.
+  config/routes.rb:89:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/routes.rb:101:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/routes.rb:102:33: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  config/routes.rb:125:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  config/setup_load_paths.rb:1:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  config/setup_load_paths.rb:3:9: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/setup_load_paths.rb:4:9: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  config/spring.rb:1:1: Style/PercentLiteralDelimiters: `%w`-literals should be delimited by `[` and `]`.
+  db/migrate/20221120113029_add_active_sessions.rb:21:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  db/migrate/20221120113029_add_active_sessions.rb:23:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:8:15: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:8:23: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:9:15: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:9:28: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:10:15: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:11:13: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:12:15: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:13:15: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:13:29: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:14:15: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:22:16: Layout/SpaceInsideArrayLiteralBrackets: Do not use space inside array brackets.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:22:21: Layout/SpaceInsideArrayLiteralBrackets: Do not use space inside array brackets.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:26:15: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:26:26: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:27:28: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:28:26: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:36:16: Layout/SpaceInsideArrayLiteralBrackets: Do not use space inside array brackets.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:36:58: Layout/SpaceInsideArrayLiteralBrackets: Do not use space inside array brackets.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:44:16: Layout/SpaceInsideArrayLiteralBrackets: Do not use space inside array brackets.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:44:44: Layout/SpaceInsideArrayLiteralBrackets: Do not use space inside array brackets.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:49:3: Layout/EmptyLinesAroundAccessModifier: Keep a blank line before and after `private`.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:50:1: Layout/IndentationWidth: Use 2 (not 4) spaces for indentation.
+  db/migrate/20221204140106_create_active_storage_tables.active_storage.rb:50:5: Layout/IndentationConsistency: Inconsistent indentation detected.
+  db/migrate/20221205124822_create_action_text_tables.action_text.rb:8:15: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221205124822_create_action_text_tables.action_text.rb:9:13: Layout/ExtraSpacing: Unnecessary spacing detected.
+  db/migrate/20221205124822_create_action_text_tables.action_text.rb:14:16: Layout/SpaceInsideArrayLiteralBrackets: Do not use space inside array brackets.
+  db/migrate/20221205124822_create_action_text_tables.action_text.rb:14:48: Layout/SpaceInsideArrayLiteralBrackets: Do not use space inside array brackets.
+  db/migrate/20221205124822_create_action_text_tables.action_text.rb:18:3: Layout/EmptyLinesAroundAccessModifier: Keep a blank line before and after `private`.
+  db/migrate/20221205124822_create_action_text_tables.action_text.rb:19:1: Layout/IndentationWidth: Use 2 (not 4) spaces for indentation.
+  db/migrate/20221205124822_create_action_text_tables.action_text.rb:19:5: Layout/IndentationConsistency: Inconsistent indentation detected.
+  db/migrate/20221218142132_new_join_tables.rb:3:1: Layout/EmptyLinesAroundMethodBody: Extra empty line detected at method body beginning.
+  db/migrate/20221218142132_new_join_tables.rb:12:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  db/migrate/20221219114340_fix_mooring.rb:3:1: Layout/EmptyLinesAroundMethodBody: Extra empty line detected at method body beginning.
+  db/migrate/20221219114340_fix_mooring.rb:7:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  db/migrate/20221219114340_fix_mooring.rb:11:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  db/migrate/20221219121724_allow_null_mooring_on_membership.rb:3:55: Layout/TrailingWhitespace: Trailing whitespace detected.
+  db/migrate/20221221193627_add_drysail.rb:3:1: Layout/EmptyLinesAroundMethodBody: Extra empty line detected at method body beginning.
+  db/migrate/20221221193627_add_drysail.rb:11:1: Layout/EmptyLinesAroundMethodBody: Extra empty line detected at method body end.
+  db/migrate/20230101160809_fix_roles.rb:8:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  db/seeds.rb:8:1: Lint/UselessAssignment: Useless assignment to variable - `drysails`.
+  db/seeds.rb:9:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:10:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:11:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:12:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:13:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:14:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:15:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:16:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:17:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:18:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:19:28: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  db/seeds.rb:20:1: Layout/TrailingEmptyLines: 1 trailing blank lines detected.
+  fix_sent_at.rb:2:16: Style/NilComparison: Prefer the use of the `nil?` predicate.
+  fix_up_database.rb:3:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  fix_up_database.rb:10:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  fix_up_database.rb:37:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  fix_up_database.rb:52:1: Layout/EmptyLines: Extra blank line detected.
+  fix_up_database.rb:55:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  fix_up_database.rb:65:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  fix_up_database.rb:67:60: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  fix_up_database.rb:68:6: Layout/MultilineOperationIndentation: Use 4 (not 3) spaces for indenting a condition in an `if` statement spanning multiple lines.
+  fix_up_database.rb:68:36: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  fix_up_database.rb:68:80: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  fix_up_database.rb:75:1: Style/PercentLiteralDelimiters: `%w`-literals should be delimited by `[` and `]`.
+  fix_up_database.rb:81:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  fix_up_database.rb:82:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  fix_up_database.rb:82:26: Layout/TrailingWhitespace: Trailing whitespace detected.
+  gen_partner_xref.rb:7:11: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  gen_partner_xref.rb:7:29: Layout/SpaceAfterComma: Space missing after comma.
+  gen_partner_xref.rb:7:30: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  gen_partner_xref.rb:9:41: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  gen_partner_xref.rb:10:42: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  get_children.rb:3:15: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  get_children.rb:3:27: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/capistrano/tasks/delayed_job.rake:2:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  lib/capistrano/tasks/delayed_job.rake:6:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  lib/capistrano/tasks/delayed_job.rake:10:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  lib/capistrano/tasks/delayed_job.rake:11:8: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/capistrano/tasks/delayed_job.rake:16:35: Style/QuotedSymbols: Prefer double-quoted symbols unless you need single quotes to avoid extra backslashes for escaping.
+  lib/capistrano/tasks/delayed_job.rake:21:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  lib/capistrano/tasks/delayed_job.rake:22:8: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/capistrano/tasks/delayed_job.rake:27:35: Style/QuotedSymbols: Prefer double-quoted symbols unless you need single quotes to avoid extra backslashes for escaping.
+  lib/capistrano/tasks/delayed_job.rake:32:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  lib/capistrano/tasks/delayed_job.rake:33:8: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/capistrano/tasks/delayed_job.rake:38:35: Style/QuotedSymbols: Prefer double-quoted symbols unless you need single quotes to avoid extra backslashes for escaping.
+  lib/capistrano/tasks/delayed_job.rake:43:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  lib/capistrano/tasks/synchronize.rake:2:1: Layout/EmptyLinesAroundBlockBody: Extra empty line detected at block body beginning.
+  lib/capistrano/tasks/synchronize.rake:4:8: Style/HashSyntax: Use the new Ruby 1.9 hash syntax.
+  lib/capistrano/tasks/synchronize.rake:8:26: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/capistrano/tasks/synchronize.rake:14:9: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/capistrano/tasks/synchronize.rake:14:29: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/capistrano/tasks/synchronize.rake:15:1: Layout/TrailingWhitespace: Trailing whitespace detected.
+  lib/tasks/chores.rake:1:1: Style/Encoding: Unnecessary utf-8 encoding comment.
+  lib/tasks/chores.rake:4:1: Layout/EmptyLinesAroundBlockBody: Extra empty line detected at block body beginning.
+  lib/tasks/chores.rake:21:13: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/tasks/chores.rake:21:24: Style/RedundantFileExtensionInRequire: Redundant `.rb` file extension detected.
+  lib/tasks/chores.rake:22:11: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/tasks/chores.rake:26:7: Layout/LeadingCommentSpace: Missing space after `#`.
+  lib/tasks/chores.rake:43:52: Layout/SpaceAfterComma: Space missing after comma.
+  lib/tasks/chores.rake:52:40: Layout/TrailingWhitespace: Trailing whitespace detected.
+  lib/tasks/chores.rake:53:41: Layout/SpaceAfterComma: Space missing after comma.
+  lib/tasks/chores.rake:55:7: Layout/IndentationWidth: Use 2 (not 4) spaces for indentation.
+  lib/tasks/chores.rake:61:40: Layout/TrailingWhitespace: Trailing whitespace detected.
+  lib/tasks/chores.rake:65:55: Layout/SpaceAfterComma: Space missing after comma.
+  lib/tasks/chores.rake:67:57: Style/RedundantInterpolation: Prefer `to_s` over string interpolation.
+  lib/tasks/chores.rake:67:74: Style/RedundantInterpolation: Prefer `to_s` over string interpolation.
+  lib/tasks/chores.rake:76:47: Layout/SpaceAfterComma: Space missing after comma.
+  lib/tasks/chores.rake:80:57: Layout/SpaceAfterComma: Space missing after comma.
+  lib/tasks/chores.rake:96:16: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/tasks/chores.rake:97:6: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  lib/tasks/chores.rake:97:16: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/tasks/chores.rake:98:6: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  lib/tasks/chores.rake:98:16: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/tasks/chores.rake:99:6: Layout/ArrayAlignment: Use one level of indentation for elements following the first line of a multi-line array.
+  lib/tasks/chores.rake:99:10: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  lib/tasks/chores.rake:101:1: Layout/EmptyLinesAroundBlockBody: Extra empty line detected at block body end.
+  lib/tasks/fix_rights.rake:1:1: Style/Encoding: Unnecessary utf-8 encoding comment.
+  set_select_email.rb:4:9: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  set_select_email.rb:5:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  set_select_email.rb:6:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  set_select_email.rb:14:1: Layout/LeadingCommentSpace: Missing space after `#`.
+  set_select_email.rb:15:18: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  set_select_email.rb:15:31: Layout/SpaceAfterComma: Space missing after comma.
+  set_select_email.rb:15:32: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  set_select_email.rb:17:13: Style/StringLiterals: Prefer double-quoted strings unless you need single quotes to avoid extra backslashes for escaping.
+  set_select_email.rb:19:20: Layout/TrailingWhitespace: Trailing whitespace detected.
+  set_select_email.rb:20:38: Style/RedundantInterpolation: Prefer `to_s` over string interpolation.
+  set_select_email.rb:21:3: Style/UnlessElse: Do not use `unless` with `else`. Rewrite these with the positive case first.
+  set_select_email.rb:23:22: Layout/ExtraSpacing: Unnecessary spacing detected.
+  set_select_email.rb:23:45: Style/Semicolon: Do not use semicolons to terminate expressions.
+  set_select_email.rb:25:21: Layout/ExtraSpacing: Unnecessary spacing detected.
+  set_select_email.rb:25:23: Layout/SpaceAroundOperators: Operator `+` should be surrounded by a single space.
+  set_select_email.rb:29:1: Layout/TrailingEmptyLines: 1 trailing blank lines detected.
+  test/controllers/users_controller_admin_test.rb:28:5: Naming/VariableName: Use snake_case for variable names.

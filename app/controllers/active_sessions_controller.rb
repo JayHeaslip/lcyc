@@ -5,7 +5,7 @@ class ActiveSessionsController < ApplicationController
   def index
     @active_sessions = ActiveSession.all
   end
-  
+
   def destroy
     @active_session = current_user.active_sessions.find(params[:id])
     @active_session.destroy

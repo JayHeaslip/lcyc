@@ -49,15 +49,15 @@ Rails.application.configure do
 
   # Tell Active Support which deprecation messages to disallow.
   config.active_support.disallowed_deprecation_warnings = []
-  config.action_mailer.default_url_options = { host: "localhost" }
+  config.action_mailer.default_url_options = {host: "localhost"}
   config.action_mailer.smtp_settings = {
-	 :address     	       => "smtp.gmail.com",
-	 :port        	       => 587,
-	 :domain      	       => 'members.lcyc.info',
-	 :user_name   	       => 'lcyc@members.lcyc.info',
-	 :password    	       => Rails.application.credentials.gmailpw,
-	 :authentication       => 'plain',
-         :enable_starttls_auto => true
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "members.lcyc.info",
+    user_name: "lcyc@members.lcyc.info",
+    password: Rails.application.credentials.gmailpw,
+    authentication: "plain",
+    enable_starttls_auto: true
   }
 
   # Raise an error on page load if there are pending migrations.
@@ -65,7 +65,6 @@ Rails.application.configure do
 
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
-
 
   # Suppress logger output for asset requests.
   config.assets.quiet = false
@@ -78,6 +77,4 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
-
-  
 end

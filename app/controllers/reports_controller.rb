@@ -1,5 +1,4 @@
 class ReportsController < ApplicationController
-
   def summary
     @categories = Membership.select(:Status).group(:Status).count
     @categories.delete("Resigned")
@@ -7,24 +6,24 @@ class ReportsController < ApplicationController
     @categories.delete("Affiliated")
     @categories.delete("Non-member")
 
-    @total = @categories.sum { |k,v| v}
+    @total = @categories.sum { |k, v| v }
   end
 
   def history
     @m = Membership.all
-    @categories = Hash.new { |h,k| h[k] = Hash.new { |h,k| h[k] = 0} }
+    @categories = Hash.new { |h, k| h[k] = Hash.new { |h, k| h[k] = 0 } }
     @m.each do |m|
-      if m.Status == "Accepted"
-        date = m.created_at
+      date = if m.Status == "Accepted"
+        m.created_at
       elsif m.Status == "Active"
-        date = m.active_date
+        m.active_date
       elsif m.Status == "Resigned"
-        date = m.resignation_date || m.updated_at
+        m.resignation_date || m.updated_at
       else
-        date = m.change_status_date
+        m.change_status_date
       end
       if date && date.year > 2018
-        month_year = date.strftime('%Y')  # %Y-%m for year & month
+        month_year = date.strftime("%Y")  # %Y-%m for year & month
         m.Status = "Resigned" if m.Status == "Deceased"
         @categories[m.Status][month_year] += 1
       end
@@ -36,6 +35,4 @@ class ReportsController < ApplicationController
     @dates.uniq!
     @dates.sort
   end
-
 end
-

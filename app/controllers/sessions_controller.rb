@@ -3,7 +3,6 @@ class SessionsController < ApplicationController
   before_action :authenticate_user!, only: [:destroy]
   skip_before_action :check_authorization
 
-
   def create
     @user = User.authenticate_by(email: params[:email].downcase, password: params[:password])
     if @user

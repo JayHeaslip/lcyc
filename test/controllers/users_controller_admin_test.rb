@@ -25,7 +25,7 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
       role_id: roles(:BOG).id
     }
     @role = roles(:member)
-    @BOG = roles(:BOG)
+    @bog = roles(:BOG)
   end
 
   test "get index" do
@@ -72,9 +72,9 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
   end
 
   test "remove a role from an user" do
-    assert_difference("@BOG.users.count", -1) do
-      delete rmrole_role_user_url(@BOG, @user)
+    assert_difference("@bog.users.count", -1) do
+      delete rmrole_role_user_url(@bog, @user)
     end
-    assert_redirected_to role_users_url(@BOG)
+    assert_redirected_to role_users_url(@bog)
   end
 end

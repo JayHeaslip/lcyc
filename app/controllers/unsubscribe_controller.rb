@@ -1,5 +1,4 @@
 class UnsubscribeController < ApplicationController
-
   skip_before_action :authenticate_user!
   skip_before_action :check_authorization
 
@@ -7,8 +6,8 @@ class UnsubscribeController < ApplicationController
     @person = Person.find_by_email_hash(params[:id])
     if @person
       @person.subscribe_general = false
-      if @person.save(:validate => false)
-        flash[:notice] = "You have unsubscribed." 
+      if @person.save(validate: false)
+        flash[:notice] = "You have unsubscribed."
       else
         flash[:alert] = "There was a problem unsubscribing."
       end
@@ -17,5 +16,4 @@ class UnsubscribeController < ApplicationController
     end
     redirect_to root_path
   end
-
 end
