@@ -36,7 +36,7 @@ gem "bootsnap", require: false
 gem "sassc-rails"
 
 # for QB interface
-gem "qbo_api", "~>2.0"
+gem "qbo_api", "~>3.0"
 gem "rack-oauth2"
 
 gem "matrix"

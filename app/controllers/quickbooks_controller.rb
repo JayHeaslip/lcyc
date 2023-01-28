@@ -58,7 +58,8 @@ class QuickbooksController < ApplicationController
 
   def update_members
     if (access_token = session[:access_token])
-      QboApi.production = !(Rails.env == "development")
+      QboApi.production = (Rails.env == "production")
+      QboApi.minor_version = 8
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
       members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       qb_members = @api.all(:customer)
@@ -110,7 +111,8 @@ class QuickbooksController < ApplicationController
 
   def generate_invoices
     if (access_token = session[:access_token])
-      QboApi.production = !(Rails.env == "development")
+      QboApi.production = (Rails.env == "production")
+      QboApi.minor_version = 8
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
       members = if params[:test]
         [Membership.find(64), Membership.find(345)]
@@ -121,14 +123,15 @@ class QuickbooksController < ApplicationController
       members.each do |m|
         logger.info "mailing name: #{m.MailingName}"
         partner_email = m.people.where('MemberType = "Partner"').first&.EmailAddress
-        qbm["PrimaryEmailAddr"] = partner_email if qbm["PrimaryEmailAddr"].nil?
+        logger.info "partner email #{partner_email}"
         qbm = @api.get(:customer, ["DisplayName", m.MailingName])
+        qbm["PrimaryEmailAddr"] = partner_email if qbm["PrimaryEmailAddr"].nil?
         invoice = {
           CustomerRef: {value: qbm["Id"]},
           AllowOnlineACHPayment: true,
           BillEmail: qbm["PrimaryEmailAddr"],
           DueDate: "#{Time.now.year}-12-31",
-          BillEmailCc: partner_email
+          "BillEmailCc": {"Address": partner_email}
         }
         invoice["Line"] = generate_line_items(m, params[:test])
         @api.create(:invoice, payload: invoice)
@@ -146,12 +149,18 @@ class QuickbooksController < ApplicationController
   private
 
   def oauth2_client
-    client_id = Rails.application.credentials.OAUTH_CONSUMER_KEY
-    client_secret = Rails.application.credentials.OAUTH_CONSUMER_SECRET
-    redirect_uri = if Rails.env == "staging"
-      Rails.application.credentials.staging.REDIRECT_URI
+    if Rails.env == "development"
+      client_id = Rails.application.credentials.development.OAUTH_CONSUMER_KEY
+      client_secret = Rails.application.credentials.development.OAUTH_CONSUMER_SECRET
+      redirect_uri = Rails.application.credentials.development.REDIRECT_URI
+    elsif Rails.env == "staging"
+      client_id = Rails.application.credentials.staging.OAUTH_CONSUMER_KEY
+      client_secret = Rails.application.credentials.staging.OAUTH_CONSUMER_SECRET
+      redirect_uri = Rails.application.credentials.staging.REDIRECT_URI
     else
-      Rails.application.credentials.production.REDIRECT_URI
+      client_id = Rails.application.credentials.production.OAUTH_CONSUMER_KEY
+      client_secret = Rails.application.credentials.production.OAUTH_CONSUMER_SECRET
+      redirect_uri = Rails.application.credentials.production.REDIRECT_URI
     end
     logger.info "redirect uri is #{redirect_uri}"
 
