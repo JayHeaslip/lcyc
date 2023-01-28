@@ -98,7 +98,9 @@ class QuickbooksController < ApplicationController
           end
         end
       end
-
+    else
+      flash[:alert] = "Please connect to quickbooks."
+      redirect_to root_url
     end
   end
 
@@ -118,7 +120,7 @@ class QuickbooksController < ApplicationController
       count = 0
       members.each do |m|
         logger.info "mailing name: #{m.MailingName}"
-        partner_email = m.people.where('MemberType = "Partner"').EmailAddress.first
+        partner_email = m.people.where('MemberType = "Partner"').first.EmailAddress
         qbm["PrimaryEmailAddr"] = partner_email if qbm["PrimaryEmailAddr"].nil?
         qbm = @api.get(:customer, ["DisplayName", m.MailingName])
         invoice = {
@@ -135,6 +137,9 @@ class QuickbooksController < ApplicationController
           sleep(40)
         end
       end
+    else
+      flash[:alert] = "Please connect to quickbooks."
+      redirect_to invoices_quickbooks_path
     end
   end
 

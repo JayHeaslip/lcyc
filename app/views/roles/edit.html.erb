@@ -1,23 +1,23 @@
 <h2>Rights Editor for <%= @role.name %></h2>
 
 <%= form_with model: @role do |f| %>
-<% @rights_tree.keys.sort.each do |controller| %>
-   <div class="form-group row">
-     <label class="col-form-label col-sm-2 pt-0"><%= controller.camelize %></label>
-     <div class="col-sm-10">
-       <% @rights_tree[controller].keys.sort.each do |action| %>
-	 <div class="form-check">
-	   <%= check_box_tag "right_ids[]", @rights_tree[controller][action].id, @controller_tree.dig(controller,action),
-	    disabled: @controller_tree.dig(controller,action) && @role.name != @controller_tree.dig(controller,action), class: "form-check-input" %>
-	   <label class="form-check-label"><%= action %></label>
-	 </div>
-       <% end %>
-     </div>
-   </div>  
-<% end %>
-<div class="form-group row">
-  <div class="offset-sm-2 col-sm-10">
-    <button type="submit"class="btn btn-primary">Update</button>
+  <% @rights_tree.keys.sort.each do |controller| %>
+    <div class="form-group row">
+      <label class="col-form-label col-sm-2 pt-0"><%= controller.camelize %></label>
+      <div class="col-sm-10">
+	<% @rights_tree[controller].keys.sort.each do |action| %>
+	  <div class="form-check">
+	    <%= check_box_tag "right_ids[]", @rights_tree[controller][action].id, @controller_tree.dig(controller,action),
+	     disabled: @controller_tree.dig(controller,action) && @role.name != @controller_tree.dig(controller,action), class: "form-check-input" %>
+	    <label class="form-check-label"><%= action %></label>
+	  </div>
+	<% end %>
+      </div>
+    </div>  
+  <% end %>
+  <div class="form-group row">
+    <div class="offset-sm-2 col-sm-10">
+      <%= f.submit "Update", class: "btn btn-primary" %>
+    </div>
   </div>
-</div>
 <% end %>

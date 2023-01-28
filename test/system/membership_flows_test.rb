@@ -16,7 +16,6 @@ class MembershipTest < ApplicationSystemTestCase
     fill_in "Zip", with: "05041"
     fill_in "Member Since", with: "2010"
     select "Active", from: "membership_Status"
-    fill_in "membership_mooring_num", with: "100"
 
     # click_on "Add person"
     within(".person") do
