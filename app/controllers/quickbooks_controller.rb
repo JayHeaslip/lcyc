@@ -140,6 +140,8 @@ class QuickbooksController < ApplicationController
           sleep(40)
         end
       end
+      flash[:notice] = "Created #{count} invoices."
+      redirect_to root_url
     else
       flash[:alert] = "Please connect to quickbooks."
       redirect_to invoices_quickbooks_path
