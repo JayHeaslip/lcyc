@@ -1,7 +1,7 @@
 # execute in console
 
 # generate drysail
-if Drysail.find(1).nil?
+if Drysail.all.empty?
   (1..12).each do |i|
     Drysail.create!(id: i)
   end
