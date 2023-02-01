@@ -77,5 +77,7 @@ bog = Role.find_by_name("BOG")
   r.save
 end
 
-# execute this command in terminal after running script
-# rails chores:load_rights
+# execute these commands in terminal after running script
+# RAILS_ENV=[staging|production] rails chores:load_rights
+# RAILS_ENV=[staging|production] rails chores:load_rights
+
