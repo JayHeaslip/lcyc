@@ -1,3 +1,7 @@
+<h3>Log Info Mailing</h3>
+
+<p>This will send an email out to each member with the following content:</p>
+
 <%= form_with model: @log_info_email do |f| %>
   <p>Subject: <%= f.text_field :subject %></p>  
   <%= f.text_area :body, cols: 80, rows: 3 %>
