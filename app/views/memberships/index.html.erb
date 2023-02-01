@@ -21,7 +21,7 @@
 	  <%= select_tag :status, options_for_select(@status_options, @selected_status), multiple: true, size: 3, class: "form-control form-control-sm" %>
 	</div>
 	<div class="col-auto">
-	  <button type ="submit" class="btn btn-primary ml-2 my-1 mr-2">Search</button> | <%= link_to "Reset", memberships_path, class: 'ms-2' %>
+	  <%= f.submit "Search", class: "btn btn-primary ml-2 my-1 mr-2" %> | <%= link_to "Reset", memberships_path, class: 'ms-2' %>
 	</div>
       </div>
     <% end %>

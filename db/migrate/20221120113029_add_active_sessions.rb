@@ -18,8 +18,7 @@ class AddActiveSessions < ActiveRecord::Migration[7.0]
     remove_column :users, :confirmation_hash
     add_index :users, :email, unique: true
     add_foreign_key :active_sessions, :users, on_delete: :cascade
-    
+
     drop_table :sessions
-    
   end
 end

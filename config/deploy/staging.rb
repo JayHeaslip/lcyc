@@ -7,7 +7,7 @@
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-server 'staging.lcyc.info', user: 'odziozo', roles: %w{app db web}
+server "staging.lcyc.info", user: "odziozo", roles: %w[app db web]
 
 # role-based syntax
 # ==================
@@ -21,8 +21,6 @@ server 'staging.lcyc.info', user: 'odziozo', roles: %w{app db web}
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
 
-
-
 # Configuration
 # =============
 # You can set any configuration variable like in config/deploy.rb
@@ -31,10 +29,9 @@ server 'staging.lcyc.info', user: 'odziozo', roles: %w{app db web}
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
-set :stage, 'staging'
-set :current_directory, 'staging'
-set :delayed_job_args, '-i 1'
-
+set :stage, "staging"
+set :current_directory, "staging"
+set :delayed_job_args, "-i 1"
 
 # Custom SSH Options
 # ==================
@@ -64,9 +61,9 @@ set :delayed_job_args, '-i 1'
 #   }
 
 # only restart delayed_job for staging, production
-after 'deploy:publishing', 'deploy:restart'
+after "deploy:publishing", "deploy:restart"
 namespace :deploy do
   task :restart do
-    invoke 'delayed_job:restart'
+    invoke "delayed_job:restart"
   end
 end

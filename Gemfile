@@ -2,13 +2,13 @@ source "https://rubygems.org"
 ruby "3.2.0"
 
 gem "rails", "~> 7.0.4"
-gem "sprockets-rails", require: 'sprockets/railtie'
+gem "sprockets-rails", require: "sprockets/railtie"
 
-#used to generate labels
+# used to generate labels
 gem "prawn"
 
 # for user password
-gem "bcrypt", "~> 3.1.7"  
+gem "bcrypt", "~> 3.1.7"
 
 # for sending emails in the background
 gem "delayed_job"
@@ -36,7 +36,7 @@ gem "bootsnap", require: false
 gem "sassc-rails"
 
 # for QB interface
-gem "qbo_api"
+gem "qbo_api", "~>3.0"
 gem "rack-oauth2"
 
 gem "matrix"
@@ -49,6 +49,7 @@ group :development, :test do
   gem "selenium-webdriver"
   gem "webdrivers", "~> 4.0", require: false
   gem "simplecov"
+  gem "standard"
 end
 
 group :development do

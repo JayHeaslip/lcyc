@@ -48,7 +48,7 @@ class PasswordsController < ApplicationController
       session[:referrer] = request.referrer
     end
   end
-  
+
   def update
     @user = User.find_signed(params[:password_reset_token], purpose: :reset_password)
     if @user

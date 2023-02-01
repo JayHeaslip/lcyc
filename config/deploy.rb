@@ -9,7 +9,7 @@ set :repo_url, "https://github.com/JayHeaslip/lcyc.git"
 
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, "/home/odziozo/rails7/lcyc"
-#set :deploy_via, :remote_cache
+# set :deploy_via, :remote_cache
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -56,4 +56,3 @@ namespace :deploy do
     end
   end
 end
-

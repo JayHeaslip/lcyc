@@ -1,10 +1,9 @@
-require 'test_helper'
+require "test_helper"
 
 class RolesIntegrationTest < ActionDispatch::IntegrationTest
-
   setup do
     admin = users(:one)
-    login_as(admin, 'passwor1')
+    login_as(admin, "passwor1")
     @user = users(:two)
     @role = roles(:member)
     @right = rights(:user_destroy)
@@ -29,9 +28,8 @@ class RolesIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "update role" do
-    patch role_url(@role), params: {right_ids: [@right.id] }
+    patch role_url(@role), params: {right_ids: [@right.id]}
     assert_redirected_to roles_url
     assert_equal flash[:notice], "#{@role.name} role was successfully updated."
   end
-
-end  
+end

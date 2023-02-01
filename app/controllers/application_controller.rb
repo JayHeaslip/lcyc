@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   include Authentication
-  
+
   protect_from_forgery with: :exception
 
   before_action :authenticate_user!
@@ -15,21 +15,16 @@ class ApplicationController < ActionController::Base
       roles = [current_user.role]
       # at most, 2 levels of hierarchy in the roles
       roles << current_user.role.parent if current_user.role.parent
-      detect = roles.detect do |r|
-        r.rights.detect do |right|
-          right.action == action_name && right.controller == self.class.controller_path
-        end
-      end
-      unless roles.detect do |r|
-               r.rights.detect do |right|
-                 right.action == action_name && right.controller == self.class.controller_path
-               end
-             end
+      if roles.detect do |r|
+           r.rights.detect do |right|
+             right.action == action_name && right.controller == self.class.controller_path
+           end
+         end
+        true
+      else
         flash[:alert] = "You are not authorized to view the page you requested."
         redirect_to request.referrer
         false
-      else
-        true
       end
     end
   end
@@ -40,11 +35,10 @@ class ApplicationController < ActionController::Base
     id = 2 if Rails.env == "production"
     begin
       pid = File.open("#{Rails.root}/tmp/pids/delayed_job.#{id}.pid").readline.chop.to_i
-      psout = %x{ps -p #{pid}}
+      psout = `ps -p #{pid}`
     rescue
       psout = ""
     end
-    system("cd #{Rails.root}; RAILS_ENV=#{Rails.env} bundle exec bin/delayed_job -i #{id} start") unless psout.include?('ruby')
+    system("cd #{Rails.root}; RAILS_ENV=#{Rails.env} bundle exec bin/delayed_job -i #{id} start") unless psout.include?("ruby")
   end
-  
 end

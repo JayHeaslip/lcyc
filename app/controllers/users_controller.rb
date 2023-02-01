@@ -1,12 +1,12 @@
 class UsersController < ApplicationController
-  before_action :redirect_if_authenticated, only: [:new, :create], unless: -> {current_user&.admin? }
+  before_action :redirect_if_authenticated, only: [:new, :create], unless: -> { current_user&.admin? }
   skip_before_action :authenticate_user!, only: [:new, :create]
   skip_before_action :check_authorization, only: [:new, :create]
 
   def index
     if params[:role_id]
       @role = Role.find(params[:role_id])
-      @users = @role.users.sort_by {|u| u.lastname}
+      @users = @role.users.sort_by { |u| u.lastname }
     else
       @role = nil
       @users = User.order(:lastname)
@@ -25,19 +25,19 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @user.person = Person.find_by_EmailAddress(@user.email)
-    if @user.person
-      @user.role = Role.find_by_name('Member')
+    @user.role = if @user.person
+      Role.find_by_name("Member")
     else
-      @user.role = Role.find_by_name('Non-member')
+      Role.find_by_name("Non-member")
     end
     update_admin_fields(params)
     if @user.save
       if @user.confirmed_at
-        flash[:success] = 'User was successfully created.'
+        flash[:success] = "User was successfully created."
         redirect_to users_path
       else
         @user.send_confirmation_email!
-        redirect_to login_path, notice: 'Check your email for confirmation instructions.'
+        redirect_to login_path, notice: "Check your email for confirmation instructions."
       end
     else
       render :new, status: :unprocessable_entity
@@ -45,24 +45,23 @@ class UsersController < ApplicationController
   end
 
   def edit
-    if current_user.admin?
-      @user = User.find(params[:id])
-      @active_sessions = @user.active_sessions.order(created_at: :desc)
+    @user = if current_user.admin?
+      User.find(params[:id])
     else
-      @user = current_user
-      @active_sessions = @user.active_sessions.order(created_at: :desc)
+      current_user
     end
+    @active_sessions = @user.active_sessions.order(created_at: :desc)
   end
 
   def update
-    if current_user.admin?
-      @user = User.find(params[:id])
+    @user = if current_user.admin?
+      User.find(params[:id])
     else
-      @user = current_user
+      current_user
     end
     update_admin_fields(params)
     if @user.update(user_params)
-      flash[:notice] = 'User was successfully updated.'
+      flash[:notice] = "User was successfully updated."
       if current_user.admin?
         redirect_to users_path
       else

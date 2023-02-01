@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_18_102645) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_31_205935) do
   create_table "action_text_rich_texts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.text "body", size: :long
@@ -58,20 +58,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_18_102645) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
-  end
-
-  create_table "attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "filename"
-    t.integer "size"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "content_type"
-    t.string "pdf_file_name"
-    t.string "pdf_content_type"
-    t.integer "pdf_file_size"
-    t.datetime "pdf_updated_at"
-    t.bigint "mailing_id"
-    t.index ["mailing_id"], name: "index_attachments_on_mailing_id"
   end
 
   create_table "boats", id: :integer, charset: "latin1", force: :cascade do |t|
@@ -157,6 +143,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_18_102645) do
     t.integer "year"
     t.integer "membership_id"
     t.index ["membership_id"], name: "fk_rails_2b86ebd36d"
+  end
+
+  create_table "log_info_email", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "subject"
+    t.text "body"
   end
 
   create_table "mailings", id: :integer, charset: "latin1", force: :cascade do |t|

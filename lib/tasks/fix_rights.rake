@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 namespace :db do
   desc "Synchronize rights database with controllers"
   task synchronize: :environment do

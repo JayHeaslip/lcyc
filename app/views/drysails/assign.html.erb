@@ -1,6 +1,6 @@
 <h2><%= "Assigning dry sail spot ##{@drysail.id}" %></h2>
 
-<%= form_with model: @drysail, method: :patch do %>
+<%= form_with model: @drysail, method: :patch do |f| %>
   <div class="row">
     <label for="Membership" class="col-form-label pt-0">Membership:</label>
     <div class="col-sm-4">
@@ -9,6 +9,6 @@
   </div>
   <div class="row">
     <div class="col-sm-3 pt-3">
-      <button type="submit" class="btn btn-primary">Assign</button>
+      <%= f.submit "Assign", class: "btn btn-primary" %>
     </div>
 <% end %>
