@@ -1,0 +1,70 @@
+<%= form_with model: @log_info_email do |f| %>
+  <p>Subject: <%= f.text_field :subject %></p>  
+  <%= f.text_area :body, cols: 80, rows: 3 %>
+  <p>Note: Children are only listed if they are under 24 years old, see Article
+    II, Section 1 (b) of the Bylaws.</p>
+  <hr/>
+  <table width="500" class="ms-4">
+    <tr>
+      <td><bold><%= @m.LastName %></bold></td>
+      <td><bold>Member Since: </bold><%= @m.MemberSince %></td>
+    </tr>
+    <tr>
+      <td><%= @m.MailingName %></bold></td>
+      <td><bold>Status: </bold><%= @m.Status %></td>
+    </tr>
+    <tr>
+      <td><%= @m.StreetAddress %></bold></td>
+      <td><bold>Mooring: </bold><%= @m.mooring&.id %></td>
+    </tr>
+    <tr>
+      <td><%= @m.City %>, <%= @m.State %>&nbsp;&nbsp;&nbsp;<%= @m.Zip %></bold></td>
+      <td><bold>Boat Name: </bold><%= @boat_info[0] %></td>
+    </tr>
+    <tr>
+      <td>Home Phone: <%= @member_info[0] %></td>
+      <td>Type: <%= @boat_info[1] %></td>
+    </tr>
+  </table>
+  <hr/>
+  <table width="500" class="ms-4">
+    <tr>
+      <th>Name</th>
+      <th>Work Phone</th>
+      <th>Cell Phone</th>
+      <th>Email Address</th>
+    </tr>
+    <tr>
+      <td><%= @member_info[1] %></td>
+      <td><%= @member_info[2] %></td>
+      <td><%= @member_info[3] %></td>
+      <td><%= @member_info[4] %></td>
+    </tr>
+    <tr>
+      <td><%= @partner_info[0] %></td>
+      <td><%= @partner_info[1] %></td>
+      <td><%= @partner_info[2] %></td>
+      <td><%= @partner_info[3] %></td>
+    </tr>
+    <tr>
+      <td><%= @children_info[0] %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+
+  <hr/>
+
+  <div class="row form-check ms-4 pb-2">
+    <span>
+      <label for="test" class="form-check-label">Test?</label>
+      <%= f.check_box :test, {checked: @test, class: "form-check-input"}, true , false %>
+    </span>
+  </div>
+  <div class="row mt-3">
+    <div class="col-sm-3">
+      <%= f.submit "Email", class: "btn btn-primary" %> | <%= link_to 'Back', url_for(:back) %>
+    </div>
+  </div>
+<% end %>

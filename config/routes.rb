@@ -110,8 +110,7 @@ Rails.application.routes.draw do
       post :send_email
     end
   end
-  get "loginfo_mailing", to: "mailings#loginfo"
-  post "loginfo_mailing", to: "mailings#loginfo"
+  resources :log_info_email, only: [:edit, :update]
 
   resources :active_sessions, only: [:index, :destroy] do
     collection do

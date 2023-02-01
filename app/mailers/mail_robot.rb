@@ -31,6 +31,9 @@ class MailRobot < ApplicationMailer
 
   def loginfo(url_options, to, cc, membership_chair, membership, boat, member, partner, children)
     ActiveStorage::Current.url_options = url_options
+    log_info_email = LogInfoEmail.find(1)
+    @subject = log_info_email.subject
+    @body = log_info_email.body
     @membership_chair = membership_chair
     @membership = membership
     @boat = boat
@@ -46,7 +49,7 @@ class MailRobot < ApplicationMailer
         cc: cc,
         from: "LCYC Announcements <lcyc@members.lcyc.info>",
         reply_to: "lcycsecretary@gmail.com",
-        subject: "[LCYC] Log info verification")
+        subject: @subject)
     end
   end
 
