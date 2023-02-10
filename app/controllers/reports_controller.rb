@@ -35,4 +35,29 @@ class ReportsController < ApplicationController
     @dates.uniq!
     @dates.sort
   end
+
+  def moorings
+    moorings = Mooring.all
+
+    @unassigned = []
+    @skip_errors = []
+    @multiple_memberships = []
+    moorings.each do |m|
+      memberships = m.memberships
+      if memberships.empty?
+        @unassigned << m.id
+      else
+        if memberships.size > 1
+          @multiple_memberships << m.id
+          skip_count = 0
+          memberships.each do |m|
+            skip_count += 1 if m.skip_mooring
+          end
+          @skip_errors << m.id unless (skip_count + 1) == memberships.size
+        else
+          @skip_errors << m.id if memberships[0].skip_mooring
+        end
+      end
+    end
+  end
 end

@@ -1,0 +1,5 @@
+<h2>Mooring Summary</h2>
+
+<p>Unassigned moorings: <%= @unassigned.join(",") %></p>
+<p>Moorings with multiple owners: <%= @multiple_memberships.join(",") %></p>
+<p>Moorings with skip mooring fee errors: <%= @skip_errors.join(",") %></p>
