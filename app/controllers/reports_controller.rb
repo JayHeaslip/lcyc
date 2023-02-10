@@ -46,17 +46,15 @@ class ReportsController < ApplicationController
       memberships = m.memberships
       if memberships.empty?
         @unassigned << m.id
-      else
-        if memberships.size > 1
-          @multiple_memberships << m.id
-          skip_count = 0
-          memberships.each do |m|
-            skip_count += 1 if m.skip_mooring
-          end
-          @skip_errors << m.id unless (skip_count + 1) == memberships.size
-        else
-          @skip_errors << m.id if memberships[0].skip_mooring
+      elsif memberships.size > 1
+        @multiple_memberships << m.id
+        skip_count = 0
+        memberships.each do |m|
+          skip_count += 1 if m.skip_mooring
         end
+        @skip_errors << m.id unless (skip_count + 1) == memberships.size
+      elsif memberships[0].skip_mooring
+        @skip_errors << m.id
       end
     end
   end
