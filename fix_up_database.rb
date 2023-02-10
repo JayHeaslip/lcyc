@@ -80,4 +80,3 @@ end
 # execute these commands in terminal after running script
 # RAILS_ENV=[staging|production] rails chores:load_rights
 # RAILS_ENV=[staging|production] rails chores:load_rights
-
