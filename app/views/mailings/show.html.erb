@@ -4,18 +4,26 @@
   <p><label>Reply To: </label><%=h @mailing.replyto %></p>
   <br/>
   <hr>
-  <%= @mailing.content %>
+  <% if @old_style %>
+    <%= render inline: @mailing.body %>
+  <% else %>
+    <%= @mailing.content %>
+  <% end %>
   <hr>
-  <h5>Attachments</h5>
-  <div class="attachment_fields">
-    <% @mailing.pdfs.each do |p| %>
-      <p><%= p.filename %></p>
-    <% end %>
-  </div>
   
-  <br/>
-  
-  <%= form_with url: send_email_mailing_path(@mailing) do |f| %>
+  <% if @old_style %>
+    <p>This is an email with the old format, it can only be displayed.</p>
+    <%= link_to "Mailings", mailings_path %>
+  <% else %>
+    <h5>Attachments</h5>
+    <div class="attachment_fields">
+      <% @mailing.pdfs.each do |p| %>
+	<p><%= p.filename %></p>
+      <% end %>
+    </div>
+    
+    <br/>
+    <%= form_with url: send_email_mailing_path(@mailing) do |f| %>
     <div class="row form-check ms-4 pb-2">
       <span>
 	<label for="test" class="form-check-label">Test?</label>
@@ -34,5 +42,6 @@
 	<%= f.submit "Email", class: "btn btn-primary" %> | <%= link_to 'Edit', edit_mailing_path(@mailing) %> | <%= link_to "Mailings", mailings_path %>
       </div>
     </div>
+    <% end %>
   <% end %>
 </div>

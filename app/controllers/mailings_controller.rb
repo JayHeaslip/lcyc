@@ -12,6 +12,7 @@ class MailingsController < ApplicationController
     @mailing = Mailing.find(params[:id])
     @test = true
     @filter_emails = false
+    @old_style = true if @mailing.content&.id.nil?
   end
 
   def new
