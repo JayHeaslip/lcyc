@@ -30,6 +30,7 @@ class BoatsController < ApplicationController
     @boat = Boat.includes(:memberships).find(params[:id])
     @boat.attributes = boat_params
     flash[:alert] = @boat.update_drysail_and_mooring
+    flash.delete(:alert) if flash[:alert].nil?
     if @boat.save
       flash[:notice] = "Successfully updated boat."
       redirect_to boat_path(@boat)
