@@ -83,8 +83,8 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
     old_email.sent_at = t
     old_email.save
     post send_email_mailing_url(@mailing)
-    formatted_time = (t + 23.hours).strftime("%m/%d/%Y at %I:%M %p")
-    assert_equal "You've sent a mailing within the last 23 hours, please wait until #{formatted_time} to send an email", flash[:error]
+    formatted_time = (t + 8.hours).strftime("%m/%d/%Y at %I:%M %p")
+    assert_equal "You've sent a mailing within the last 8 hours, please wait until #{formatted_time} to send an email", flash[:error]
   end
 
   test "send test mailing non-member email" do
