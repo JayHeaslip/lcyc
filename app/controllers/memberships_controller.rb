@@ -59,7 +59,7 @@ class MembershipsController < ApplicationController
     @membership.attributes = membership_params
     @membership.change_status_date = Time.now.strftime("%Y-%m-%d") if current_status != @membership.Status
     if (current_status == "Inactive") && (@membership.Status == "Active")
-      flash[:alert] = "For members returning to Active status from Inactive status, the active date should be updated to the day payment is received for the return to Active"
+      flash[:alert] = "For members returning to Active status from Inactive status, if adding to the waitlist, the waitlist date should be the day payment is received for the return to Active."
     end
     unless @membership.mooring_eligible
       flash[:alert] = "Mooring removed due to membership category update." if !@membership.mooring.nil?

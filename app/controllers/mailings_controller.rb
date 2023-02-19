@@ -58,11 +58,11 @@ class MailingsController < ApplicationController
   def send_email
     @mailing = Mailing.find(params[:id])
 
-    # check if it's been at least 23 hours since we sent a blast
+    # check if it's been at least 8 hours since we sent a blast
     last_email_sent_time = Mailing.order(sent_at: :desc).first.sent_at
     last_email_sent_time = Time.now - 1.day if last_email_sent_time.nil?
 
-    if params[:test] || (Time.now > (last_email_sent_time + 23.hours))
+    if params[:test] || (Time.now > (last_email_sent_time + 8.hours))
       @filter_emails = !params[:filter_emails].nil?
       people = Person.email_list(@mailing.committee, @filter_emails)
       if params[:test]
@@ -83,8 +83,8 @@ class MailingsController < ApplicationController
       end
       redirect_to mailings_path
     else
-      formatted_time = (last_email_sent_time + 23.hours).strftime("%m/%d/%Y at %I:%M %p")
-      flash[:error] = "You've sent a mailing within the last 23 hours, please wait until #{formatted_time} to send an email"
+      formatted_time = (last_email_sent_time + 8.hours).strftime("%m/%d/%Y at %I:%M %p")
+      flash[:error] = "You've sent a mailing within the last 8 hours, please wait until #{formatted_time} to send an email"
       render :show, status: :unprocessable_entity
     end
   end
@@ -95,7 +95,7 @@ class MailingsController < ApplicationController
       if Rails.env == "test"
         MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver
       else
-        MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver_later(wait_until: (i * 30).seconds.from_now)
+        MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver_later(wait_until: (i * 20).seconds.from_now)
       end
     end
   end
