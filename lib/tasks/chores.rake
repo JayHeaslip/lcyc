@@ -23,11 +23,11 @@ namespace :chores do
       # ActiveRecord::SessionStore::Session.delete_all ['updated_at < ?', 24.hours.ago]
 
       # backup the database and mail a copy to my gmail account
-      verbose(false)
-      mysqlopts = "-Q --add-drop-table --add-locks=FALSE --lock-tables=FALSE"
-      sh "mysqldump -h mysql.lcyc.info -u #{user} -p#{pw} #{mysqlopts} #{db} | gzip -c > #{home}/#{db}.sql.gz"
-      verbose(true)
-      MailRobot.dbbackup("#{home}/#{db}.sql.gz").deliver
+      #verbose(false)
+      #mysqlopts = "-Q --add-drop-table --add-locks=FALSE --lock-tables=FALSE"
+      #sh "mysqldump -h mysql.lcyc.info -u #{user} -p#{pw} #{mysqlopts} #{db} | gzip -c > #{home}/#{db}.sql.gz"
+      #verbose(true)
+      #MailRobot.dbbackup("#{home}/#{db}.sql.gz").deliver
 
       # rotate logs
       sh "/usr/sbin/logrotate -s #{home}/logrotate.state ./logrotate.conf"
@@ -89,10 +89,10 @@ namespace :chores do
   end
 
   def get_db_config
-    db_config = ActiveRecord::Base.configurations[Rails.env]
-    [db_config["username"],
-      db_config["password"],
-      db_config["database"],
+    db_config_hash = ActiveRecord::Base.configurations.find_db_config(Rails.env)
+    [db_config_hash[:username],
+      db_config_hash[:password],
+      db_config_hash[:database],
       ENV["HOME"]]
   end
 end
