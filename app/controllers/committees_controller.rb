@@ -7,7 +7,7 @@ class CommitteesController < ApplicationController
       @committee = "All"
       @people = Person.active.where(MemberType: ["Member", "Partner"]).order(:LastName)
     else
-      @committee =params[:committee] || "Boats"
+      @committee = params[:committee] || "Boats"
       @people = Person.active.committee(@committee)
     end
   end
