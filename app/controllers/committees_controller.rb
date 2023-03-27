@@ -19,8 +19,9 @@ class CommitteesController < ApplicationController
   end
 
   def download
-    @committee = Committee.includes(:people).find(params[:id])
-    content = Person.committee_spreadsheet(@committee.people)
-    send_data(content, type: "text/csv", filename: "#{@committee.Name}_committee.csv")
+    @committee = params[:id]
+    @people = Person.active.where(MemberType: ["Member", "Partner"]).committee(@committee).order(:LastName)
+    content = Person.committee_spreadsheet(@people)
+    send_data(content, type: "text/csv", filename: "#{params[:id]}_committee.csv")
   end
 end
