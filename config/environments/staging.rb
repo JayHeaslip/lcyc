@@ -52,19 +52,11 @@ Rails.application.configure do
   config.log_level = :debug
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
-
-  # Prepend all log lines with the following tags.
-  config.log_tags = [
-    ->(request) { request.cookie_jar.signed[:user_email] }
-  ]
+  config.active_storage.service = :google
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  # Use a real queuing backend for Active Job (and separate queues per environment)
-  # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "lcyc_#{Rails.env}"
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
