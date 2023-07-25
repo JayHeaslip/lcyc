@@ -7,7 +7,6 @@ gem "google-cloud-storage"
 gem "ruby-vips"
 gem "image_processing", "~> 1.2"
 
-
 # used to generate labels
 gem "prawn"
 
