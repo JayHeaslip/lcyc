@@ -34,22 +34,18 @@ Rails.application.configure do
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  config.active_storage.service = :google
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  # Use a different cache store in production.
+  # config.cache_store = :mem_cache_store
 
   config.action_mailer.perform_caching = false
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  # Raise exceptions for disallowed deprecations.
-  config.active_support.disallowed_deprecation = :raise
+  config.action_mailer.default_url_options = {host: "members.lcyc.info"}
 
-  # Tell Active Support which deprecation messages to disallow.
-  config.active_support.disallowed_deprecation_warnings = []
-  config.action_mailer.default_url_options = {host: "localhost"}
   config.action_mailer.smtp_settings = {
     address: "smtp.gmail.com",
     port: 587,

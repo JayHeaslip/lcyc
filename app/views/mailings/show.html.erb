@@ -18,7 +18,7 @@
     <h5>Attachments</h5>
     <div class="attachment_fields">
       <% @mailing.pdfs.each do |p| %>
-	<p><%= p.filename %></p>
+	<p><%= link_to(p.filename, rails_blob_path(p, disposition: "attachment")) %></p>
       <% end %>
     </div>
     

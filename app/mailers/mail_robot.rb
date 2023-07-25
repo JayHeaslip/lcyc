@@ -19,7 +19,7 @@ class MailRobot < ApplicationMailer
     ActiveStorage::Current.url_options = url_options
     tag = "[LCYC] "
     @url = "#{host}unsubscribe/#{person.email_hash}"
-    @content = mailing.content
+    @content = mailing.content.body.to_html
     mailing.pdfs.each do |p|
       attachments[p.filename.to_s] = p.download
     end

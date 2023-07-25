@@ -19057,7 +19057,7 @@ trix-editor .attachment__metadata .attachment__size {
 
 .trix-content .attachment--preview {
   width: 100%;
-  text-align: center;
+  text-align: left;
 }
 
 .trix-content .attachment--preview .attachment__caption {
