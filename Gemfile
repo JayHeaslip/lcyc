@@ -4,8 +4,8 @@ ruby "3.2.0"
 gem "rails", "~> 7.0.4"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "google-cloud-storage"
-gem "ruby-vips"
-gem "image_processing", "~> 1.2"
+#gem "ruby-vips"
+#gem "image_processing", "~> 1.2"
 
 # used to generate labels
 gem "prawn"
