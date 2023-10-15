@@ -2,7 +2,7 @@ require "csv"
 
 class Membership < ApplicationRecord
   @@current_year = Time.now.year
-  @@dues = {Active: 850, Senior: 283, Inactive: 50, Associate: 425, Life: 0}
+  @@dues = {Active: 1100, Senior: 367, Inactive: 50, Associate: 550, Life: 0}
   @@mooring_fee = 80
   @@mooring_replacement_fee = 120
   @@drysail_fee = 100
