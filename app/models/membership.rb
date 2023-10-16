@@ -2,7 +2,7 @@ require "csv"
 
 class Membership < ApplicationRecord
   @@current_year = Time.now.year
-  @@dues = {Active: 850, Senior: 283, Inactive: 50, Associate: 425, Life: 0}
+  @@dues = {Active: 1100, Senior: 367, Inactive: 50, Associate: 550, Life: 0}
   @@mooring_fee = 80
   @@mooring_replacement_fee = 120
   @@drysail_fee = 100
@@ -176,7 +176,7 @@ class Membership < ApplicationRecord
           drysail_fee = m.calculate_drysail_fee
           initiation_due = m.calculate_initiation_installment
           total = dues + mooring_fee + initiation_due + drysail_fee
-          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, "#{m.Zip}\x09", m.Country, m.Status,
+          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
             m.mooring&.id, m.drysail&.id, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end

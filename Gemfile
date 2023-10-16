@@ -1,8 +1,13 @@
 source "https://rubygems.org"
 ruby "3.2.0"
 
-gem "rails", "~> 7.0.4"
+gem "rails", "~> 7.1.1"
 gem "sprockets-rails", require: "sprockets/railtie"
+gem "google-cloud-storage"
+#gem "rack-cors"
+
+#gem "ruby-vips"
+#gem "image_processing", "~> 1.2"
 
 # used to generate labels
 gem "prawn"
@@ -40,6 +45,7 @@ gem "qbo_api", "~>3.0"
 gem "rack-oauth2"
 
 gem "matrix"
+gem "trix"
 
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console

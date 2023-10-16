@@ -1,4 +1,5 @@
 class Mailing < ApplicationRecord
+  has_one_attached :image
   has_many_attached :pdfs
   validate :validate_pdfs
 
