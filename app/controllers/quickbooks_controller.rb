@@ -129,7 +129,7 @@ class QuickbooksController < ApplicationController
         invoice = {
           CustomerRef: {value: qbm["Id"]},
           AllowOnlineACHPayment: true,
-          BillEmail: qbm["PrimaryEmailAddr"],
+          "BillEmail": { "Address": qbm["PrimaryEmailAddr"]},
           DueDate: "#{Time.now.year}-12-31",
           "BillEmailCc": {"Address": partner_email}
         }
