@@ -23,7 +23,7 @@ This site is for maintaining the membership database for LCYC.
        * git co production
        * git merge master
        * check public/.htaccess --> PassengerAppEnv production
-       * git ci
+       * git ci (if needed)
        * git push origin
        * production uses the production branch
 
