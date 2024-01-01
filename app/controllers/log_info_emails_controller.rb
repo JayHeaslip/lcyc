@@ -1,15 +1,16 @@
-class LogInfoEmailController < ApplicationController
+class LogInfoEmailsController < ApplicationController
   include ActiveStorage::SetCurrent
 
   before_action :check_delayed_job, only: [:edit]
 
+  # initial email is initialized from db/seeds.rb
   def edit
     @log_info_email = LogInfoEmail.find(1)
     set_loginfo_variables
   end
 
   def update
-    @log_info_email = LogInfoEmail.find(params[:id])
+    @log_info_email = LogInfoEmail.find(1)
     if @log_info_email.update(log_info_email_params)
       if params[:log_info_email][:test]
         memberships = [Person.find_by_EmailAddress(current_user.email)&.membership]

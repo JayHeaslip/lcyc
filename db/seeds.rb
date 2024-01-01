@@ -18,4 +18,4 @@
 #  {id: 11},
 #  {id: 12}])
 
-LogInfoEmail.create([{subject: "[LCYC] Log info verification", body: "<p>Please review the following information. This will be used for your listing in the next LCYC log. If you need to make updates or corrections, please send an email to our Membership chair, Betsey Dempsey, at lcycsecretary@gmail.com.</p>"}])
+LogInfoEmail.create([{subject: "[LCYC] Log info verification", body: "Please review the following information. This will be used for your listing in the next LCYC log. If you need to make updates or corrections, please send an email to our Membership chair, Betsey Dempsey, at lcycsecretary@gmail.com."}])

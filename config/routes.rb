@@ -110,7 +110,7 @@ Rails.application.routes.draw do
       post :send_email
     end
   end
-  resources :log_info_email, only: [:edit, :update]
+  resource :log_info_email, only: [:edit, :update]
 
   resources :active_sessions, only: [:index, :destroy] do
     collection do
