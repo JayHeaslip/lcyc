@@ -57,7 +57,7 @@
 	</div>
 	<label for="Committee", class="col-auto col-form-label">Committee:</label>
 	<div class="col-sm-2 mt-1">
-	  <%= f.collection_select :Committee1, Committee.all, :Name, :Name, class: "form-control", include_blank: true %>
+	  <%= f.collection_select :Committee1, Committee.order(:Name), :Name, :Name, class: "form-control", include_blank: true %>
 	</div>
       </div>
     <% end %>
