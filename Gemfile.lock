@@ -214,7 +214,7 @@ GEM
     matrix (0.4.2)
     memoist (0.16.2)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.4)
+    mini_portile2 (2.8.5)
     minitest (5.19.0)
     msgpack (1.7.2)
     multi_json (1.15.0)
@@ -234,7 +234,7 @@ GEM
       net-protocol
     net-ssh (7.2.0)
     nio4r (2.7.0)
-    nokogiri (1.15.4)
+    nokogiri (1.16.2)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     os (1.1.4)
@@ -256,7 +256,7 @@ GEM
       faraday-detailed_logger
       faraday-multipart
       nokogiri
-    racc (1.7.1)
+    racc (1.7.3)
     rack (2.2.8)
     rack-oauth2 (2.2.0)
       activesupport
