@@ -180,6 +180,21 @@ class Membership < ApplicationRecord
             m.mooring&.id, m.drysail&.id, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end
+    when "Evite"
+      members = self.members.all_active
+      CSV.generate(col_sep: ",") do |csv|
+        csv << %w[LastName MailingName Email Cell]
+        members.each do |m|
+          person = if m.prefer_partner_email
+            m.people.where('MemberType = "Partner"').first
+          else
+            m.people.where('MemberType = "Member"').first
+          end
+          email = person.EmailAddress
+          cell = person.CellPhone
+          csv << [m.LastName, m.MailingName, email, cell]
+        end
+      end
     end
   end
 
