@@ -82,14 +82,13 @@ class QuickbooksController < ApplicationController
       @existing_qbo_members.each do |k, v|
         unless v # create the member in QBO
           m = Membership.find_by_MailingName(k)
-          member_email = m.people.where('MemberType = "Member"').first.EmailAddress
           member = {
             DisplayName: k,
             BillAddr: {Line1: m.StreetAddress,
                        City: m.City,
                        CountrySubDivisionCode: m.State,
                        PostalCode: m.Zip},
-            PrimaryEmailAddr: {Address: member_email}
+            PrimaryEmailAddr: {Address: m.primary_email}
           }
           logger.info "Creating #{k}"
           @api.create(:customer, payload: member)
@@ -122,17 +121,15 @@ class QuickbooksController < ApplicationController
       count = 0
       members.each do |m|
         logger.info "mailing name: #{m.MailingName}"
-        partner_email = m.people.where('MemberType = "Partner"').first&.EmailAddress
-        logger.info "partner email #{partner_email}"
         qbm = @api.get(:customer, ["DisplayName", m.MailingName])
-        qbm["PrimaryEmailAddr"] = {Address: partner_email } if qbm["PrimaryEmailAddr"].nil? || m.prefer_partner_email
-        member_email = m.people.where('MemberType = "Member"').first.EmailAddress
-        cc_email = m.prefer_partner_email ? member_email : partner_email
+        logger.info "prefer #{m.prefer_partner_email}"
+        logger.info "primary email #{m.primary_email}"
+        logger.info " cc email #{m.cc_email}"
         invoice = {
-          "CustomerRef": {value: qbm["Id"]},
+          CustomerRef: {value: qbm["Id"]},
           AllowOnlineACHPayment: true,
           BillEmail: qbm["PrimaryEmailAddr"],
-          "BillEmailCc": {"Address": cc_email},
+          BillEmailCc: {Address: m.cc_email},
           DueDate: "#{Time.now.year}-12-31"
         }
         invoice["Line"] = generate_line_items(m, params[:test])
@@ -184,7 +181,7 @@ class QuickbooksController < ApplicationController
       member_email = m.people.where('MemberType = "Member"').first.EmailAddress
       update = false
       if qbm["PrimaryEmailAddr"] &&
-          qbm["PrimaryEmailAddr"]["Address"] != member_email
+          qbm["PrimaryEmailAddr"]["Address"] != m.primary_email
         update = true
         logger.info "email changed"
       elsif update_address(qbm, m)
@@ -199,7 +196,7 @@ class QuickbooksController < ApplicationController
                      City: m.City,
                      CountrySubDivisionCode: m.State,
                      PostalCode: m.Zip},
-          PrimaryEmailAddr: {Address: member_email}
+          PrimaryEmailAddr: {Address: m.primary_email}
         }
         @api.update(:customer, id: qbm["Id"], payload: member)
       end

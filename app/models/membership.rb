@@ -67,6 +67,10 @@ class Membership < ApplicationRecord
     self.Status.in? ["Active", "Life", "Associate"]
   end
 
+  def wait_list_eligible
+    self.Status.in? ["Accepted", "Active", "Life", "Associate"]
+  end
+
   ## returns a string for flash
   def update_drysail_and_mooring(boat)
     if boat.location == "" || boat.location.nil?
@@ -269,6 +273,18 @@ class Membership < ApplicationRecord
     else
       0
     end
+  end
+
+  def primary_email
+    member_email = people.where('MemberType = "Member"').first.EmailAddress
+    partner_email = people.where('MemberType = "Partner"').first.EmailAddress
+    (member_email.blank? || prefer_partner_email) ? partner_email : partner_email
+  end
+
+  def cc_email
+    member_email = people.where('MemberType = "Member"').first.EmailAddress
+    partner_email = people.where('MemberType = "Partner"').first.EmailAddress
+    (member_email.blank? || prefer_partner_email) ? member_email : partner_email
   end
 
   def calculate_mooring_replacement_fee
