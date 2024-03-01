@@ -189,13 +189,8 @@ class Membership < ApplicationRecord
       CSV.generate(col_sep: ",") do |csv|
         csv << %w[LastName MailingName Email Cell]
         members.each do |m|
-          person = if m.prefer_partner_email
-            m.people.where('MemberType = "Partner"').first
-          else
-            m.people.where('MemberType = "Member"').first
-          end
-          email = person.EmailAddress
-          cell = person.CellPhone
+          email = m.primary_email
+          cell = m.primary_cell
           csv << [m.LastName, m.MailingName, email, cell]
         end
       end
@@ -276,15 +271,21 @@ class Membership < ApplicationRecord
   end
 
   def primary_email
-    member_email = people.where('MemberType = "Member"').first.EmailAddress
-    partner_email = people.where('MemberType = "Partner"').first.EmailAddress
+    member_email = people.where('MemberType = "Member"').first&.EmailAddress
+    partner_email = people.where('MemberType = "Partner"').first&.EmailAddress
     (member_email.blank? || (prefer_partner_email && !partner_email.blank?)) ? partner_email : member_email
   end
 
   def cc_email
-    member_email = people.where('MemberType = "Member"').first.EmailAddress
-    partner_email = people.where('MemberType = "Partner"').first.EmailAddress
+    member_email = people.where('MemberType = "Member"').first&.EmailAddress
+    partner_email = people.where('MemberType = "Partner"').first&.EmailAddress
     (member_email.blank? || (prefer_partner_email && !partner_email.blank?)) ? member_email : partner_email
+  end
+
+  def primary_cell
+    member_cell = people.where('MemberType = "Member"').first&.CellPhone
+    partner_cell = people.where('MemberType = "Partner"').first&.CellPhone
+    (member_cell.blank? || (prefer_partner_email && !partner_cell.blank?)) ? partner_cell : member_cell
   end
 
   def calculate_mooring_replacement_fee

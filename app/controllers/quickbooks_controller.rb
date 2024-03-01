@@ -178,7 +178,6 @@ class QuickbooksController < ApplicationController
   def update_member(qbm, m, display_name)
     if m # update a member
       @existing_qbo_members[display_name] = true
-      member_email = m.people.where('MemberType = "Member"').first.EmailAddress
       update = false
       if qbm["PrimaryEmailAddr"] &&
           qbm["PrimaryEmailAddr"]["Address"] != m.primary_email
