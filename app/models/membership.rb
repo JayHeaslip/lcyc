@@ -278,13 +278,13 @@ class Membership < ApplicationRecord
   def primary_email
     member_email = people.where('MemberType = "Member"').first.EmailAddress
     partner_email = people.where('MemberType = "Partner"').first.EmailAddress
-    (member_email.blank? || prefer_partner_email) ? partner_email : partner_email
+    (member_email.blank? || (prefer_partner_email && !partner_email.blank?)) ? partner_email : member_email
   end
 
   def cc_email
     member_email = people.where('MemberType = "Member"').first.EmailAddress
     partner_email = people.where('MemberType = "Partner"').first.EmailAddress
-    (member_email.blank? || prefer_partner_email) ? member_email : partner_email
+    (member_email.blank? || (prefer_partner_email && !partner_email.blank?)) ? member_email : partner_email
   end
 
   def calculate_mooring_replacement_fee
