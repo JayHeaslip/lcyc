@@ -67,6 +67,10 @@ class Membership < ApplicationRecord
     self.Status.in? ["Active", "Life", "Associate"]
   end
 
+  def wait_list_eligible
+    self.Status.in? ["Accepted", "Active", "Life", "Associate"]
+  end
+
   ## returns a string for flash
   def update_drysail_and_mooring(boat)
     if boat.location == "" || boat.location.nil?
@@ -180,6 +184,16 @@ class Membership < ApplicationRecord
             m.mooring&.id, m.drysail&.id, email, dues, initiation_due, mooring_fee, drysail_fee, total]
         end
       end
+    when "Evite"
+      members = self.members.all_active
+      CSV.generate(col_sep: ",") do |csv|
+        csv << %w[LastName MailingName Email Cell]
+        members.each do |m|
+          email = m.primary_email
+          cell = m.primary_cell
+          csv << [m.LastName, m.MailingName, email, cell]
+        end
+      end
     end
   end
 
@@ -254,6 +268,24 @@ class Membership < ApplicationRecord
     else
       0
     end
+  end
+
+  def primary_email
+    member_email = people.where('MemberType = "Member"').first&.EmailAddress
+    partner_email = people.where('MemberType = "Partner"').first&.EmailAddress
+    (member_email.blank? || (prefer_partner_email && !partner_email.blank?)) ? partner_email : member_email
+  end
+
+  def cc_email
+    member_email = people.where('MemberType = "Member"').first&.EmailAddress
+    partner_email = people.where('MemberType = "Partner"').first&.EmailAddress
+    (member_email.blank? || (prefer_partner_email && !partner_email.blank?)) ? member_email : partner_email
+  end
+
+  def primary_cell
+    member_cell = people.where('MemberType = "Member"').first&.CellPhone
+    partner_cell = people.where('MemberType = "Partner"').first&.CellPhone
+    (member_cell.blank? || (prefer_partner_email && !partner_cell.blank?)) ? partner_cell : member_cell
   end
 
   def calculate_mooring_replacement_fee

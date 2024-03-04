@@ -1,13 +1,13 @@
 source "https://rubygems.org"
 ruby "3.2.0"
 
-gem "rails", "~> 7.1.2"
+gem "rails", "~> 7.1.3.1"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "google-cloud-storage"
-#gem "rack-cors"
+# gem "rack-cors"
 
-#gem "ruby-vips"
-#gem "image_processing", "~> 1.2"
+# gem "ruby-vips"
+# gem "image_processing", "~> 1.2"
 
 # used to generate labels
 gem "prawn"
@@ -23,7 +23,7 @@ gem "daemons"
 # for dreamhost
 gem "mysql2"
 
-gem "puma", "~> 5.6"
+gem "puma", "~> 6.0"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"
 
@@ -43,6 +43,7 @@ gem "sassc-rails"
 # for QB interface
 gem "qbo_api", "~>3.0"
 gem "rack-oauth2"
+gem "rack", "2.2.8.1"
 
 gem "matrix"
 gem "trix"

@@ -66,6 +66,10 @@ class MembershipsController < ApplicationController
       @membership.mooring = nil
       @membership.remove_boat_from_mooring
     end
+    unless @membership.wait_list_eligible
+      flash[:alert] = "Member removed from wait list due to membership category update." if !@membership.wait_list_entry.nil?
+      @membership.wait_list_entry = nil
+    end
     @membership.boats.each do |b|
       flash[:alert] = (flash[:alert] || "") + @membership.update_drysail_and_mooring(b)
     end
@@ -170,7 +174,7 @@ class MembershipsController < ApplicationController
 
   def spreadsheets
     @spreadsheet_options = ["Billing", "Log Members", "Log Fleet",
-      "Log Partner Xref", "Member Cards/Workday Checklist", "Resigned"]
+      "Log Partner Xref", "Member Cards/Workday Checklist", "Evite", "Resigned"]
   end
 
   def download_spreadsheet
@@ -278,7 +282,7 @@ class MembershipsController < ApplicationController
     params.require(:membership).permit(:LastName, :MailingName, :StreetAddress, :City,
       :State, :Zip, :Country, :Status, :MemberSince, :mooring,
       :application_date, :active_date, :resignation_date, :initiation,
-      :paid, :skip_mooring, :installments, :initiation_fee, :drysail_num, :notes,
+      :paid, :skip_mooring, :prefer_partner_email, :installments, :initiation_fee, :drysail_num, :notes,
       people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),
       boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy),
       initiation_installments_attributes: InitiationInstallment.attribute_names.map(&:to_sym).push(:_destroy))
