@@ -17,18 +17,16 @@ namespace :chores do
   task daily: :environment do
     require "mail_robot"
     chore("Daily") do
-      # user, pw, db, home = get_db_config
-      home = ENV["HOME"]
+      user, pw, db, home = get_db_config
 
       # clear sessions older than 24 hours
       # ActiveRecord::SessionStore::Session.delete_all ['updated_at < ?', 24.hours.ago]
 
       # backup the database and mail a copy to my gmail account
       # verbose(false)
-      # mysqlopts = "-Q --add-drop-table --add-locks=FALSE --lock-tables=FALSE"
-      # sh "mysqldump -h mysql.lcyc.info -u #{user} -p#{pw} #{mysqlopts} #{db} | gzip -c > #{home}/#{db}.sql.gz"
-      # verbose(true)
-      # MailRobot.dbbackup("#{home}/#{db}.sql.gz").deliver
+      sh "mysqldump -h mysql.lcyc.info -u #{user} --password=#{pw} --no-tablespaces #{db} | gzip -c > #{home}/#{db}.sql.gz"
+      verbose(true)
+      MailRobot.dbbackup("#{home}/#{db}.sql.gz").deliver_now
 
       # rotate logs
       sh "/usr/sbin/logrotate -s #{home}/logrotate.state ./logrotate.conf"
@@ -89,11 +87,11 @@ namespace :chores do
     puts "#{name} Task Finished: #{Time.now}"
   end
 
-  # def get_db_config
-  #   db_config_hash = ActiveRecord::Base.configurations.find_db_config(Rails.env)
-  #   [db_config_hash[:username],
-  #     db_config_hash[:password],
-  #     db_config_hash[:database],
-  #     ENV["HOME"]]
-  # end
+  def get_db_config
+    db_config_hash = ActiveRecord::Base.configurations.find_db_config(Rails.env).configuration_hash
+    [db_config_hash[:username],
+     db_config_hash[:password],
+     db_config_hash[:database],
+     ENV["HOME"]]
+  end
 end
