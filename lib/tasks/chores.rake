@@ -4,13 +4,13 @@ namespace :chores do
     user, pw, db, home = get_db_config
     mysqlopts = "-Q --add-drop-table --add-locks=FALSE --lock-tables=FALSE"
     tables = "users rights roles rights_roles roles_users"
-    sh "mysqldump -u#{user} -p#{pw} #{mysqlopts} #{db} #{tables} | gzip -c > #{home}/#{db}.users.sql.gz"
+    sh "mysqldump -u#{user} #{mysqlopts} #{db} #{tables} | gzip -c > #{home}/#{db}.users.sql.gz"
   end
 
   desc "Restore users, rights, roles, right_roles, roles_users"
   task restore_users: :environment do
     user, pw, db, home = get_db_config
-    sh "gunzip <#{home}/#{db}.users.sql.gz | mysql -u#{user} -p#{pw} #{db}"
+    sh "gunzip <#{home}/#{db}.users.sql.gz | mysql -u#{user} #{db}"
   end
 
   desc "Run daily chore (usually done as a cron job)"
@@ -24,7 +24,7 @@ namespace :chores do
 
       # backup the database and mail a copy to my gmail account
       # verbose(false)
-      sh "mysqldump -h mysql.lcyc.info -u #{user} --password=#{pw} --no-tablespaces #{db} | gzip -c > #{home}/#{db}.sql.gz"
+      sh "mysqldump -h mysql.lcyc.info -u #{user} --no-tablespaces #{db} | gzip -c > #{home}/#{db}.sql.gz"
       verbose(true)
       MailRobot.dbbackup("#{home}/#{db}.sql.gz").deliver_now
 
