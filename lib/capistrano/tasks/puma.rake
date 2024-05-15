@@ -1,5 +1,4 @@
 namespace :puma do
-
   def puma_roles
     fetch(:puma_server_role, :app)
   end
@@ -14,5 +13,4 @@ namespace :puma do
       end
     end
   end
-
 end

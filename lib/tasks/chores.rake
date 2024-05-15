@@ -1,7 +1,7 @@
 namespace :chores do
   desc "Backup users, rights, roles, rights_roles, roles_users"
   task backup_users: :environment do
-    user, pw, db, home = get_db_config
+    user, _, db, home = get_db_config
     mysqlopts = "-Q --add-drop-table --add-locks=FALSE --lock-tables=FALSE"
     tables = "users rights roles rights_roles roles_users"
     sh "mysqldump -u#{user} #{mysqlopts} #{db} #{tables} | gzip -c > #{home}/#{db}.users.sql.gz"
@@ -9,7 +9,7 @@ namespace :chores do
 
   desc "Restore users, rights, roles, right_roles, roles_users"
   task restore_users: :environment do
-    user, pw, db, home = get_db_config
+    user, _, db, home = get_db_config
     sh "gunzip <#{home}/#{db}.users.sql.gz | mysql -u#{user} #{db}"
   end
 
@@ -17,7 +17,7 @@ namespace :chores do
   task daily: :environment do
     require "mail_robot"
     chore("Daily") do
-      user, pw, db, home = get_db_config
+      user, _, db, home = get_db_config
 
       # clear sessions older than 24 hours
       # ActiveRecord::SessionStore::Session.delete_all ['updated_at < ?', 24.hours.ago]
@@ -90,8 +90,8 @@ namespace :chores do
   def get_db_config
     db_config_hash = ActiveRecord::Base.configurations.find_db_config(Rails.env).configuration_hash
     [db_config_hash[:username],
-     db_config_hash[:password],
-     db_config_hash[:database],
-     ENV["HOME"]]
+      db_config_hash[:password],
+      db_config_hash[:database],
+      ENV["HOME"]]
   end
 end
