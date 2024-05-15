@@ -41,7 +41,6 @@ set :keep_releases, 8
 
 # install in system directory to simplify things
 set :bundle_path, "/home/odziozo/.rvm/gems/ruby-3.2.0@global"
-set :passenger_restart_with_touch, true
 
 # only restart delayed_job for production
 namespace :deploy do
