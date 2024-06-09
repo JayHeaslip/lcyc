@@ -62,11 +62,6 @@ set :delayed_job_args, "-i 2"
 #     # password: "please use keys"
 #   }
 
-# only restart delayed_job for staging, production
-after "deploy:publishing", "deploy:restart"
-namespace :deploy do
-  task :restart do
-    invoke "delayed_job:restart"
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
