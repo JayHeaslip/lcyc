@@ -64,6 +64,7 @@ set :delayed_job_args, "-i 1"
 after "deploy:publishing", "deploy:restart"
 namespace :deploy do
   task :restart do
+    invoke "puma:restart"
     invoke "delayed_job:restart"
   end
 end

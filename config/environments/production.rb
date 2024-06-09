@@ -104,6 +104,7 @@ Rails.application.configure do
     user_name: "lcyc@members.lcyc.info",
     password: Rails.application.credentials.gmailpw,
     authentication: "plain",
+    read_timeout: 90,
     enable_starttls_auto: true
   }
 
