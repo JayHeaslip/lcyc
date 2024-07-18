@@ -12,6 +12,10 @@ gem "google-cloud-storage"
 # used to generate labels
 gem "prawn"
 
+# action text images
+gem "image_processing", "~>1.2"
+gem "ruby-vips"
+
 # for user password
 gem "bcrypt", "~> 3.1.7"
 
