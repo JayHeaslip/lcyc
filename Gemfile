@@ -10,7 +10,8 @@ gem "google-cloud-storage"
 gem "prawn", "2.4.0"
 
 # action text images
-gem "image_processing", "~>1.2"
+# dreamhost doesn't have vips
+#gem "image_processing", "~>1.2"
 #gem "ruby-vips"
 
 # for user password
