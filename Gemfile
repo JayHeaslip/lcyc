@@ -11,8 +11,8 @@ gem "prawn", "2.4.0"
 
 # action text images
 # dreamhost doesn't have vips
-#gem "image_processing", "~>1.2"
-#gem "ruby-vips"
+gem "image_processing", "~>1.2"
+gem "mini_magick"
 
 # for user password
 gem "bcrypt", "~> 3.1.7"

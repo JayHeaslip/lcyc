@@ -58,6 +58,7 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :google
+  config.active_storage.variant_processor = :mini_magick
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
