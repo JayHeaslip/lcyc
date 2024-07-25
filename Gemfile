@@ -6,15 +6,12 @@ gem "sprockets-rails", require: "sprockets/railtie"
 gem "google-cloud-storage"
 # gem "rack-cors"
 
-# gem "ruby-vips"
-# gem "image_processing", "~> 1.2"
-
 # used to generate labels
-gem "prawn"
+gem "prawn", "2.4.0"
 
 # action text images
 gem "image_processing", "~>1.2"
-gem "ruby-vips"
+#gem "ruby-vips"
 
 # for user password
 gem "bcrypt", "~> 3.1.7"
