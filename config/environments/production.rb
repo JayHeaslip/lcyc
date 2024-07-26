@@ -21,7 +21,8 @@ Rails.application.configure do
 
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
-  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
+  # config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+  config.public_file_server.enabled = true
 
   # Compress JavaScripts and CSS.
   config.assets.css_compressor = :sass
@@ -56,7 +57,8 @@ Rails.application.configure do
   ]
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  config.active_storage.service = :google
+  config.active_storage.variant_processor = :mini_magick
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -107,6 +109,4 @@ Rails.application.configure do
     read_timeout: 90,
     enable_starttls_auto: true
   }
-
-  config.active_storage.service = :local
 end

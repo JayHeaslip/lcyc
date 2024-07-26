@@ -9,6 +9,7 @@ class MailingsController < ApplicationController
   end
 
   def show
+    logger.info ActiveStorage::Current.url_options
     @mailing = Mailing.find(params[:id])
     @test = true
     @filter_emails = false
@@ -34,6 +35,8 @@ class MailingsController < ApplicationController
   end
 
   def edit
+    logger.info "url_options"
+    logger.info ActiveStorage::Current.url_options
     @mailing = Mailing.find(params[:id])
     @committees = ["All"].concat(Committee.names)
   end
