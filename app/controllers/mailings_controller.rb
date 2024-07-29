@@ -65,7 +65,7 @@ class MailingsController < ApplicationController
     last_email_sent_time = Mailing.order(sent_at: :desc).first.sent_at
     last_email_sent_time = Time.now - 1.day if last_email_sent_time.nil?
 
-    if params[:test] || (Time.now > (last_email_sent_time + 8.hours))
+    # if params[:test] || (Time.now > (last_email_sent_time + 8.hours))
       @filter_emails = !params[:filter_emails].nil?
       people = Person.email_list(@mailing.committee, @filter_emails)
       if params[:test]
@@ -85,11 +85,11 @@ class MailingsController < ApplicationController
         flash[:notice] = "Delivering mail."
       end
       redirect_to mailings_path
-    else
-      formatted_time = (last_email_sent_time + 8.hours).strftime("%m/%d/%Y at %I:%M %p")
-      flash[:error] = "You've sent a mailing within the last 8 hours, please wait until #{formatted_time} to send an email"
-      render :show, status: :unprocessable_entity
-    end
+    # else
+    #   formatted_time = (last_email_sent_time + 8.hours).strftime("%m/%d/%Y at %I:%M %p")
+    #   flash[:error] = "You've sent a mailing within the last 8 hours, please wait until #{formatted_time} to send an email"
+    #   render :show, status: :unprocessable_entity
+    # end
   end
 
   def deliver_mail(people, mailing, host, filtered)
