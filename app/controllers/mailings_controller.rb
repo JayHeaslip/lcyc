@@ -66,30 +66,30 @@ class MailingsController < ApplicationController
     last_email_sent_time = Time.now - 1.day if last_email_sent_time.nil?
 
     # if params[:test] || (Time.now > (last_email_sent_time + 8.hours))
-    @filter_emails = !params[:filter_emails].nil?
-    people = Person.email_list(@mailing.committee, @filter_emails)
-    if params[:test]
-      p = Person.find_by_EmailAddress(current_user.email)
-      if p.nil?
-        p = add_as_nonmember(current_user.email)
+      @filter_emails = !params[:filter_emails].nil?
+      people = Person.email_list(@mailing.committee, @filter_emails)
+      if params[:test]
+        p = Person.find_by_EmailAddress(current_user.email)
+        if p.nil?
+          p = add_as_nonmember(current_user.email)
+        end
+        people = [p]
+        logger.info "Test email address: #{p.EmailAddress}"
+      else
+        @mailing.sent_at = Time.now
+        @mailing.save
       end
-      people = [p]
-      logger.info "Test email address: #{p.EmailAddress}"
-    else
-      @mailing.sent_at = Time.now
-      @mailing.save
-    end
-    
-    unless people.empty?
-      deliver_mail(people, @mailing, host, @filter_emails)
-      flash[:notice] = "Delivering mail."
-    end
-    redirect_to mailings_path
-    #else
-    #    formatted_time = (last_email_sent_time + 8.hours).strftime("%m/%d/%Y at %I:%M %p")
-    #    flash[:error] = "You've sent a mailing within the last 8 hours, please wait until #{formatted_time} to send an email"
-    #    render :show, status: :unprocessable_entity
-    #  end
+
+      unless people.empty?
+        deliver_mail(people, @mailing, host, @filter_emails)
+        flash[:notice] = "Delivering mail."
+      end
+      redirect_to mailings_path
+    # else
+    #   formatted_time = (last_email_sent_time + 8.hours).strftime("%m/%d/%Y at %I:%M %p")
+    #   flash[:error] = "You've sent a mailing within the last 8 hours, please wait until #{formatted_time} to send an email"
+    #   render :show, status: :unprocessable_entity
+    # end
   end
 
   def deliver_mail(people, mailing, host, filtered)
