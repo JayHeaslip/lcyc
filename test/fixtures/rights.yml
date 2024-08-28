@@ -48,4 +48,8 @@ person_destroy:
   controller: people
   action: destroy
   
+member_show:
+  name: MembershipsController.show
+  controller: memberships
+  action: show
   

@@ -1,30 +1,31 @@
-require "digest/sha1"
+require 'digest/sha1'
 
 class User < ApplicationRecord
   attr_accessor :current_password
+
   has_secure_password
   has_many :active_sessions, dependent: :destroy
   before_save :downcase_email
 
   belongs_to :person, optional: true
 
-  validates :email, format: {with: URI::MailTo::EMAIL_REGEXP}, presence: true, uniqueness: true
-  validates_presence_of :firstname, :lastname
-  validates_length_of :password, minimum: 6, if: :validate_password?
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }, presence: true, uniqueness: true
+  validates :firstname, :lastname, presence: true
+  validates :password, length: { minimum: 6, if: :validate_password? }
 
   belongs_to :role
 
   def admin?
-    role?("Admin")
+    role?('Admin')
   end
 
   def self.authenticate_by(attributes)
-    passwords, identifiers = attributes.to_h.partition do |name, value|
+    passwords, identifiers = attributes.to_h.partition do |name, _value|
       !has_attribute?(name) && has_attribute?("#{name}_digest")
     end.map(&:to_h)
+    raise ArgumentError, 'One or more password arguments are required' if passwords.empty?
+    raise ArgumentError, 'One or more finder arguments are required' if identifiers.empty?
 
-    raise ArgumentError, "One or more password arguments are required" if passwords.empty?
-    raise ArgumentError, "One or more finder arguments are required" if identifiers.empty?
     if (record = find_by(identifiers))
       record if passwords.count { |name, value| record.public_send(:"authenticate_#{name}", value) } == passwords.size
     else
@@ -35,7 +36,7 @@ class User < ApplicationRecord
 
   def confirm!
     if unconfirmed?
-      update_columns(confirmed_at: Time.current)
+      update(confirmed_at: Time.current)
     else
       false
     end
@@ -47,6 +48,10 @@ class User < ApplicationRecord
 
   def unconfirmed?
     !confirmed?
+  end
+
+  def roles
+    [role] + (role.parent.nil? ? [] : role.parent)
   end
 
   def generate_confirmation_token
@@ -78,7 +83,7 @@ class User < ApplicationRecord
   end
 
   def membership
-    p = Person.find_by_EmailAddress(email)
+    p = Person.find_by(EmailAddress: email)
     p&.membership&.id
   end
 
@@ -91,6 +96,6 @@ class User < ApplicationRecord
   # Assert whether or not the password validations should be performed. Always on new records, only on existing
   # records if the .password attribute isn't blank.
   def validate_password?
-    new_record? ? true : !password.blank?
+    new_record? ? true : password.present?
   end
 end

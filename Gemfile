@@ -59,6 +59,8 @@ group :development, :test do
   gem "webdrivers", "~> 4.0", require: false
   gem "simplecov"
   gem "standard"
+  gem "rubocop-rails"
+  gem "rubocop-capybara"
 end
 
 group :development do
