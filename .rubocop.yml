@@ -1,0 +1,33 @@
+require:
+ - rubocop-rails
+ - rubocop-capybara
+
+Rails/UnknownEnv:
+  Environments:
+    - production
+    - development
+    - test
+    - staging
+
+AllCops:
+  NewCops: enable
+Style/Documentation:
+  Enabled: false
+Rails/I18nLocaleTexts:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/MethodLength:
+  Exclude:
+   - app/models/user.rb
+Metrics/AbcSize:
+  Exclude:
+   - app/models/user.rb
+Metrics/PerceivedComplexity:
+  Exclude:
+   - app/models/user.rb
+Metrics/CyclomaticComplexity:
+  Exclude:
+   - app/models/user.rb
+   
