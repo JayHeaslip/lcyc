@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  ENV_MAP = { development: 0, staging: 1, production: 2 }.freeze
+  ENV_MAP = { development: 0, staging: 1, production: 2, test: 3 }.freeze
   include Authentication
 
   protect_from_forgery with: :exception
@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
 
   def check_delayed_job
     id = ENV_MAP[Rails.env.to_sym]
+    puts "id is #{id}"
     begin
       pid = File.open(Rails.root.to_s + "/tmp/pids/delayed_job.#{id}.pid").readline.chop.to_i
       psout = `ps -p #{pid}`

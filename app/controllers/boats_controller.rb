@@ -17,7 +17,7 @@ class BoatsController < ApplicationController
     @boat = Boat.includes(:memberships).find(params[:id])
     @boat.attributes = boat_params
     if @boat.save
-      drysail_and_mooring_alert
+      flash[:alert] = @boat.update_drysail_and_mooring
       flash[:notice] = 'Successfully updated boat.'
       redirect_to boat_path(@boat)
     else
