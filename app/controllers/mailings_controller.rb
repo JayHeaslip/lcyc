@@ -98,7 +98,9 @@ class MailingsController < ApplicationController
       if Rails.env == "test"
         MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver
       else
+        # :nocov:
         MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver_later(wait_until: (i * 20).seconds.from_now)
+        # :nocov:
       end
     end
   end

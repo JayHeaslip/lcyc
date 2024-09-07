@@ -9,7 +9,9 @@ class UnsubscribeController < ApplicationController
       if @person.save(validate: false)
         flash[:notice] = "You have unsubscribed."
       else
+        # :nocov:
         flash[:alert] = "There was a problem unsubscribing."
+        # :nocov:
       end
     else
       flash[:alert] = "Email address not found."
