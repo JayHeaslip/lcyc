@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :redirect_if_authenticated, only: [:new, :create], unless: -> { current_user&.admin? }
-  skip_before_action :authenticate_user!, only: [:new, :create]
-  skip_before_action :check_authorization, only: [:new, :create]
+  before_action :redirect_if_authenticated, only: [ :new, :create ], unless: -> { current_user&.admin? }
+  skip_before_action :authenticate_user!, only: [ :new, :create ]
+  skip_before_action :check_authorization, only: [ :new, :create ]
 
   def index
     if params[:role_id]
@@ -90,7 +90,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    permitted = [:firstname, :lastname, :email, :password, :password_confirmation]
+    permitted = [ :firstname, :lastname, :email, :password, :password_confirmation ]
     params.require(:user).permit(permitted)
   end
 

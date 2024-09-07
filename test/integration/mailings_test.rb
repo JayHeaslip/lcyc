@@ -23,19 +23,19 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "create" do
-    post mailings_url, params: {mailing: {subject: "test2", body: "test"}}
+    post mailings_url, params: { mailing: { subject: "test2", body: "test" } }
     @mailing = Mailing.find_by_subject("test2")
     assert_redirected_to mailing_url(@mailing)
   end
 
   test "create with committee" do
-    post mailings_url, params: {mailing: {subject: "test2", body: "test", committee: "Boats"}}
+    post mailings_url, params: { mailing: { subject: "test2", body: "test", committee: "Boats" } }
     @mailing = Mailing.find_by_subject("test2")
     assert_redirected_to mailing_url(@mailing)
   end
 
   test "create bad" do
-    post mailings_url, params: {mailing: {body: "test"}}
+    post mailings_url, params: { mailing: { body: "test" } }
     assert_response :unprocessable_entity
   end
 
@@ -45,13 +45,13 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "update" do
-    patch mailing_url(@mailing), params: {mailing: {subject: "test3", body: "test"}}
+    patch mailing_url(@mailing), params: { mailing: { subject: "test3", body: "test" } }
     @mailing = Mailing.find_by_subject("test3")
     assert_redirected_to mailing_url(@mailing)
   end
 
   test "update bad" do
-    patch mailing_url(@mailing), params: {mailing: {subject: " ", body: "test22"}}
+    patch mailing_url(@mailing), params: { mailing: { subject: " ", body: "test22" } }
     assert_response :unprocessable_entity
   end
 
@@ -73,7 +73,7 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "send test mailing" do
-    post send_email_mailing_url(@mailing), params: {test: true}
+    post send_email_mailing_url(@mailing), params: { test: true }
     assert_redirected_to mailings_url
   end
 
@@ -90,7 +90,7 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
   test "send test mailing non-member email" do
     logout
     login_as(users(:no_member_email), "passwor2")
-    post send_email_mailing_url(@mailing), params: {test: true}
+    post send_email_mailing_url(@mailing), params: { test: true }
     assert_equal "Delivering mail.", flash[:notice]
     assert_redirected_to mailings_url
   end

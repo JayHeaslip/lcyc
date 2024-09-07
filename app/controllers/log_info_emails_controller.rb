@@ -1,7 +1,7 @@
 class LogInfoEmailsController < ApplicationController
   include ActiveStorage::SetCurrent
 
-  before_action :check_delayed_job, only: [:edit]
+  before_action :check_delayed_job, only: [ :edit ]
 
   # initial email is initialized from db/seeds.rb
   def edit
@@ -13,7 +13,7 @@ class LogInfoEmailsController < ApplicationController
     @log_info_email = LogInfoEmail.find(1)
     if @log_info_email.update(log_info_email_params)
       send_emails
-      flash[:notice] = 'Log info emails sent.'
+      flash[:notice] = "Log info emails sent."
       redirect_to root_url
     else
       set_loginfo_variables
@@ -39,8 +39,8 @@ class LogInfoEmailsController < ApplicationController
 
   def memberships
     if params[:log_info_email][:test]
-      memberships = [Person.find_by(EmailAddress: current_user.email&.membership)]
-      [Membership.find(407)] if memberships[0].nil?
+      memberships = [ Person.find_by(EmailAddress: current_user.email&.membership) ]
+      [ Membership.find(407) ] if memberships[0].nil?
     else
       Membership.members
     end
@@ -69,7 +69,7 @@ class LogInfoEmailsController < ApplicationController
 
   def send_email(cnt)
     partner_info = m.partner_info[0].split("\t")
-    member_info = [@to, @cc, @membership_chair, m, m.boat_info, m.member_info, partner_info, m.children_info]
+    member_info = [ @to, @cc, @membership_chair, m, m.boat_info, m.member_info, partner_info, m.children_info ]
     send_time = (cnt * 30).seconds.from_now
     MailRobot.loginfo(ActiveStorage::Current.url_options, member_info).deliver_later(wait_until: send_time)
   end

@@ -1,8 +1,8 @@
 class MailingsController < ApplicationController
   include ActiveStorage::SetCurrent
 
-  skip_before_action :authenticate_user!, :check_authorization, only: [:deliver_mail]
-  before_action :check_delayed_job, only: [:new, :show]
+  skip_before_action :authenticate_user!, :check_authorization, only: [ :deliver_mail ]
+  before_action :check_delayed_job, only: [ :new, :show ]
 
   def index
     @mailings = Mailing.sorted
@@ -20,12 +20,12 @@ class MailingsController < ApplicationController
     @mailing = Mailing.new
     @mailing.replyto = current_user.email
     @mailing.html = true
-    @committees = ["All"].concat(Committee.names)
+    @committees = [ "All" ].concat(Committee.names)
   end
 
   def create
     @mailing = Mailing.new(mailing_params)
-    @committees = ["All"].concat(Committee.names)
+    @committees = [ "All" ].concat(Committee.names)
     if @mailing.save
       flash[:success] = "Success."
       redirect_to mailing_path(@mailing)
@@ -38,7 +38,7 @@ class MailingsController < ApplicationController
     logger.info "url_options"
     logger.info ActiveStorage::Current.url_options
     @mailing = Mailing.find(params[:id])
-    @committees = ["All"].concat(Committee.names)
+    @committees = [ "All" ].concat(Committee.names)
   end
 
   def update
@@ -48,7 +48,7 @@ class MailingsController < ApplicationController
       flash[:success] = "Success."
       redirect_to mailing_path(@mailing)
     else
-      @committees = ["All"].concat(Committee.names)
+      @committees = [ "All" ].concat(Committee.names)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -73,7 +73,7 @@ class MailingsController < ApplicationController
       if p.nil?
         p = add_as_nonmember(current_user.email)
       end
-      people = [p]
+      people = [ p ]
       logger.info "Test email address: #{p.EmailAddress}"
     else
       @mailing.sent_at = Time.now

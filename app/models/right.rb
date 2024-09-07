@@ -45,7 +45,7 @@ class Right < ApplicationRecord
       # The following thanks to Tom Styles
       # Then check to make sure that all the rights for that controller in the database
       # still exist in the controller itself
-      where(["controller = ?", controller.controller_path]).each do |right_to_go|
+      where([ "controller = ?", controller.controller_path ]).each do |right_to_go|
         unless controller.public_instance_methods(false).include?(right_to_go.action.to_sym)
           puts "removing from database: #{controller.controller_path}, #{right_to_go.action}"
           right_to_go.destroy

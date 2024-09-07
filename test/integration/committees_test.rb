@@ -27,13 +27,13 @@ class CommitteesIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "show_committee" do
-    get list_committees_url, params: {committee: "Boats"}
+    get list_committees_url, params: { committee: "Boats" }
     assert_response :success
     assert_select "h2", "Boats Committee"
   end
 
   test "show_all_committees" do
-    get list_committees_url, params: {committee: "All"}
+    get list_committees_url, params: { committee: "All" }
     assert_response :success
     assert_select "h2", "Committee listing for all members"
   end

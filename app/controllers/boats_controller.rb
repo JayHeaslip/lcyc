@@ -18,7 +18,7 @@ class BoatsController < ApplicationController
     @boat.attributes = boat_params
     if @boat.save
       flash[:alert] = @boat.update_drysail_and_mooring
-      flash[:notice] = 'Successfully updated boat.'
+      flash[:notice] = "Successfully updated boat."
       redirect_to boat_path(@boat)
     else
       render :edit, status: :unprocessable_entity
@@ -28,7 +28,7 @@ class BoatsController < ApplicationController
   def destroy
     @boat = Boat.find(params[:id])
     unless adjust_membership
-      flash[:notice] = 'Boat deleted.'
+      flash[:notice] = "Boat deleted."
       @boat.delete
     end
     redirect_to request.referer
@@ -44,7 +44,7 @@ class BoatsController < ApplicationController
     adjust_boat_membership
     if @boat.save
       flash[:alert] = @boat.update_drysail_and_mooring
-      flash[:notice] = 'Saved association.'
+      flash[:notice] = "Saved association."
       redirect_to boat_path(@boat)
     else
       @memberships = Membership.active - @boat.memberships
@@ -55,11 +55,11 @@ class BoatsController < ApplicationController
   private
 
   def sort_column
-    Boat.column_names.include?(params[:sort]) ? params[:sort] : 'Name'
+    Boat.column_names.include?(params[:sort]) ? params[:sort] : "Name"
   end
 
   def sort_direction
-    %w[asc desc].include?(params[:direction]) ? params[:direction] : 'asc'
+    %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
   end
 
   def boat_params
@@ -71,13 +71,13 @@ class BoatsController < ApplicationController
     return unless @boat.memberships.size > 1
 
     @membership = Membership.find(params[:membership_id])
-    @membership.boats = @membership.boats - [@boat]
+    @membership.boats = @membership.boats - [ @boat ]
     @membership.save
   end
 
   def adjust_boat_membership
     @membership = Membership.find(params[:boat][:memberships])
     @boat.memberships << @membership
-    @membership.mooring = @boat.mooring if @boat.location == 'Mooring'
+    @membership.mooring = @boat.mooring if @boat.location == "Mooring"
   end
 end

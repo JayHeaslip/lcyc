@@ -13,7 +13,7 @@ class DrysailsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "update drysail spot" do
-    patch drysail_url(drysails(:drysail1)), params: {membership: ActiveRecord::FixtureSet.identify(:member2)}
+    patch drysail_url(drysails(:drysail1)), params: { membership: ActiveRecord::FixtureSet.identify(:member2) }
     flash[:success] = "Assigned dry sail spot #1."
     assert_redirected_to drysails_url
   end

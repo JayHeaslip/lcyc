@@ -17,17 +17,17 @@ class Boat < ApplicationRecord
 
   def selection_string
     name = (self.Name && self.Name != "") ? self.Name : "(no name)"
-    [name, self.Mfg_Size].join(" ")
+    [ name, self.Mfg_Size ].join(" ")
   end
 
   def self.to_csv
     boats = Boat.order("Name, mooring_id").includes(:memberships)
     CSV.generate(col_sep: ",") do |csv|
-      csv << ["Name", "Mooring#", "Sail#", "Mfg/Size", "PHRF", "Owner"]
+      csv << [ "Name", "Mooring#", "Sail#", "Mfg/Size", "PHRF", "Owner" ]
       boats.each do |b|
         phrf = (b.PHRF == 0) ? "" : b.PHRF
         owners = b.memberships.map { |e| e.LastName }.sort!
-        csv << [b.Name, b.mooring_id, b.sail_num, b.Mfg_Size, phrf, owners.join("/")]
+        csv << [ b.Name, b.mooring_id, b.sail_num, b.Mfg_Size, phrf, owners.join("/") ]
       end
     end
   end

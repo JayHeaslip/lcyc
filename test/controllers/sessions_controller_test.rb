@@ -77,7 +77,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should handle unknown user" do
-    post login_path, params: {email: "unknown@example.com", password: "abcdefg"}
+    post login_path, params: { email: "unknown@example.com", password: "abcdefg" }
     assert_equal "Incorrect email or password.", flash[:alert]
     assert_response :unprocessable_entity
   end

@@ -15,7 +15,7 @@ class DrysailsController < ApplicationController
       flash[:success] = "Assigned dry sail spot ##{@drysail.id}."
       redirect_to drysails_path
     else
-      flash.now[:alert] = 'Problem assiging dry sail spot'
+      flash.now[:alert] = "Problem assiging dry sail spot"
       render :assign, status: :unprocessable_entity
     end
   end

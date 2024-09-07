@@ -49,7 +49,7 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
   end
 
   test "update an user" do
-    patch user_url(@user), params: {user: @update}
+    patch user_url(@user), params: { user: @update }
     assert_redirected_to users_url
   end
 
@@ -59,7 +59,7 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
   end
 
   test "create an user" do
-    post users_url, params: {user: @new, email_confirmed: true}
+    post users_url, params: { user: @new, email_confirmed: true }
     assert_redirected_to users_url
     assert_equal flash[:success], "User was successfully created."
   end

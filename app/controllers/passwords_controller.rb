@@ -1,6 +1,6 @@
 class PasswordsController < ApplicationController
-  before_action :redirect_if_authenticated, except: [:change]
-  skip_before_action :authenticate_user!, except: [:change]
+  before_action :redirect_if_authenticated, except: [ :change ]
+  skip_before_action :authenticate_user!, except: [ :change ]
   skip_before_action :check_authorization
 
   def create

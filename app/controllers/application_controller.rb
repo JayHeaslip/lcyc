@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     if current_user.admin? || role_authorized?
       true
     else
-      flash[:alert] = 'You are not authorized to view the page you requested.'
+      flash[:alert] = "You are not authorized to view the page you requested."
       redirect_to request.referer
       false
     end
@@ -26,9 +26,9 @@ class ApplicationController < ActionController::Base
       pid = File.open(Rails.root.to_s + "/tmp/pids/delayed_job.#{id}.pid").readline.chop.to_i
       psout = `ps -p #{pid}`
     rescue StandardError
-      psout = ''
+      psout = ""
     end
-    return if psout.include?('ruby')
+    return if psout.include?("ruby")
 
     system("cd #{Rails.root}; RAILS_ENV=#{Rails.env} bundle exec bin/delayed_job -i #{id} start")
   end

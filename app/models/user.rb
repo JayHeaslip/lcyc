@@ -1,4 +1,4 @@
-require 'digest/sha1'
+require "digest/sha1"
 
 class User < ApplicationRecord
   attr_accessor :current_password
@@ -16,15 +16,15 @@ class User < ApplicationRecord
   belongs_to :role
 
   def admin?
-    role?('Admin')
+    role?("Admin")
   end
 
   def self.authenticate_by(attributes)
     passwords, identifiers = attributes.to_h.partition do |name, _value|
       !has_attribute?(name) && has_attribute?("#{name}_digest")
     end.map(&:to_h)
-    raise ArgumentError, 'One or more password arguments are required' if passwords.empty?
-    raise ArgumentError, 'One or more finder arguments are required' if identifiers.empty?
+    raise ArgumentError, "One or more password arguments are required" if passwords.empty?
+    raise ArgumentError, "One or more finder arguments are required" if identifiers.empty?
 
     if (record = find_by(identifiers))
       record if passwords.count { |name, value| record.public_send(:"authenticate_#{name}", value) } == passwords.size
@@ -51,7 +51,7 @@ class User < ApplicationRecord
   end
 
   def roles
-    [role] + (role.parent.nil? ? [] : role.parent)
+    [ role ] + (role.parent.nil? ? [] : role.parent)
   end
 
   def generate_confirmation_token

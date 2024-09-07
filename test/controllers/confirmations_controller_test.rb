@@ -41,7 +41,7 @@ class ConfirmationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should resend confirmation email if user is unconfirmed" do
     assert_emails 1 do
-      post confirmations_path, params: {user: {email: @unconfirmed_user.email}}
+      post confirmations_path, params: { user: { email: @unconfirmed_user.email } }
     end
 
     assert_redirected_to login_path
@@ -50,7 +50,7 @@ class ConfirmationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should prevent user from confirming if they are already confirmed" do
     assert_no_emails do
-      post confirmations_path, params: {user: {email: @confirmed_user.email}}
+      post confirmations_path, params: { user: { email: @confirmed_user.email } }
     end
     assert_redirected_to new_confirmation_path
     assert_not_nil flash[:alert]
@@ -83,7 +83,7 @@ class ConfirmationsControllerTest < ActionDispatch::IntegrationTest
     assert_not_nil flash[:alert]
 
     assert_no_emails do
-      post confirmations_path, params: {user: {email: @confirmed_user.email}}
+      post confirmations_path, params: { user: { email: @confirmed_user.email } }
     end
 
     assert_redirected_to root_path

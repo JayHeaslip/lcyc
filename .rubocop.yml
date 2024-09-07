@@ -1,33 +1,16 @@
-require:
- - rubocop-rails
- - rubocop-capybara
+# Omakase Ruby styling for Rails
+inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
-Rails/UnknownEnv:
-  Environments:
-    - production
-    - development
-    - test
-    - staging
+# Overwrite or add rules to create your own house style
+#
+# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
+# Layout/SpaceInsideArrayLiteralBrackets:
+#   Enabled: false
 
-AllCops:
-  NewCops: enable
-Style/Documentation:
+# Avoid flagging book highlighting and section marking
+Layout/LeadingCommentSpace:
   Enabled: false
-Rails/I18nLocaleTexts:
+Layout/CommentIndentation:
   Enabled: false
-Style/FrozenStringLiteralComment:
+Layout/EmptyLineAfterMagicComment:
   Enabled: false
-
-Metrics/MethodLength:
-  Exclude:
-   - app/models/user.rb
-Metrics/AbcSize:
-  Exclude:
-   - app/models/user.rb
-Metrics/PerceivedComplexity:
-  Exclude:
-   - app/models/user.rb
-Metrics/CyclomaticComplexity:
-  Exclude:
-   - app/models/user.rb
-   

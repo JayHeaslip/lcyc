@@ -6,7 +6,7 @@ class MembershipsController < ApplicationController
 
   def index
     @status_options = %w[Accepted Active Associate Honorary Inactive Life Resigned Senior]
-    params[:status] ||= ["Active", "Associate", "Honorary", "Life", "Senior"]
+    params[:status] ||= [ "Active", "Associate", "Honorary", "Life", "Senior" ]
     @memberships = filter_memberships(params)
     @memberships = @memberships.order(sort_column + " " + sort_direction)
     @lastname = params[:lastname]
@@ -155,7 +155,7 @@ class MembershipsController < ApplicationController
   end
 
   def labels
-    @label_options = ["All", "No Email", "Workday"]
+    @label_options = [ "All", "No Email", "Workday" ]
   end
 
   def download_labels
@@ -173,8 +173,8 @@ class MembershipsController < ApplicationController
   end
 
   def spreadsheets
-    @spreadsheet_options = ["Billing", "Log Members", "Log Fleet",
-      "Log Partner Xref", "Member Cards/Workday Checklist", "Evite", "Resigned"]
+    @spreadsheet_options = [ "Billing", "Log Members", "Log Fleet",
+      "Log Partner Xref", "Member Cards/Workday Checklist", "Evite", "Resigned" ]
   end
 
   def download_spreadsheet
@@ -185,7 +185,7 @@ class MembershipsController < ApplicationController
     installments = InitiationInstallment.includes(:membership).order(:year)
     @initiation_fee_due = []
     installments.each do |i|
-      @initiation_fee_due << [i.membership, i.amount, i.year]
+      @initiation_fee_due << [ i.membership, i.amount, i.year ]
     end
   end
 
@@ -210,7 +210,7 @@ class MembershipsController < ApplicationController
           p.grid.columns.times do |j|
             b = p.grid(i, j)
             indent = 10
-            p.bounding_box [b.top_left[0] + indent, b.top_left[1]], width: b.width, height: b.height - indent do
+            p.bounding_box [ b.top_left[0] + indent, b.top_left[1] ], width: b.width, height: b.height - indent do
               m = list[page * 30 + 3 * i + j]
               overflow = generate_text(p, m, b.width, workday) if !m.nil?
               logger.error "#{m.MailingName} overflowed: |#{overflow}|" if overflow && overflow != ""

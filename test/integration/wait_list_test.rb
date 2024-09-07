@@ -24,7 +24,7 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
 
   test "create entry" do
     @membership = memberships(:member2)
-    post wait_list_entries_url, params: {wait_list_entry: {membership_id: @membership.id}}
+    post wait_list_entries_url, params: { wait_list_entry: { membership_id: @membership.id } }
     assert_redirected_to wait_list_entries_url
     assert_equal flash[:notice], "Wait list entry was successfully created."
     @wl = WaitListEntry.last
@@ -34,7 +34,7 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
   test "create entry accepted member" do
     @wl = WaitListEntry.new
     @membership = memberships(:member4)
-    post wait_list_entries_path, params: {wait_list_entry: {membership_id: @membership.id, notes: "New note"}}
+    post wait_list_entries_path, params: { wait_list_entry: { membership_id: @membership.id, notes: "New note" } }
     assert_redirected_to wait_list_entries_path
     assert_equal flash[:notice], "Wait list entry was successfully created."
     @wl = WaitListEntry.last
@@ -45,7 +45,7 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
   test "create invalid entry" do
     @wl = WaitListEntry.new
     @membership = memberships(:member4)
-    post wait_list_entries_path, params: {force_wld: true, wait_list_entry: {membership_id: @membership.id, notes: "New note"}}
+    post wait_list_entries_path, params: { force_wld: true, wait_list_entry: { membership_id: @membership.id, notes: "New note" } }
     assert_response :unprocessable_entity
   end
 
@@ -55,13 +55,13 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "update entry" do
-    patch wait_list_entry_path(@wl), params: {wait_list_entry: {membership_id: @membership.id, notes: "Note"}}
+    patch wait_list_entry_path(@wl), params: { wait_list_entry: { membership_id: @membership.id, notes: "Note" } }
     assert_redirected_to wait_list_entries_path
     assert_equal flash[:notice], "Wait list entry was successfully updated."
   end
 
   test "update entry forced date" do
-    patch wait_list_entry_path(@wl), params: {force_wld: true, wait_list_entry: {membership_id: @membership.id, notes: "Note", date: "02-11-1995"}}
+    patch wait_list_entry_path(@wl), params: { force_wld: true, wait_list_entry: { membership_id: @membership.id, notes: "Note", date: "02-11-1995" } }
     assert_redirected_to wait_list_entries_path
     assert_equal flash[:notice], "Wait list entry was successfully updated."
     @wl = WaitListEntry.find(ActiveRecord::FixtureSet.identify(:wl2))
@@ -69,12 +69,12 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "update unvalid entry date" do
-    patch wait_list_entry_path(@wl), params: {force_wld: true, wait_list_entry: {membership_id: @membership.id, notes: "Note"}}
+    patch wait_list_entry_path(@wl), params: { force_wld: true, wait_list_entry: { membership_id: @membership.id, notes: "Note" } }
     assert_response :unprocessable_entity
   end
 
   test "update entry accepted member" do
-    patch wait_list_entry_path(@wlaccepted), params: {wait_list_entry: {membership_id: @wlaccepted.membership_id, notes: "Updated note"}}
+    patch wait_list_entry_path(@wlaccepted), params: { wait_list_entry: { membership_id: @wlaccepted.membership_id, notes: "Updated note" } }
     assert_redirected_to wait_list_entries_path
     assert_equal flash[:notice], "Wait list entry was successfully updated."
     @wl = WaitListEntry.find(ActiveRecord::FixtureSet.identify(:wl1))
@@ -100,13 +100,13 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "update mooring" do
-    patch mooring_update_wait_list_entry_url(wait_list_entries(:wl4)), params: {mooring: 100}
+    patch mooring_update_wait_list_entry_url(wait_list_entries(:wl4)), params: { mooring: 100 }
     assert_redirected_to wait_list_entries_url
   end
 
   test "update mooring with boat" do
     @wl2 = wait_list_entries(:wl2)
-    patch mooring_update_wait_list_entry_url(@wl2), params: {mooring: 100}
+    patch mooring_update_wait_list_entry_url(@wl2), params: { mooring: 100 }
     assert_redirected_to wait_list_entries_url
   end
 
@@ -114,7 +114,7 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
     @membership = @wl.membership
     @membership.LastName = ""
     @membership.save(validate: false)
-    patch mooring_update_wait_list_entry_url(@wl), params: {mooring: 100}
+    patch mooring_update_wait_list_entry_url(@wl), params: { mooring: 100 }
     assert_response :unprocessable_entity
     assert_select "div p", "Total : 4"
   end
