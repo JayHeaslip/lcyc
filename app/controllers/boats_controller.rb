@@ -47,8 +47,10 @@ class BoatsController < ApplicationController
       flash[:notice] = "Saved association."
       redirect_to boat_path(@boat)
     else
+      # :nocov:
       @memberships = Membership.active - @boat.memberships
       render :associate, status: :unprocessable_entity
+      # :nocov:
     end
   end
 

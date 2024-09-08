@@ -100,4 +100,14 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     delete logout_path
     assert_redirected_to login_path
   end
+
+  test "should login from cookie" do
+    login @confirmed_user, remember_user: true
+    tok = cookies[:remember_token]
+    reset!
+    cookies[:remember_token] = tok
+
+    get root_url
+    assert_response :success
+  end
 end

@@ -43,6 +43,7 @@ sue:
   LastName: john
   FirstName: Sue
   EmailAddress: suejohn@abc.com
+  select_email: true
   membership: member3
   Committee1: Boats
 

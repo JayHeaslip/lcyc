@@ -95,13 +95,7 @@ class MailingsController < ApplicationController
   def deliver_mail(people, mailing, host, filtered)
     people.each_with_index do |person, i|
       person.generate_email_hash if person.email_hash.nil?
-      if Rails.env == "test"
-        MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver
-      else
-        # :nocov:
-        MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver_later(wait_until: (i * 20).seconds.from_now)
-        # :nocov:
-      end
+      MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver_later(wait_until: (i * 20).seconds.from_now)
     end
   end
 

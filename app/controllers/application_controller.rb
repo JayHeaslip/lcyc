@@ -21,7 +21,6 @@ class ApplicationController < ActionController::Base
 
   def check_delayed_job
     id = ENV_MAP[Rails.env.to_sym]
-    puts "id is #{id}"
     begin
       pid = File.open(Rails.root.to_s + "/tmp/pids/delayed_job.#{id}.pid").readline.chop.to_i
       psout = `ps -p #{pid}`

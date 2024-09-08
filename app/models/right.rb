@@ -28,7 +28,7 @@ class Right < ApplicationRecord
     all.each do |r|
       controller = r.name.gsub(/\..*/, "")
       unless controllers_str_array.include?(controller)
-        puts "removing #{r.name}"
+        # puts "removing #{r.name}"
         r.destroy
       end
     end
@@ -38,7 +38,7 @@ class Right < ApplicationRecord
       controller.public_instance_methods(false).each do |action|
         next if /return_to_main|component_update|component|^_/.match?(action)
         if where("controller = ? AND action = ?", controller.controller_path, action).empty?
-          puts "adding to database: #{controller.controller_path}, #{action}"
+          # puts "adding to database: #{controller.controller_path}, #{action}"
           new(name: "#{controller}.#{action}", controller: controller.controller_path, action: action).save!
         end
       end
@@ -47,14 +47,14 @@ class Right < ApplicationRecord
       # still exist in the controller itself
       where([ "controller = ?", controller.controller_path ]).each do |right_to_go|
         unless controller.public_instance_methods(false).include?(right_to_go.action.to_sym)
-          puts "removing from database: #{controller.controller_path}, #{right_to_go.action}"
+          # puts "removing from database: #{controller.controller_path}, #{right_to_go.action}"
           right_to_go.destroy
         end
       end
     end
 
     # special case - MailingsController#deliver_mail - don't check authorization on this (run in delayed job)
-    puts "removing MailingsController.deliver_mail"
+    # puts "removing MailingsController.deliver_mail"
     find_by_name("MailingsController.deliver_mail").destroy
   end
 
