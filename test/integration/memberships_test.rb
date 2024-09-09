@@ -279,16 +279,16 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "inactivee returning to active wl date" do
+  test "inactive returning to active wl date" do
     @inactive = memberships(:inactive)
     patch membership_url(@inactive),
       params: { membership:
                   {
-                    Status: "Active",
-                    
+                    Status: "Active"
+
                   } }
-    assert_redirected_to membership_url(@membership.id)
+    assert_redirected_to membership_url(@inactive.id)
+    assert_equal flash[:alert], "For members returning to Active status from Inactive status, if adding to the waitlist, the waitlist date should be the day payment is received for the return to Active."
     assert_equal flash[:success], "Membership was successfully updated."
-    assert_response :success
   end
 end
