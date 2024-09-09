@@ -7,7 +7,7 @@ This site is for maintaining the membership database for LCYC.
 
 * To run the test suite: rails test, rails test:system
 
-* To check code syntax: standardrb
+* To check code syntax: rubocop -a
 
 * The site uses delayed_job to send email, the daemon will be started when creating email if it's not already running.
 
