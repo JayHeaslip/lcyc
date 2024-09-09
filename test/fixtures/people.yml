@@ -128,4 +128,11 @@ mem10:
   FirstName: joe
   membership: member10
   Committee1: Docks
+
+resigned:  
+  MemberType: Member
+  LastName: dave
+  FirstName: joe
+  membership: resigned
+  Committee1: Docks
   

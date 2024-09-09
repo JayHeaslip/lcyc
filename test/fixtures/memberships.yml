@@ -13,7 +13,7 @@ member1:
 
 member2:
   LastName: 'Smith'
-  MailingName: 'Jim'
+  MailingName: 'Very Long Mailing Name and another long part'
   StreetAddress: '234 Main St'
   City: 'Shelburne'
   State: 'VT'
@@ -25,7 +25,7 @@ member2:
 
 member3:
   LastName: 'Jones'
-  MailingName: 'John with boat'
+  MailingName: 'Very Long Mailing Name another long part'
   StreetAddress: '567 Main St'
   City: 'Shelburne'
   State: 'VT'
@@ -115,6 +115,32 @@ member10:
   Zip: 05482
   application_date: 02-03-2018
   Status: 'Active'
+  MemberSince: 2001
+  mooring: mooring10
+  boats: boat10
+  
+resigned:
+  LastName: 'Resigned'
+  MailingName: 'Resigned'
+  StreetAddress: '123 Maple St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  application_date: 02-03-2018
+  Status: 'Resigned'
+  MemberSince: 2001
+  mooring: mooring10
+  boats: boat10
+  
+inactive:
+  LastName: 'Inactive'
+  MailingName: 'Inactive'
+  StreetAddress: '123 Maple St'
+  City: 'Shelburne'
+  State: 'VT'
+  Zip: 05482
+  application_date: 02-03-2018
+  Status: 'Inactive'
   MemberSince: 2001
   mooring: mooring10
   boats: boat10

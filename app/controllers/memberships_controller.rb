@@ -123,9 +123,11 @@ class MembershipsController < ApplicationController
       flash[:notice] = "Saved association."
       redirect_to membership_path(@membership)
     else
+      # :nocov:
       @boats = Boat.order(:Name) - @membership.boats
       flash[:alert] = "Error saving association."
       render :associate, status: :unprocessable_entity
+      # :nocov:
     end
   end
 
@@ -137,7 +139,9 @@ class MembershipsController < ApplicationController
     if @membership.save
       flash[:notice] = "Mooring ##{mooring_id} unassigned."
     else
+      # :nocov:
       flash[:alert] = "Problem unassigning mooring ##{mooring_id}."
+      # :nocov:
     end
     redirect_to moorings_path
   end
@@ -149,7 +153,9 @@ class MembershipsController < ApplicationController
     if @membership.save
       flash[:notice] = "Dry sail spot ##{drysail.id} unassigned."
     else
+      # :nocov:
       flash[:alert] = "Problem unassigning dry sail spot ##{drysail.id}."
+      # :nocov:
     end
     redirect_to drysails_path
   end

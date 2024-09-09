@@ -13,7 +13,9 @@ class ConfirmationsController < ApplicationController
       if @user.confirm!
         redirect_to login_path, notice: "Your account has been confirmed."
       else
+        # :nocov:
         redirect_to new_confirmation_path, alert: "Something went wrong."
+        # :nocov:
       end
     else
       redirect_to new_confirmation_path, alert: "Invalid token."

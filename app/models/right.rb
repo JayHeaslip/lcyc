@@ -38,7 +38,6 @@ class Right < ApplicationRecord
       controller.public_instance_methods(false).each do |action|
         next if /return_to_main|component_update|component|^_/.match?(action)
         if where("controller = ? AND action = ?", controller.controller_path, action).empty?
-          # puts "adding to database: #{controller.controller_path}, #{action}"
           new(name: "#{controller}.#{action}", controller: controller.controller_path, action: action).save!
         end
       end

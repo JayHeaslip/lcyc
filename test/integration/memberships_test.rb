@@ -273,4 +273,22 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     get initiation_report_memberships_url
     assert_select "h2", "Initiation installments due"
   end
+
+  test "display wait list add form" do
+    get wl_membership_url(@membership3)
+    assert_response :success
+  end
+
+  test "inactivee returning to active wl date" do
+    @inactive = memberships(:inactive)
+    patch membership_url(@inactive),
+      params: { membership:
+                  {
+                    Status: "Active",
+                    
+                  } }
+    assert_redirected_to membership_url(@membership.id)
+    assert_equal flash[:success], "Membership was successfully updated."
+    assert_response :success
+  end
 end

@@ -25,11 +25,15 @@ class ApplicationController < ActionController::Base
       pid = File.open(Rails.root.to_s + "/tmp/pids/delayed_job.#{id}.pid").readline.chop.to_i
       psout = `ps -p #{pid}`
     rescue StandardError
+      # :nocov:
       psout = ""
+      # :nocov:
     end
     return if psout.include?("ruby")
 
+    # :nocov:
     system("cd #{Rails.root}; RAILS_ENV=#{Rails.env} bundle exec bin/delayed_job -i #{id} start")
+    # :nocov:
   end
 
   def role_authorized?
