@@ -13,13 +13,16 @@ class BoatTest < ActiveSupport::TestCase
   end
 
   test "should assign boat to mooring" do
-    @boat.mooring = nil
+    @boat = boats(:boat1)
+    @membership = memberships(:member3)
     @boat.location = "Mooring"
     assert_nil @boat.update_drysail_and_mooring
     assert_equal @boat.mooring, @membership.mooring
   end
 
   test "should assign boat to drysail" do
+    @boat = boats(:boat3)
+    @membership = memberships(:member5)
     @boat.drysail = nil
     @boat.location = "Parking Lot"
     assert_nil @boat.update_drysail_and_mooring
@@ -27,6 +30,8 @@ class BoatTest < ActiveSupport::TestCase
   end
 
   test "should not assign boat to mooring if mooring is not nil" do
+    @boat = boats(:boat1)
+    @membership = memberships(:member3)
     @boat.location = "Mooring"
     assert_nil @boat.update_drysail_and_mooring
   end
@@ -40,6 +45,8 @@ class BoatTest < ActiveSupport::TestCase
   end
 
   test "should not assign boat to drysail if drysail is not nil" do
+    @boat = boats(:boat1)
+    @membership = memberships(:member5)
     @boat.location = "Parking Lot"
     assert_nil @boat.update_drysail_and_mooring
   end

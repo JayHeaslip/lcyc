@@ -7,6 +7,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     @membership = memberships(:member1)
     @membership2 = memberships(:member2)
     @membership3 = memberships(:member3)
+    @membership10 = memberships(:member10)
     @boat = boats(:boat1)
     @boat2 = boats(:boat2)
   end
@@ -291,4 +292,17 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal flash[:alert], "For members returning to Active status from Inactive status, if adding to the waitlist, the waitlist date should be the day payment is received for the return to Active."
     assert_equal flash[:success], "Membership was successfully updated."
   end
+
+  test "delete membership with one boat" do
+    delete membership_url(@membership3)
+    assert_equal flash[:success], "Membership was successfully deleted."
+    assert_redirected_to memberships_path
+  end
+
+  test "delete membership with more than one boat" do
+    delete membership_url(@membership10)
+    assert_equal flash[:success], "Membership was successfully deleted."
+    assert_redirected_to memberships_path
+  end
+
 end

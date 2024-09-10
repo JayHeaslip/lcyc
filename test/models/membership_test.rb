@@ -13,6 +13,8 @@ class MembershipTest < ActiveSupport::TestCase
   end
 
   test "should assign boat to mooring" do
+    @boat = boats(:boat3)
+    @membership = memberships(:member5)
     @boat.mooring = nil
     @boat.location = "Mooring"
     assert_equal "", @membership.update_drysail_and_mooring(@boat)
@@ -20,6 +22,8 @@ class MembershipTest < ActiveSupport::TestCase
   end
 
   test "should assign boat to drysail" do
+    @boat = boats(:boat3)
+    @membership = memberships(:member5)
     @boat.drysail = nil
     @boat.location = "Parking Lot"
     assert_equal "", @membership.update_drysail_and_mooring(@boat)

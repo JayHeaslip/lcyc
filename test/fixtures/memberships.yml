@@ -117,7 +117,7 @@ member10:
   Status: 'Active'
   MemberSince: 2001
   mooring: mooring10
-  boats: boat10
+  boats: boat10 extra
   
 resigned:
   LastName: 'Resigned'
@@ -130,7 +130,6 @@ resigned:
   Status: 'Resigned'
   MemberSince: 2001
   mooring: mooring10
-  boats: boat10
   
 inactive:
   LastName: 'Inactive'
