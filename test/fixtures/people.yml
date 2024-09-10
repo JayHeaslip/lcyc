@@ -143,3 +143,9 @@ inactive:
   membership: inactive
   Committee1: Docks
   
+rick:
+  MemberType: Member
+  LastName: Bob
+  FirstName: Rick
+  membership: member11
+  Committee1: Docks
