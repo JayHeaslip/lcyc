@@ -52,4 +52,20 @@ member_show:
   name: MembershipsController.show
   controller: memberships
   action: show
+
+summary_report:
+  name: ReportsController.summary
+  controller: reports
+  action: summary
+
+history_report:
+  name: ReportsController.history
+  controller: reports
+  action: history
+
+moorings_report:
+  name: ReportsController.moorings
+  controller: reports
+  action: moorings
   
+

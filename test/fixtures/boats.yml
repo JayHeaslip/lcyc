@@ -22,6 +22,10 @@ boat10:
   Name: 'Hi'
   Mfg_Size: 'J200'
 
+boat11:
+  Name: 'Hi!'
+  Mfg_Size: 'J200'
+
 extra:
   Name: 'Hello'
   Mfg_Size: 'J150'

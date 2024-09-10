@@ -13,8 +13,8 @@ class BoatTest < ActiveSupport::TestCase
   end
 
   test "should assign boat to mooring" do
-    @boat = boats(:boat1)
-    @membership = memberships(:member3)
+    @boat = boats(:boat11)
+    @membership = memberships(:member11)
     @boat.location = "Mooring"
     assert_nil @boat.update_drysail_and_mooring
     assert_equal @boat.mooring, @membership.mooring
