@@ -16,8 +16,10 @@ class LogInfoEmailsController < ApplicationController
       flash[:notice] = "Log info emails sent."
       redirect_to root_url
     else
+      # :nocov:
       set_loginfo_variables
       render :edit, status: :unprocessable_entity
+      # :nocov:
     end
   end
 
@@ -38,8 +40,8 @@ class LogInfoEmailsController < ApplicationController
   end
 
   def memberships
-    if params[:log_info_email][:test]
-      memberships = [ Person.find_by(EmailAddress: current_user.email).membership ]
+    if params[:log_info_email][:test] == "true"
+      memberships = [ Person.find_by(EmailAddress: current_user.email)&.membership ]
       if memberships[0].nil?
         [ Membership.find(407) ]
       else
@@ -50,12 +52,12 @@ class LogInfoEmailsController < ApplicationController
     end
   end
 
-  def to_cc
-    if params[:log_info_email][:test]
+  def to_cc(m)
+    if params[:log_info_email][:test] == "true"
       @cc = nil
       @to = current_user.email
     else
-      @to = m.people.where('MemberType = "Member"').first.EmailAddress
+      @to = m.people.where('MemberType = "Member"').first&.EmailAddress
       @cc = m.people.where('MemberType = "Partner"').first&.EmailAddress
       nil if @to.nil? && @cc.nil?
     end
@@ -63,7 +65,7 @@ class LogInfoEmailsController < ApplicationController
 
   def send_emails
     memberships.each_with_index do |m, i|
-      if to_cc
+      if to_cc(m)
         send_email(m, i)
       else
         logger.info "Log info email not sent for #{m.MailingName}"

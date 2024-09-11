@@ -67,5 +67,16 @@ moorings_report:
   name: ReportsController.moorings
   controller: reports
   action: moorings
-  
+
+edit_log_info_emails:
+  name: LogInfoEmailsController.edit
+  controller: log_info_emails
+  action: edit
+
+update_log_info_emails:
+  name: LogInfoEmailsController.update
+  controller: log_info_emails
+  action: update
+
+
 

@@ -198,11 +198,11 @@ class Membership < ApplicationRecord
   end
 
   def member_info
-    m = people.where('MemberType = "Member"').first
-    if m
-      [ m.HomePhone, m.FirstName, m.WorkPhone, m.CellPhone, m.EmailAddress ]
+    member = people.where('MemberType = "Member"').first
+    if member
+      [ member.HomePhone, member.FirstName, member.WorkPhone, member.CellPhone, member.EmailAddress ]
     else
-      logger.info "No member for #{id}, #{self.FirstName} #{self.LastName}"
+      logger.info "No member for #{id}, #{self.MailingName}"
       [ nil, nil, nil, nil, nil ]
     end
   end
