@@ -9,7 +9,7 @@ boat2:
   Mfg_Size: 'J80'
   Name: "Hello2"
   location: "Mooring"
-  mooring: mooring1
+  mooring: mooring2
 
 boat3:
   Mfg_Size: 'J120'

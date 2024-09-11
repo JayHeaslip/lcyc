@@ -6,6 +6,8 @@ class BoatsIntegrationTest < ActionDispatch::IntegrationTest
     login_as(admin, "passwor1")
     @membership = memberships(:member1)
     @boat = boats(:boat1)
+    @membership6 = memberships(:member6)
+    @boat4 = boats(:boat4)
   end
 
   test "get_index" do
@@ -63,5 +65,12 @@ class BoatsIntegrationTest < ActionDispatch::IntegrationTest
   test "save association" do
     post save_association_boat_url(@boat), params: { boat: { memberships: memberships(:member2).id } }
     assert_redirected_to boat_url(@boat)
+  end
+
+  test "destroy boat with more than one membership" do
+    @request.env["HTTP_REFERER"] = "http://test.com/membership/#{@membership6.id}"
+    get membership_url(@membership6)
+    delete membership_boat_url(@membership6, @boat4), headers: { HTTP_REFERER: membership_url(@membership6) }
+    assert_redirected_to membership_url(@membership6)
   end
 end

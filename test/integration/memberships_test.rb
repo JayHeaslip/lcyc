@@ -20,7 +20,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   test "get_index" do
     get memberships_url
     assert_response :success
-    assert_select "p", "Total : 10"
+    assert_select "p", "Total : 11"
   end
 
   test "show_membership" do
@@ -177,6 +177,8 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "remove a moored boat with multiple owners from membership that owns the mooring" do
+    @membership = memberships(:member3)
+    @boat = boats(:boat4)
     delete rmboat_boat_membership_url(@boat, @membership)
     assert_redirected_to boat_url(@boat)
   end

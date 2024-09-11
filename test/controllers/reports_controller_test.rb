@@ -13,7 +13,7 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
   test "should generate a summary report" do
     login @confirmed_user
     get summary_report_path
-    assert_match /Total: 12/, @response.body
+    assert_match /Total: 13/, @response.body
     assert_response :success
   end
 

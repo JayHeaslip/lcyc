@@ -149,3 +149,10 @@ rick:
   FirstName: Rick
   membership: member11
   Committee1: Docks
+
+bobsmith:
+  MemberType: Member
+  LastName: Smith
+  FirstName: Bob
+  membership: member6
+  Committee1: Docks

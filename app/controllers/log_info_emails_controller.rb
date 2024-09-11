@@ -28,7 +28,7 @@ class LogInfoEmailsController < ApplicationController
   end
 
   def set_loginfo_variables
-    @m = Person.find_by(EmailAddress: current_user.email&.membership)
+    @m = Person.find_by(EmailAddress: current_user.email).membership
     @m = Membership.find(407) if @m.nil?
     @boat_info = @m.boat_info
     @member_info = @m.member_info
@@ -39,8 +39,12 @@ class LogInfoEmailsController < ApplicationController
 
   def memberships
     if params[:log_info_email][:test]
-      memberships = [ Person.find_by(EmailAddress: current_user.email&.membership) ]
-      [ Membership.find(407) ] if memberships[0].nil?
+      memberships = [ Person.find_by(EmailAddress: current_user.email).membership ]
+      if memberships[0].nil?
+        [ Membership.find(407) ]
+      else
+        memberships
+      end
     else
       Membership.members
     end
@@ -60,14 +64,14 @@ class LogInfoEmailsController < ApplicationController
   def send_emails
     memberships.each_with_index do |m, i|
       if to_cc
-        send_email(i)
+        send_email(m, i)
       else
         logger.info "Log info email not sent for #{m.MailingName}"
       end
     end
   end
 
-  def send_email(cnt)
+  def send_email(m, cnt)
     partner_info = m.partner_info[0].split("\t")
     member_info = [ @to, @cc, @membership_chair, m, m.boat_info, m.member_info, partner_info, m.children_info ]
     send_time = (cnt * 30).seconds.from_now
