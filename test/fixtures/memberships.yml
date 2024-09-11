@@ -135,11 +135,11 @@ member10:
 member11:
   id: 407
   LastName: 'Mem11'
-  MailingName: 'Mem11'
-  StreetAddress: '123 Maple St'
-  City: 'Shelburne'
-  State: 'VT'
-  Zip: 05482
+  MailingName: ' Mem11 '
+  StreetAddress: ' 123 Maple St '
+  City: ' Shelburne '
+  State: 'V '
+  Zip: ' 05482 '
   application_date: 02-03-2018
   Status: 'Active'
   MemberSince: 2001

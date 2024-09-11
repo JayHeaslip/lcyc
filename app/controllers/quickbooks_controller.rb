@@ -9,24 +9,13 @@ class QuickbooksController < ApplicationController
   def cleanup
     members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
     members.each do |m|
-      update = false
-      if m.MailingName != m.MailingName.strip
-        update = true
-        m.MailingName = m.MailingName.strip
-      elsif m.StreetAddress != m.StreetAddress.strip
-        update = true
-        m.StreetAddress = m.StreetAddress.strip
-      elsif m.City != m.City.strip
-        update = true
-        m.City = m.City.strip
-      elsif m.State != m.State.strip
-        update = true
-        m.State = m.State.strip
-      elsif m.Zip != m.Zip.strip
-        update = true
-        m.Zip = m.Zip.strip
-      end
-      m.save if update
+      @update = false
+      m.MailingName = strip(m.MailingName)
+      m.StreetAddress = strip(m.StreetAddress)
+      m.City = strip(m.City)
+      m.State = strip(m.State)
+      m.Zip = strip(m.Zip)
+      m.save if @update
     end
   end
 
@@ -41,6 +30,8 @@ class QuickbooksController < ApplicationController
     state = params[:state]
     error = params[:error]
     code = params[:code]
+    puts state
+    puts "session ##{session[:state]}#"
     if state == session[:state]
       client = oauth2_client
       client.authorization_code = code
@@ -149,6 +140,13 @@ class QuickbooksController < ApplicationController
   end
 
   private
+
+  def strip(str)
+    if str != str.strip
+      @update = true
+      str.strip
+    end
+  end
 
   def oauth2_client
     if Rails.env == "development"
