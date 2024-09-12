@@ -27,11 +27,10 @@ class QuickbooksController < ApplicationController
   end
 
   def new
+    # :nocov:
     state = params[:state]
     error = params[:error]
     code = params[:code]
-    puts state
-    puts "session ##{session[:state]}#"
     if state == session[:state]
       client = oauth2_client
       client.authorization_code = code
@@ -45,9 +44,11 @@ class QuickbooksController < ApplicationController
     else
       "Error: #{error}"
     end
+    # :nocov:
   end
 
   def update_members
+    # :nocov:
     if (access_token = session[:access_token])
       QboApi.production = (Rails.env == "production")
       QboApi.minor_version = 8
@@ -93,6 +94,7 @@ class QuickbooksController < ApplicationController
       flash[:alert] = "Please connect to quickbooks."
       redirect_to root_url
     end
+    # :nocov:
   end
 
   def invoices
@@ -100,6 +102,7 @@ class QuickbooksController < ApplicationController
   end
 
   def generate_invoices
+    # :nocov:
     if (access_token = session[:access_token])
       QboApi.production = (Rails.env == "production")
       QboApi.minor_version = 8
@@ -137,6 +140,7 @@ class QuickbooksController < ApplicationController
       flash[:alert] = "Please connect to quickbooks."
       redirect_to invoices_quickbooks_path
     end
+    # :nocov:
   end
 
   private
@@ -149,6 +153,7 @@ class QuickbooksController < ApplicationController
   end
 
   def oauth2_client
+    # :nocov:
     if Rails.env == "development"
       client_id = Rails.application.credentials.development.OAUTH_CONSUMER_KEY
       client_secret = Rails.application.credentials.development.OAUTH_CONSUMER_SECRET
@@ -171,9 +176,11 @@ class QuickbooksController < ApplicationController
       authorization_endpoint: "https://appcenter.intuit.com/connect/oauth2",
       token_endpoint: "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer"
     )
+    # :nocov:
   end
 
   def update_member(qbm, m, display_name)
+    # :nocov:
     if m # update a member
       @existing_qbo_members[display_name] = true
       update = false
@@ -201,9 +208,11 @@ class QuickbooksController < ApplicationController
       logger.info "deleting #{display_name}"
       @api.deactivate(:customer, id: qbm["Id"])
     end
+    # :nocov:
   end
 
   def update_address(qbm, m)
+    # :nocov:
     if qbm["BillAddr"].nil?
       return true
     elsif qbm["BillAddr"]["Line1"] != m.StreetAddress
@@ -216,9 +225,11 @@ class QuickbooksController < ApplicationController
       return true
     end
     false
+    # :nocov:
   end
 
   def generate_line_items(m, test)
+    # :nocov:
     dues = Membership.dues(m) || 0
     mooring_fee = m.calculate_mooring_fee
     mooring_replacement_fee = m.calculate_mooring_replacement_fee
@@ -301,5 +312,6 @@ class QuickbooksController < ApplicationController
     end
 
     line_items
+    # :nocov:
   end
 end

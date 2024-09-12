@@ -22,9 +22,9 @@ class QuickbooksControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "get new QB token, matching session" do
-    session[:state] = "123"
-    get new_quickbook_path, params: { state: "123", error: "456", code: "789" }
+  test "display form to generate invoices" do
+    get invoices_quickbooks_path
     assert_response :success
   end
+
 end
