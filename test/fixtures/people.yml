@@ -126,6 +126,15 @@ mem10:
   MemberType: Member
   LastName: dave
   FirstName: joe
+  EmailAddress: joe@abc.com
+  membership: member10
+  Committee1: Docks
+
+p10:  
+  MemberType: Partner
+  LastName: dave
+  FirstName: sue
+  EmailAddress: sue@abc.com
   membership: member10
   Committee1: Docks
 

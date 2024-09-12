@@ -46,17 +46,41 @@ class MembershipTest < ActiveSupport::TestCase
     assert_equal @boat.location, ""
   end
 
+  test "should not assign boat to drysail if drysail is not available" do
+    @boat.location = "Parking Lot"
+    @mooring.memberships = []
+    @boat.drysail = nil
+    assert_equal "Drysail spot not available for boat.\n", @membership.update_drysail_and_mooring(@boat)
+    assert_equal @boat.location, ""
+  end
+
   test "should not assign boat to drysail if drysail is not nil" do
     @boat.location = "Parking Lot"
     @boat.drysail = drysails(:drysail10)
     assert_nil @boat.update_drysail_and_mooring
   end
 
-  test "should not assign boat to drysail if drysail is not available" do
-    @boat.location = "Parking Lot"
-    @boat.drysail = nil
-    @membership.drysail = nil
-    assert_equal "Drysail spot not available for boat.\n", @boat.update_drysail_and_mooring
-    assert_equal @boat.location, ""
+  test "should generate a partner cc email" do
+    assert_equal @membership.cc_email, "sue@abc.com"
+  end
+
+  test "should generate a partner cc email, blank partner email" do
+    @partner = people(:p10)
+    @partner.EmailAddress = ""
+    @partner.save
+    assert_equal @membership.cc_email, ""
+  end
+
+  test "should generate a partner cc email, blank member email" do
+    @member = people(:mem10)
+    @member.EmailAddress = ""
+    @member.save
+    assert_equal @membership.cc_email, ""
+  end
+
+  test "should generate a partner cc email, prefer partner" do
+    @membership.prefer_partner_email = true
+    @membership.save
+    assert_equal @membership.cc_email, "joe@abc.com"
   end
 end

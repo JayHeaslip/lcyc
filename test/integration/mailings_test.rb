@@ -62,7 +62,7 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
 
   test "send mailing" do
     post send_email_mailing_url(@mailing)
-    assert_enqueued_emails 10
+    assert_enqueued_emails 12
     assert_redirected_to mailings_url
   end
 
@@ -99,6 +99,12 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
     login_as(users(:no_member_email), "passwor2")
     post send_email_mailing_url(@mailing), params: { test: true }
     assert_equal "Delivering mail.", flash[:notice]
+    assert_redirected_to mailings_url
+  end
+
+  test "send test mailing with pdf attachment" do
+    @mailing = mailings(:three)
+    post send_email_mailing_url(@mailing), params: { test: true }
     assert_redirected_to mailings_url
   end
 end

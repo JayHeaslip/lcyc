@@ -29,4 +29,5 @@ boat11:
 extra:
   Name: 'Hello'
   Mfg_Size: 'J150'
+  location: "Parking Lot"
   

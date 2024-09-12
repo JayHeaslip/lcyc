@@ -260,6 +260,11 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "generate evite spreadsheet" do
+    post download_spreadsheet_memberships_url, params: { spreadsheet: "Evite" }
+    assert_response :success
+  end
+
   test "unassign a mooring" do
     post unassign_membership_url(@membership)
     assert_equal "Mooring #261007983 unassigned.", flash[:notice]

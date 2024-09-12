@@ -1,0 +1,4 @@
+three_pdf_attachment:
+  name: pdf
+  record: three (Mailing)
+  blob: pdf_blob

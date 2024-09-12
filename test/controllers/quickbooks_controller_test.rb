@@ -1,7 +1,6 @@
 require "test_helper"
 
 class QuickbooksControllerTest < ActionDispatch::IntegrationTest
-
   setup do
     admin = users(:one)
     login_as(admin, "passwor1")
@@ -26,5 +25,4 @@ class QuickbooksControllerTest < ActionDispatch::IntegrationTest
     get invoices_quickbooks_path
     assert_response :success
   end
-
 end
