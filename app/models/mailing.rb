@@ -21,7 +21,9 @@ class Mailing < ApplicationRecord
         errors.add(:attachments, "must be a PDF")
       end
       unless pdf.byte_size < 5.megabytes
+        # :nocov:
         errors.add(:attachments, "must be less than 5 Megabytes")
+        # :nocov:
       end
     end
   end

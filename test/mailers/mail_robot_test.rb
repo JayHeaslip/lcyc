@@ -33,8 +33,7 @@ class MailRobotTest < ActionMailer::TestCase
   test "mailing with pdf" do
     @person = people(:bob)
     @mailing = mailings(:one)
-    puts "class is #{@mailing.class}"
-    @mailing.attachments["first.pdf"] = File.read("/home/vboxuser/rails/lcyc/test/fixtures/files/first.pdf")
+    @mailing.pdfs.attach(io: File.open("/home/vboxuser/rails/lcyc/test/fixtures/files/first.pdf"), filename: "first.pdf", content_type: "application/pdf")
     @mailing.save
     url_options = {}
     email = MailRobot.mailing(url_options, @person, @mailing, "www.example.com")
@@ -46,5 +45,12 @@ class MailRobotTest < ActionMailer::TestCase
     assert_equal [ "lcyc@members.lcyc.info" ], email.from
     assert_equal [ @person.EmailAddress ], email.to
     assert_equal "[LCYC] #{@mailing.subject}", email.subject
+  end
+
+  test "mailing with invalid file type" do
+    @person = people(:bob)
+    @mailing = mailings(:one)
+    @mailing.pdfs.attach(io: File.open("/home/vboxuser/rails/lcyc/test/fixtures/files/lcyc.jpg"), filename: "lcyc.jpg", content_type: "image/jpeg")
+    assert_not @mailing.save
   end
 end
