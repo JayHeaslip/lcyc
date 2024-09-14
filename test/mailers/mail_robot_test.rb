@@ -53,4 +53,25 @@ class MailRobotTest < ActionMailer::TestCase
     @mailing.pdfs.attach(io: File.open("/home/vboxuser/rails/lcyc/test/fixtures/files/lcyc.jpg"), filename: "lcyc.jpg", content_type: "image/jpeg")
     assert_not @mailing.save
   end
+
+  test "loginfo" do
+    @mailing = mailings(:loginfo)
+    to = "jim@abc.com"
+    cc = "sue@abc.com"
+    membership = memberships(:member1)
+    boat = boats(:boat1)
+    member = people(:bob)
+    partner = people(:jill)
+
+    email = MailRobot.loginfo(ActiveStorage::Current.url_options, to, cc, "Betsey", membership, boat,  member, partner, [])
+
+    assert_emails 1 do
+      email.deliver_now
+    end
+
+    assert_equal [ "lcyc@members.lcyc.info" ], email.from
+    assert_equal [ "jim@abc.com" ], email.to
+    assert_equal [ "sue@abc.com" ], email.cc
+    assert_equal "[LCYC] Log info verification", email.subject
+  end
 end

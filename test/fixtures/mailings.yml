@@ -14,3 +14,7 @@ three:
   subject: test
   body:  test2
   committee: 'All'
+
+loginfo:
+  subject: loginfo
+  body:  test2
