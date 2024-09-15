@@ -33,9 +33,7 @@ class Boat < ApplicationRecord
   end
 
   def update_drysail_and_mooring
-    if location == "" || location.nil?
-      nil
-    elsif location == "Mooring" && mooring.nil?
+    if location == "Mooring" && mooring.nil?
       available_mooring = Membership.mooring_available(memberships)
       if available_mooring
         self.mooring = available_mooring
@@ -53,6 +51,8 @@ class Boat < ApplicationRecord
         self.location = ""
         "Drysail spot not available for boat.\n"
       end
+    else
+      nil
     end
   end
 end
