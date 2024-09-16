@@ -27,6 +27,7 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
   test "should generate a moorings report" do
     login @confirmed_user
     get moorings_report_path
+    @membership = memberships(:member1)
     assert_match /<p>Unassigned moorings: 100/, @response.body
     assert_response :success
   end

@@ -70,9 +70,6 @@ class MembershipsController < ApplicationController
       flash[:alert] = "Member removed from wait list due to membership category update." if !@membership.wait_list_entry.nil?
       @membership.wait_list_entry = nil
     end
-    @membership.boats.each do |b|
-      flash[:alert] = (flash[:alert] || "") + @membership.update_drysail_and_mooring(b)
-    end
     if @membership.save
       flash.delete(:alert) if flash[:alert].blank?
       flash[:success] = "Membership was successfully updated."

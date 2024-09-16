@@ -71,37 +71,6 @@ class Membership < ApplicationRecord
     self.Status.in? [ "Accepted", "Active", "Life", "Associate" ]
   end
 
-  ## returns a string for flash
-  def update_drysail_and_mooring(boat)
-    if boat.location == "" || boat.location.nil?
-      boat.mooring = nil
-      boat.drysail = nil
-      ""
-    elsif boat.location == "Mooring" && boat.mooring.nil?
-      # does one of the boat owners have a mooring?
-      mooring = Membership.mooring_available(boat.memberships)
-      if mooring
-        boat.mooring = mooring
-        ""
-      else
-        boat.location = ""
-        "Mooring not available for boat.\n"
-      end
-    elsif boat.location == "Parking Lot" && boat.drysail.nil?
-      # does one of the boat owners have a drysail spot?
-      drysail = Membership.drysail_available(boat.memberships)
-      if drysail
-        boat.drysail = drysail
-        ""
-      else
-        boat.location = ""
-        "Drysail spot not available for boat.\n"
-      end
-    else
-      ""
-    end
-  end
-
   # return first available mooring from an array of memberships
   def self.mooring_available(memberships)
     memberships.each do |m|

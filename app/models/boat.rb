@@ -8,10 +8,31 @@ class Boat < ApplicationRecord
   validate :name_or_mfg?
   validates_uniqueness_of :Name, scope: :Mfg_Size, allow_blank: true
   validates_uniqueness_of :Mfg_Size, scope: :Name, allow_blank: true
+  validate :check_location
 
   def name_or_mfg?
     if self.Name.blank? && self.Mfg_Size.blank?
       errors.add(:base, "You must specify either a Name or Mfg/Size")
+    end
+  end
+
+  def check_location
+    if location == "Mooring" && mooring.nil?
+      available_mooring = Membership.mooring_available(memberships)
+      if available_mooring
+        self.mooring = available_mooring
+      else
+        self.location = ""
+        errors.add(:base, "Mooring not available for boat")
+      end
+    elsif location == "Parking Lot" && drysail.nil?
+      available_drysail = Membership.drysail_available(memberships)
+      if available_drysail
+        self.drysail = available_drysail
+      else
+        self.location = ""
+        errors.add(:base, "Drysail spot not available for boat")
+      end
     end
   end
 
@@ -29,30 +50,6 @@ class Boat < ApplicationRecord
         owners = b.memberships.map { |e| e.LastName }.sort!
         csv << [ b.Name, b.mooring_id, b.sail_num, b.Mfg_Size, phrf, owners.join("/") ]
       end
-    end
-  end
-
-  def update_drysail_and_mooring
-    if location == "Mooring" && mooring.nil?
-      available_mooring = Membership.mooring_available(memberships)
-      if available_mooring
-        self.mooring = available_mooring
-        nil
-      else
-        self.location = ""
-        "Mooring not available for boat.\n"
-      end
-    elsif location == "Parking Lot" && drysail.nil?
-      available_drysail = Membership.drysail_available(memberships)
-      if available_drysail
-        self.drysail = available_drysail
-        nil
-      else
-        self.location = ""
-        "Drysail spot not available for boat.\n"
-      end
-    else
-      nil
     end
   end
 end

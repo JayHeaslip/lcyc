@@ -7,17 +7,12 @@ class MembershipTest < ActiveSupport::TestCase
     @mooring = mooring(:mooring10)
   end
 
-  test "should return blank message if location is blank or nil" do
-    @boat.location = ""
-    assert_equal "", @membership.update_drysail_and_mooring(@boat)
-  end
-
   test "should assign boat to mooring" do
     @boat = boats(:boat3)
     @membership = memberships(:member5)
     @boat.mooring = nil
     @boat.location = "Mooring"
-    assert_equal "", @membership.update_drysail_and_mooring(@boat)
+    @boat.save
     assert_equal @boat.mooring, @membership.mooring
   end
 
@@ -26,7 +21,7 @@ class MembershipTest < ActiveSupport::TestCase
     @membership = memberships(:member5)
     @boat.drysail = nil
     @boat.location = "Parking Lot"
-    assert_equal "", @membership.update_drysail_and_mooring(@boat)
+    @boat.save
     assert_equal @boat.drysail, @membership.drysail
   end
 
@@ -34,30 +29,32 @@ class MembershipTest < ActiveSupport::TestCase
     @boat.location = "Mooring"
     @boat.mooring = mooring(:mooring10)
     old_mooring = @boat.mooring
-    assert_equal "", @membership.update_drysail_and_mooring(@boat)
+    @boat.save
     assert_equal old_mooring, @boat.mooring
   end
 
   test "should not assign boat to mooring if mooring is not available" do
     @boat.location = "Mooring"
-    @mooring.memberships = []
-    @boat.mooring = nil
-    assert_equal "Mooring not available for boat.\n", @membership.update_drysail_and_mooring(@boat)
+    @membership.mooring = nil
+    assert_not @boat.valid?
+    assert_equal @boat.errors.full_messages, [ "Mooring not available for boat" ]
     assert_equal @boat.location, ""
   end
 
   test "should not assign boat to drysail if drysail is not available" do
     @boat.location = "Parking Lot"
-    @mooring.memberships = []
     @boat.drysail = nil
-    assert_equal "Drysail spot not available for boat.\n", @membership.update_drysail_and_mooring(@boat)
+    assert_not @boat.valid?
+    assert_equal @boat.errors.full_messages, [ "Drysail spot not available for boat" ]
     assert_equal @boat.location, ""
   end
 
   test "should not assign boat to drysail if drysail is not nil" do
     @boat.location = "Parking Lot"
     @boat.drysail = drysails(:drysail10)
-    assert_nil @boat.update_drysail_and_mooring
+    old_drysail = @boat.drysail
+    @boat.save
+    assert_equal old_drysail, @boat.drysail
   end
 
   test "should generate a partner cc email" do
