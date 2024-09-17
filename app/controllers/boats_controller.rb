@@ -26,9 +26,28 @@ class BoatsController < ApplicationController
 
   def destroy
     @boat = Boat.find(params[:id])
+    logger.info "deleting boat"
     unless adjust_membership
       flash[:notice] = "Boat deleted."
       @boat.delete
+    end
+    redirect_to request.referer
+  end
+
+  def rmboat
+    @boat = Boat.find(params[:id])
+    @membership = Membership.find(params[:membership_id])
+    # if the membership has the mooring the boat is on
+    # remove the boat from the mooring
+    if @membership.mooring && (@membership.mooring.id == @boat.mooring_id)
+      @boat.location = ""
+      @boat_mooring_id = nil
+    end
+    @boat.memberships.delete(@membership)
+    flash[:notice] = "#{@membership.LastName} removed from boat"
+    if @boat.memberships.empty?
+      flash[:notice] += ", boat deleted."
+      @boat.destroy
     end
     redirect_to request.referer
   end

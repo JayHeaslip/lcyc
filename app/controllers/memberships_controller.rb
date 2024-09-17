@@ -86,26 +86,6 @@ class MembershipsController < ApplicationController
     redirect_to memberships_path
   end
 
-  def rmboat
-    @boat = Boat.find(params[:boat_id])
-    @membership = Membership.find(params[:id])
-    # if the membership has the mooring the boat is on
-    # remove the boat from the mooring
-    if @membership.mooring && (@membership.mooring.id == @boat.mooring_id)
-      @boat.location = ""
-      @boat_mooring_id = nil
-    end
-    @boat.memberships.delete(@membership)
-    flash[:notice] = "#{@membership.LastName} removed from boat"
-    if @boat.memberships.empty?
-      flash[:notice] += ", boat deleted."
-      @boat.destroy
-      redirect_to boats_path
-    else
-      redirect_to boat_path(@boat)
-    end
-  end
-
   def associate
     @membership = Membership.find(params[:id])
     @boats = Boat.order(:Name) - @membership.boats

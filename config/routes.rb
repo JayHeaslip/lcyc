@@ -70,8 +70,12 @@ Rails.application.routes.draw do
       post :unassign_drysail
     end
     resources :people
-    resources :boats
-  end
+    resources :boats do
+      member do
+        delete :rmboat
+      end
+    end
+   end
 
   resources :people, only: [ :destroy ]
 
