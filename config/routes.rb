@@ -65,7 +65,7 @@ Rails.application.routes.draw do
       get :wl
       post :wladd
       get :associate
-      post :save_association
+      patch :save_association
       post :unassign
       post :unassign_drysail
     end
