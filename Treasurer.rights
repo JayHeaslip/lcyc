@@ -1,6 +1,6 @@
-"quickbooks","cleanup"
-"quickbooks","connect"
-"quickbooks","generate_invoices"
-"quickbooks","invoices"
-"quickbooks","new"
-"quickbooks","update_members"
+QuickbooksController.cleanup
+QuickbooksController.connect
+QuickbooksController.generate_invoices
+QuickbooksController.invoices
+QuickbooksController.new
+QuickbooksController.update_members
