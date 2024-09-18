@@ -326,7 +326,6 @@ class QuickbooksController < ApplicationController
         }
       }
     }
-
     line_items
     # :nocov:
   end
