@@ -310,7 +310,23 @@ class QuickbooksController < ApplicationController
         }
       }
     end
-
+    if test
+      docks_assessment = 10
+    else
+      docks_assessment = 125
+    end
+    dock_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
+    line_items << {
+      Amount: dock_assessments,
+      DetailType: "SalesItemLineDetail",
+      SalesItemLineDetail: {
+        ItemRef: {
+          value: dock_assessment_value,
+          name: "Docks Assessment"
+        }
+      }
+    }
+    
     line_items
     # :nocov:
   end
