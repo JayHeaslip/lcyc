@@ -17,6 +17,7 @@ class Boat < ApplicationRecord
   end
 
   def check_location
+    return if new_record?
     if location == "Mooring" && mooring.nil?
       available_mooring = Membership.mooring_available(memberships)
       if available_mooring
