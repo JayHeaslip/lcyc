@@ -58,6 +58,7 @@ class MembershipsController < ApplicationController
     current_status = @membership.Status
     @membership.attributes = membership_params
     @membership.change_status_date = Time.now.strftime("%Y-%m-%d") if current_status != @membership.Status
+    @membership.resignation_date = Time.now.strftime("%Y-%m-%d") if @membership.Status == "Resigned" && @membership.resignation_date.nil?
     if (current_status == "Inactive") && (@membership.Status == "Active")
       flash[:alert] = "For members returning to Active status from Inactive status, if adding to the waitlist, the waitlist date should be the day payment is received for the return to Active."
     end
