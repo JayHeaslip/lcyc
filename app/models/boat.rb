@@ -10,6 +10,8 @@ class Boat < ApplicationRecord
   validates_uniqueness_of :Mfg_Size, scope: :Name, allow_blank: true
   validate :check_location
 
+  scope :active_members, -> { includes(:memberships).where(memberships: { Status: ["Associate", "Active", "Senior"] })}
+
   def name_or_mfg?
     if self.Name.blank? && self.Mfg_Size.blank?
       errors.add(:base, "You must specify either a Name or Mfg/Size")
@@ -43,7 +45,7 @@ class Boat < ApplicationRecord
   end
 
   def self.to_csv
-    boats = Boat.order("Name, mooring_id").includes(:memberships)
+    boats = Boat.active_members.order(:Name).includes(:memberships)
     CSV.generate(col_sep: ",") do |csv|
       csv << [ "Name", "Mooring#", "Sail#", "Mfg/Size", "PHRF", "Owner" ]
       boats.each do |b|
