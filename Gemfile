@@ -25,7 +25,7 @@ gem "daemons"
 # for dreamhost
 gem "mysql2"
 
-gem "puma", "~> 6.0"
+gem "puma", "~> 6.4"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"
 
