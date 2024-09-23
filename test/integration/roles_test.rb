@@ -28,7 +28,7 @@ class RolesIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "update role" do
-    patch role_url(@role), params: {right_ids: [@right.id]}
+    patch role_url(@role), params: { right_ids: [ @right.id ] }
     assert_redirected_to roles_url
     assert_equal flash[:notice], "#{@role.name} role was successfully updated."
   end

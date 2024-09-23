@@ -77,7 +77,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should handle unknown user" do
-    post login_path, params: {email: "unknown@example.com", password: "abcdefg"}
+    post login_path, params: { email: "unknown@example.com", password: "abcdefg" }
     assert_equal "Incorrect email or password.", flash[:alert]
     assert_response :unprocessable_entity
   end
@@ -99,5 +99,15 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     delete logout_path
     assert_redirected_to login_path
+  end
+
+  test "should login from cookie" do
+    login @confirmed_user, remember_user: true
+    tok = cookies[:remember_token]
+    reset!
+    cookies[:remember_token] = tok
+
+    get root_url
+    assert_response :success
   end
 end

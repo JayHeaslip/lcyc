@@ -6,7 +6,7 @@ class MembershipsController < ApplicationController
 
   def index
     @status_options = %w[Accepted Active Associate Honorary Inactive Life Resigned Senior]
-    params[:status] ||= ["Active", "Associate", "Honorary", "Life", "Senior"]
+    params[:status] ||= [ "Active", "Associate", "Honorary", "Life", "Senior" ]
     @memberships = filter_memberships(params)
     @memberships = @memberships.order(sort_column + " " + sort_direction)
     @lastname = params[:lastname]
@@ -58,6 +58,7 @@ class MembershipsController < ApplicationController
     current_status = @membership.Status
     @membership.attributes = membership_params
     @membership.change_status_date = Time.now.strftime("%Y-%m-%d") if current_status != @membership.Status
+    @membership.resignation_date = Time.now.strftime("%Y-%m-%d") if @membership.Status == "Resigned" && @membership.resignation_date.nil?
     if (current_status == "Inactive") && (@membership.Status == "Active")
       flash[:alert] = "For members returning to Active status from Inactive status, if adding to the waitlist, the waitlist date should be the day payment is received for the return to Active."
     end
@@ -69,9 +70,6 @@ class MembershipsController < ApplicationController
     unless @membership.wait_list_eligible
       flash[:alert] = "Member removed from wait list due to membership category update." if !@membership.wait_list_entry.nil?
       @membership.wait_list_entry = nil
-    end
-    @membership.boats.each do |b|
-      flash[:alert] = (flash[:alert] || "") + @membership.update_drysail_and_mooring(b)
     end
     if @membership.save
       flash.delete(:alert) if flash[:alert].blank?
@@ -89,26 +87,6 @@ class MembershipsController < ApplicationController
     redirect_to memberships_path
   end
 
-  def rmboat
-    @boat = Boat.find(params[:boat_id])
-    @membership = Membership.find(params[:id])
-    # if the membership has the mooring the boat is on
-    # remove the boat from the mooring
-    if @membership.mooring && (@membership.mooring.id == @boat.mooring_id)
-      @boat.location = ""
-      @boat_mooring_id = nil
-    end
-    @boat.memberships.delete(@membership)
-    flash[:notice] = "#{@membership.LastName} removed from boat"
-    if @boat.memberships.empty?
-      flash[:notice] += ", boat deleted."
-      @boat.destroy
-      redirect_to boats_path
-    else
-      redirect_to boat_path(@boat)
-    end
-  end
-
   def associate
     @membership = Membership.find(params[:id])
     @boats = Boat.order(:Name) - @membership.boats
@@ -123,9 +101,11 @@ class MembershipsController < ApplicationController
       flash[:notice] = "Saved association."
       redirect_to membership_path(@membership)
     else
+      # :nocov:
       @boats = Boat.order(:Name) - @membership.boats
       flash[:alert] = "Error saving association."
       render :associate, status: :unprocessable_entity
+      # :nocov:
     end
   end
 
@@ -137,7 +117,9 @@ class MembershipsController < ApplicationController
     if @membership.save
       flash[:notice] = "Mooring ##{mooring_id} unassigned."
     else
+      # :nocov:
       flash[:alert] = "Problem unassigning mooring ##{mooring_id}."
+      # :nocov:
     end
     redirect_to moorings_path
   end
@@ -149,13 +131,15 @@ class MembershipsController < ApplicationController
     if @membership.save
       flash[:notice] = "Dry sail spot ##{drysail.id} unassigned."
     else
+      # :nocov:
       flash[:alert] = "Problem unassigning dry sail spot ##{drysail.id}."
+      # :nocov:
     end
     redirect_to drysails_path
   end
 
   def labels
-    @label_options = ["All", "No Email", "Workday"]
+    @label_options = [ "All", "No Email", "Workday" ]
   end
 
   def download_labels
@@ -173,8 +157,8 @@ class MembershipsController < ApplicationController
   end
 
   def spreadsheets
-    @spreadsheet_options = ["Billing", "Log Members", "Log Fleet",
-      "Log Partner Xref", "Member Cards/Workday Checklist", "Evite", "Resigned"]
+    @spreadsheet_options = [ "Billing", "Log Members", "Log Fleet",
+      "Log Partner Xref", "Member Cards/Workday Checklist", "Evite", "Resigned" ]
   end
 
   def download_spreadsheet
@@ -185,7 +169,7 @@ class MembershipsController < ApplicationController
     installments = InitiationInstallment.includes(:membership).order(:year)
     @initiation_fee_due = []
     installments.each do |i|
-      @initiation_fee_due << [i.membership, i.amount, i.year]
+      @initiation_fee_due << [ i.membership, i.amount, i.year ]
     end
   end
 
@@ -210,7 +194,7 @@ class MembershipsController < ApplicationController
           p.grid.columns.times do |j|
             b = p.grid(i, j)
             indent = 10
-            p.bounding_box [b.top_left[0] + indent, b.top_left[1]], width: b.width, height: b.height - indent do
+            p.bounding_box [ b.top_left[0] + indent, b.top_left[1] ], width: b.width, height: b.height - indent do
               m = list[page * 30 + 3 * i + j]
               overflow = generate_text(p, m, b.width, workday) if !m.nil?
               logger.error "#{m.MailingName} overflowed: |#{overflow}|" if overflow && overflow != ""

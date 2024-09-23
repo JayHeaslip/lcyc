@@ -89,9 +89,9 @@ namespace :chores do
 
   def get_db_config
     db_config_hash = ActiveRecord::Base.configurations.find_db_config(Rails.env).configuration_hash
-    [db_config_hash[:username],
+    [ db_config_hash[:username],
       db_config_hash[:password],
       db_config_hash[:database],
-      ENV["HOME"]]
+      ENV["HOME"] ]
   end
 end

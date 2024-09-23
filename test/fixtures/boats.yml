@@ -9,7 +9,7 @@ boat2:
   Mfg_Size: 'J80'
   Name: "Hello2"
   location: "Mooring"
-  mooring: mooring1
+  mooring: mooring2
 
 boat3:
   Mfg_Size: 'J120'
@@ -21,4 +21,13 @@ boat4:
 boat10:
   Name: 'Hi'
   Mfg_Size: 'J200'
+
+boat11:
+  Name: 'Hi!'
+  Mfg_Size: 'J200'
+
+extra:
+  Name: 'Hello'
+  Mfg_Size: 'J150'
+  location: "Parking Lot"
   

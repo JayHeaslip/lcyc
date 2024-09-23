@@ -6,7 +6,7 @@ class RightsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "synchronize removing right" do
-    r = Right.new(name: "Users#bogus", controller: "Users", action: "bogus")
+    r = Right.new(name: "UsersController.bogus", controller: "users", action: "bogus")
     r.save
     Right.synchronize_with_controllers
   end

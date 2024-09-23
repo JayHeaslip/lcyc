@@ -2,24 +2,11 @@ class BoatsController < ApplicationController
   helper_method :sort_column, :sort_direction
 
   def index
-    @boats = Boat.order(sort_column + " " + sort_direction)
+    @boats = Boat.active_members.order("#{sort_column} #{sort_direction}")
   end
 
   def show
     @boat = Boat.find(params[:id])
-  end
-
-  def destroy
-    @boat = Boat.find(params[:id])
-    if @boat.memberships.size > 1
-      @membership = Membership.find(params[:membership_id])
-      @membership.boats = @membership.boats - [@boat]
-      @membership.save
-    else
-      flash[:notice] = "Boat deleted."
-      @boat.delete
-    end
-    redirect_to request.referrer
   end
 
   def edit
@@ -29,14 +16,40 @@ class BoatsController < ApplicationController
   def update
     @boat = Boat.includes(:memberships).find(params[:id])
     @boat.attributes = boat_params
-    flash[:alert] = @boat.update_drysail_and_mooring
-    flash.delete(:alert) if flash[:alert].nil?
     if @boat.save
       flash[:notice] = "Successfully updated boat."
       redirect_to boat_path(@boat)
     else
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @boat = Boat.find(params[:id])
+    logger.info "deleting boat"
+    unless adjust_membership
+      flash[:notice] = "Boat deleted."
+      @boat.delete
+    end
+    redirect_to request.referer
+  end
+
+  def rmboat
+    @boat = Boat.find(params[:id])
+    @membership = Membership.find(params[:membership_id])
+    # if the membership has the mooring the boat is on
+    # remove the boat from the mooring
+    if @membership.mooring && (@membership.mooring.id == @boat.mooring_id)
+      @boat.location = ""
+      @boat_mooring_id = nil
+    end
+    @boat.memberships.delete(@membership)
+    flash[:notice] = "#{@membership.LastName} removed from boat"
+    if @boat.memberships.empty?
+      flash[:notice] += ", boat deleted."
+      @boat.destroy
+    end
+    redirect_to request.referer
   end
 
   def associate
@@ -46,16 +59,15 @@ class BoatsController < ApplicationController
 
   def save_association
     @boat = Boat.find(params[:id])
-    @membership = Membership.find(params[:boat][:memberships])
-    @boat.memberships << @membership
-    @membership.mooring = @boat.mooring if @boat.location == "Mooring"
+    adjust_boat_membership
     if @boat.save
       flash[:notice] = "Saved association."
       redirect_to boat_path(@boat)
     else
+      # :nocov:
       @memberships = Membership.active - @boat.memberships
-      puts @boat.errors.full_messages
       render :associate, status: :unprocessable_entity
+      # :nocov:
     end
   end
 
@@ -71,6 +83,20 @@ class BoatsController < ApplicationController
 
   def boat_params
     params.require(:boat).permit(:Mfg_Size, :Type, :Name, :Length,
-      :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring_id)
+                                 :Draft, :Class, :PHRF, :sail_num, :Status, :location, :mooring_id)
+  end
+
+  def adjust_membership
+    return unless @boat.memberships.size > 1
+
+    @membership = Membership.find(params[:membership_id])
+    @membership.boats = @membership.boats - [ @boat ]
+    @membership.save
+  end
+
+  def adjust_boat_membership
+    @membership = Membership.find(params[:boat][:memberships])
+    @boat.memberships << @membership
+    @membership.mooring = @boat.mooring if @boat.location == "Mooring"
   end
 end

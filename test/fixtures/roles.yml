@@ -7,7 +7,7 @@ member:
 
 BOG:
   name: BOG
-  rights: [user_create, user_destroy]
+  rights: [user_create, user_destroy, summary_report, history_report, moorings_report, edit_log_info_emails, update_log_info_emails]
 
 membership:
   name: Membership

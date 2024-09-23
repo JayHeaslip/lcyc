@@ -1,5 +1,5 @@
 installment1:
   membership: member3
   amount: 1000
-  year:  2023
+  year:  <%= Time.now.year + 1 %>
   

@@ -109,7 +109,7 @@
   <% if not @membership.boats.empty? %>
   <h3><%= 'Boat'.pluralize(@membership.boats.size) %></h3>
     <hr>
-    <%= render 'boats/boats_table', locals: {boats_array: @membership.boats, show_sort: false, membership: @membership.id } %>
+    <%= render 'boats_table', locals: {boats_array: @membership.boats, show_sort: false, membership: @membership.id } %>
   <% end %>
   <p>
     <%= link_to 'Associate an Existing Boat', associate_membership_path(@membership) %>

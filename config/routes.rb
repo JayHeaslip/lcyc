@@ -17,8 +17,8 @@ Rails.application.routes.draw do
 
   resources :users
 
-  resources :confirmations, only: [:create, :edit, :new], param: :confirmation_token
-  resources :passwords, only: [:create, :edit, :new, :update], param: :password_reset_token
+  resources :confirmations, only: [ :create, :edit, :new ], param: :confirmation_token
+  resources :passwords, only: [ :create, :edit, :new, :update ], param: :password_reset_token
 
   resources :quickbooks do
     collection do
@@ -30,7 +30,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :roles, except: [:new, :destroy] do
+  resources :roles, except: [ :new, :destroy ] do
     resources :users do
       member do
         delete :rmrole
@@ -38,13 +38,13 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :moorings, only: [:index] do
+  resources :moorings, only: [ :index ] do
     collection do
       get :unassigned
     end
   end
 
-  resources :drysails, only: [:index, :update] do
+  resources :drysails, only: [ :index, :update ] do
     member do
       get :assign
     end
@@ -65,15 +65,19 @@ Rails.application.routes.draw do
       get :wl
       post :wladd
       get :associate
-      post :save_association
+      patch :save_association
       post :unassign
       post :unassign_drysail
     end
     resources :people
-    resources :boats
-  end
+    resources :boats do
+      member do
+        delete :rmboat
+      end
+    end
+   end
 
-  resources :people, only: [:destroy]
+  resources :people, only: [ :destroy ]
 
   resources :committees, only: [] do
     collection do
@@ -98,7 +102,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :wait_list_entries, except: [:show] do
+  resources :wait_list_entries, except: [ :show ] do
     member do
       get :assign
       patch :mooring_update
@@ -110,9 +114,9 @@ Rails.application.routes.draw do
       post :send_email
     end
   end
-  resource :log_info_email, only: [:edit, :update]
+  resource :log_info_email, only: [ :edit, :update ]
 
-  resources :active_sessions, only: [:index, :destroy] do
+  resources :active_sessions, only: [ :index, :destroy ] do
     collection do
       delete "destroy_all"
     end

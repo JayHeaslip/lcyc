@@ -23,19 +23,19 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "create" do
-    post mailings_url, params: {mailing: {subject: "test2", body: "test"}}
+    post mailings_url, params: { mailing: { subject: "test2", body: "test" } }
     @mailing = Mailing.find_by_subject("test2")
     assert_redirected_to mailing_url(@mailing)
   end
 
   test "create with committee" do
-    post mailings_url, params: {mailing: {subject: "test2", body: "test", committee: "Boats"}}
+    post mailings_url, params: { mailing: { subject: "test2", body: "test", committee: "Boats" } }
     @mailing = Mailing.find_by_subject("test2")
     assert_redirected_to mailing_url(@mailing)
   end
 
   test "create bad" do
-    post mailings_url, params: {mailing: {body: "test"}}
+    post mailings_url, params: { mailing: { body: "test" } }
     assert_response :unprocessable_entity
   end
 
@@ -45,13 +45,13 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "update" do
-    patch mailing_url(@mailing), params: {mailing: {subject: "test3", body: "test"}}
+    patch mailing_url(@mailing), params: { mailing: { subject: "test3", body: "test" } }
     @mailing = Mailing.find_by_subject("test3")
     assert_redirected_to mailing_url(@mailing)
   end
 
   test "update bad" do
-    patch mailing_url(@mailing), params: {mailing: {subject: " ", body: "test22"}}
+    patch mailing_url(@mailing), params: { mailing: { subject: " ", body: "test22" } }
     assert_response :unprocessable_entity
   end
 
@@ -62,6 +62,13 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
 
   test "send mailing" do
     post send_email_mailing_url(@mailing)
+    assert_enqueued_emails 12
+    assert_redirected_to mailings_url
+  end
+
+  test "send filtered mailing" do
+    post send_email_mailing_url(@mailing), params: { filter_emails: true }
+    assert_enqueued_emails 1
     assert_redirected_to mailings_url
   end
 
@@ -73,25 +80,31 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "send test mailing" do
-    post send_email_mailing_url(@mailing), params: {test: true}
+    post send_email_mailing_url(@mailing), params: { test: true }
     assert_redirected_to mailings_url
   end
 
-###  test "send too soon" do
-###    t = Time.now
-###    old_email = mailings(:two)
-###    old_email.sent_at = t
-###    old_email.save
-###    post send_email_mailing_url(@mailing)
-###    formatted_time = (t + 8.hours).strftime("%m/%d/%Y at %I:%M %p")
-###    assert_equal "You've sent a mailing within the last 8 hours, please wait until #{formatted_time} to send an email", flash[:error]
-###  end
+  ###  test "send too soon" do
+  ###    t = Time.now
+  ###    old_email = mailings(:two)
+  ###    old_email.sent_at = t
+  ###    old_email.save
+  ###    post send_email_mailing_url(@mailing)
+  ###    formatted_time = (t + 8.hours).strftime("%m/%d/%Y at %I:%M %p")
+  ###    assert_equal "You've sent a mailing within the last 8 hours, please wait until #{formatted_time} to send an email", flash[:error]
+  ###  end
 
   test "send test mailing non-member email" do
     logout
     login_as(users(:no_member_email), "passwor2")
-    post send_email_mailing_url(@mailing), params: {test: true}
+    post send_email_mailing_url(@mailing), params: { test: true }
     assert_equal "Delivering mail.", flash[:notice]
+    assert_redirected_to mailings_url
+  end
+
+  test "send test mailing with pdf attachment" do
+    @mailing = mailings(:three)
+    post send_email_mailing_url(@mailing), params: { test: true }
     assert_redirected_to mailings_url
   end
 end

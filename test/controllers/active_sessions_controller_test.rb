@@ -66,4 +66,10 @@ class ActiveSessionsControllerTest < ActionDispatch::IntegrationTest
     assert_nil current_user
     assert cookies[:remember_token].blank?
   end
+
+  test "should list all active sessions" do
+    login @confirmed_user
+    get active_sessions_path
+    assert_response :success
+  end
 end

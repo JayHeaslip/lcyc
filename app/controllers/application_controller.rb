@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  ENV_MAP = { development: 0, staging: 1, production: 2, test: 3 }.freeze
   include Authentication
 
   protect_from_forgery with: :exception
@@ -9,36 +10,37 @@ class ApplicationController < ActionController::Base
   private
 
   def check_authorization
-    if current_user.admin?
+    if current_user.admin? || role_authorized?
       true
     else
-      roles = [current_user.role]
-      # at most, 2 levels of hierarchy in the roles
-      roles << current_user.role.parent if current_user.role.parent
-      if roles.detect do |r|
-           r.rights.detect do |right|
-             right.action == action_name && right.controller == self.class.controller_path
-           end
-         end
-        true
-      else
-        flash[:alert] = "You are not authorized to view the page you requested."
-        redirect_to request.referrer
-        false
-      end
+      flash[:alert] = "You are not authorized to view the page you requested."
+      redirect_to request.referer
+      false
     end
   end
 
   def check_delayed_job
-    id = 0 # development
-    id = 1 if Rails.env == "staging"
-    id = 2 if Rails.env == "production"
+    id = ENV_MAP[Rails.env.to_sym]
     begin
-      pid = File.open("#{Rails.root}/tmp/pids/delayed_job.#{id}.pid").readline.chop.to_i
+      pid = File.open(Rails.root.to_s + "/tmp/pids/delayed_job.#{id}.pid").readline.chop.to_i
       psout = `ps -p #{pid}`
-    rescue
+    rescue StandardError
+      # :nocov:
       psout = ""
+      # :nocov:
     end
-    system("cd #{Rails.root}; RAILS_ENV=#{Rails.env} bundle exec bin/delayed_job -i #{id} start") unless psout.include?("ruby")
+    return if psout.include?("ruby")
+
+    # :nocov:
+    system("cd #{Rails.root}; RAILS_ENV=#{Rails.env} bundle exec bin/delayed_job -i #{id} start")
+    # :nocov:
+  end
+
+  def role_authorized?
+    current_user.roles.detect do |r|
+      r.rights.detect do |right|
+        right.action == action_name && right.controller == self.class.controller_path
+      end
+    end
   end
 end

@@ -2,7 +2,7 @@ require "csv"
 
 class Membership < ApplicationRecord
   @@current_year = Time.now.year
-  @@dues = {Active: 1100, Senior: 367, Inactive: 50, Associate: 550, Life: 0}
+  @@dues = { Active: 1100, Senior: 367, Inactive: 50, Associate: 550, Life: 0 }
   @@mooring_fee = 80
   @@mooring_replacement_fee = 120
   @@drysail_fee = 100
@@ -25,28 +25,28 @@ class Membership < ApplicationRecord
 
   has_one :wait_list_entry, dependent: :destroy
 
-  validates :LastName, presence: true, length: {maximum: 30}
-  validates :MailingName, presence: true, length: {maximum: 100}
-  validates :StreetAddress, presence: true, length: {maximum: 50}
-  validates :City, presence: true, length: {maximum: 30}
-  validates :State, presence: true, length: {is: 2}
-  validates :Zip, presence: true, length: {maximum: 12}
+  validates :LastName, presence: true, length: { maximum: 30 }
+  validates :MailingName, presence: true, length: { maximum: 100 }
+  validates :StreetAddress, presence: true, length: { maximum: 50 }
+  validates :City, presence: true, length: { maximum: 30 }
+  validates :State, presence: true, length: { is: 2 }
+  validates :Zip, presence: true, length: { maximum: 12 }
   validates :Status, presence: true
   validate :check_type, if: proc { |m| !m.people.empty? }
   validate :ensure_people, if: proc { |m| m.people.empty? }
   validate :member_since, if: proc { |m| m.Status != "Accepted" }
-  validates :installments, allow_nil: true, inclusion: {in: (2..4)}
+  validates :installments, allow_nil: true, inclusion: { in: (2..4) }
 
   # all categories of membership
-  scope :members, -> { where(Status: ["Active", "Associate", "Honorary", "Inactive", "Life", "Senior"]).order(:LastName) }
+  scope :members, -> { where(Status: [ "Active", "Associate", "Honorary", "Inactive", "Life", "Senior" ]).order(:LastName) }
   # eligible for a mooring
-  scope :active, -> { where(Status: ["Active", "Life", "Associate"]).order(:LastName) }
+  scope :active, -> { where(Status: [ "Active", "Life", "Associate" ]).order(:LastName) }
   # adding accepted for QBO since they can be billed for mooring wait list
-  scope :accepted, -> { where(Status: ["Accepted"]).order(:LastName) }
+  scope :accepted, -> { where(Status: [ "Accepted" ]).order(:LastName) }
   # all membership except Inactive
-  scope :all_active, -> { where(Status: ["Active", "Associate", "Honorary", "Life", "Senior"]).order(:LastName) }
+  scope :all_active, -> { where(Status: [ "Active", "Associate", "Honorary", "Life", "Senior" ]).order(:LastName) }
   # not on the email announce list
-  scope :no_email, -> { where(Status: ["Active", "Associate", "Honorary", "Life", "Senior"]).order(:LastName) }
+  scope :no_email, -> { where(Status: [ "Active", "Associate", "Honorary", "Life", "Senior" ]).order(:LastName) }
 
   # used for filtering
   scope :lastname, ->(lastname) { where("LastName like ?", "#{lastname}%") }
@@ -64,42 +64,11 @@ class Membership < ApplicationRecord
   end
 
   def mooring_eligible
-    self.Status.in? ["Active", "Life", "Associate"]
+    self.Status.in? [ "Active", "Life", "Associate" ]
   end
 
   def wait_list_eligible
-    self.Status.in? ["Accepted", "Active", "Life", "Associate"]
-  end
-
-  ## returns a string for flash
-  def update_drysail_and_mooring(boat)
-    if boat.location == "" || boat.location.nil?
-      boat.mooring = nil
-      boat.drysail = nil
-      ""
-    elsif boat.location == "Mooring" && boat.mooring.nil?
-      # does one of the boat owners have a mooring?
-      mooring = Membership.mooring_available(boat.memberships)
-      if mooring
-        boat.mooring = mooring
-        ""
-      else
-        boat.location = ""
-        "Mooring not available for boat.\n"
-      end
-    elsif boat.location == "Parking Lot" && boat.drysail.nil?
-      # does one of the boat owners have a drysail spot?
-      drysail = Membership.drysail_available(boat.memberships)
-      if drysail
-        boat.drysail = drysail
-        ""
-      else
-        boat.location = ""
-        "Drysail spot not available for boat.\n"
-      end
-    else
-      ""
-    end
+    self.Status.in? [ "Accepted", "Active", "Life", "Associate" ]
   end
 
   # return first available mooring from an array of memberships
@@ -144,8 +113,8 @@ class Membership < ApplicationRecord
         csv << %w[LastName MailingName Street City State Zip Country Status MemberSince Mooring BoatName BoatType
           HomePhone MN MW MC ME Partner Children]
         members.each do |m|
-          info = [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
-            m.MemberSince, m.mooring ? m.mooring.id : ""].concat(m.boat_info)
+          info = [ m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
+            m.MemberSince, m.mooring ? m.mooring.id : "" ].concat(m.boat_info)
           info = info.concat(m.member_info)
           info = info.concat(m.partner_info)
           info = info.concat(m.children_info)
@@ -155,12 +124,12 @@ class Membership < ApplicationRecord
     when "Log Partner Xref"
       all = Membership.all_active.includes(:people)
       CSV.generate(col_sep: ",") do |csv|
-        csv << ["Partner", "", "Member"]
+        csv << [ "Partner", "", "Member" ]
         all.each do |m|
           member = m.people.where(MemberType: "Member").first
           partner = m.people.where(MemberType: "Partner").first
           if partner && member.LastName != partner.LastName
-            csv << ["#{partner.LastName}, #{partner.FirstName}", "see", "#{member.LastName}, #{member.FirstName}"]
+            csv << [ "#{partner.LastName}, #{partner.FirstName}", "see", "#{member.LastName}, #{member.FirstName}" ]
           end
         end
       end
@@ -180,8 +149,8 @@ class Membership < ApplicationRecord
           drysail_fee = m.calculate_drysail_fee
           initiation_due = m.calculate_initiation_installment
           total = dues + mooring_fee + initiation_due + drysail_fee
-          csv << [m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
-            m.mooring&.id, m.drysail&.id, email, dues, initiation_due, mooring_fee, drysail_fee, total]
+          csv << [ m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
+            m.mooring&.id, m.drysail&.id, email, dues, initiation_due, mooring_fee, drysail_fee, total ]
         end
       end
     when "Evite"
@@ -191,39 +160,39 @@ class Membership < ApplicationRecord
         members.each do |m|
           email = m.primary_email
           cell = m.primary_cell
-          csv << [m.LastName, m.MailingName, email, cell]
+          csv << [ m.LastName, m.MailingName, email, cell ]
         end
       end
     end
   end
 
   def member_info
-    m = people.where('MemberType = "Member"').first
-    if m
-      [m.HomePhone, m.FirstName, m.WorkPhone, m.CellPhone, m.EmailAddress]
+    member = people.where('MemberType = "Member"').first
+    if member
+      [ member.HomePhone, member.FirstName, member.WorkPhone, member.CellPhone, member.EmailAddress ]
     else
-      logger.info "No member for #{id}, #{self.FirstName} #{self.LastName}"
-      [nil, nil, nil, nil, nil]
+      logger.info "No member for #{id}, #{self.MailingName}"
+      [ nil, nil, nil, nil, nil ]
     end
   end
 
   def partner_info
     p = people.where('MemberType = "Partner"').first
     if p
-      ["#{p.FirstName}\t#{p.WorkPhone}\t#{p.CellPhone}\t#{p.EmailAddress}"]
+      [ "#{p.FirstName}\t#{p.WorkPhone}\t#{p.CellPhone}\t#{p.EmailAddress}" ]
     else
-      [""]
+      [ "" ]
     end
   end
 
   def children_info
     cutoff = @@current_year - 25
-    children = people.where(["MemberType = 'Child' and BirthYear > ? ", cutoff]).order(:BirthYear)
+    children = people.where([ "MemberType = 'Child' and BirthYear > ? ", cutoff ]).order(:BirthYear)
     cstr = nil
     if !children.empty?
       cstr = "Children: " + children.map { |c| c.FirstName }.join(", ")
     end
-    [cstr]
+    [ cstr ]
   end
 
   def boat_info
@@ -235,9 +204,9 @@ class Membership < ApplicationRecord
       boat = boats.first
     end
     if boat
-      [boat.Name, boat.Mfg_Size]
+      [ boat.Name, boat.Mfg_Size ]
     else
-      [nil, nil]
+      [ nil, nil ]
     end
   end
 

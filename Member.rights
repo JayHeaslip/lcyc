@@ -1,0 +1,15 @@
+BoatsController.associate
+BoatsController.destroy
+BoatsController.edit
+BoatsController.rmboat
+BoatsController.save_association
+BoatsController.show
+BoatsController.update
+MembershipsController.associate
+MembershipsController.edit
+MembershipsController.save_association
+MembershipsController.show
+MembershipsController.update
+PeopleController.destroy
+PeopleController.show
+UsersController.show

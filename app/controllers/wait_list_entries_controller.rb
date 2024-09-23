@@ -4,7 +4,7 @@ class WaitListEntriesController < ApplicationController
   end
 
   def new
-    @memberships = Membership.where(Status: ["Accepted", "Active", "Associate", "Inactive", "Senior"], mooring: nil).order("LastName")
+    @memberships = Membership.where(Status: [ "Accepted", "Active", "Associate", "Inactive", "Senior" ], mooring: nil).order("LastName")
     wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
     @memberships -= wait_list_memberships
     @wait_list_entry = WaitListEntry.new
@@ -24,7 +24,7 @@ class WaitListEntriesController < ApplicationController
       flash[:notice] = "Wait list entry was successfully created."
       redirect_to wait_list_entries_path
     else
-      @memberships = Membership.where(Status: ["Accepted", "Active", "Associate", "Inactive", "Senior"], mooring: nil).order("LastName")
+      @memberships = Membership.where(Status: [ "Accepted", "Active", "Associate", "Inactive", "Senior" ], mooring: nil).order("LastName")
       wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
       @memberships -= wait_list_memberships
       render :new, status: :unprocessable_entity

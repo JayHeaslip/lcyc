@@ -1,0 +1,45 @@
+<table class="table table-sm">
+  <thead class="thead-light">
+    <tr>
+      <% if locals[:show_sort] %>
+      <th><%= sortable "Name" %></th>
+      <th><%= sortable "Mfg_Size", "Mfg/Size" %></th>
+      <th><%= sortable "Type" %></th>
+      <th><%= sortable "Length" %></th>
+      <th><%= sortable "Draft" %></th>
+      <th><%= sortable "mooring_id", "Mooring" %></th>
+      <th><%= sortable "drysail_id", "Drysail" %></th>
+      <% else %>
+      <th>Name</th>
+      <th>Mfg/Size</th>
+      <th>Type</th>
+      <th>Length</th>
+      <th>Draft</th>
+      <th>Mooring</th>
+      <th>Drysail</th>
+      <th></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% for boat in locals[:boats_array] %>
+    <tr>
+      <% if boat.Name.blank? %>
+      <td><%= boat.Name %></td>
+      <td><%= link_to boat.Mfg_Size, boat_path(boat) %></td>
+      <% else %>
+      <td><%= link_to boat.Name, boat_path(boat) %></td>
+      <td><%= boat.Mfg_Size %></td>
+      <% end %>
+      <td><%= boat.Type %></td>
+      <td><%= boat.Length %></td>
+      <td><%= boat.Draft %></td>
+      <td><%= boat.mooring_id %></td>
+      <td><%= boat.drysail&.id %></td>
+      <td class="list-actions">
+	<%= link_to 'Delete', rmboat_membership_boat_path(locals[:membership], boat), data: { turbo_confirm: 'Are you sure?', turbo_method: :delete} %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

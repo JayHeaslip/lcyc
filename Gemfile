@@ -25,7 +25,7 @@ gem "daemons"
 # for dreamhost
 gem "mysql2"
 
-gem "puma", "~> 6.0"
+gem "puma", "~> 6.4"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"
 
@@ -52,13 +52,16 @@ gem "trix"
 
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
-  gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+  gem "byebug", platforms: [ :mri, :mingw, :x64_mingw ]
   # Adds support for Capybara system testing and selenium driver
   gem "capybara", "~> 3.26"
   gem "selenium-webdriver"
   gem "webdrivers", "~> 4.0", require: false
   gem "simplecov"
   gem "standard"
+  gem "rubocop-rails"
+  gem "rubocop-capybara"
+  gem "rubocop-rails-omakase"
 end
 
 group :development do

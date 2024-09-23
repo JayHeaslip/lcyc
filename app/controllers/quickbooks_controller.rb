@@ -9,24 +9,13 @@ class QuickbooksController < ApplicationController
   def cleanup
     members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
     members.each do |m|
-      update = false
-      if m.MailingName != m.MailingName.strip
-        update = true
-        m.MailingName = m.MailingName.strip
-      elsif m.StreetAddress != m.StreetAddress.strip
-        update = true
-        m.StreetAddress = m.StreetAddress.strip
-      elsif m.City != m.City.strip
-        update = true
-        m.City = m.City.strip
-      elsif m.State != m.State.strip
-        update = true
-        m.State = m.State.strip
-      elsif m.Zip != m.Zip.strip
-        update = true
-        m.Zip = m.Zip.strip
-      end
-      m.save if update
+      @update = false
+      m.MailingName = strip(m.MailingName)
+      m.StreetAddress = strip(m.StreetAddress)
+      m.City = strip(m.City)
+      m.State = strip(m.State)
+      m.Zip = strip(m.Zip)
+      m.save if @update
     end
   end
 
@@ -38,6 +27,7 @@ class QuickbooksController < ApplicationController
   end
 
   def new
+    # :nocov:
     state = params[:state]
     error = params[:error]
     code = params[:code]
@@ -54,9 +44,11 @@ class QuickbooksController < ApplicationController
     else
       "Error: #{error}"
     end
+    # :nocov:
   end
 
   def update_members
+    # :nocov:
     if (access_token = session[:access_token])
       QboApi.production = (Rails.env == "production")
       QboApi.minor_version = 8
@@ -84,11 +76,11 @@ class QuickbooksController < ApplicationController
           m = Membership.find_by_MailingName(k)
           member = {
             DisplayName: k,
-            BillAddr: {Line1: m.StreetAddress,
+            BillAddr: { Line1: m.StreetAddress,
                        City: m.City,
                        CountrySubDivisionCode: m.State,
-                       PostalCode: m.Zip},
-            PrimaryEmailAddr: {Address: m.primary_email}
+                       PostalCode: m.Zip },
+            PrimaryEmailAddr: { Address: m.primary_email }
           }
           logger.info "Creating #{k}"
           @api.create(:customer, payload: member)
@@ -102,6 +94,7 @@ class QuickbooksController < ApplicationController
       flash[:alert] = "Please connect to quickbooks."
       redirect_to root_url
     end
+    # :nocov:
   end
 
   def invoices
@@ -109,27 +102,28 @@ class QuickbooksController < ApplicationController
   end
 
   def generate_invoices
+    # :nocov:
     if (access_token = session[:access_token])
       QboApi.production = (Rails.env == "production")
       QboApi.minor_version = 8
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
       members = if params[:test]
-        [Membership.find(64), Membership.find(345)]
+        [ Membership.find(64), Membership.find(345) ]
       else
         Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       end
       count = 0
       members.each do |m|
         logger.info "mailing name: #{m.MailingName}"
-        qbm = @api.get(:customer, ["DisplayName", m.MailingName])
+        qbm = @api.get(:customer, [ "DisplayName", m.MailingName ])
         logger.info "prefer #{m.prefer_partner_email}"
         logger.info "primary email #{m.primary_email}"
         logger.info " cc email #{m.cc_email}"
         invoice = {
-          CustomerRef: {value: qbm["Id"]},
+          CustomerRef: { value: qbm["Id"] },
           AllowOnlineACHPayment: true,
-          BillEmail: {Address: m.primary_email},
-          BillEmailCc: {Address: m.cc_email},
+          BillEmail: { Address: m.primary_email },
+          BillEmailCc: { Address: m.cc_email },
           DueDate: "#{Time.now.year}-12-31"
         }
         invoice["Line"] = generate_line_items(m, params[:test])
@@ -146,11 +140,20 @@ class QuickbooksController < ApplicationController
       flash[:alert] = "Please connect to quickbooks."
       redirect_to invoices_quickbooks_path
     end
+    # :nocov:
   end
 
   private
 
+  def strip(str)
+    if str != str.strip
+      @update = true
+      str.strip
+    end
+  end
+
   def oauth2_client
+    # :nocov:
     if Rails.env == "development"
       client_id = Rails.application.credentials.development.OAUTH_CONSUMER_KEY
       client_secret = Rails.application.credentials.development.OAUTH_CONSUMER_SECRET
@@ -173,9 +176,11 @@ class QuickbooksController < ApplicationController
       authorization_endpoint: "https://appcenter.intuit.com/connect/oauth2",
       token_endpoint: "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer"
     )
+    # :nocov:
   end
 
   def update_member(qbm, m, display_name)
+    # :nocov:
     if m # update a member
       @existing_qbo_members[display_name] = true
       update = false
@@ -191,11 +196,11 @@ class QuickbooksController < ApplicationController
         logger.info "Updating QBO info for #{display_name}"
         member = {
           DisplayName: display_name,
-          BillAddr: {Line1: m.StreetAddress,
+          BillAddr: { Line1: m.StreetAddress,
                      City: m.City,
                      CountrySubDivisionCode: m.State,
-                     PostalCode: m.Zip},
-          PrimaryEmailAddr: {Address: m.primary_email}
+                     PostalCode: m.Zip },
+          PrimaryEmailAddr: { Address: m.primary_email }
         }
         @api.update(:customer, id: qbm["Id"], payload: member)
       end
@@ -203,9 +208,11 @@ class QuickbooksController < ApplicationController
       logger.info "deleting #{display_name}"
       @api.deactivate(:customer, id: qbm["Id"])
     end
+    # :nocov:
   end
 
   def update_address(qbm, m)
+    # :nocov:
     if qbm["BillAddr"].nil?
       return true
     elsif qbm["BillAddr"]["Line1"] != m.StreetAddress
@@ -218,9 +225,11 @@ class QuickbooksController < ApplicationController
       return true
     end
     false
+    # :nocov:
   end
 
   def generate_line_items(m, test)
+    # :nocov:
     dues = Membership.dues(m) || 0
     mooring_fee = m.calculate_mooring_fee
     mooring_replacement_fee = m.calculate_mooring_replacement_fee
@@ -231,7 +240,7 @@ class QuickbooksController < ApplicationController
     line_items = []
     if dues != 0
       dues = 5 if test
-      dues_value = @api.get(:item, ["Name", "Dues"])["Id"]
+      dues_value = @api.get(:item, [ "Name", "Dues" ])["Id"]
       line_items << {
         Amount: dues,
         DetailType: "SalesItemLineDetail",
@@ -245,7 +254,7 @@ class QuickbooksController < ApplicationController
     end
     if mooring_fee != 0
       mooring_fee = 6 if test
-      mooring_fee_value = @api.get(:item, ["Name", "Mooring Fee"])["Id"]
+      mooring_fee_value = @api.get(:item, [ "Name", "Mooring Fee" ])["Id"]
       line_items << {
         Amount: mooring_fee,
         Description: "Mooring ##{m.mooring&.id}",
@@ -260,7 +269,7 @@ class QuickbooksController < ApplicationController
     end
     if mooring_replacement_fee != 0
       mooring_replacement_fee = 7 if test
-      mooring_replacement_fee_value = @api.get(:item, ["Name", "Mooring Replacement Fee"])["Id"]
+      mooring_replacement_fee_value = @api.get(:item, [ "Name", "Mooring Replacement Fee" ])["Id"]
       line_items << {
         Amount: mooring_replacement_fee,
         Description: "Mooring ##{m.mooring&.id}",
@@ -275,7 +284,7 @@ class QuickbooksController < ApplicationController
     end
     if drysail_fee != 0
       drysail_fee = 8 if test
-      drysail_value = @api.get(:item, ["Name", "Drysail Fee"])["Id"]
+      drysail_value = @api.get(:item, [ "Name", "Drysail Fee" ])["Id"]
       line_items << {
         Amount: drysail_fee,
         DetailType: "SalesItemLineDetail",
@@ -289,7 +298,7 @@ class QuickbooksController < ApplicationController
     end
     if initiation_due != 0
       initiation_due = 9 if test
-      initiation_value = @api.get(:item, ["Name", "Initiation Installment"])["Id"]
+      initiation_value = @api.get(:item, [ "Name", "Initiation Installment" ])["Id"]
       line_items << {
         Amount: initiation_due,
         DetailType: "SalesItemLineDetail",
@@ -301,7 +310,23 @@ class QuickbooksController < ApplicationController
         }
       }
     end
-
+    if test
+      docks_assessment = 10
+    else
+      docks_assessment = 125
+    end
+    dock_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
+    line_items << {
+      Amount: dock_assessments,
+      DetailType: "SalesItemLineDetail",
+      SalesItemLineDetail: {
+        ItemRef: {
+          value: dock_assessment_value,
+          name: "Docks Assessment"
+        }
+      }
+    }
     line_items
+    # :nocov:
   end
 end

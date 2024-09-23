@@ -63,23 +63,23 @@ class Person < ApplicationRecord
   end
 
   def self.to_csv
-    people = Person.active.where(MemberType: ["Member", "Partner"]).order("memberships.LastName")
+    people = Person.active.where(MemberType: [ "Member", "Partner" ]).order("memberships.LastName")
     CSV.generate(col_sep: ",") do |csv|
       csv << %w[FirstName LastName MemberLastName MailingName Status Comittee MemberSince MemberType Birthyear]
       people.each do |p|
         m = p.membership
-        csv << [p.FirstName, p.LastName, m.LastName, m.MailingName, m.Status, p.Committee1, m.MemberSince, p.MemberType, p.BirthYear]
+        csv << [ p.FirstName, p.LastName, m.LastName, m.MailingName, m.Status, p.Committee1, m.MemberSince, p.MemberType, p.BirthYear ]
       end
     end
   end
 
   def self.resigned_to_csv
-    people = Person.resigned.where(MemberType: ["Member", "Partner"]).order("memberships.LastName")
+    people = Person.resigned.where(MemberType: [ "Member", "Partner" ]).order("memberships.LastName")
     CSV.generate(col_sep: ",") do |csv|
       csv << %w[FirstName LastName MemberLastName MailingName Status Comittee MemberSince MemberType Birthyear ResignationDate Updated_at]
       people.each do |p|
         m = p.membership
-        csv << [p.FirstName, p.LastName, m.LastName, m.MailingName, m.Status, p.Committee1, m.MemberSince, p.MemberType, p.BirthYear, m.resignation_date, m.updated_at]
+        csv << [ p.FirstName, p.LastName, m.LastName, m.MailingName, m.Status, p.Committee1, m.MemberSince, p.MemberType, p.BirthYear, m.resignation_date, m.updated_at ]
       end
     end
   end
@@ -88,7 +88,7 @@ class Person < ApplicationRecord
     CSV.generate(col_sep: ",") do |csv|
       csv << %w[FirstName LastName HomePhone WorkPhone CellPhone EmailAddress Committee]
       people.each do |p|
-        csv << [p.LastName, p.FirstName, p.HomePhone, p.WorkPhone, p.CellPhone, p.EmailAddress, p.Committee1]
+        csv << [ p.LastName, p.FirstName, p.HomePhone, p.WorkPhone, p.CellPhone, p.EmailAddress, p.Committee1 ]
       end
     end
   end

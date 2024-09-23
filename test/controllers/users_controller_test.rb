@@ -43,7 +43,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not update unconfirmed user" do
-    patch user_url(@unconfirmed_user), params: {user: @update, role_ids: @role_ids}
+    patch user_url(@unconfirmed_user), params: { user: @update, role_ids: @role_ids }
     assert_redirected_to login_url
   end
 
@@ -85,7 +85,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "should not get index" do
     login_as @member, "passwor3"
-    get users_url, headers: {HTTP_REFERER: root_url}
+    get users_url, headers: { HTTP_REFERER: root_url }
     assert_redirected_to root_url
     assert_not_nil flash[:alert]
   end
@@ -126,13 +126,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
   test "update invalid user" do
     login_as @member, "passwor3"
-    patch user_url(@member), params: {user: {firstname: "", lastname: @member.lastname}}
+    patch user_url(@member), params: { user: { firstname: "", lastname: @member.lastname } }
     assert_response :unprocessable_entity
   end
 
   test "should not delete an user" do
     login_as @member, "passwor3"
-    delete user_path(@user), headers: {HTTP_REFERER: root_url}
+    delete user_path(@user), headers: { HTTP_REFERER: root_url }
     assert_redirected_to root_path
     assert_not_nil flash[:alert]
   end

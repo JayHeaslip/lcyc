@@ -43,6 +43,7 @@ sue:
   LastName: john
   FirstName: Sue
   EmailAddress: suejohn@abc.com
+  select_email: true
   membership: member3
   Committee1: Boats
 
@@ -125,6 +126,42 @@ mem10:
   MemberType: Member
   LastName: dave
   FirstName: joe
+  EmailAddress: joe@abc.com
   membership: member10
   Committee1: Docks
+
+p10:  
+  MemberType: Partner
+  LastName: dave
+  FirstName: sue
+  EmailAddress: sue@abc.com
+  membership: member10
+  Committee1: Docks
+
+resigned:  
+  MemberType: Member
+  LastName: dave
+  FirstName: joe
+  membership: resigned
+  Committee1: Docks
+
+inactive:  
+  MemberType: Member
+  LastName: dave
+  FirstName: joe
+  membership: inactive
+  Committee1: Docks
   
+rick:
+  MemberType: Member
+  LastName: Bob
+  FirstName: Rick
+  membership: member11
+  Committee1: Docks
+
+bobsmith:
+  MemberType: Member
+  LastName: Smith
+  FirstName: Bob
+  membership: member6
+  Committee1: Docks

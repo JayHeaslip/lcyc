@@ -48,4 +48,35 @@ person_destroy:
   controller: people
   action: destroy
   
-  
+member_show:
+  name: MembershipsController.show
+  controller: memberships
+  action: show
+
+summary_report:
+  name: ReportsController.summary
+  controller: reports
+  action: summary
+
+history_report:
+  name: ReportsController.history
+  controller: reports
+  action: history
+
+moorings_report:
+  name: ReportsController.moorings
+  controller: reports
+  action: moorings
+
+edit_log_info_emails:
+  name: LogInfoEmailsController.edit
+  controller: log_info_emails
+  action: edit
+
+update_log_info_emails:
+  name: LogInfoEmailsController.update
+  controller: log_info_emails
+  action: update
+
+
+
