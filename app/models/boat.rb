@@ -10,7 +10,7 @@ class Boat < ApplicationRecord
   validates_uniqueness_of :Mfg_Size, scope: :Name, allow_blank: true
   validate :check_location
 
-  scope :active_members, -> { includes(:memberships).where(memberships: { Status: ["Associate", "Active", "Senior"] })}
+  scope :active_members, -> { includes(:memberships).where(memberships: { Status: [ "Associate", "Active", "Senior" ] }) }
 
   def name_or_mfg?
     if self.Name.blank? && self.Mfg_Size.blank?
