@@ -259,7 +259,7 @@ GEM
     psych (5.1.2)
       stringio
     public_suffix (6.0.1)
-    puma (6.4.2)
+    puma (6.4.3)
       nio4r (~> 2.0)
     qbo_api (3.0.2)
       faraday (>= 1.10.0)
@@ -481,7 +481,7 @@ DEPENDENCIES
   mini_magick
   mysql2
   prawn (= 2.4.0)
-  puma (~> 6.0)
+  puma (~> 6.4)
   qbo_api (~> 3.0)
   rack (= 2.2.8.1)
   rack-oauth2
