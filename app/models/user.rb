@@ -51,7 +51,7 @@ class User < ApplicationRecord
   end
 
   def roles
-    [ role ] + (role.parent.nil? ? [] : [role.parent])
+    [ role ] + (role.parent.nil? ? [] : [ role.parent ])
   end
 
   def generate_confirmation_token

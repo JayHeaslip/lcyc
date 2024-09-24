@@ -1,5 +1,6 @@
 TODO items
 ------------------------------------------
+add testing of Role hierarchy
 make sure ./cronjob runs ok, only need to run on production
 on switch to production, kill delayed job, then restart and check
 allow BOG to People#select_commitee, People#committee, Committees#download_spreadsheet
