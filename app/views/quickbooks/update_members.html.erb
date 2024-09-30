@@ -5,3 +5,13 @@
     <p>Created <%= k %></p>
   <% end %>
 <% end %>
+
+<h3>Deleted Members</h3>
+<% if @deleted_qbo_members.size > 0 %>
+  <p>Check each of the deleted members to see if they need to be merged with an existing QB member.</p>
+  <% @deleted_qbo_members.each do |m| %>
+     <p>Deleted <%= m %></p>
+  <% end %>
+<% else %>
+  <p>None</p>
+<% end %>

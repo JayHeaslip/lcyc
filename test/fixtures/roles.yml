@@ -15,3 +15,9 @@ membership:
 
 nonmember:
   name: Non-member
+
+communication:
+  name: Communication
+  rights: [new_mailing]
+  parent: BOG
+  

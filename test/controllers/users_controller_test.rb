@@ -137,6 +137,19 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_not_nil flash[:alert]
   end
 
-  test "should not remove a role from an user" do
+  test "role hierarchy, actual role" do
+    @barb2 = users(:barb2)
+    login_as @barb2, "passwor2"
+
+    get new_mailing_path
+    assert_response :success
+  end
+
+  test "role hierarchy, parent role" do
+    @barb2 = users(:barb2)
+    login_as @barb2, "passwor2"
+
+    get history_report_path
+    assert_response :success
   end
 end
