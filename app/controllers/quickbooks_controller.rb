@@ -56,6 +56,7 @@ class QuickbooksController < ApplicationController
       members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       qb_members = @api.all(:customer)
       @existing_qbo_members = {}
+      @deleted_qbo_members = []
       members.each do |m|
         @existing_qbo_members[m.MailingName] = false
       end
@@ -206,6 +207,7 @@ class QuickbooksController < ApplicationController
       end
     else # delete from QBO, no longer in membership db
       logger.info "deleting #{display_name}"
+      @deleted_qbo_members << display_name
       @api.deactivate(:customer, id: qbm["Id"])
     end
     # :nocov:
