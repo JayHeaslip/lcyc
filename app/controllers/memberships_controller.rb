@@ -189,7 +189,7 @@ class MembershipsController < ApplicationController
       p.font "Times-Roman"
       p.font_size 11
       (0..pages).each do |page|
-        p.define_grid(columns: 3, rows: 10, column_gutter: 10)
+        p.define_grid(columns: 3, rows: 10, row_gutter: 0, column_gutter: 10)
         p.grid.rows.times do |i|
           p.grid.columns.times do |j|
             b = p.grid(i, j)

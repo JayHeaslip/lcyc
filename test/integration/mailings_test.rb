@@ -2,7 +2,7 @@ require "test_helper"
 
 class MailingsIntegrationTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
-  
+
   setup do
     admin = users(:one)
     login_as(admin, "passwor1")
