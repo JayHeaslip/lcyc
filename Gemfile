@@ -4,13 +4,12 @@ ruby "3.3.5"
 gem "rails", "~> 7.2.1"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "google-cloud-storage"
-# gem "rack-cors"
 
 # used to generate labels
 gem "prawn"
 
 # action text images
-# dreamhost doesn't have vips
+# dreamhost doesn't have vips, use imagemagick
 gem "image_processing", "~>1.2"
 
 # for user password
@@ -44,10 +43,10 @@ gem "sassc-rails"
 # for QB interface
 gem "qbo_api", "~>3.0"
 gem "rack-oauth2"
-gem "rack", "2.2.8.1"
+gem "rack"
 
 gem "matrix"
-gem "trix"
+gem "csv"
 
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
@@ -55,7 +54,7 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem "capybara", "~> 3.26"
   gem "selenium-webdriver"
-  gem "webdrivers", "~> 4.0", require: false
+  gem "webdrivers", require: false
   gem "simplecov"
   gem "standard"
   gem "rubocop-rails"

@@ -319,7 +319,7 @@ class QuickbooksController < ApplicationController
     end
     dock_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
     line_items << {
-      Amount: dock_assessments,
+      Amount: docks_assessment,
       DetailType: "SalesItemLineDetail",
       SalesItemLineDetail: {
         ItemRef: {
