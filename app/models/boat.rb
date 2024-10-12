@@ -20,28 +20,16 @@ class Boat < ApplicationRecord
 
   def check_location
     return if new_record?
-    if location == "Mooring" && mooring.nil?
-      available_mooring = Membership.mooring_available(memberships)
-      if available_mooring
-        self.mooring = available_mooring
-      else
-        self.location = ""
-        errors.add(:base, "Mooring not available for boat")
-      end
-    elsif location == "Parking Lot" && drysail.nil?
-      available_drysail = Membership.drysail_available(memberships)
-      if available_drysail
-        self.drysail = available_drysail
-      else
-        self.location = ""
-        errors.add(:base, "Drysail spot not available for boat")
-      end
+    if location == "Mooring" && !mooring # no mooring set
+      check_mooring
+    elsif location == "Parking Lot" && !drysail # no drysail set
+      check_drysail
     end
   end
 
   def selection_string
-    name = (self.Name && self.Name != "") ? self.Name : "(no name)"
-    [ name, self.Mfg_Size ].join(" ")
+    name = (self&.Name != "") ? self.Name : "(no name)"
+    "#{name} #{self.Mfg_Size}"
   end
 
   def self.to_csv
@@ -49,10 +37,38 @@ class Boat < ApplicationRecord
     CSV.generate(col_sep: ",") do |csv|
       csv << [ "Name", "Mooring#", "Sail#", "Mfg/Size", "PHRF", "Owner" ]
       boats.each do |b|
-        phrf = (b.PHRF == 0) ? "" : b.PHRF
-        owners = b.memberships.map { |e| e.LastName }.sort!
-        csv << [ b.Name, b.mooring_id, b.sail_num, b.Mfg_Size, phrf, owners.join("/") ]
+        csv << [ b.Name, b.mooring_id, b.sail_num, b.Mfg_Size, b.phrf, b.owners.join("/") ]
       end
+    end
+  end
+
+  def phrf
+    (self.PHRF == 0) ? "" : self.PHRF
+  end
+
+  def owners
+    memberships.map { |e| e.LastName }.sort!
+  end
+
+  private
+
+  def check_mooring
+    available_mooring = Membership.mooring_available(memberships)
+    if available_mooring
+      self.mooring = available_mooring
+    else
+      self.location = ""
+      errors.add(:base, "Mooring not available for boat")
+    end
+  end
+
+  def check_drysail
+    available_drysail = Membership.drysail_available(memberships)
+    if available_drysail
+      self.drysail = available_drysail
+    else
+      self.location = ""
+      errors.add(:base, "Drysail spot not available for boat")
     end
   end
 end
