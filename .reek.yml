@@ -5,12 +5,23 @@ detectors:
   UncommunicativeVariableName:
     accept:
       - b
-      - m
+      - c
       - e
+      - m
+      - p
+      - r
   NestedIterators:
     max_allowed_nesting: 2
+  TooManyStatements:
+    max_statements: 10
+  MissingSafeMethod:
+    enabled: false
+  InstanceVariableAssumption:
+    enabled: false
 exclude_paths:
-  - "test/"
+  - test/
+  - config/
+  - db/
 
 ### Directory specific configuration
 

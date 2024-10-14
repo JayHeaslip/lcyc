@@ -5,16 +5,18 @@ class RolesController < ApplicationController
 
   def show
     @role = Role.find(params[:id])
+    parent = @role.parent
     @controller_tree = {}
     generate_controller_tree(@role, @role.name)
-    generate_controller_tree(@role.parent, @role.parent.name) if @role.parent
+    generate_controller_tree(parent, parent.name) if parent
   end
 
   def edit
     @role = Role.find(params[:id])
+    parent = @role.parent
     @controller_tree = {}
     generate_controller_tree(@role, @role.name)
-    generate_controller_tree(@role.parent, @role.parent.name) if @role.parent
+    generate_controller_tree(parent, parent.name) if parent
     # creates a tree of controllers with the actions for each controller
     # top level is hash of controllers
     #  next level is an array of actions

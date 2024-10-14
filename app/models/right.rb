@@ -55,20 +55,27 @@ class Right < ApplicationRecord
   def self.sync_with_database
     # Find the actions in each of the controllers, and add them to the database
     @controllers.each do |controller|
-      controller.public_instance_methods(false).each do |action|
-        next if /return_to_main|component_update|component|^_/.match?(action)
-        if where("controller = ? AND action = ?", controller.controller_path, action).empty?
-          new(name: "#{controller}.#{action}", controller: controller.controller_path, action: action).save!
-        end
+      add_actions_to_database(controller)
+      remove__rights_from_database(controller)  # not found in the controller
+    end
+  end
+
+  def self.add_actions_to_database(controller)
+    controller.public_instance_methods(false).each do |action|
+      next if /return_to_main|component_update|component|^_/.match?(action)
+      path = controller.controller_path
+      if where("controller = ? AND action = ?", path, action).empty?
+        new(name: "#{controller}.#{action}", controller: path, action: action).save!
       end
-      # Check to make sure that all the rights for that controller in the database
-      # still exist in the controller itself
-      where([ "controller = ?", controller.controller_path ]).each do |right_to_go|
+    end
+  end
+
+  def self.remove__rights_from_database(controller)
+    where([ "controller = ?", controller.controller_path ]).each do |right_to_go|
         unless controller.public_instance_methods(false).include?(right_to_go.action.to_sym)
           # puts "removing from database: #{controller.controller_path}, #{right_to_go.action}"
           right_to_go.destroy
         end
-      end
     end
   end
 end
