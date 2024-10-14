@@ -1,8 +1,16 @@
 ---
-
 detectors:
   IrresponsibleModule:
     enabled: false
+  UncommunicativeVariableName:
+    accept:
+      - b
+      - m
+      - e
+  NestedIterators:
+    max_allowed_nesting: 2
+exclude_paths:
+  - "test/"
 
 ### Directory specific configuration
 
