@@ -7,8 +7,7 @@ require "json"
 class QuickbooksController < ApplicationController
   # remove leading/trailing blanks for membership data going to quickbooks
   def cleanup
-    members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
-    members.each do |m|
+    Membership.billed_members.each do |m|
       @update = false
       m.MailingName = strip(m.MailingName)
       m.StreetAddress = strip(m.StreetAddress)
@@ -147,10 +146,7 @@ class QuickbooksController < ApplicationController
   private
 
   def strip(str)
-    if str != str.strip
-      @update = true
-      str.strip
-    end
+    (str != str.strip) ? @update = true && str.strip : str
   end
 
   def oauth2_client

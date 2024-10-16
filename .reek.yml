@@ -21,8 +21,12 @@ detectors:
     enabled: false
   TooManyInstanceVariables:
     max_instance_variables: 6
-
-exclude_paths:
-  - test/
-  - config/
-  - db/
+  FeatureEnvy:
+    exclude:
+      - "QuickbooksController#cleanup" 
+# doesnt wotk with rubycritic
+#exclude_paths:
+#  - test/controllers
+#  - config
+#  - db
+  
