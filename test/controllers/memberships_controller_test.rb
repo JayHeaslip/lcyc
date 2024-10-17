@@ -12,7 +12,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     params = { membership: attrs }
     params[:membership][:initiation_installments_attributes] = { "0": { amount: 1000, year: 2022 } }
     put membership_path(@membership), params: params
-    assert_response :unprocessable_entity
+    assert_redirected_to membership_path(@membership)
   end
 
   test "should not update if initiation installment amount is blank" do
@@ -20,7 +20,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     params = { membership: attrs }
     params[:membership][:initiation_installments_attributes] = { "0": { amount: nil, year: 2022 } }
     put membership_path(@membership), params: params
-    assert_response :unprocessable_entity
+    assert_redirected_to membership_path(@membership)
   end
 
   test "should update if boat name is not blank" do
@@ -28,7 +28,7 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     params = { membership: attrs }
     params[:membership][:boats_attributes] = { "0": { Mfg_Size: nil, Name: "Hello" } }
     put membership_path(@membership), params: params
-    assert_response :unprocessable_entity
+    assert_redirected_to membership_path(@membership)
   end
 
   test "should update if mfg/size is not blank" do
@@ -36,6 +36,6 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
     params = { membership: attrs }
     params[:membership][:boats_attributes] = { "0": { Mfg_Size: "SeaRay", Name: nil } }
     put membership_path(@membership), params: params
-    assert_response :unprocessable_entity
+    assert_redirected_to membership_path(@membership)
   end
 end

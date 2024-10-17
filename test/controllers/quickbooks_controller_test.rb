@@ -9,6 +9,8 @@ class QuickbooksControllerTest < ActionDispatch::IntegrationTest
   test "cleanup the database" do
     get cleanup_quickbooks_path
     assert_response :success
+    m = Membership.find_by(MailingName: "Very Long Mailing Name and another long part")
+    assert_not_nil m
   end
 
   test "connect to QB" do
