@@ -30,3 +30,5 @@ This site is for maintaining the membership database for LCYC.
        * production uses the production branch
 
     2. bundle exec cap production deploy
+
+ * To restart after making a fix:  systemctl --user restart puma_production.service
