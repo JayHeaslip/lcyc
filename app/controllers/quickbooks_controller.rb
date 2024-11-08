@@ -313,13 +313,13 @@ class QuickbooksController < ApplicationController
     else
       docks_assessment = 125
     end
-    dock_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
+    docks_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
     line_items << {
       Amount: docks_assessment,
       DetailType: "SalesItemLineDetail",
       SalesItemLineDetail: {
         ItemRef: {
-          value: dock_assessment_value,
+          value: docks_assessment_value,
           name: "Docks Assessment"
         }
       }
