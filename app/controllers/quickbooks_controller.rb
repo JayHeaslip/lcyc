@@ -233,11 +233,12 @@ class QuickbooksController < ApplicationController
     mooring_replacement_fee = m.calculate_mooring_replacement_fee
     drysail_fee = m.calculate_drysail_fee
     initiation_due = m.calculate_initiation_installment
+    docks_assessment = m.docks_assessment
 
     # need to query Items to get value & name (Id & Name)
     line_items = []
     if dues != 0
-      dues = 5 if test
+     dues = 5 if test
       dues_value = @api.get(:item, [ "Name", "Dues" ])["Id"]
       line_items << {
         Amount: dues,
@@ -308,22 +309,21 @@ class QuickbooksController < ApplicationController
         }
       }
     end
-    if test
-      docks_assessment = 10
-    else
-      docks_assessment = 125
-    end
-    docks_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
-    line_items << {
-      Amount: docks_assessment,
-      DetailType: "SalesItemLineDetail",
-      SalesItemLineDetail: {
-        ItemRef: {
-          value: docks_assessment_value,
-          name: "Docks Assessment"
+
+    if docks_assessment != 0
+      docks_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
+      line_items << {
+        Amount: docks_assessment,
+        DetailType: "SalesItemLineDetail",
+        SalesItemLineDetail: {
+          ItemRef: {
+            value: docks_assessment_value,
+            name: "Docks Assessment"
+          }
         }
       }
-    }
+    end
+
     line_items
     # :nocov:
   end
