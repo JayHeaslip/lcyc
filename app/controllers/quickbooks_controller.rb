@@ -9,6 +9,8 @@ class QuickbooksController < ApplicationController
   def cleanup
     Membership.billed_members.each do |m|
       @update = false
+      puts m.id
+      puts "#### #{m.MailingName}###"
       m.MailingName = strip(m.MailingName)
       m.StreetAddress = strip(m.StreetAddress)
       m.City = strip(m.City)
@@ -128,7 +130,8 @@ class QuickbooksController < ApplicationController
         }
         invoice["Line"] = generate_line_items(m, params[:test])
         logger.info invoice
-        @api.create(:invoice, payload: invoice)
+        return_code = @api.create(:invoice, payload: invoice)
+        logger.info "return_code #{return_code}"
         count += 1
         if (count % 20) == 0
           sleep(40)
@@ -233,7 +236,7 @@ class QuickbooksController < ApplicationController
     mooring_replacement_fee = m.calculate_mooring_replacement_fee
     drysail_fee = m.calculate_drysail_fee
     initiation_due = m.calculate_initiation_installment
-    docks_assessment = m.docks_assessment
+    docks_assessment = m.calculate_docks_assessment
 
     # need to query Items to get value & name (Id & Name)
     line_items = []
