@@ -9,8 +9,6 @@ class QuickbooksController < ApplicationController
   def cleanup
     Membership.billed_members.each do |m|
       @update = false
-      puts m.id
-      puts "#### #{m.MailingName}###"
       m.MailingName = strip(m.MailingName)
       m.StreetAddress = strip(m.StreetAddress)
       m.City = strip(m.City)
@@ -85,7 +83,11 @@ class QuickbooksController < ApplicationController
             PrimaryEmailAddr: { Address: m.primary_email }
           }
           logger.info "Creating #{k}"
-          @api.create(:customer, payload: member)
+          begin
+            response = @api.create(:customer, payload: member)
+          rescue QboApi::BadRequest => e
+            flash[:alert] += e.message
+          end
           count += 1
           if (count % 20) == 0
             sleep(40)
@@ -114,13 +116,16 @@ class QuickbooksController < ApplicationController
       else
         Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       end
-      count = 0
+      total = 0
+      count = 1
+      payload = { "BatchItemRequest": [] }
       members.each do |m|
         logger.info "mailing name: #{m.MailingName}"
-        qbm = @api.get(:customer, [ "DisplayName", m.MailingName ])
-        logger.info "prefer #{m.prefer_partner_email}"
-        logger.info "primary email #{m.primary_email}"
-        logger.info " cc email #{m.cc_email}"
+        begin
+          qbm = @api.get(:customer, [ "DisplayName", m.MailingName ])
+        rescue QboApi::BadRequest => e
+          flash[:alert] += e.message
+        end
         invoice = {
           CustomerRef: { value: qbm["Id"] },
           AllowOnlineACHPayment: true,
@@ -129,15 +134,21 @@ class QuickbooksController < ApplicationController
           DueDate: "#{Time.now.year}-12-31"
         }
         invoice["Line"] = generate_line_items(m, params[:test])
-        logger.info invoice
-        return_code = @api.create(:invoice, payload: invoice)
-        logger.info "return_code #{return_code}"
+        batch_item = { "bId": "bid#{count}", "operation": "create",
+                      "Invoice": invoice }
+        payload[:BatchItemRequest] << batch_item
         count += 1
-        if (count % 20) == 0
-          sleep(40)
+        if count == 31
+          response = @api.batch(payload)
+          logger.info "response #{response}"
+          payload = { "BatchItemRequest": [] }
+          total = total + 30
+          count = 1
         end
       end
-      flash[:notice] = "Created #{count} invoices."
+      response = @api.batch(payload)
+      logger.info "response #{response}"
+      flash[:notice] = "Created #{total + (count-1)} invoices."
       redirect_to root_url
     else
       flash[:alert] = "Please connect to quickbooks."
