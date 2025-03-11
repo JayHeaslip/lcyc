@@ -3,7 +3,7 @@
 This site is for maintaining the membership database for LCYC.
 
 
-* Ruby version - 3.2.0
+* Ruby version - 3.3.5
 
 * To run the test suite: rails test, rails test:system
 
@@ -34,4 +34,4 @@ This site is for maintaining the membership database for LCYC.
 
     2. bundle exec cap production deploy
 
- * To restart after making a fix:  systemctl --user restart puma_production.service
+ * To manually restart after making a patch:  systemctl --user restart puma_production.service
