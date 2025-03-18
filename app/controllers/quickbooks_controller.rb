@@ -50,7 +50,7 @@ class QuickbooksController < ApplicationController
     # :nocov:
     if (access_token = session[:access_token])
       QboApi.production = (Rails.env == "production")
-      QboApi.minor_version = 8
+      QboApi.minor_version = 75
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
       members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       qb_members = @api.all(:customer)
@@ -109,7 +109,7 @@ class QuickbooksController < ApplicationController
     # :nocov:
     if (access_token = session[:access_token])
       QboApi.production = (Rails.env == "production")
-      QboApi.minor_version = 8
+      QboApi.minor_version = 75
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
       members = if params[:test]
         [ Membership.find(64), Membership.find(345) ]
