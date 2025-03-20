@@ -39,6 +39,8 @@ class Membership < ApplicationRecord
 
   # all categories of membership
   scope :members, -> { where(Status: [ "Active", "Associate", "Honorary", "Inactive", "Life", "Senior" ]).order(:LastName) }
+  # members who should get a bill
+  scope :billed_members, -> { where('Status NOT IN ("Honorary", "Life", "Non-member")').order(:LastName) }
   # eligible for a mooring
   scope :active, -> { where(Status: [ "Active", "Life", "Associate" ]).order(:LastName) }
   # adding accepted for QBO since they can be billed for mooring wait list
@@ -136,7 +138,7 @@ class Membership < ApplicationRecord
     when "Billing"
       members = self.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       CSV.generate(col_sep: ",") do |csv|
-        csv << %w[LastName MailingName Street City State Zip Country Status Mooring DrySailStorage Email Dues Initiation MooringFee DrySailStorageFee Total]
+        csv << %w[LastName MailingName Street City State Zip Country Status Mooring DrySailStorage Email Dues Initiation MooringFee DrySailStorageFee DocksAssessment Total]
         members.each do |m|
           dues = Membership.dues(m) || 0
           member = m.people.where('MemberType = "Member"').first
@@ -148,9 +150,10 @@ class Membership < ApplicationRecord
           mooring_fee = m.calculate_mooring_fee + m.calculate_mooring_replacement_fee
           drysail_fee = m.calculate_drysail_fee
           initiation_due = m.calculate_initiation_installment
-          total = dues + mooring_fee + initiation_due + drysail_fee
+          docks_assessment = m.calculate_docks_assessment
+          total = dues + mooring_fee + initiation_due + drysail_fee + docks_assessment
           csv << [ m.LastName, m.MailingName, m.StreetAddress, m.City, m.State, m.Zip, m.Country, m.Status,
-            m.mooring&.id, m.drysail&.id, email, dues, initiation_due, mooring_fee, drysail_fee, total ]
+            m.mooring&.id, m.drysail&.id, email, dues, initiation_due, mooring_fee, drysail_fee, docks_assessment, total ]
         end
       end
     when "Evite"
@@ -234,6 +237,16 @@ class Membership < ApplicationRecord
   def calculate_mooring_fee
     if mooring && !skip_mooring
       @@mooring_fee
+    else
+      0
+    end
+  end
+
+  def calculate_docks_assessment
+    if self.Status == "Active"
+      125
+    elsif self.Status == "Associate"
+      62
     else
       0
     end

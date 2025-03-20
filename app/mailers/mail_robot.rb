@@ -29,8 +29,9 @@ class MailRobot < ApplicationMailer
       subject: tag + mailing.subject)
   end
 
-  def loginfo(url_options, to, cc, membership_chair, membership, boat, member, partner, children)
+  def loginfo(url_options, args)
     ActiveStorage::Current.url_options = url_options
+    to, cc, membership_chair, membership, boat, member, partner, children = args
     log_info_email = LogInfoEmail.find(1)
     @subject = log_info_email.subject
     @body = log_info_email.body

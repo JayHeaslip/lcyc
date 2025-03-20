@@ -63,7 +63,7 @@ class MailRobotTest < ActionMailer::TestCase
     member = people(:bob)
     partner = people(:jill)
 
-    email = MailRobot.loginfo(ActiveStorage::Current.url_options, to, cc, "Betsey", membership, boat,  member, partner, [])
+    email = MailRobot.loginfo(ActiveStorage::Current.url_options, [ to, cc, "Betsey", membership, boat,  member, partner, [] ])
 
     assert_emails 1 do
       email.deliver_now

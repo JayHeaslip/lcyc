@@ -1,8 +1,6 @@
 require "digest/sha1"
 
 class User < ApplicationRecord
-  attr_accessor :current_password
-
   has_secure_password
   has_many :active_sessions, dependent: :destroy
   before_save :downcase_email
@@ -51,7 +49,8 @@ class User < ApplicationRecord
   end
 
   def roles
-    [ role ] + (role.parent.nil? ? [] : [ role.parent ])
+    parent = role.parent
+    [ role ] + (parent ? [ parent ] : [])
   end
 
   def generate_confirmation_token

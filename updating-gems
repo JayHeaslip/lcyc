@@ -1,0 +1,22 @@
+Fix vulnerable gems
+
+$ gem install bundler-audit
+$ bundle audit --update
+
+[For each gem listed by the audit]
+
+$ bundle update --conservative --patch <gem-name>
+
+Update non-production gems
+
+$ bundle update --conservative --group test development
+
+Update production gems
+
+$ bundle update --patch --strict
+$ bundle update --minor --strict
+$ bundle update --major
+
+List constrained gems
+
+$ bundle outdated --groups

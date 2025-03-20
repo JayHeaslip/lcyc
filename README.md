@@ -3,11 +3,14 @@
 This site is for maintaining the membership database for LCYC.
 
 
-* Ruby version - 3.2.0
+* Ruby version - 3.3.5
 
 * To run the test suite: rails test, rails test:system
 
 * To check code syntax: rubocop -a
+* To update gems see ~/updating-gems
+
+  
 
 * The site uses delayed_job to send email, the daemon will be started when creating email if it's not already running.
 
@@ -30,3 +33,5 @@ This site is for maintaining the membership database for LCYC.
        * production uses the production branch
 
     2. bundle exec cap production deploy
+
+ * To manually restart after making a patch:  systemctl --user restart puma_production.service

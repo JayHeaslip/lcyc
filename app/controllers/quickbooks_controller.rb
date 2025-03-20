@@ -7,8 +7,7 @@ require "json"
 class QuickbooksController < ApplicationController
   # remove leading/trailing blanks for membership data going to quickbooks
   def cleanup
-    members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
-    members.each do |m|
+    Membership.billed_members.each do |m|
       @update = false
       m.MailingName = strip(m.MailingName)
       m.StreetAddress = strip(m.StreetAddress)
@@ -51,7 +50,7 @@ class QuickbooksController < ApplicationController
     # :nocov:
     if (access_token = session[:access_token])
       QboApi.production = (Rails.env == "production")
-      QboApi.minor_version = 8
+      QboApi.minor_version = 75
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
       members = Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       qb_members = @api.all(:customer)
@@ -84,7 +83,11 @@ class QuickbooksController < ApplicationController
             PrimaryEmailAddr: { Address: m.primary_email }
           }
           logger.info "Creating #{k}"
-          @api.create(:customer, payload: member)
+          begin
+            response = @api.create(:customer, payload: member)
+          rescue QboApi::BadRequest => e
+            flash[:alert] += e.message
+          end
           count += 1
           if (count % 20) == 0
             sleep(40)
@@ -106,20 +109,23 @@ class QuickbooksController < ApplicationController
     # :nocov:
     if (access_token = session[:access_token])
       QboApi.production = (Rails.env == "production")
-      QboApi.minor_version = 8
+      QboApi.minor_version = 75
       @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
       members = if params[:test]
         [ Membership.find(64), Membership.find(345) ]
       else
         Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
       end
-      count = 0
+      total = 0
+      count = 1
+      payload = { "BatchItemRequest": [] }
       members.each do |m|
         logger.info "mailing name: #{m.MailingName}"
-        qbm = @api.get(:customer, [ "DisplayName", m.MailingName ])
-        logger.info "prefer #{m.prefer_partner_email}"
-        logger.info "primary email #{m.primary_email}"
-        logger.info " cc email #{m.cc_email}"
+        begin
+          qbm = @api.get(:customer, [ "DisplayName", m.MailingName ])
+        rescue QboApi::BadRequest => e
+          flash[:alert] += e.message
+        end
         invoice = {
           CustomerRef: { value: qbm["Id"] },
           AllowOnlineACHPayment: true,
@@ -128,14 +134,21 @@ class QuickbooksController < ApplicationController
           DueDate: "#{Time.now.year}-12-31"
         }
         invoice["Line"] = generate_line_items(m, params[:test])
-        logger.info invoice
-        @api.create(:invoice, payload: invoice)
+        batch_item = { "bId": "bid#{count}", "operation": "create",
+                      "Invoice": invoice }
+        payload[:BatchItemRequest] << batch_item
         count += 1
-        if (count % 20) == 0
-          sleep(40)
+        if count == 31
+          response = @api.batch(payload)
+          logger.info "response #{response}"
+          payload = { "BatchItemRequest": [] }
+          total = total + 30
+          count = 1
         end
       end
-      flash[:notice] = "Created #{count} invoices."
+      response = @api.batch(payload)
+      logger.info "response #{response}"
+      flash[:notice] = "Created #{total + (count-1)} invoices."
       redirect_to root_url
     else
       flash[:alert] = "Please connect to quickbooks."
@@ -147,10 +160,7 @@ class QuickbooksController < ApplicationController
   private
 
   def strip(str)
-    if str != str.strip
-      @update = true
-      str.strip
-    end
+    (str != str.strip) ? @update = true && str.strip : str
   end
 
   def oauth2_client
@@ -237,11 +247,12 @@ class QuickbooksController < ApplicationController
     mooring_replacement_fee = m.calculate_mooring_replacement_fee
     drysail_fee = m.calculate_drysail_fee
     initiation_due = m.calculate_initiation_installment
+    docks_assessment = m.calculate_docks_assessment
 
     # need to query Items to get value & name (Id & Name)
     line_items = []
     if dues != 0
-      dues = 5 if test
+     dues = 5 if test
       dues_value = @api.get(:item, [ "Name", "Dues" ])["Id"]
       line_items << {
         Amount: dues,
@@ -312,22 +323,21 @@ class QuickbooksController < ApplicationController
         }
       }
     end
-    if test
-      docks_assessment = 10
-    else
-      docks_assessment = 125
-    end
-    dock_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
-    line_items << {
-      Amount: dock_assessments,
-      DetailType: "SalesItemLineDetail",
-      SalesItemLineDetail: {
-        ItemRef: {
-          value: dock_assessment_value,
-          name: "Docks Assessment"
+
+    if docks_assessment != 0
+      docks_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
+      line_items << {
+        Amount: docks_assessment,
+        DetailType: "SalesItemLineDetail",
+        SalesItemLineDetail: {
+          ItemRef: {
+            value: docks_assessment_value,
+            name: "Docks Assessment"
+          }
         }
       }
-    }
+    end
+
     line_items
     # :nocov:
   end

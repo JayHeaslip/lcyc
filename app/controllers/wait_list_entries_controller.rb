@@ -4,29 +4,19 @@ class WaitListEntriesController < ApplicationController
   end
 
   def new
-    @memberships = Membership.where(Status: [ "Accepted", "Active", "Associate", "Inactive", "Senior" ], mooring: nil).order("LastName")
-    wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
-    @memberships -= wait_list_memberships
-    @wait_list_entry = WaitListEntry.new
+    setup_variables
   end
 
   def create
     @membership = Membership.find(params[:wait_list_entry][:membership_id])
     @wait_list_entry = WaitListEntry.new(wait_list_params)
-    unless params[:force_wld]
-      @wait_list_entry.date = if @membership.Status == "Accepted"
-        @wait_list_entry.membership.application_date
-      else
-        @wait_list_entry.membership.active_date
-      end
-    end
+    set_date_from_membership unless params[:force_wld]
+
     if @wait_list_entry.save
       flash[:notice] = "Wait list entry was successfully created."
       redirect_to wait_list_entries_path
     else
-      @memberships = Membership.where(Status: [ "Accepted", "Active", "Associate", "Inactive", "Senior" ], mooring: nil).order("LastName")
-      wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
-      @memberships -= wait_list_memberships
+      setup_variables
       render :new, status: :unprocessable_entity
     end
   end
@@ -38,11 +28,12 @@ class WaitListEntriesController < ApplicationController
   def update
     @wait_list_entry = WaitListEntry.find(params[:id])
     @wait_list_entry.attributes = wait_list_params
+    wait_list_membership = @wait_list_entry.membership
     unless params[:force_wld]
-      @wait_list_entry.date = if @wait_list_entry.membership.Status == "Accepted"
-        @wait_list_entry.membership.application_date
+      @wait_list_entry.date = if wait_list_membership.Status == "Accepted"
+        wait_list_membership.application_date
       else
-        @wait_list_entry.membership.active_date
+        wait_list_membership.active_date
       end
     end
     if @wait_list_entry.save
@@ -94,5 +85,21 @@ class WaitListEntriesController < ApplicationController
 
   def wait_list_params
     params.require(:wait_list_entry).permit(:date, :membership_id, :notes)
+  end
+
+  def setup_variables
+    @memberships = Membership.where(Status: [ "Accepted", "Active", "Associate", "Inactive", "Senior" ], mooring: nil).order("LastName")
+    wait_list_memberships = WaitListEntry.all.map { |w| w.membership }
+    @memberships -= wait_list_memberships
+    @wait_list_entry = WaitListEntry.new
+  end
+
+  def set_date_from_membership
+    wait_list_membership = @wait_list_entry.membership
+    @wait_list_entry.date = if @membership.Status == "Accepted"
+                              wait_list_membership.application_date
+    else
+                              wait_list_membership.active_date
+    end
   end
 end
