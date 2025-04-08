@@ -16,6 +16,7 @@ class WaitListEntriesController < ApplicationController
       flash[:notice] = "Wait list entry was successfully created."
       redirect_to wait_list_entries_path
     else
+      flash.now[:alert] = @wait_list_entry.errors.full_messages.to_sentence
       setup_variables
       render :new, status: :unprocessable_entity
     end
