@@ -16,6 +16,7 @@ class BoatsController < ApplicationController
   def update
     @boat = Boat.includes(:memberships).find(params[:id])
     @boat.attributes = boat_params
+    @boat.update_mooring_drysail
     if @boat.save
       flash[:notice] = "Successfully updated boat."
       redirect_to boat_path(@boat)
@@ -26,7 +27,6 @@ class BoatsController < ApplicationController
 
   def destroy
     @boat = Boat.find(params[:id])
-    logger.info "deleting boat"
     unless adjust_membership
       flash[:notice] = "Boat deleted."
       @boat.delete

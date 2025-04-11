@@ -50,7 +50,7 @@
     </div>
     <label for="Type" class="col-auto col-form-label pt-0">Location:</label>
     <div class="col-auto">
-      <% @selected = mooring ? 'Mooring' : '' %>
+      <% @selected = f.object.location %>
       <%= f.select :location, ['Mooring', 'Parking Lot'], {include_blank: true, selected: @selected} %>
     </div>
     <div class="col-sm-2">

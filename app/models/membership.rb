@@ -300,6 +300,17 @@ class Membership < ApplicationRecord
       if b.location == "Mooring"
         b.location = ""
         b.mooring = nil
+        b.save
+      end
+    end
+  end
+
+  def remove_boat_from_drysail
+    boats.each do |b|
+      if b.location == "Parking Lot"
+        b.location = ""
+        b.drysail = nil
+        b.save
       end
     end
   end
@@ -312,6 +323,7 @@ class Membership < ApplicationRecord
       end
     end
   end
+
   def check_drysail
     boats.each do |b|
       if b.location == "Parking Lot"

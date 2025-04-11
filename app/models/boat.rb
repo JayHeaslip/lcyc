@@ -50,6 +50,17 @@ class Boat < ApplicationRecord
     memberships.map { |e| e.LastName }.sort!
   end
 
+  def update_mooring_drysail
+    if self.location == ""
+      self.mooring = nil
+      self.drysail = nil
+    elsif location == "Parking Lot"
+      self.mooring = nil
+    elsif location == "Mooring"
+      self.drysail = nil
+    end
+  end
+
   private
 
   def check_mooring

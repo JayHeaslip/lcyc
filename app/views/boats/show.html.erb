@@ -19,7 +19,10 @@
 	<td><b>Draft:</b></td><td><%= @boat.Draft %></td>
       </tr>
       <tr>
-	<td><b>Mooring#:</b></td><td><%= @boat.mooring_id %></td>
+	<td><b>Mooring#:</b></td><td><%= @boat.mooring&.id %></td>
+      </tr>
+      <tr>
+	<td><b>Drysail#:</b></td><td><%= @boat.drysail&.id %></td>
       </tr>
       <tr>
 	<td><b>Sail#:</b></td><td><%= @boat.sail_num %></td>

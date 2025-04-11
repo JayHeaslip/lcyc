@@ -129,6 +129,7 @@ class MembershipsController < ApplicationController
   def unassign_drysail
     @membership = Membership.find(params[:id])
     drysail = @membership.drysail
+    @membership.remove_boat_from_drysail
     @membership.drysail = nil
     if @membership.save
       flash[:notice] = "Dry sail spot ##{drysail.id} unassigned."

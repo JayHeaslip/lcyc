@@ -37,7 +37,7 @@
       <td><%= boat.Type %></td>
       <td><%= boat.Length %></td>
       <td><%= boat.Draft %></td>
-      <td><%= boat.mooring_id %></td>
+      <td><%= boat.mooring&.id %></td>
       <td><%= boat.drysail&.id %></td>
       <td class="list-actions">
 	<%= link_to 'Delete', boat, data: { turbo_confirm: 'Are you sure?', turbo_method: :delete} %>
