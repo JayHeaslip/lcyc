@@ -13,7 +13,7 @@
     
     <template data-dynamic-form-target="boatTemplate">
       <%= f.fields_for :boats, Boat.new, child_index: 'NEW_RECORD' do |boat_fields| %>
-	<%= render "boats/form", f: boat_fields %>
+	<%= render "boats/form", f: boat_fields, mooring: @membership.mooring&.id, drysail: @membership.drysail&.id %>
       <% end %>
     </template>
     
@@ -46,7 +46,7 @@
     <hr>
     <div class="boat_fields ms-4">
 	<%= f.fields_for :boats do |f| %>
-	    <%= render 'boats/form', f: f %>
+	    <%= render 'boats/form', f: f, mooring: @membership.mooring&.id, drysail: @membership.drysail&.id  %>
 	<% end %>
 	<div data-dynamic-form-target="boat"></div>
 	<button type="button" data-action="dynamic-form#add_boat", class="btn btn-primary mb-3">Add boat</button>

@@ -74,6 +74,8 @@ class MembershipsController < ApplicationController
     if @membership.save
       flash.delete(:alert) if flash[:alert].blank?
       flash[:success] = "Membership was successfully updated."
+      @membership.check_mooring
+      @membership.check_drysail
       redirect_to membership_path(@membership)
     else
       render :edit, status: :unprocessable_entity

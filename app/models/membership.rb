@@ -303,4 +303,21 @@ class Membership < ApplicationRecord
       end
     end
   end
+
+  def check_mooring
+    boats.each do |b|
+      if b.location == "Mooring"
+        b.mooring = mooring
+        b.save
+      end
+    end
+  end
+  def check_drysail
+    boats.each do |b|
+      if b.location == "Parking Lot"
+        b.drysail = drysail
+        b.save
+      end
+    end
+  end
 end

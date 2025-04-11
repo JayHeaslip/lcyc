@@ -50,13 +50,14 @@
     </div>
     <label for="Type" class="col-auto col-form-label pt-0">Location:</label>
     <div class="col-auto">
-      <%= f.select :location, ['Mooring', 'Parking Lot'], {include_blank: true} %>
+      <% @selected = mooring ? 'Mooring' : '' %>
+      <%= f.select :location, ['Mooring', 'Parking Lot'], {include_blank: true, selected: @selected} %>
     </div>
     <div class="col-sm-2">
-      Mooring #<%= f.object.mooring_id %>
+      Mooring #<%= mooring ? mooring : '' %>
     </div>
     <div class="col-sm-2">
-      Drysail #<%= f.object.drysail %>
+      Drysail #<%= drysail %>
     </div>
   </div>
   <button type="button" data-action="dynamic-form#remove_boat", class="btn btn-link">Remove boat</button>
