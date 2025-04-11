@@ -93,12 +93,7 @@ Rails.application.routes.draw do
   resources :boats do
     member do
       get :associate
-      post :save_association
-    end
-    resources :memberships do
-      member do
-        delete :rmboat
-      end
+      patch :save_association
     end
   end
 

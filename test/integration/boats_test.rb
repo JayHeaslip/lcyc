@@ -63,7 +63,7 @@ class BoatsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "save association" do
-    post save_association_boat_url(@boat), params: { boat: { memberships: memberships(:member2).id } }
+    patch save_association_boat_url(@boat), params: { boat: { memberships: memberships(:member2).id } }
     assert_redirected_to boat_url(@boat)
   end
 

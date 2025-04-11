@@ -46,6 +46,7 @@ class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
     @wl = WaitListEntry.new
     @membership = memberships(:member4)
     post wait_list_entries_path, params: { force_wld: true, wait_list_entry: { membership_id: @membership.id, notes: "New note" } }
+    assert_equal flash[:alert], "Date can't be blank"
     assert_response :unprocessable_entity
   end
 

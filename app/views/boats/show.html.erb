@@ -45,7 +45,7 @@
 	<td><%= link_to membership.LastName, membership %></td>
 	<td><%= membership.MailingName %></td>
 	<td class="list-actions">
-          <%= link_to "Remove Association", rmboat_boat_membership_path(@boat,membership), data: {confirm: "Are you sure?", turbo_method: :delete } %>
+          <%= link_to "Remove Association", rmboat_membership_boat_path(membership, @boat), data: {turbo_confirm: "Are you sure?", turbo_method: :delete } %>
 	</td>
       </tr>
       <% end %>
