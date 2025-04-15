@@ -52,7 +52,7 @@ Rails.application.configure do
     port: 587,
     domain: "members.lcyc.info",
     user_name: "lcyc@members.lcyc.info",
-    password: Rails.application.credentials.gmailpw,
+    password: Rails.application.credentials.app_password,
     authentication: "plain",
     enable_starttls_auto: true
   }

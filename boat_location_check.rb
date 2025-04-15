@@ -1,12 +1,14 @@
 # execute in console
 
 Membership.find_each do |m|
+  mooring_used = false
   m.boats.each do |b|
-    if m.mooring && b.mooring != m.mooring && b.location != "Mooring"
+    if m.mooring && b.mooring != m.mooring && b.location != "Mooring" && !mooring_used
       puts "Boat location may be incorrect"
       puts " Members #{m.MailingName}"
       puts " Boat #{b.Mfg_Size}"
     end
+    mooring_used = true if b.location == "Mooring"
   end
 end
 
