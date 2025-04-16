@@ -114,4 +114,10 @@
   <p>
     <%= link_to 'Associate an Existing Boat', associate_membership_path(@membership) %>
   </p>
+  <p>
+    <%= link_to 'Back', memberships_path(since: @since,
+                                 operator: @operator,
+                                 lastname: @lastname,
+                                 status: @status) %>
+  </p>
 </div>

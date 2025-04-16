@@ -45,6 +45,7 @@ class MembershipsController < ApplicationController
   end
 
   def show
+    set_filter_params
     @membership = Membership.find(params[:id])
     @membership.people.sort
   end
@@ -83,10 +84,14 @@ class MembershipsController < ApplicationController
   end
 
   def destroy
+    logger.info "params[:status] #{params[:status]}"
     @membership = Membership.find(params[:id])
     @membership.destroy
     flash[:success] = "Membership was successfully deleted."
-    redirect_to memberships_path
+    redirect_to memberships_path(since: session[:since],
+                                 operator: session[:operator],
+                                 lastname: session[:lastname],
+                                 status: session[:status])
   end
 
   def associate
@@ -260,6 +265,7 @@ class MembershipsController < ApplicationController
 
   def filter_memberships(params)
     @memberships = Membership.all
+    save_params
     @memberships = @memberships.since(params[:since], params[:operator]) if params[:since].present?
     @memberships = @memberships.lastname(params[:lastname]) if params[:lastname].present?
     @memberships = @memberships.status(params[:status]) if params[:status].present?
@@ -273,5 +279,19 @@ class MembershipsController < ApplicationController
       people_attributes: Person.attribute_names.map(&:to_sym).push(:_destroy),
       boats_attributes: Boat.attribute_names.map(&:to_sym).push(:_destroy),
       initiation_installments_attributes: InitiationInstallment.attribute_names.map(&:to_sym).push(:_destroy))
+  end
+
+  def save_params
+    session[:since] = params[:since]
+    session[:operator] = params[:operator]
+    session[:lastname] = params[:lastname]
+    session[:status] = params[:status]
+  end
+
+  def set_filter_params
+    @since = session[:since]
+    @operator = session[:operator]
+    @lastname = session[:lastname]
+    @status = session[:status]
   end
 end
