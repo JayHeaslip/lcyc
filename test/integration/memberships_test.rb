@@ -24,7 +24,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "show_membership" do
-    get membership_url(@membership3)
+    get membership_url(@membership3), headers: { HTTP_REFERER: memberships_url }
     assert_response :success
     assert_select "tr td", "Mailing Name:"
     assert_select "tr td+td", @membership3.MailingName

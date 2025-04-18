@@ -46,6 +46,7 @@ class MembershipsController < ApplicationController
 
   def show
     set_filter_params
+    set_back_path
     @membership = Membership.find(params[:id])
     @membership.people.sort
   end
@@ -84,14 +85,15 @@ class MembershipsController < ApplicationController
   end
 
   def destroy
-    logger.info "params[:status] #{params[:status]}"
     @membership = Membership.find(params[:id])
     @membership.destroy
     flash[:success] = "Membership was successfully deleted."
     redirect_to memberships_path(since: session[:since],
                                  operator: session[:operator],
                                  lastname: session[:lastname],
-                                 status: session[:status])
+                                 status: session[:status],
+                                 sort: session[:sort],
+                                 direction: session[:direction])
   end
 
   def associate
@@ -286,6 +288,8 @@ class MembershipsController < ApplicationController
     session[:operator] = params[:operator]
     session[:lastname] = params[:lastname]
     session[:status] = params[:status]
+    session[:sort] = params[:sort]
+    session[:direction] = params[:direction]
   end
 
   def set_filter_params
@@ -293,5 +297,21 @@ class MembershipsController < ApplicationController
     @operator = session[:operator]
     @lastname = session[:lastname]
     @status = session[:status]
+    @direction = session[:direction]
+    @sort = session[:sort]
+  end
+
+  def set_back_path
+    session[:membership_referrer] = request.referrer unless request.referrer.match(/memberships\/\d+\/edit/)
+    if session[:membership_referrer].match(/memberships\/index/)
+      @back_path = memberships_path(since: @since,
+                                  operator: @operator,
+                                  lastname: @lastname,
+                                  status: @status,
+                                  sort: @sort,
+                                  direction: @direction)
+    else
+      @back_path = session[:membership_referrer]
+    end
   end
 end
