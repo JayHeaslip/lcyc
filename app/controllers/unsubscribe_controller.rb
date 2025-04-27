@@ -2,6 +2,10 @@ class UnsubscribeController < ApplicationController
   skip_before_action :authenticate_user!
   skip_before_action :check_authorization
 
+  def show
+    @hash = params[:id]
+  end
+  
   def update
     @person = Person.find_by_email_hash(params[:id])
     if @person
