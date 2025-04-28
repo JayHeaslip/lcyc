@@ -1,8 +1,9 @@
 <h2>Are you sure you want to unsubscribe?</h2>
-<%= form_with url: unsubscribe_path(@hash), method: :put do |f| %>
+<%= form_with url: "/unsubscribe/#{@hash}", method: :put do |f| %>
+<p><%= "#{@first} #{@last}, #{@email}" %></p>
 <div class="row">
   <div class="col-sm-3">
-    <%= f.submit "Unsubscribe", class: "btn btn-primary" %> | <%= link_to "Cancel", :controller => 'admin', :action => 'login' %>
+    <%= f.submit "Unsubscribe", class: "btn btn-primary" %> | <%= link_to "Cancel", :controller => 'sessions', :action => 'new' %>
   </div>
 </div>
 <% end %>

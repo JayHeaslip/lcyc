@@ -37,18 +37,4 @@ class CommitteesIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "h2", "Committee listing for all members"
   end
-
-  test "unsubscribe bad hash" do
-    logout
-    get "/unsubscribe/1234"
-    assert_redirected_to root_url
-    assert_equal flash[:alert], "Email address not found."
-  end
-
-  test "unsubscribe" do
-    logout
-    get "/unsubscribe/2345"
-    assert_redirected_to root_url
-    assert_equal flash[:notice], "You have unsubscribed."
-  end
 end

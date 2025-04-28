@@ -17,9 +17,15 @@ class PeopleIntegrationTest < ActionDispatch::IntegrationTest
     assert_equal flash[:alert], "Email address not found."
   end
 
-  test "unsubscribe" do
+  test "unsubscribe get" do
     logout
     get "/unsubscribe/2345"
+    assert_response :success
+  end
+
+  test "unsubscribe put" do
+    logout
+    put "/unsubscribe/2345"
     assert_redirected_to root_url
     assert_equal flash[:notice], "You have unsubscribed."
   end
