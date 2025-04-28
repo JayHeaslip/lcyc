@@ -15,8 +15,8 @@ Rails.application.routes.draw do
   post "change_password", to: "passwords#change"
 
 
-  get 'unsubscribe/:id', to: 'unsubscribe#show'
-  put 'unsubscribe/:id', to: 'unsubscribe#update'
+  get "unsubscribe/:id", to: "unsubscribe#show"
+  put "unsubscribe/:id", to: "unsubscribe#update"
 
   resources :users
 

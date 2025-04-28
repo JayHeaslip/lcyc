@@ -1,4 +1,4 @@
-File.open("mooring_email.csv","w") do |o|
+File.open("mooring_email.csv", "w") do |o|
   o.puts "Mooring#, First Name, Last Name, Email, MemberSince"
   Mooring.find_each do |m|
     m.memberships.each do |mem|

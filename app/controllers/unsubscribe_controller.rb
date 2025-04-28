@@ -3,9 +3,18 @@ class UnsubscribeController < ApplicationController
   skip_before_action :check_authorization
 
   def show
-    @hash = params[:id]
+    p = Person.find_by_email_hash(params[:id])
+    if p.nil?
+      redirect_to root_path
+      flash[:alert] = "Email address not found."
+    else
+      @hash = params[:id]
+      @first = p.FirstName
+      @last = p.LastName
+      @email = p.EmailAddress
+    end
   end
-  
+
   def update
     @person = Person.find_by_email_hash(params[:id])
     if @person
