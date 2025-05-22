@@ -179,7 +179,8 @@ class MembershipsController < ApplicationController
     installments = InitiationInstallment.includes(:membership).order(:year)
     @initiation_fee_due = []
     installments.each do |i|
-      @initiation_fee_due << [ i.membership, i.amount, i.year ]
+      next if i.membership.Status != "Active" && i.membership.Status != "Associate"
+      @initiation_fee_due << [ i.membership, i.membership.Status, i.membership.MemberSince, i.membership.active_date, i.amount, i.year ]
     end
   end
 
