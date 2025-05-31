@@ -113,6 +113,7 @@ Rails.application.routes.draw do
     end
   end
   resource :log_info_email, only: [ :edit, :update ]
+  get "subscription_list", to: "reports#subscription_list"
 
   resources :active_sessions, only: [ :index, :destroy ] do
     collection do

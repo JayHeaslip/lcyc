@@ -9,6 +9,13 @@ class ReportsController < ApplicationController
     @total = @categories.sum { |k, v| v }
   end
 
+  def subscription_list
+    mime_type = "text/csv"
+    filename = "subscription_list_#{I18n.l(Time.now, format: :short)}"
+    filename += ".csv"
+    send_data(Person.email_list_to_csv, type: mime_type, filename: filename)
+  end
+
   def history
     @m = Membership.all
     @categories = Hash.new { |h, k| h[k] = Hash.new { |h, k| h[k] = 0 } }
