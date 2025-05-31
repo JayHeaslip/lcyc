@@ -73,6 +73,16 @@ class Person < ApplicationRecord
     end
   end
 
+  def self.email_list_to_csv
+    people = Person.email_list
+    CSV.generate(col_sep: ",") do |csv|
+      csv << %w[FirstName LastName Email]
+      people.each do |p|
+        csv << [ p.FirstName, p.LastName, p.EmailAddress ]
+      end
+    end
+  end
+
   def self.resigned_to_csv
     people = Person.resigned.where(MemberType: [ "Member", "Partner" ]).order("memberships.LastName")
     CSV.generate(col_sep: ",") do |csv|
