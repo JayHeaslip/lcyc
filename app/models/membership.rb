@@ -33,6 +33,7 @@ class Membership < ApplicationRecord
   validates :Zip, presence: true, length: { maximum: 12 }
   validates :Status, presence: true
   validate :check_type, if: proc { |m| !m.people.empty? }
+  validate :check_active_date, if: proc { |m| m.Status == "Active" || m.Status == "Associate" }
   validate :ensure_people, if: proc { |m| m.people.empty? }
   validate :member_since, if: proc { |m| m.Status != "Accepted" }
   validates :installments, allow_nil: true, inclusion: { in: (2..4) }
@@ -63,6 +64,11 @@ class Membership < ApplicationRecord
   def check_type
     errors.add :base, "There can be one and only one 'Member'" if count_type("Member") != 1
     errors.add :base, "There can be at most one 'Partner'" if count_type("Partner") > 1
+  end
+
+  def check_active_date
+    errors.add(:active_date, "can not be blank") unless self.active_date != nil
+    errors.add(:active_date, "year has to match Member Since year") unless self.active_date&.year == self.MemberSince
   end
 
   def mooring_eligible

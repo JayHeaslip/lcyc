@@ -4,7 +4,7 @@ class MembershipTest < ApplicationSystemTestCase
   test "new membership" do
     visit root_path
     fill_in "email", with: "dave@abc.com"
-    fill_in "password", with: "passwor1"
+    fill_in "password", with: "aqswde12$$"
     click_on "Login"
     click_on "Memberships"
     click_on "New Membership"
@@ -15,6 +15,9 @@ class MembershipTest < ApplicationSystemTestCase
     fill_in "State", with: "VT"
     fill_in "Zip", with: "05041"
     fill_in "Member Since", with: "2010"
+    select "January", from: "membership_active_date_2i"
+    select "10", from: "membership_active_date_3i"
+    select "2010", from: "membership_active_date_1i"
     select "Active", from: "membership_Status"
 
     # click_on "Add person"
