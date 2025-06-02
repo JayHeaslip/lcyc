@@ -3,7 +3,7 @@ require "test_helper"
 class MooringsIntegrationTest < ActionDispatch::IntegrationTest
   setup do
     admin = users(:one)
-    login_as(admin, "passwor1")
+    login_as(admin, "aqswde12$$")
     @membership = memberships(:member1)
     @membership2 = memberships(:member2)
     @membership3 = memberships(:member3)

@@ -5,7 +5,7 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
 
   setup do
     admin = users(:one)
-    login_as(admin, "passwor1")
+    login_as(admin, "aqswde12$$")
     @mailing = mailings(:one)
   end
 

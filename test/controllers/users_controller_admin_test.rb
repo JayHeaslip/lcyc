@@ -3,7 +3,7 @@ require "test_helper"
 class UsersControllerTest1 < ActionDispatch::IntegrationTest
   setup do
     admin = users(:one)
-    login_as(admin, "passwor1")
+    login_as(admin, "aqswde12$$")
     @user = users(:two)
     @update = {
       firstname: "Jim",

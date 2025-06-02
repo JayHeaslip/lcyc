@@ -3,7 +3,7 @@ require "test_helper"
 class QuickbooksControllerTest < ActionDispatch::IntegrationTest
   setup do
     admin = users(:one)
-    login_as(admin, "passwor1")
+    login_as(admin, "aqswde12$$")
   end
 
   test "cleanup the database" do
