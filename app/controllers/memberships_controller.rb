@@ -303,16 +303,18 @@ class MembershipsController < ApplicationController
   end
 
   def set_back_path
-    session[:membership_referrer] = request.referrer unless request.referrer.match(/memberships\/\d+\/edit/)
-    if session[:membership_referrer].match(/memberships\/index/)
+    session[:membership_referrer] = request.referrer unless request.referrer&.match(/memberships\/\d+\/edit/)
+    if session[:membership_referrer]&.match(/memberships\/index/)
       @back_path = memberships_path(since: @since,
                                   operator: @operator,
                                   lastname: @lastname,
                                   status: @status,
                                   sort: @sort,
                                   direction: @direction)
-    else
+    elsif session[:membership_referrer]
       @back_path = session[:membership_referrer]
+    else
+      @back_path = root_path
     end
   end
 end

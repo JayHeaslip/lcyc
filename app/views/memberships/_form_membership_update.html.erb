@@ -21,24 +21,36 @@
     </div>
 </div>
 
-<% if Current.user.roles?(%w(Admin Membership)) %>
+<% if Current.user.roles?(%w(Admin Membership Harbormaster)) %>
     <div class="row">
 	<div class="col-sm-3">
 	    <label for="application_date" class="col-form-label pt-0">Approval Date:</label>
 	    <div class="">
-		<%= f.date_select :application_date, include_blank: true, order: [:month, :day, :year], start_year: 1960, end_year: Time.now.year, class: 'form-control' %>
+	      <% if Current.user.roles?(%w(Admin Membership)) %>
+	        <%= f.date_select :application_date, include_blank: true, order: [:month, :day, :year], start_year: 1960, end_year: Time.now.year, class: 'form-control' %>
+	      <% else %>
+	        <%= @membership.application_date %>
+	      <% end %>
 	    </div>
 	</div>
 	<div class="col-sm-3">
 	    <label for="active_date" class="col-form-label pt-0">Active Date:</label>
 	    <div class="">
-		<%= f.date_select :active_date, include_blank: true, order: [:month, :day, :year], start_year: 1960, end_year: 1+Time.now.year, class: 'form-control' %>
+	      <% if Current.user.roles?(%w(Admin Membership)) %>
+  	        <%= f.date_select :active_date, include_blank: true, order: [:month, :day, :year], start_year: 1960, end_year: 1+Time.now.year, class: 'form-control' %>
+	      <% else %>
+	        <%= @membership.active_date %>	
+	      <% end %>
 	    </div>
 	</div>
 	<div class="col-sm-3">
 	    <label for="resignation_date" class="col-form-label pt-0">Resignation_Date:</label>
 	    <div class="">
-		<%= f.date_select :resignation_date, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year-1, end_year: 1+Time.now.year, class: 'form-cont' %>
+	      <% if Current.user.roles?(%w(Admin Membership)) %>
+	      <%= f.date_select :resignation_date, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year-1, end_year: 1+Time.now.year, class: 'form-cont' %>
+	      <% else %>
+	      <%= @membership.resignation_date %>
+	      <% end %>
 	    </div>
 	</div>
     </div>
@@ -58,6 +70,7 @@
 	    <label for="notes">Notes</label>
 	</span>
     </div>
+    <% if Current.user.roles?(%w(Admin Membership)) %>
     <h5>Initiation Installments</h5>
     <hr>
     <div class="initiation_installment_fields ms-4">
@@ -67,4 +80,5 @@
 	<div data-dynamic-form-target="installment"></div>
 	<button type="button" data-action="dynamic-form#add_installment", class="btn btn-primary mb-3 mt-3">Add initiation installment</button>
     </div>
+    <% end %>
 <% end %>    
