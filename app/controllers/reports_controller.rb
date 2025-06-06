@@ -26,11 +26,7 @@ class ReportsController < ApplicationController
       member_birthyear = member.BirthYear if member.BirthYear
       partner_birthyear = partner.BirthYear if partner&.BirthYear
 
-      active_year_criteria = [ m.MemberSince + 5, member.BirthYear + 40 ]
-      active_year_criteria.push(partner_birthyear + 40) if partner_birthyear
-      logger.info m.MailingName
-      logger.info active_year_criteria
-      active_year = active_year_criteria.min
+      active_year = m.active_year
       @list << [ m.MailingName, member.EmailAddress, m.MemberSince, member_birthyear, partner_birthyear, active_year ]
       @list = @list.sort { |a, b| a[5] <=> b[5] }
     end

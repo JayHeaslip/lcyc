@@ -110,6 +110,7 @@ class Membership < ApplicationRecord
   end
 
   def self.dues(m)
+    m.associate_check
     @@dues[m.Status.to_sym] || 0
   end
 
@@ -335,6 +336,29 @@ class Membership < ApplicationRecord
       if b.location == "Parking Lot"
         b.drysail = drysail
         b.save
+      end
+    end
+  end
+
+  def active_year
+    member = people.where(MemberType: "Member").first
+    partner = people.where(MemberType: "Partner").first
+    m_birthyear = member.BirthYear if member.BirthYear
+    p_birthyear = partner.BirthYear if partner&.BirthYear
+
+    active_year_criteria = [ self.MemberSince + 5, m_birthyear + 40 ]
+    active_year_criteria.push(p_birthyear + 40) if p_birthyear
+    active_year_criteria.min
+  end
+
+  def associate_check
+    if self.Status == "Associate"
+      logger.info "associate check #{self.MailingName} #{active_year}"
+      if active_year <= Time.now.year+1
+        logger.info "#{self.MailingName} -> Active"
+        self.Status = "Active"
+        change_status_date = Time.now.strftime("%Y-%m-%d")
+        self.save
       end
     end
   end
