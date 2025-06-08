@@ -12,7 +12,7 @@ module ApplicationHelper
 
   def flash_messages(opts = {})
     flash.each do |msg_type, message|
-      concat(content_tag(:div, message, class: "mb-2 text-center alert #{bootstrap_class_for(msg_type)}"))
+      concat(content_tag(:div, simple_format(message), class: "mb-2 text-left alert #{bootstrap_class_for(msg_type)}"))
     end
     nil
   end

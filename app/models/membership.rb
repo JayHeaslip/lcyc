@@ -353,13 +353,25 @@ class Membership < ApplicationRecord
 
   def associate_check
     if self.Status == "Associate"
-      logger.info "associate check #{self.MailingName} #{active_year}"
       if active_year <= Time.now.year+1
         logger.info "#{self.MailingName} -> Active"
-        self.Status = "Active"
-        change_status_date = Time.now.strftime("%Y-%m-%d")
-        self.save
+        Membership.set_flash_message("#{self.MailingName} needs to be made Active")
+        #self.Status = "Active"
+        #change_status_date = Time.now.strftime("%Y-%m-%d")
+        #self.save
       end
     end
+  end
+
+  def self.set_flash_message(msg)
+    @@flash_message = @@flash_message + msg + "<br>"
+  end
+
+  def self.reset_flash_message
+    @@flash_message = ""
+  end
+
+  def self.flash_message
+    @@flash_message
   end
 end
