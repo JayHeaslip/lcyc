@@ -3,7 +3,7 @@ require "test_helper"
 class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   setup do
     admin = users(:one)
-    login_as(admin, "passwor1")
+    login_as(admin, "aqswde12$$")
     @membership = memberships(:member1)
     @membership2 = memberships(:member2)
     @membership3 = memberships(:member3)
@@ -46,6 +46,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
                                       Zip: "05401",
                                       MemberSince: "2018",
                                       Status: "Active",
+                                      active_date: "01-01-2018",
                                       people_attributes: [ { FirstName: "John", LastName: "Doe",
                                                            Committee1: "Boats", MemberType: "Member" } ] } }
 
@@ -81,6 +82,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
                                       Zip: "05401",
                                       MemberSince: "2018",
                                       Status: "Active",
+                                      active_date: "01-01-2018",
                                       people_attributes: [ { FirstName: "John", LastName: "Doe",
                                                            Committee1: "Boats", MemberType: "Member" } ],
                                       boat_attributes: [ { Name: "Testing", Mfg_Size: "", Type: "Sail" } ] } }
@@ -123,6 +125,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
                    Zip: "05401",
                    MemberSince: "1974",
                    Status: "Active",
+                   active_date: "01-01-1974",
                    people_attributes: [ { FirstName: "Jill", LastName: "Doe",
                                         Committee1: "Dock", MemberType: "Partner" } ]
 

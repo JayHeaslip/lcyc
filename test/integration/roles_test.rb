@@ -3,7 +3,7 @@
 class RolesIntegrationTest < ActionDispatch::IntegrationTest
   setup do
     admin = users(:one)
-    login_as(admin, "passwor1")
+    login_as(admin, "aqswde12$$")
     @role = roles(:member)
     @right = rights(:user_destroy)
   end

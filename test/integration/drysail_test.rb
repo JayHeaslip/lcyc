@@ -3,7 +3,7 @@ require "test_helper"
 class DrysailsIntegrationTest < ActionDispatch::IntegrationTest
   setup do
     admin = users(:one)
-    login_as(admin, "passwor1")
+    login_as(admin, "aqswde12$$")
   end
 
   test "assign drysail spot" do

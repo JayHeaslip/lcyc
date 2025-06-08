@@ -8,7 +8,7 @@ member1:
   Status: 'Active'
   application_date: '2002-02-02'
   active_date: '2010-02-02'
-  MemberSince: 2001
+  MemberSince: 2010
   mooring: mooring2
 
 member2:
@@ -19,7 +19,7 @@ member2:
   State: VT
   Zip: 05482
   Status: 'Active'
-  MemberSince: 2001
+  MemberSince: 2009
   active_date: '2009-02-02'
   Status: 'Active'
 
@@ -32,6 +32,7 @@ member3:
   Zip: 05482
   Status: 'Active'
   MemberSince: 2001
+  active_date: '2001-02-02'
   Status: 'Active'
   mooring: mooring2
   boats: boat4
@@ -54,9 +55,10 @@ member5:
   City: 'Shelburne'
   State: 'VT'
   Zip: 05482
-  application_date: 02-03-2018
+  application_date: 01-03-2018
+  active_date: 02-03-2018
   Status: 'Active'
-  MemberSince: 2001
+  MemberSince: 2018
   boats: boat3
   mooring: mooring3
   
@@ -180,3 +182,4 @@ inactive:
   application_date: 02-03-2018
   Status: 'Inactive'
   MemberSince: 2001
+  active_date: '2001-02-02'

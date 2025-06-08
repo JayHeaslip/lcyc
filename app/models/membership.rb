@@ -33,6 +33,7 @@ class Membership < ApplicationRecord
   validates :Zip, presence: true, length: { maximum: 12 }
   validates :Status, presence: true
   validate :check_type, if: proc { |m| !m.people.empty? }
+  validate :check_active_date, if: proc { |m| m.Status == "Active" || m.Status == "Associate" }
   validate :ensure_people, if: proc { |m| m.people.empty? }
   validate :member_since, if: proc { |m| m.Status != "Accepted" }
   validates :installments, allow_nil: true, inclusion: { in: (2..4) }
@@ -63,6 +64,11 @@ class Membership < ApplicationRecord
   def check_type
     errors.add :base, "There can be one and only one 'Member'" if count_type("Member") != 1
     errors.add :base, "There can be at most one 'Partner'" if count_type("Partner") > 1
+  end
+
+  def check_active_date
+    errors.add(:active_date, "can not be blank") unless self.active_date != nil
+    errors.add(:active_date, "year has to match Member Since year") unless self.active_date&.year == self.MemberSince
   end
 
   def mooring_eligible
@@ -104,6 +110,7 @@ class Membership < ApplicationRecord
   end
 
   def self.dues(m)
+    m.associate_check
     @@dues[m.Status.to_sym] || 0
   end
 
@@ -331,5 +338,40 @@ class Membership < ApplicationRecord
         b.save
       end
     end
+  end
+
+  def active_year
+    member = people.where(MemberType: "Member").first
+    partner = people.where(MemberType: "Partner").first
+    m_birthyear = member.BirthYear if member.BirthYear
+    p_birthyear = partner.BirthYear if partner&.BirthYear
+
+    active_year_criteria = [ self.MemberSince + 5, m_birthyear + 40 ]
+    active_year_criteria.push(p_birthyear + 40) if p_birthyear
+    active_year_criteria.min
+  end
+
+  def associate_check
+    if self.Status == "Associate"
+      if active_year <= Time.now.year+1
+        logger.info "#{self.MailingName} -> Active"
+        Membership.set_flash_message("#{self.MailingName} needs to be made Active")
+        #self.Status = "Active"
+        #change_status_date = Time.now.strftime("%Y-%m-%d")
+        #self.save
+      end
+    end
+  end
+
+  def self.set_flash_message(msg)
+    @@flash_message = @@flash_message + msg + "<br>"
+  end
+
+  def self.reset_flash_message
+    @@flash_message = ""
+  end
+
+  def self.flash_message
+    @@flash_message
   end
 end

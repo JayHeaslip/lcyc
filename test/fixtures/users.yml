@@ -2,7 +2,7 @@ one:
   firstname: dave
   lastname: dave
   email: dave@abc.com
-  password_digest: <%= BCrypt::Password.create('passwor1') %>
+  password_digest: <%= BCrypt::Password.create('aqswde12$$') %>
   confirmed_at: <%= Time.now %>
   role: admin
 

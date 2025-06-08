@@ -148,7 +148,7 @@ class QuickbooksController < ApplicationController
       end
       response = @api.batch(payload)
       logger.info "response #{response}"
-      flash[:notice] = "Created #{total + (count-1)} invoices."
+      flash[:notice] = "Created #{total + (count-1)} invoices.\n#{Membership.flash_message}"
       redirect_to root_url
     else
       flash[:alert] = "Please connect to quickbooks."
@@ -242,100 +242,106 @@ class QuickbooksController < ApplicationController
 
   def generate_line_items(m, test)
     # :nocov:
+    Membership.reset_flash_message
     dues = Membership.dues(m) || 0
-    mooring_fee = m.calculate_mooring_fee
-    mooring_replacement_fee = m.calculate_mooring_replacement_fee
-    drysail_fee = m.calculate_drysail_fee
-    initiation_due = m.calculate_initiation_installment
-    docks_assessment = m.calculate_docks_assessment
+    if Membership.flash_messages != ""
+      flash[:error] = "Error:\n #{Membership.flash_message}"
+      redirect_to invoices_quickbooks_path
+    else
+      mooring_fee = m.calculate_mooring_fee
+      mooring_replacement_fee = m.calculate_mooring_replacement_fee
+      drysail_fee = m.calculate_drysail_fee
+      initiation_due = m.calculate_initiation_installment
+      docks_assessment = m.calculate_docks_assessment
 
-    # need to query Items to get value & name (Id & Name)
-    line_items = []
-    if dues != 0
-     dues = 5 if test
-      dues_value = @api.get(:item, [ "Name", "Dues" ])["Id"]
-      line_items << {
-        Amount: dues,
-        DetailType: "SalesItemLineDetail",
-        SalesItemLineDetail: {
-          ItemRef: {
-            value: dues_value,
-            name: "Dues"
+      # need to query Items to get value & name (Id & Name)
+      line_items = []
+      if dues != 0
+        dues = 5 if test
+        dues_value = @api.get(:item, [ "Name", "Dues" ])["Id"]
+        line_items << {
+          Amount: dues,
+          DetailType: "SalesItemLineDetail",
+          SalesItemLineDetail: {
+            ItemRef: {
+              value: dues_value,
+              name: "Dues"
+            }
           }
         }
-      }
-    end
-    if mooring_fee != 0
-      mooring_fee = 6 if test
-      mooring_fee_value = @api.get(:item, [ "Name", "Mooring Fee" ])["Id"]
-      line_items << {
-        Amount: mooring_fee,
-        Description: "Mooring ##{m.mooring&.id}",
-        DetailType: "SalesItemLineDetail",
-        SalesItemLineDetail: {
-          ItemRef: {
-            value: mooring_fee_value,
-            name: "Mooring Fee"
+      end
+      if mooring_fee != 0
+        mooring_fee = 6 if test
+        mooring_fee_value = @api.get(:item, [ "Name", "Mooring Fee" ])["Id"]
+        line_items << {
+          Amount: mooring_fee,
+          Description: "Mooring ##{m.mooring&.id}",
+          DetailType: "SalesItemLineDetail",
+          SalesItemLineDetail: {
+            ItemRef: {
+              value: mooring_fee_value,
+              name: "Mooring Fee"
+            }
           }
         }
-      }
-    end
-    if mooring_replacement_fee != 0
-      mooring_replacement_fee = 7 if test
-      mooring_replacement_fee_value = @api.get(:item, [ "Name", "Mooring Replacement Fee" ])["Id"]
-      line_items << {
-        Amount: mooring_replacement_fee,
-        Description: "Mooring ##{m.mooring&.id}",
-        DetailType: "SalesItemLineDetail",
-        SalesItemLineDetail: {
-          ItemRef: {
-            value: mooring_replacement_fee_value,
-            name: "Mooring Replacement Fee"
+      end
+      if mooring_replacement_fee != 0
+        mooring_replacement_fee = 7 if test
+        mooring_replacement_fee_value = @api.get(:item, [ "Name", "Mooring Replacement Fee" ])["Id"]
+        line_items << {
+          Amount: mooring_replacement_fee,
+          Description: "Mooring ##{m.mooring&.id}",
+          DetailType: "SalesItemLineDetail",
+          SalesItemLineDetail: {
+            ItemRef: {
+              value: mooring_replacement_fee_value,
+              name: "Mooring Replacement Fee"
+            }
           }
         }
-      }
-    end
-    if drysail_fee != 0
-      drysail_fee = 8 if test
-      drysail_value = @api.get(:item, [ "Name", "Drysail Fee" ])["Id"]
-      line_items << {
-        Amount: drysail_fee,
-        DetailType: "SalesItemLineDetail",
-        SalesItemLineDetail: {
-          ItemRef: {
-            value: drysail_value,
-            name: "Drysail Fee"
+      end
+      if drysail_fee != 0
+        drysail_fee = 8 if test
+        drysail_value = @api.get(:item, [ "Name", "Drysail Fee" ])["Id"]
+        line_items << {
+          Amount: drysail_fee,
+          DetailType: "SalesItemLineDetail",
+          SalesItemLineDetail: {
+            ItemRef: {
+              value: drysail_value,
+              name: "Drysail Fee"
+            }
           }
         }
-      }
-    end
-    if initiation_due != 0
-      initiation_due = 9 if test
-      initiation_value = @api.get(:item, [ "Name", "Initiation Installment" ])["Id"]
-      line_items << {
-        Amount: initiation_due,
-        DetailType: "SalesItemLineDetail",
-        SalesItemLineDetail: {
-          ItemRef: {
-            value: initiation_value,
-            name: "Initiation Installment"
+      end
+      if initiation_due != 0
+        initiation_due = 9 if test
+        initiation_value = @api.get(:item, [ "Name", "Initiation Installment" ])["Id"]
+        line_items << {
+          Amount: initiation_due,
+          DetailType: "SalesItemLineDetail",
+          SalesItemLineDetail: {
+            ItemRef: {
+              value: initiation_value,
+              name: "Initiation Installment"
+            }
           }
         }
-      }
-    end
+      end
 
-    if docks_assessment != 0
-      docks_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
-      line_items << {
-        Amount: docks_assessment,
-        DetailType: "SalesItemLineDetail",
-        SalesItemLineDetail: {
-          ItemRef: {
-            value: docks_assessment_value,
-            name: "Docks Assessment"
+      if docks_assessment != 0
+        docks_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
+        line_items << {
+          Amount: docks_assessment,
+          DetailType: "SalesItemLineDetail",
+          SalesItemLineDetail: {
+            ItemRef: {
+              value: docks_assessment_value,
+              name: "Docks Assessment"
+            }
           }
         }
-      }
+      end
     end
 
     line_items

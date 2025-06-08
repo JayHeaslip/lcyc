@@ -124,5 +124,6 @@ Rails.application.routes.draw do
   get "summary_report", to: "reports#summary"
   get "history_report", to: "reports#history"
   get "moorings_report", to: "reports#moorings"
+  get "associates_report", to: "reports#associates"
   get "shrink_image/:id", to: "image#shrink", as: "shrink"
 end

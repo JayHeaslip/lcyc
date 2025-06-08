@@ -91,7 +91,8 @@
     </thead>
     <tbody>
       <% for person in @membership.people.sort %>
-      <tr>
+      <% hidden = person.MemberType == "Child" && ((Time.now.year - person&.BirthYear) > 23) %>
+      <tr style="<%= hidden ? 'display:none' : '' %>">
 	<td><%= person.FirstName %></td>
 	<td><%= person.LastName %></td>
 	<td><%= person.MemberType %></td>

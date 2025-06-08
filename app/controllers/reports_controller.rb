@@ -16,6 +16,22 @@ class ReportsController < ApplicationController
     send_data(Person.email_list_to_csv, type: mime_type, filename: filename)
   end
 
+  # list associate memebrs that are require to go active next year
+  def associates
+    @m = Membership.where(Status: "Associate"). order(:LastName)
+    @list = []
+    @m.each do |m|
+      member = m.people.where(MemberType: "Member").first
+      partner = m.people.where(MemberType: "Partner").first
+      member_birthyear = member.BirthYear if member.BirthYear
+      partner_birthyear = partner.BirthYear if partner&.BirthYear
+
+      active_year = m.active_year
+      @list << [ m.MailingName, member.EmailAddress, m.MemberSince, member_birthyear, partner_birthyear, active_year ]
+      @list = @list.sort { |a, b| a[5] <=> b[5] }
+    end
+  end
+
   def history
     @m = Membership.all
     @categories = Hash.new { |h, k| h[k] = Hash.new { |h, k| h[k] = 0 } }

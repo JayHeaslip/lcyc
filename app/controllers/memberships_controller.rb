@@ -172,6 +172,7 @@ class MembershipsController < ApplicationController
   end
 
   def download_spreadsheet
+    Membership.reset_flash_message
     export_csv(params[:spreadsheet])
   end
 
@@ -255,15 +256,20 @@ class MembershipsController < ApplicationController
     filename += ".csv"
 
     content = if type.start_with?("Member Card")
-      Person.to_csv
+                Person.to_csv
     elsif type.start_with?("Resigned")
-      Person.resigned_to_csv
+                Person.resigned_to_csv
     elsif type.start_with?("Log Fleet")
-      Boat.to_csv
-    else
-      Membership.to_csv(type)
+                Boat.to_csv
+    else # billing
+                Membership.to_csv(type)
     end
-    send_data(content, type: mime_type, filename: filename)
+    if Membership.flash_message != ""
+      flash[:error] = "Error:\n #{Membership.flash_message}"
+      redirect_to spreadsheets_memberships_path
+    else
+      send_data(content, type: mime_type, filename: filename)
+    end
   end
 
   def filter_memberships(params)
@@ -303,16 +309,18 @@ class MembershipsController < ApplicationController
   end
 
   def set_back_path
-    session[:membership_referrer] = request.referrer unless request.referrer.match(/memberships\/\d+\/edit/)
-    if session[:membership_referrer].match(/memberships\/index/)
+    session[:membership_referrer] = request.referrer unless request.referrer&.match(/memberships\/\d+\/edit/)
+    if session[:membership_referrer]&.match(/memberships\/index/)
       @back_path = memberships_path(since: @since,
                                   operator: @operator,
                                   lastname: @lastname,
                                   status: @status,
                                   sort: @sort,
                                   direction: @direction)
-    else
+    elsif session[:membership_referrer]
       @back_path = session[:membership_referrer]
+    else
+      @back_path = root_path
     end
   end
 end

@@ -18,7 +18,7 @@
     </template>
     
     <% if @membership.errors.any? %>
-      <div class="row">
+      <div id="error_explanation">
 	<h3><%= @membership.errors.count %> errors prohibited this membership from being saved:</h3>
 	<ul>
 	  <% @membership.errors.full_messages.each do |message| %>

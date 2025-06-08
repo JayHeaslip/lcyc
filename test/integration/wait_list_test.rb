@@ -3,7 +3,7 @@ require "test_helper"
 class WaitListEntriesIntegrationTest < ActionDispatch::IntegrationTest
   setup do
     admin = users(:one)
-    login_as(admin, "passwor1")
+    login_as(admin, "aqswde12$$")
     @membership = memberships(:member1)
     @wl = wait_list_entries(:wl2)
     @badwl = wait_list_entries(:wl3)
