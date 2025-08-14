@@ -168,7 +168,7 @@ class MembershipsController < ApplicationController
 
   def spreadsheets
     @spreadsheet_options = [ "Billing", "Log Members", "Log Fleet",
-      "Log Partner Xref", "Member Cards/Workday Checklist", "Evite", "Resigned" ]
+      "Log Partner Xref", "Member Cards/Workday Checklist", "Evite", "Resigned", "Member List" ]
   end
 
   def download_spreadsheet
@@ -259,6 +259,8 @@ class MembershipsController < ApplicationController
                 Person.to_csv
     elsif type.start_with?("Resigned")
                 Person.resigned_to_csv
+    elsif type.start_with?("Member List")
+                Membership.list_to_csv
     elsif type.start_with?("Log Fleet")
                 Boat.to_csv
     else # billing

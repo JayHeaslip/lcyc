@@ -95,6 +95,18 @@ class Membership < ApplicationRecord
     nil
   end
 
+  def self.list_to_csv
+    members = self.members.includes(:people).order("LastName, MailingName")
+    CSV.generate(col_sep: ",") do |csv|
+      csv << %w[MailingName FirstName LastName Type Birthyear Cell Email MemberSince]
+      members.each do |m|
+        m.people.each do |p|
+          csv << [ m.MailingName, p.FirstName, p.LastName, p.MemberType, p.BirthYear, p.CellPhone, p.EmailAddress, m.MemberSince ]
+        end
+      end
+    end
+  end
+
   def ensure_people
     errors.add :base, "You must have a Member in the list of people"
   end
