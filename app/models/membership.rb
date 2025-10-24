@@ -358,7 +358,9 @@ class Membership < ApplicationRecord
     m_birthyear = member.BirthYear if member.BirthYear
     p_birthyear = partner.BirthYear if partner&.BirthYear
 
-    active_year_criteria = [ self.MemberSince + 5, m_birthyear + 40 ]
+    # note membersince+6 ensures that Associates get a full 5 years from the date
+    # they became active (per the bylaws) because we bill yearly but track active date by the day
+    active_year_criteria = [ self.MemberSince + 6, m_birthyear + 40 ]
     active_year_criteria.push(p_birthyear + 40) if p_birthyear
     active_year_criteria.min
   end
