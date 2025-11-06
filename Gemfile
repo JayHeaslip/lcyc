@@ -1,7 +1,7 @@
 source "https://rubygems.org"
-ruby "3.3.5"
+ruby "3.4.7"
 
-gem "rails", "~> 7.2.1"
+gem "rails", "~> 8.1.1"
 gem "sprockets-rails", require: "sprockets/railtie"
 gem "google-cloud-storage"
 
