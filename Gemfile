@@ -2,7 +2,6 @@ source "https://rubygems.org"
 ruby "3.4.7"
 
 gem "rails", "~> 8.1.1"
-gem "sprockets-rails", require: "sprockets/railtie"
 gem "google-cloud-storage"
 
 # used to generate labels
@@ -19,6 +18,7 @@ gem "bcrypt", "~> 3.1.7"
 gem "delayed_job"
 gem "delayed_job_active_record"
 gem "daemons"
+gem "benchmark"
 
 # for dreamhost
 gem "mysql2"
