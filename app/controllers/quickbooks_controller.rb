@@ -106,8 +106,8 @@ class QuickbooksController < ApplicationController
       flash[:alert] = errors.join("\n") if errors.any?
     else
       flash[:alert] = "Please connect to quickbooks."
+      redirect_to root_url
     end
-    redirect_to root_url
     # :nocov:
   end
 
@@ -137,6 +137,7 @@ class QuickbooksController < ApplicationController
     total_invoices_created = 0
     failed_customers = []
     batch_errors = []
+    Membership.reset_flash_message
     
     begin
       members.each do |membership|  # Uses batch loading to avoid N+1 and memory issues
@@ -148,7 +149,7 @@ class QuickbooksController < ApplicationController
         
         # Step 2: Build invoice
         invoice = build_invoice(membership, customer_id, params[:test])
-        
+
         # Step 3: Add to current batch
         payload[:BatchItemRequest] << {
           bId: "bid#{batch_id_counter}",
@@ -176,16 +177,21 @@ class QuickbooksController < ApplicationController
       
       # Final success message
       flash[:notice] = "Successfully created #{total_invoices_created} #{'invoice'.pluralize(total_invoices_created)}."
+
+      flash[:error] = Membership.flash_message if Membership.flash_message != ""
       
       if batch_errors.any?
-        flash[:alert] = "Some invoices failed to create: #{batch_errors.join(' ')}"
+        alerts = ["Some invoices failed to create: #{batch_errors.size} had errors, check the logs"]
+        logger.error batch_errors
       end
 
       if failed_customers.any?
-        flash[:alert] = [flash[:alert],
-                         "Warning: Skipped #{failed_customers.size} members because their QuickBooks customer was not found: " + failed_customers.map(&:first).join(', ')]
+        alerts ||= []
+        alerts << "Warning: Skipped #{failed_customers.size} members because their QuickBooks customer was not found, check the logs"
+        logger.error failed_customers
       end
-    
+      flash[:alerts] = alerts.join("\n") if alerts
+                                                                                                                                      
       redirect_to root_url
       # :nocov:
     end
@@ -216,7 +222,6 @@ class QuickbooksController < ApplicationController
       DueDate: "#{Time.now.year}-12-31",
       BillEmail: { Address: membership.primary_email },
       BillEmailCc: { Address: membership.cc_email },
-      DueDate: "#{Time.now.year}-12-31",
     }
     invoice["Line"] = generate_line_items(membership, params[:test])
     invoice
@@ -333,107 +338,102 @@ class QuickbooksController < ApplicationController
 
   def generate_line_items(m, test)
     # :nocov:
-    Membership.reset_flash_message
     dues = Membership.dues(m) || 0
-    if Membership.flash_message != ""
-      flash[:error] = "Error:\n #{Membership.flash_message}"
-    else
-      mooring_fee = m.calculate_mooring_fee
-      mooring_replacement_fee = m.calculate_mooring_replacement_fee
-      drysail_fee = m.calculate_drysail_fee
-      initiation_due = m.calculate_initiation_installment
-      docks_assessment = m.calculate_docks_assessment
-
-      # need to query Items to get value & name (Id & Name)
-      line_items = []
-      if dues != 0
-        dues = 5 if test
-        dues_value = @api.get(:item, [ "Name", "Dues" ])["Id"]
-        line_items << {
-          Amount: dues,
-          DetailType: "SalesItemLineDetail",
-          SalesItemLineDetail: {
-            ItemRef: {
-              value: dues_value,
-              name: "Dues"
-            }
+    line_items = []
+    mooring_fee = m.calculate_mooring_fee
+    mooring_replacement_fee = m.calculate_mooring_replacement_fee
+    drysail_fee = m.calculate_drysail_fee
+    initiation_due = m.calculate_initiation_installment
+    docks_assessment = m.calculate_docks_assessment
+    
+    # need to query Items to get value & name (Id & Name)
+    if dues != 0
+      dues = 5 if test
+      dues_value = @api.get(:item, [ "Name", "Dues" ])["Id"]
+      line_items << {
+        Amount: dues,
+        DetailType: "SalesItemLineDetail",
+        SalesItemLineDetail: {
+          ItemRef: {
+            value: dues_value,
+            name: "Dues"
           }
         }
-      end
-      if mooring_fee != 0
-        mooring_fee = 6 if test
-        mooring_fee_value = @api.get(:item, [ "Name", "Mooring Fee" ])["Id"]
-        line_items << {
-          Amount: mooring_fee,
-          Description: "Mooring ##{m.mooring&.id}",
-          DetailType: "SalesItemLineDetail",
-          SalesItemLineDetail: {
-            ItemRef: {
-              value: mooring_fee_value,
-              name: "Mooring Fee"
-            }
-          }
-        }
-      end
-      if mooring_replacement_fee != 0
-        mooring_replacement_fee = 7 if test
-        mooring_replacement_fee_value = @api.get(:item, [ "Name", "Mooring Replacement Fee" ])["Id"]
-        line_items << {
-          Amount: mooring_replacement_fee,
-          Description: "Mooring ##{m.mooring&.id}",
-          DetailType: "SalesItemLineDetail",
-          SalesItemLineDetail: {
-            ItemRef: {
-              value: mooring_replacement_fee_value,
-              name: "Mooring Replacement Fee"
-            }
-          }
-        }
-      end
-      if drysail_fee != 0
-        drysail_fee = 8 if test
-        drysail_value = @api.get(:item, [ "Name", "Drysail Fee" ])["Id"]
-        line_items << {
-          Amount: drysail_fee,
-          DetailType: "SalesItemLineDetail",
-          SalesItemLineDetail: {
-            ItemRef: {
-              value: drysail_value,
-              name: "Drysail Fee"
-            }
-          }
-        }
-      end
-      if initiation_due != 0
-        initiation_due = 9 if test
-        initiation_value = @api.get(:item, [ "Name", "Initiation Installment" ])["Id"]
-        line_items << {
-          Amount: initiation_due,
-          DetailType: "SalesItemLineDetail",
-          SalesItemLineDetail: {
-            ItemRef: {
-              value: initiation_value,
-              name: "Initiation Installment"
-            }
-          }
-        }
-      end
-
-      if docks_assessment != 0
-        docks_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
-        line_items << {
-          Amount: docks_assessment,
-          DetailType: "SalesItemLineDetail",
-          SalesItemLineDetail: {
-            ItemRef: {
-              value: docks_assessment_value,
-              name: "Docks Assessment"
-            }
-          }
-        }
-      end
+      }
     end
-
+    if mooring_fee != 0
+      mooring_fee = 6 if test
+      mooring_fee_value = @api.get(:item, [ "Name", "Mooring Fee" ])["Id"]
+      line_items << {
+        Amount: mooring_fee,
+        Description: "Mooring ##{m.mooring&.id}",
+        DetailType: "SalesItemLineDetail",
+        SalesItemLineDetail: {
+          ItemRef: {
+            value: mooring_fee_value,
+            name: "Mooring Fee"
+          }
+        }
+      }
+    end
+    if mooring_replacement_fee != 0
+      mooring_replacement_fee = 7 if test
+      mooring_replacement_fee_value = @api.get(:item, [ "Name", "Mooring Replacement Fee" ])["Id"]
+      line_items << {
+        Amount: mooring_replacement_fee,
+        Description: "Mooring ##{m.mooring&.id}",
+        DetailType: "SalesItemLineDetail",
+        SalesItemLineDetail: {
+          ItemRef: {
+            value: mooring_replacement_fee_value,
+            name: "Mooring Replacement Fee"
+          }
+        }
+      }
+    end
+    if drysail_fee != 0
+      drysail_fee = 8 if test
+      drysail_value = @api.get(:item, [ "Name", "Drysail Fee" ])["Id"]
+      line_items << {
+        Amount: drysail_fee,
+        DetailType: "SalesItemLineDetail",
+        SalesItemLineDetail: {
+          ItemRef: {
+            value: drysail_value,
+            name: "Drysail Fee"
+          }
+        }
+      }
+    end
+    if initiation_due != 0
+      initiation_due = 9 if test
+      initiation_value = @api.get(:item, [ "Name", "Initiation Installment" ])["Id"]
+      line_items << {
+        Amount: initiation_due,
+        DetailType: "SalesItemLineDetail",
+        SalesItemLineDetail: {
+          ItemRef: {
+            value: initiation_value,
+            name: "Initiation Installment"
+          }
+        }
+      }
+    end
+    
+    if docks_assessment != 0
+      docks_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
+      line_items << {
+        Amount: docks_assessment,
+        DetailType: "SalesItemLineDetail",
+        SalesItemLineDetail: {
+          ItemRef: {
+            value: docks_assessment_value,
+            name: "Docks Assessment"
+          }
+        }
+      }
+    end
+    
     line_items
     # :nocov:
   end
