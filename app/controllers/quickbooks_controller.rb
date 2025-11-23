@@ -17,14 +17,14 @@ class QuickbooksController < ApplicationController
       m.save if @update
     end
   end
-  
+
   def connect
     session[:state] = SecureRandom.uuid
     session[:qb_oauth_processed] = false
     client = oauth2_client
     redirect_to client.authorization_uri(scope: "com.intuit.quickbooks.accounting", state: session[:state]), allow_other_host: true
   end
-  
+
   def new
     # :nocov:
     if params[:code].present?
@@ -67,7 +67,7 @@ class QuickbooksController < ApplicationController
       members.each do |m|
         @existing_qbo_members[m.MailingName] = false
       end
-      
+
       # for each membership, update the data in QBO
       qb_members.each do |qbm|
         display_name = qbm["DisplayName"]
@@ -76,7 +76,7 @@ class QuickbooksController < ApplicationController
         m = Membership.accepted.find_by_MailingName(display_name) if m.nil?
         update_member(qbm, m, display_name)
       end
-      
+
       # add new members
       count = 0
       errors = []
@@ -121,32 +121,32 @@ class QuickbooksController < ApplicationController
       flash[:alert] = "Please connect to QuickBooks."
       return redirect_to invoices_quickbooks_path
     end
-    
+
     QboApi.production = (Rails.env == "production")
     QboApi.minor_version = 75
     @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
-    
+
     members = if params[:test]
-                [Membership.find(64), Membership.find(345)]
-              else
+                [ Membership.find(64), Membership.find(345) ]
+    else
                 Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
-              end
-    
+    end
+
     payload = { "BatchItemRequest": [] }
     batch_id_counter = 1
     total_invoices_created = 0
     failed_customers = []
     batch_errors = []
     Membership.reset_flash_message
-    
+
     begin
       members.each do |membership|  # Uses batch loading to avoid N+1 and memory issues
         logger.info "Processing invoice for: #{membership.MailingName}"
-        
+
         # Step 1: Find or handle missing QuickBooks customer
         customer_id = find_or_log_customer_id(membership, failed_customers)
         next unless customer_id  # Skip if customer not found in QBO
-        
+
         # Step 2: Build invoice
         invoice = build_invoice(membership, customer_id, params[:test])
 
@@ -156,9 +156,9 @@ class QuickbooksController < ApplicationController
           operation: "create",
           Invoice: invoice
         }
-        
+
         batch_id_counter += 1
-        
+
         # Step 4: Send batch when we hit 30 items (QBO batch limit is 30)
         if payload[:BatchItemRequest].size == 30
           result = send_batch_and_reset!(payload)
@@ -167,21 +167,21 @@ class QuickbooksController < ApplicationController
           payload[:BatchItemRequest] = []  # Reset for next batch
         end
       end
-      
+
       # Step 5: Send any remaining invoices in the final batch
       if payload[:BatchItemRequest].any?
         result = send_batch_and_reset!(payload)
         total_invoices_created += result[:successful]
         batch_errors.concat(result[:errors])
       end
-      
+
       # Final success message
       flash[:notice] = "Successfully created #{total_invoices_created} #{'invoice'.pluralize(total_invoices_created)}."
 
       flash[:error] = Membership.flash_message if Membership.flash_message != ""
-      
+
       if batch_errors.any?
-        alerts = ["Some invoices failed to create: #{batch_errors.size} had errors, check the logs"]
+        alerts = [ "Some invoices failed to create: #{batch_errors.size} had errors, check the logs" ]
         logger.error batch_errors
       end
 
@@ -191,7 +191,7 @@ class QuickbooksController < ApplicationController
         logger.error failed_customers
       end
       flash[:alerts] = alerts.join("\n") if alerts
-                                                                                                                                      
+
       redirect_to root_url
       # :nocov:
     end
@@ -202,59 +202,59 @@ class QuickbooksController < ApplicationController
   def find_or_log_customer_id(membership, failed_customers)
     display_name = membership.MailingName
     begin
-      response = @api.get(:customer, ["DisplayName", display_name])
+      response = @api.get(:customer, [ "DisplayName", display_name ])
       response["Id"]
     rescue QboApi::NotFound
-      failed_customers << [display_name, membership.id]
+      failed_customers << [ display_name, membership.id ]
       logger.warn "Customer not found in QuickBooks: #{display_name} (Membership ##{membership.id})"
       nil
     rescue QboApi::BadRequest => e
-      failed_customers << [display_name, membership.id]
+      failed_customers << [ display_name, membership.id ]
       logger.warn "Bad request for customer #{display_name}: #{e.message}"
       nil
     end
   end
-  
+
   def build_invoice(membership, customer_id, test_mode)
     invoice = {
       CustomerRef: { value: customer_id },
       AllowOnlineACHPayment: true,
       DueDate: "#{Time.now.year}-12-31",
       BillEmail: { Address: membership.primary_email },
-      BillEmailCc: { Address: membership.cc_email },
+      BillEmailCc: { Address: membership.cc_email }
     }
     invoice["Line"] = generate_line_items(membership, params[:test])
     invoice
   end
-  
+
   def send_batch_and_reset!(payload)
     return { successful: 0, errors: [] } if payload[:BatchItemRequest].empty?
-    
+
     begin
       response = @api.batch(payload)
       logger.info "Batch response: #{response.inspect}"
-      
+
       batch_responses = response["BatchItemResponse"]
-      
+
       successful = batch_responses.count { |item| item["Invoice"] && !item["Fault"] }
-      
+
       errors = batch_responses.map do |item|
         next unless item["Fault"]
-        
+
         fault = item["Fault"]
         error_msg = fault["Message"] || "Unknown error"
         detail    = fault.dig("Detail") || ""
         "Failed (#{item['bId']}): #{error_msg}#{detail.present? ? " - #{detail}" : ""}"
-        end.compact 
+        end.compact
 
       { successful: successful, errors: errors }
 
     rescue QboApi::Error => e
      logger.error "Batch failed entirely: #{e.message}"
-     { successful: 0, errors: ["Batch failed: #{e.message}"] }
+     { successful: 0, errors: [ "Batch failed: #{e.message}" ] }
     end
   end
-                                                                                    
+
   def strip(str)
     (str != str.strip) ? @update = true && str.strip : str
   end
@@ -345,7 +345,7 @@ class QuickbooksController < ApplicationController
     drysail_fee = m.calculate_drysail_fee
     initiation_due = m.calculate_initiation_installment
     docks_assessment = m.calculate_docks_assessment
-    
+
     # need to query Items to get value & name (Id & Name)
     if dues != 0
       dues = 5 if test
@@ -419,7 +419,7 @@ class QuickbooksController < ApplicationController
         }
       }
     end
-    
+
     if docks_assessment != 0
       docks_assessment_value = @api.get(:item, [ "Name", "Docks Assessment" ])["Id"]
       line_items << {
@@ -433,7 +433,7 @@ class QuickbooksController < ApplicationController
         }
       }
     end
-    
+
     line_items
     # :nocov:
   end
