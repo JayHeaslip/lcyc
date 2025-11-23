@@ -17,31 +17,39 @@ class QuickbooksController < ApplicationController
       m.save if @update
     end
   end
-
+  
   def connect
     session[:state] = SecureRandom.uuid
-
+    session[:qb_oauth_processed] = false
     client = oauth2_client
     redirect_to client.authorization_uri(scope: "com.intuit.quickbooks.accounting", state: session[:state]), allow_other_host: true
   end
-
+  
   def new
     # :nocov:
-    state = params[:state]
-    error = params[:error]
-    code = params[:code]
-    if state == session[:state]
-      client = oauth2_client
-      client.authorization_code = code
-      if (resp = client.access_token!)
-        session[:refresh_token] = resp.refresh_token
-        session[:access_token] = resp.access_token
-        session[:realm_id] = params[:realmId]
-      else
-        "Something went wrong. Try the process again"
+    if params[:code].present?
+      if session[:qb_oauth_processed]
+        flash[:notice] = "QuickBooks is already connected."
+        return redirect_to root_path
       end
-    else
-      "Error: #{error}"
+
+      state = params[:state]
+      error = params[:error]
+      code = params[:code]
+      if state == session[:state]
+        client = oauth2_client
+        client.authorization_code = code
+        if (resp = client.access_token!)
+          session[:refresh_token] = resp.refresh_token
+          session[:access_token] = resp.access_token
+          session[:realm_id] = params[:realmId]
+          session[:qb_oauth_processed] = true
+        else
+          "Something went wrong. Try the process again"
+        end
+      else
+        "Error: #{error}"
+      end
     end
     # :nocov:
   end
@@ -59,7 +67,7 @@ class QuickbooksController < ApplicationController
       members.each do |m|
         @existing_qbo_members[m.MailingName] = false
       end
-
+      
       # for each membership, update the data in QBO
       qb_members.each do |qbm|
         display_name = qbm["DisplayName"]
@@ -68,25 +76,26 @@ class QuickbooksController < ApplicationController
         m = Membership.accepted.find_by_MailingName(display_name) if m.nil?
         update_member(qbm, m, display_name)
       end
-
+      
       # add new members
       count = 0
+      errors = []
       @existing_qbo_members.each do |k, v|
         unless v # create the member in QBO
           m = Membership.find_by_MailingName(k)
           member = {
             DisplayName: k,
             BillAddr: { Line1: m.StreetAddress,
-                       City: m.City,
-                       CountrySubDivisionCode: m.State,
-                       PostalCode: m.Zip },
+                        City: m.City,
+                        CountrySubDivisionCode: m.State,
+                        PostalCode: m.Zip },
             PrimaryEmailAddr: { Address: m.primary_email }
           }
           logger.info "Creating #{k}"
           begin
             response = @api.create(:customer, payload: member)
           rescue QboApi::BadRequest => e
-            flash[:alert] += e.message
+            errors << e.message
           end
           count += 1
           if (count % 20) == 0
@@ -94,10 +103,11 @@ class QuickbooksController < ApplicationController
           end
         end
       end
+      flash[:alert] = errors.join("\n") if errors.any?
     else
       flash[:alert] = "Please connect to quickbooks."
-      redirect_to root_url
     end
+    redirect_to root_url
     # :nocov:
   end
 
@@ -107,58 +117,139 @@ class QuickbooksController < ApplicationController
 
   def generate_invoices
     # :nocov:
-    if (access_token = session[:access_token])
-      QboApi.production = (Rails.env == "production")
-      QboApi.minor_version = 75
-      @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
-      members = if params[:test]
-        [ Membership.find(64), Membership.find(345) ]
-      else
-        Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
-      end
-      total = 0
-      count = 1
-      payload = { "BatchItemRequest": [] }
-      members.each do |m|
-        logger.info "mailing name: #{m.MailingName}"
-        begin
-          qbm = @api.get(:customer, [ "DisplayName", m.MailingName ])
-        rescue QboApi::BadRequest => e
-          flash[:alert] += e.message
-        end
-        invoice = {
-          CustomerRef: { value: qbm["Id"] },
-          AllowOnlineACHPayment: true,
-          BillEmail: { Address: m.primary_email },
-          BillEmailCc: { Address: m.cc_email },
-          DueDate: "#{Time.now.year}-12-31"
-        }
-        invoice["Line"] = generate_line_items(m, params[:test])
-        batch_item = { "bId": "bid#{count}", "operation": "create",
-                      "Invoice": invoice }
-        payload[:BatchItemRequest] << batch_item
-        count += 1
-        if count == 31
-          response = @api.batch(payload)
-          logger.info "response #{response}"
-          payload = { "BatchItemRequest": [] }
-          total = total + 30
-          count = 1
-        end
-      end
-      response = @api.batch(payload)
-      logger.info "response #{response}"
-      flash[:notice] = "Created #{total + (count-1)} invoices.\n#{Membership.flash_message}"
-      redirect_to root_url
-    else
-      flash[:alert] = "Please connect to quickbooks."
-      redirect_to invoices_quickbooks_path
+    if (access_token = session[:access_token]).blank?
+      flash[:alert] = "Please connect to QuickBooks."
+      return redirect_to invoices_quickbooks_path
     end
-    # :nocov:
+    
+    QboApi.production = (Rails.env == "production")
+    QboApi.minor_version = 75
+    @api = QboApi.new(access_token: access_token, realm_id: session[:realm_id])
+    
+    members = if params[:test]
+                [Membership.find(64), Membership.find(345)]
+              else
+                Membership.members.where('Status NOT IN ("Honorary", "Life")').includes(:people)
+              end
+    
+    payload = { "BatchItemRequest": [] }
+    batch_id_counter = 1
+    total_invoices_created = 0
+    failed_customers = []
+    batch_errors = []
+    
+    begin
+      members.each do |membership|  # Uses batch loading to avoid N+1 and memory issues
+        logger.info "Processing invoice for: #{membership.MailingName}"
+        
+        # Step 1: Find or handle missing QuickBooks customer
+        customer_id = find_or_log_customer_id(membership, failed_customers)
+        next unless customer_id  # Skip if customer not found in QBO
+        
+        # Step 2: Build invoice
+        invoice = build_invoice(membership, customer_id, params[:test])
+        
+        # Step 3: Add to current batch
+        payload[:BatchItemRequest] << {
+          bId: "bid#{batch_id_counter}",
+          operation: "create",
+          Invoice: invoice
+        }
+        
+        batch_id_counter += 1
+        
+        # Step 4: Send batch when we hit 30 items (QBO batch limit is 30)
+        if payload[:BatchItemRequest].size == 30
+          result = send_batch_and_reset!(payload)
+          total_invoices_created += result[:successful]
+          batch_errors.concat(result[:errors])
+          payload[:BatchItemRequest] = []  # Reset for next batch
+        end
+      end
+      
+      # Step 5: Send any remaining invoices in the final batch
+      if payload[:BatchItemRequest].any?
+        result = send_batch_and_reset!(payload)
+        total_invoices_created += result[:successful]
+        batch_errors.concat(result[:errors])
+      end
+      
+      # Final success message
+      flash[:notice] = "Successfully created #{total_invoices_created} #{'invoice'.pluralize(total_invoices_created)}."
+      
+      if batch_errors.any?
+        flash[:alert] = "Some invoices failed to create: #{batch_errors.join(' ')}"
+      end
+
+      if failed_customers.any?
+        flash[:alert] = [flash[:alert],
+                         "Warning: Skipped #{failed_customers.size} members because their QuickBooks customer was not found: " + failed_customers.map(&:first).join(', ')]
+      end
+    
+      redirect_to root_url
+      # :nocov:
+    end
   end
 
   private
 
+  def find_or_log_customer_id(membership, failed_customers)
+    display_name = membership.MailingName
+    begin
+      response = @api.get(:customer, ["DisplayName", display_name])
+      response["Id"]
+    rescue QboApi::NotFound
+      failed_customers << [display_name, membership.id]
+      logger.warn "Customer not found in QuickBooks: #{display_name} (Membership ##{membership.id})"
+      nil
+    rescue QboApi::BadRequest => e
+      failed_customers << [display_name, membership.id]
+      logger.warn "Bad request for customer #{display_name}: #{e.message}"
+      nil
+    end
+  end
+  
+  def build_invoice(membership, customer_id, test_mode)
+    invoice = {
+      CustomerRef: { value: customer_id },
+      AllowOnlineACHPayment: true,
+      DueDate: "#{Time.now.year}-12-31",
+      BillEmail: { Address: membership.primary_email },
+      BillEmailCc: { Address: membership.cc_email },
+      DueDate: "#{Time.now.year}-12-31",
+    }
+    invoice["Line"] = generate_line_items(membership, params[:test])
+    invoice
+  end
+  
+  def send_batch_and_reset!(payload)
+    return { successful: 0, errors: [] } if payload[:BatchItemRequest].empty?
+    
+    begin
+      response = @api.batch(payload)
+      logger.info "Batch response: #{response.inspect}"
+      
+      batch_responses = response["BatchItemResponse"]
+      
+      successful = batch_responses.count { |item| item["Invoice"] && !item["Fault"] }
+      
+      errors = batch_responses.map do |item|
+        next unless item["Fault"]
+        
+        fault = item["Fault"]
+        error_msg = fault["Message"] || "Unknown error"
+        detail    = fault.dig("Detail") || ""
+        "Failed (#{item['bId']}): #{error_msg}#{detail.present? ? " - #{detail}" : ""}"
+        end.compact 
+
+      { successful: successful, errors: errors }
+
+    rescue QboApi::Error => e
+     logger.error "Batch failed entirely: #{e.message}"
+     { successful: 0, errors: ["Batch failed: #{e.message}"] }
+    end
+  end
+                                                                                    
   def strip(str)
     (str != str.strip) ? @update = true && str.strip : str
   end
@@ -244,9 +335,8 @@ class QuickbooksController < ApplicationController
     # :nocov:
     Membership.reset_flash_message
     dues = Membership.dues(m) || 0
-    if Membership.flash_messages != ""
+    if Membership.flash_message != ""
       flash[:error] = "Error:\n #{Membership.flash_message}"
-      redirect_to invoices_quickbooks_path
     else
       mooring_fee = m.calculate_mooring_fee
       mooring_replacement_fee = m.calculate_mooring_replacement_fee
