@@ -43,7 +43,7 @@ gem "sassc-rails"
 # for QB interface
 gem "qbo_api", "~>3.0"
 gem "rack-oauth2"
-gem "rack"
+gem "rack", ">= 3.1.18"
 
 gem "matrix"
 gem "csv"
