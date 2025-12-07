@@ -49,6 +49,7 @@ class ReportsController < ApplicationController
         month_year = date.strftime("%Y")  # %Y-%m for year & month
         m.Status = "Resigned" if m.Status == "Deceased"
         @categories[m.Status][month_year] += 1
+        #logger.info "#{m.MailingName}, #{m.Status}, #{month_year}, #{m.resignation_date}, #{m.change_status_date}, #{m.updated_at}"
       end
     end
     @dates = []
