@@ -2,10 +2,6 @@ require "csv"
 
 class Membership < ApplicationRecord
   @@current_year = Time.now.year
-  @@dues = { Active: 1100, Senior: 367, Inactive: 50, Associate: 550, Life: 0 }
-  @@mooring_fee = 85
-  @@mooring_replacement_fee = 120
-  @@drysail_fee = 100
 
   before_destroy :destroy_boats
   has_many :people, foreign_key: "MembershipID", dependent: :destroy
@@ -123,7 +119,8 @@ class Membership < ApplicationRecord
 
   def self.dues(m)
     m.associate_check
-    @@dues[m.Status.to_sym] || 0
+    dues = Hash[Active: Fee.instance.active, Senior: Fee.instance.senior, Inactive: Fee.instance.inactive, Associate: Fee.instance.associate]
+    dues[m.Status.to_sym] || 0
   end
 
   def self.to_csv(type)
@@ -255,20 +252,22 @@ class Membership < ApplicationRecord
 
   def calculate_mooring_fee
     if mooring && !skip_mooring
-      @@mooring_fee
+      Fee.instance.mooring_fee
     else
       0
     end
   end
 
   def calculate_docks_assessment
-    if self.Status == "Active"
-      125
-    elsif self.Status == "Associate"
-      62
-    else
-      0
+    fee = 0
+    unless Fee.instance.skip_docks_assessment
+      if self.Status == "Active"
+        fee = 125
+      elsif self.Status == "Associate"
+        fee =62
+      end
     end
+    fee
   end
 
   def primary_email
@@ -291,7 +290,7 @@ class Membership < ApplicationRecord
 
   def calculate_mooring_replacement_fee
     if mooring && !skip_mooring
-      @@mooring_replacement_fee
+      Fee.instance.mooring_replacement_fee
     else
       0
     end
@@ -299,7 +298,7 @@ class Membership < ApplicationRecord
 
   def calculate_drysail_fee
     if drysail
-      @@drysail_fee
+      Fee.instance.drysail_fee
     else
       0
     end

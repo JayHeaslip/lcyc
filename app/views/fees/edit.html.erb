@@ -1,0 +1,73 @@
+<%= form_for @fee do |f| %>
+  <% if @fee.errors.any? %>
+  <div id="error_explanation">
+    <h3><%= pluralize(@fee.errors.count, "error") %>
+      prohibited these fees from being saved:</h3>
+    
+    <ul>
+      <% @fee.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+
+  <div>
+    <h2>Fees</h2>
+    <div class="row align-items-center">
+      <p>Dues:</p>
+      <div class="col-sm-2">
+	<span class="has-float-label">
+	  <%= f.text_field :active, id: :active, class: "form-control", placeholder: " " %>
+	  <label for="active">Active</label>
+	</span>
+      </div>
+      <div class="col-sm-2">
+	<span class="has-float-label">
+	  <%= f.text_field :associate, id: :associate, class: "form-control", placeholder: " " %>
+	  <label for="active">Associate</label>
+	</span>
+      </div>
+      <div class="col-sm-2">
+	<span class="has-float-label">
+	  <%= f.text_field :inactive, id: :inactive, class: "form-control", placeholder: " " %>
+	  <label for="active">Inactive</label>
+	</span>
+      </div>
+      <div class="col-sm-2">
+	<span class="has-float-label">
+	  <%= f.text_field :senior, id: :senior, class: "form-control", placeholder: " " %>
+	  <label for="active">Senior</label>
+	</span>
+      </div>
+    </div>
+    <br/>
+    <div class="col-sm-2">
+      <span class="has-float-label">
+	<%= f.text_field :mooring_fee, id: :mooring_fee, class: "form-control", placeholder: " " %>
+	<label for="active">Mooring Fee</label>
+      </span>
+    </div>
+    <br/>
+    <div class="col-sm-2">
+      <span class="has-float-label">
+	<%= f.text_field :mooring_replacement_fee, id: :mooring_replacement_fee, class: "form-control", placeholder: " " %>
+	<label for="active">Mooring Replacement Fee</label>
+      </span>
+    </div>
+    <br/>
+    <div class="col-sm-2">
+      <span class="has-float-label">
+	<%= f.text_field :drysail_fee, id: :drysail_fee, class: "form-control", placeholder: " " %>
+	<label for="active">Drysail Fee</label>
+      </span>
+    </div>
+    <br/>
+    <%= f.label :skip_docks_assessment, "Skip Docks Assessment?" %>
+    <%= f.check_box :skip_docks_assessment %>
+  </div>
+  <br/>
+  <div class="col-sm-3">
+    <%= f.submit "Update", class: "btn btn-primary" %>
+  </div>
+<% end %>

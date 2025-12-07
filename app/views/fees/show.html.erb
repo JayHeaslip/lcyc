@@ -1,0 +1,21 @@
+<div>
+  <h3>Fees</h3>
+  <hr>
+  <table>
+    <tr>Dues:</tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;Active:</td><td style="text-align:right"><%= @fee.active %></td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;Associate:</td><td style="text-align:right"><%= @fee.associate %></td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;Inactive:</td><td style="text-align:right"><%= @fee.inactive %></td></tr>
+    <tr><td>&nbsp;&nbsp;&nbsp;Senior:</td><td style="text-align:right"><%= @fee.senior %></td></tr>
+    <tr><td>Mooring Fee:</td><td style="text-align:right"><%= @fee.mooring_fee %></td></tr>
+    <tr><td>Mooring Replacement Fee:</td><td style="text-align:right"><%= @fee.mooring_replacement_fee %></td></tr>
+    <tr><td>Drysail Fee:</td><td style="text-align:right"><%= @fee.drysail_fee %></td></tr>
+  </table>
+  <p></p>
+  <p>Docks Assessment is a $125 charge that was added in 2025 for 6 years, this should always be checked starting with billing for the 2031 season.</p>
+  <p>Skip Docks Assessment: <%= check_box_tag 'Skip Docks Assessment', '1', @fee.skip_docks_assessment, disabled: true%></p>
+  <p>
+    <%= link_to 'Edit Fees', edit_fee_path %>
+  </p>
+
+</div>

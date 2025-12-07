@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_11_06_164252) do
+ActiveRecord::Schema[8.1].define(version: 2025_12_07_134029) do
   create_table "action_text_rich_texts", charset: "utf8mb3", force: :cascade do |t|
     t.text "body", size: :long
     t.datetime "created_at", null: false
@@ -136,6 +136,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_11_06_164252) do
   create_table "drysails", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "membership_id"
     t.index ["membership_id"], name: "index_drysails_on_membership_id"
+  end
+
+  create_table "fees", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "active"
+    t.integer "associate"
+    t.integer "drysail_fee"
+    t.integer "inactive"
+    t.integer "mooring_fee"
+    t.integer "mooring_replacement_fee"
+    t.integer "senior"
+    t.boolean "skip_docks_assessment"
   end
 
   create_table "initiation_installments", charset: "utf8mb3", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
