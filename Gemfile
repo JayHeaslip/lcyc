@@ -23,7 +23,7 @@ gem "benchmark"
 # for dreamhost
 gem "mysql2"
 
-gem "puma", "~> 6.4"
+gem "puma"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"
 
