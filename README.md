@@ -3,7 +3,7 @@
 This site is for maintaining the membership database for LCYC.
 
 
-* Ruby version - 3.3.5
+* Ruby version - 3.4.7
 
 * To run the test suite: rails test, rails test:system
 
@@ -27,7 +27,6 @@ This site is for maintaining the membership database for LCYC.
   
        * git co production
        * git merge master
-       * check public/.htaccess --> PassengerAppEnv production
        * git ci (if needed)
        * git push origin
        * production uses the production branch
