@@ -1,8 +1,7 @@
 source "https://rubygems.org"
-ruby "3.3.5"
+ruby "3.4.7"
 
-gem "rails", "~> 7.2.1"
-gem "sprockets-rails", require: "sprockets/railtie"
+gem "rails", "~> 8.1.1"
 gem "google-cloud-storage"
 
 # used to generate labels
@@ -19,11 +18,12 @@ gem "bcrypt", "~> 3.1.7"
 gem "delayed_job"
 gem "delayed_job_active_record"
 gem "daemons"
+gem "benchmark"
 
 # for dreamhost
 gem "mysql2"
 
-gem "puma", "~> 6.4"
+gem "puma"
 # Bundle and transpile JavaScript [https://github.com/rails/jsbundling-rails]
 gem "jsbundling-rails"
 
@@ -43,7 +43,7 @@ gem "sassc-rails"
 # for QB interface
 gem "qbo_api", "~>3.0"
 gem "rack-oauth2"
-gem "rack"
+gem "rack", ">= 3.1.18"
 
 gem "matrix"
 gem "csv"
@@ -54,7 +54,6 @@ group :development, :test do
   # Adds support for Capybara system testing and selenium driver
   gem "capybara", "~> 3.26"
   gem "selenium-webdriver"
-  gem "webdrivers", require: false
   gem "simplecov"
   gem "standard"
   gem "rubocop-rails"

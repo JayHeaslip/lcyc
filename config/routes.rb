@@ -23,6 +23,8 @@ Rails.application.routes.draw do
   resources :confirmations, only: [ :create, :edit, :new ], param: :confirmation_token
   resources :passwords, only: [ :create, :edit, :new, :update ], param: :password_reset_token
 
+  resource :fee, only: [ :show, :edit, :update ]
+
   resources :quickbooks do
     collection do
       get :cleanup

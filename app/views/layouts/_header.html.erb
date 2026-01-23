@@ -65,6 +65,7 @@
 	<li class="nav-item dropdown">
 	  <a class="nav-link dropdown-toggle" href="#" id="navbarQBDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Quickbooks</a>
 	  <ul class="dropdown-menu" aria-labelledby="navbarQBDropdown">
+            <li><%= link_to "Fees", fee_path, class: "dropdown-item" %></li>
             <li><%= link_to "Cleanup", cleanup_quickbooks_path, class: "dropdown-item" %></li>
             <li><%= link_to "Connect", connect_quickbooks_path, class: "dropdown-item" %></li>
             <li><%= link_to "Update members", update_members_quickbooks_path, class: "dropdown-item" %></li>

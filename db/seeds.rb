@@ -18,4 +18,6 @@
 #  {id: 11},
 #  {id: 12}])
 
-LogInfoEmail.create([ { subject: "[LCYC] Log info verification", body: "Please review the following information. This will be used for your listing in the next LCYC log. If you need to make updates or corrections, please send an email to our Membership chair, Betsey Dempsey, at lcycsecretary@gmail.com." } ])
+#LogInfoEmail.create([ { subject: "[LCYC] Log info verification", body: "Please review the following information. This will be used for your listing in the next LCYC log. If you need to make updates or corrections, please send an email to our Membership chair, Betsey Dempsey, at lcycsecretary@gmail.com." } ])
+
+Fee.create!([ { id: 1, active: 1100, senior: 367, inactive: 50, associate: 550, mooring_fee: 85, mooring_replacement_fee: 120, drysail_fee: 100, skip_docks_assessment: false } ])

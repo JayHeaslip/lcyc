@@ -1,0 +1,9 @@
+fees1:
+  id: 1
+  active: 1100
+  senior: 367
+  inactive: 50
+  associate: 550
+  mooring_fee: 85
+  mooring_replacement_fee: 120
+  drysail_fee: 100
