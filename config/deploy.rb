@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock "~> 3.19.1"
+lock "~> 3.20.0"
 
 set :application, "lcyc"
 set :repo_url, "https://github.com/JayHeaslip/lcyc.git"
