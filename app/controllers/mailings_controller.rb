@@ -13,7 +13,7 @@ class MailingsController < ApplicationController
     @mailing = Mailing.find(params[:id])
     @test = true
     @filter_emails = false
-    @old_style = true if @mailing.content&.id.nil?
+    @old_style = false #true if @mailing.content&.id.nil?
   end
 
   def new
@@ -95,7 +95,7 @@ class MailingsController < ApplicationController
   def deliver_mail(people, mailing, host, filtered)
     people.each_with_index do |person, i|
       person.generate_email_hash if person.email_hash.nil?
-      MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver_later(wait_until: (i * 10).seconds.from_now)
+      MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver_later
     end
   end
 

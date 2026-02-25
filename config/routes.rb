@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   get "unsubscribe/:id", to: "unsubscribe#show"
   put "unsubscribe/:id", to: "unsubscribe#update"
 
+  mount MissionControl::Jobs::Engine => "/jobs"
+
   resources :users
 
   resources :confirmations, only: [ :create, :edit, :new ], param: :confirmation_token

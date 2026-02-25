@@ -74,3 +74,7 @@ group :development do
   gem "ed25519", "~> 1.2"
   gem "bcrypt_pbkdf", "~> 1.0"
 end
+
+gem "solid_queue", "~> 1.3"
+
+gem "mission_control-jobs", "~> 1.1"
