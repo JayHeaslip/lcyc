@@ -1,8 +1,6 @@
 class LogInfoEmailsController < ApplicationController
   include ActiveStorage::SetCurrent
 
-  before_action :check_delayed_job, only: [ :edit ]
-
   # initial email is initialized from db/seeds.rb
   def edit
     @log_info_email = LogInfoEmail.find(1)

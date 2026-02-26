@@ -2,7 +2,6 @@ class MailingsController < ApplicationController
   include ActiveStorage::SetCurrent
 
   skip_before_action :authenticate_user!, :check_authorization, only: [ :deliver_mail ]
-  before_action :check_delayed_job, only: [ :new, :show ]
 
   def index
     @mailings = Mailing.sorted

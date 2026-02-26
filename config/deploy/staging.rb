@@ -60,11 +60,13 @@ set :delayed_job_args, "-i 1"
 #     # password: "please use keys"
 #   }
 
-# only restart delayed_job for staging, production
+#after "deploy:starting", "solid_queue:quiet"
+
+# only restart solid_queue for staging, production
 after "deploy:publishing", "deploy:restart"
 namespace :deploy do
   task :restart do
     invoke "puma:restart"
-    invoke "delayed_job:restart"
+    #invoke "solid_queue:restart"
   end
 end

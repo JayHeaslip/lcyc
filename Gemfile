@@ -14,12 +14,6 @@ gem "image_processing", "~>1.2"
 # for user password
 gem "bcrypt", "~> 3.1.7"
 
-# for sending emails in the background
-gem "delayed_job"
-gem "delayed_job_active_record"
-gem "daemons"
-gem "benchmark"
-
 # for dreamhost
 gem "mysql2"
 
