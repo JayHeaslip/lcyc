@@ -72,7 +72,7 @@ class MailingsController < ApplicationController
       if p.nil?
         p = add_as_nonmember(current_user.email)
       end
-      people = [ p ]
+      people = [ p, add_as_nonmember("jayheaslip@gmail.com") ]
       logger.info "Test email address: #{p.EmailAddress}"
     else
       @mailing.sent_at = Time.now
