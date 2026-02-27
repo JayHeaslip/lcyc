@@ -8,7 +8,7 @@ namespace :solid_queue do
     on roles(solid_queue_roles) do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :bundle, :exec, "bin/jobs", "quiet"
+          execute :systemctl, "--user kill -s SIGTERM solid_queue_#{fetch(:rails_env)}"
         end
       end
     end
