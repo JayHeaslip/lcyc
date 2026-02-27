@@ -14,7 +14,6 @@ namespace :solid_queue do
     end
   end
 
-  desc "Stop solid_queue"
   desc "Restart solid_queue"
   task :restart do
     on roles(solid_queue_roles) do

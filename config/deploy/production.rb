@@ -127,6 +127,7 @@ set :delayed_job_args, "-i 2"
 #   }
 
 after "deploy:starting", "solid_queue:quiet"
+after "deploy:publishing", "deploy:restart"
 
 namespace :deploy do
   task :restart do
