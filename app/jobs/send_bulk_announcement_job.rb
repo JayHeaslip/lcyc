@@ -12,6 +12,7 @@ class SendBulkAnnouncementJob < ApplicationJob
 
         AnnouncementMailer.mailing(person.id, mailing_id, url_options, host)
           .deliver_now   # ← use deliver_now inside job
+        sleep 15
       rescue => e
         Rails.logger.error("Failed to send to person #{person_id}: #{e.message}")
       end
