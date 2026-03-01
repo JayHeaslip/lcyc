@@ -29,9 +29,8 @@ Rails.application.routes.draw do
 
   resources :quickbooks do
     collection do
-      get :cleanup
-      get :connect
-      get :update_members
+      get :connect             # This starts the OAuth flow
+      get :new, as: :callback  # This is where Intuit sends the user back
       get :invoices
       post :generate_invoices
     end

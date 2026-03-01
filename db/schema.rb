@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_07_134029) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_28_135245) do
   create_table "action_text_rich_texts", charset: "utf8mb3", force: :cascade do |t|
     t.text "body", size: :long
     t.datetime "created_at", null: false
@@ -138,7 +138,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_07_134029) do
     t.index ["membership_id"], name: "index_drysails_on_membership_id"
   end
 
-  create_table "fees", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "fees", charset: "utf8mb3", collation: "utf8mb3_unicode_ci", force: :cascade do |t|
     t.integer "active"
     t.integer "associate"
     t.integer "drysail_fee"
@@ -276,6 +276,16 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_07_134029) do
     t.index ["id"], name: "id1"
   end
 
+  create_table "quickbooks_configs", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.text "access_token"
+    t.datetime "access_token_expires_at"
+    t.datetime "created_at", null: false
+    t.string "realm_id"
+    t.text "refresh_token"
+    t.datetime "refresh_token_expires_at"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "rights", id: :integer, charset: "latin1", options: "ENGINE=InnoDB ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "action"
     t.string "controller"
@@ -315,6 +325,8 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_07_134029) do
     t.datetime "updated_at", precision: nil
   end
 
+  add_foreign_key "active_sessions", "users", on_delete: :cascade
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "initiation_installments", "memberships"
   add_foreign_key "memberships", "boats", column: "Boat", name: "memberships_ibfk_1", on_delete: :nullify
