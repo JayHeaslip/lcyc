@@ -63,14 +63,28 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "send mailing" do
-    post send_email_mailing_url(@mailing)
-    assert_enqueued_emails 12
+    assert_enqueued_jobs 1, only: SendBulkAnnouncementJob do  # ← key change
+      post send_email_mailing_url(@mailing)
+    end
+
+    # Optional: inspect the enqueued job's arguments if you want deeper assertions
+    enqueued_job = enqueued_jobs.last
+    assert_equal @mailing.id, enqueued_job[:args][0]  # mailing_id first
+    assert_equal 12, enqueued_job[:args][1].size      # person_ids array length matches your 12
+
     assert_redirected_to mailings_url
   end
 
   test "send filtered mailing" do
-    post send_email_mailing_url(@mailing), params: { filter_emails: true }
-    assert_enqueued_emails 1
+    assert_enqueued_jobs 1, only: SendBulkAnnouncementJob do  # ← key change
+      post send_email_mailing_url(@mailing), params: { filter_emails: true }
+    end
+
+    # Optional: inspect the enqueued job's arguments if you want deeper assertions
+    enqueued_job = enqueued_jobs.last
+    assert_equal @mailing.id, enqueued_job[:args][0]  # mailing_id first
+    assert_equal 1, enqueued_job[:args][1].size      # person_ids array length matches your 12
+
     assert_redirected_to mailings_url
   end
 

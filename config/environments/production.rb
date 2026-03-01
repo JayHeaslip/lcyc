@@ -108,7 +108,8 @@ Rails.application.configure do
     domain: "members.lcyc.info",
     user_name: "lcyc@members.lcyc.info",
     password: Rails.application.credentials.app_password,
-    authentication: "plain",
+    authentication: :plain,
+    open_timeout: 10,
     read_timeout: 90,
     enable_starttls_auto: true
   }

@@ -94,10 +94,20 @@ class MailingsController < ApplicationController
   end
 
   def deliver_mail(people, mailing, host, filtered)
-    people.each_with_index do |person, i|
+    people_ids = []
+    people.each do |person|
       person.generate_email_hash if person.email_hash.nil?
-      MailRobot.mailing(ActiveStorage::Current.url_options, person, mailing, host, filtered).deliver_later
+      if filtered
+        people_ids << person.id if person.select_email
+      else
+        people_ids << person.id
+      end
     end
+
+    url_options = { host: host, protocol: "https" }  #
+    SendBulkAnnouncementJob.perform_later(mailing.id,
+                                          people_ids,
+                                          url_options)
   end
 
   private
