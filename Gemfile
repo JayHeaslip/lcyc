@@ -50,6 +50,8 @@ group :development, :test do
   gem "selenium-webdriver"
   gem "simplecov"
   gem "standard"
+  gem "minitest"
+  gem "minitest-mock"
   gem "rubocop-rails"
   gem "rubocop-capybara"
   gem "rubocop-rails-omakase"
