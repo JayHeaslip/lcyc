@@ -1,5 +1,4 @@
 class LogInfoMailer < ApplicationMailer
-
   def mailing(membership_id, url_options)
     ActiveStorage::Current.url_options = url_options
 
@@ -15,7 +14,7 @@ class LogInfoMailer < ApplicationMailer
     @member = @membership.member_info
     @partner = @membership.partner_info[0].split("\t")
     @children = @membership.children_info
-    
+
     if @to
       mail(to: @to,
            cc: @cc,
@@ -32,7 +31,6 @@ class LogInfoMailer < ApplicationMailer
       to = cc
       cc = nil
     end
-    [to, cc]
+    [ to, cc ]
   end
-
 end

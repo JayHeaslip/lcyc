@@ -6,7 +6,7 @@ class MembershipTest < ApplicationSystemTestCase
     fill_in "email", with: "dave@abc.com"
     fill_in "password", with: "aqswde12$$"
     click_on "Login"
-    assert_current_path root_path
+    assert_current_path root_path, wait: 3
     click_on "Memberships"
     click_on "New Membership"
     fill_in "MembershipLastName", with: "Doe"

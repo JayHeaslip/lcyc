@@ -41,13 +41,12 @@ class LogInfoEmailsController < ApplicationController
     if params[:log_info_email][:test] == "true"
       membership = [ Person.find_by(EmailAddress: current_user.email)&.membership ]
       if membership[0].nil?
-        [407]
+        [ 407 ]
       else
-        [membership.first.id]
+        [ membership.first.id ]
       end
     else
       Membership.members.ids
     end
   end
-
 end
