@@ -13873,7 +13873,7 @@
   defineJQueryPlugin(Toast);
 
   // node_modules/trix/dist/trix.esm.min.js
-  var t = "2.1.16";
+  var t = "2.1.17";
   var e = "[data-trix-attachment]";
   var i = { preview: { presentation: "gallery", caption: { name: true, size: true } }, file: { caption: { size: true } } };
   var n = { default: { tagName: "div", parse: false }, quote: { tagName: "blockquote", nestable: true }, heading1: { tagName: "h1", terminal: true, breakOnReturn: true, group: false }, code: { tagName: "pre", terminal: true, htmlAttributes: ["language"], text: { plaintext: true } }, bulletList: { tagName: "ul", parse: false }, bullet: { tagName: "li", listAttribute: "bulletList", group: false, nestable: true, test(t3) {
@@ -14993,6 +14993,7 @@
     }, i2;
   }();
   ci.addHook("uponSanitizeAttribute", function(t3, e2) {
+    if ("data-trix-serialized-attributes" === e2.attrName) return void (e2.keepAttr = false);
     /^data-trix-/.test(e2.attrName) && (e2.forceKeepAttr = true);
   });
   var ui = "style href src width height language class".split(" ");
@@ -17634,7 +17635,10 @@
           break;
         }
         if (s3.parentNode === t3) {
-          if (n2++ === e2) break;
+          if (n2++ === e2) {
+            !i2 && I(s3, { strict: i2 }) && (r2 && o2.index++, o2.offset = 0, r2 = true);
+            break;
+          }
         } else if (!E(t3, s3) && n2 > 0) break;
         I(s3, { strict: i2 }) ? (r2 && o2.index++, o2.offset = 0, r2 = true) : o2.offset += _n(s3);
       }
