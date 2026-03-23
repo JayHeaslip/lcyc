@@ -12,7 +12,7 @@ gem "prawn"
 gem "image_processing", "~>1.2"
 
 # for user password
-gem "bcrypt", "~> 3.1.7"
+gem "bcrypt", "~> 3.1.22"
 
 # for dreamhost
 gem "mysql2"
