@@ -3,7 +3,7 @@
 This site is for maintaining the membership database for LCYC.
 
 
-* Ruby version - 3.4.7
+* Ruby version - 3.4.8
 
 * To run the test suite: rails test, rails test:system
 
@@ -11,8 +11,6 @@ This site is for maintaining the membership database for LCYC.
 * To update gems see ~/updating-gems
 
   
-
-* The site uses delayed_job to send email, the daemon will be started when creating email if it's not already running.
 
 * This uses capistrano for deployment.
 
