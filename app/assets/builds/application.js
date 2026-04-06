@@ -13873,7 +13873,7 @@
   defineJQueryPlugin(Toast);
 
   // node_modules/trix/dist/trix.esm.min.js
-  var t = "2.1.17";
+  var t = "2.1.18";
   var e = "[data-trix-attachment]";
   var i = { preview: { presentation: "gallery", caption: { name: true, size: true } }, file: { caption: { size: true } } };
   var n = { default: { tagName: "div", parse: false }, quote: { tagName: "blockquote", nestable: true }, heading1: { tagName: "h1", terminal: true, breakOnReturn: true, group: false }, code: { tagName: "pre", terminal: true, htmlAttributes: ["language"], text: { plaintext: true } }, bulletList: { tagName: "ul", parse: false }, bullet: { tagName: "li", listAttribute: "bulletList", group: false, nestable: true, test(t3) {
@@ -15700,7 +15700,8 @@
   Ii(qi, "permittedAttributes", ["caption", "presentation"]), Ui.registerType("attachment", qi);
   var Hi = class extends Ui {
     static fromJSON(t3) {
-      return new this(t3.string, t3.attributes);
+      const e2 = { ...t3.attributes };
+      return e2.href && !ci.isValidAttribute("a", "href", e2.href) && delete e2.href, new this(t3.string, e2);
     }
     constructor(t3) {
       super(...arguments), this.string = ((t4) => t4.replace(/\r\n?/g, "\n"))(t3), this.length = this.string.length;
