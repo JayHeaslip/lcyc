@@ -3,6 +3,7 @@ lock "~> 3.20.0"
 
 set :application, "lcyc"
 set :repo_url, "https://github.com/JayHeaslip/lcyc.git"
+set :log_level, :info
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
