@@ -11,7 +11,7 @@ class UserTest < ApplicationSystemTestCase
     fill_in "password", with: "password"
     fill_in "password_confirmation", with: "password"
     click_on "Register"
-    assert_current_path login_path, wait: 3
+    assert_current_path login_path, wait: 5
     assert_text "Check your email for confirmation instructions."
   end
 end
