@@ -20,7 +20,11 @@ Rails.application.routes.draw do
 
   mount MissionControl::Jobs::Engine => "/jobs"
 
-  resources :users
+  resources :users do
+    member do
+      delete :destroy_all_sessions
+    end
+  end
 
   resources :confirmations, only: [ :create, :edit, :new ], param: :confirmation_token
   resources :passwords, only: [ :create, :edit, :new, :update ], param: :password_reset_token

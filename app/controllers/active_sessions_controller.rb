@@ -7,22 +7,9 @@ class ActiveSessionsController < ApplicationController
   end
 
   def destroy
-    @active_session = current_user.active_sessions.find(params[:id])
+    @active_session = ActiveSession.find(params[:id])
+    user = @active_session.user
     @active_session.destroy
-    if current_user
-      redirect_to user_path(current_user), notice: "Session deleted."
-    else
-      forget_active_session
-      reset_session
-      redirect_to root_path, notice: "Signed out."
-    end
-  end
-
-  def destroy_all
-    forget_active_session
-    Current.user.active_sessions.destroy_all
-    reset_session
-
-    redirect_to root_path, notice: "Signed out."
+    redirect_to edit_user_path(user), notice: "Session deleted."
   end
 end

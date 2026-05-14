@@ -87,6 +87,13 @@ class UsersController < ApplicationController
     redirect_to role_users_path(@role)
   end
 
+  def destroy_all_sessions
+    @user = User.find(params[:id])
+    active_sessions = @user.active_sessions
+    active_sessions.destroy_all
+    redirect_to edit_user_path(@user), notice: "All sessions deleted."
+  end
+
   private
 
   def user_params

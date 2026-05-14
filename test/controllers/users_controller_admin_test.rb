@@ -26,6 +26,9 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
     }
     @role = roles(:member)
     @bog = roles(:BOG)
+
+    @admin = Role.find_by_name("Admin")
+    @confirmed_user = User.create!(firstname: "Jim", lastname: "Bob", email: "confirmed_user@example.com", password: "password", password_confirmation: "password", confirmed_at: Time.current, role: @admin)
   end
 
   test "get index" do
@@ -76,5 +79,17 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
       delete rmrole_role_user_url(@bog, @user)
     end
     assert_redirected_to role_users_url(@bog)
+  end
+
+  test "should destroy all active sessions" do
+    @confirmed_user.active_sessions.create!
+    @confirmed_user.active_sessions.create!
+
+    assert_difference("ActiveSession.count", -2) do
+      delete destroy_all_sessions_user_path(@confirmed_user)
+    end
+
+    assert_redirected_to edit_user_path(@confirmed_user)
+    assert_not_nil flash[:notice]
   end
 end
