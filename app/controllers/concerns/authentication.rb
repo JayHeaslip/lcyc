@@ -41,11 +41,13 @@ module Authentication
   private
 
   def current_user
-    Current.user = if session[:current_active_session_id].present?
-                     ActiveSession.find_by(id: session[:current_active_session_id])&.user
+    active_session = if session[:current_active_session_id].present?
+                   ActiveSession.find_by(id: session[:current_active_session_id])
     elsif cookies.permanent.encrypted[:remember_token].present?
-                     ActiveSession.find_by(remember_token: cookies.permanent.encrypted[:remember_token])&.user
+                   ActiveSession.find_by(remember_token: cookies.permanent.encrypted[:remember_token])
     end
+    active_session&.update(updated_at: Time.now)
+    Current.user = active_session&.user
   end
 
   def user_signed_in?
