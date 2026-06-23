@@ -17,7 +17,8 @@
 	<li class="nav-item dropdown">
 	  <a class="nav-link dropdown-toggle" href="#" id="navbarMembershipDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Memberships</a>
 	  <ul class="dropdown-menu" aria-labelledby="navbarMembershipDropdown">
-            <li><%= link_to "Memberships", memberships_path, class: "dropdown-item" %></li>
+            <li><%= link_to "Directory", directory_index_path, class: "dropdown-item" %></li>
+	    <li><%= link_to "Memberships", memberships_path, class: "dropdown-item" %></li>
             <li><%= link_to "New Membership", new_membership_path, class: "dropdown-item" %></li>
             <li><hr class="dropdown-divider"></li>
             <li><%= link_to "Committees", select_committees_path, class: "dropdown-item" %></li>

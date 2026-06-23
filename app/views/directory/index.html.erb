@@ -1,0 +1,19 @@
+<h2>Memberhip Directory</h2>
+<table class="table table-sm table-striped table-spacious">
+  <thead class="thead-light">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @members.each do |p| %>
+    <tr>
+      <td><%= link_to "#{p.LastName}, #{p.FirstName}", directory_path(p) %></td>
+      <td><%= link_to p.EmailAddress, "mailto:#{p.EmailAddress}" %></td>
+      <td><%= p.CellPhone %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

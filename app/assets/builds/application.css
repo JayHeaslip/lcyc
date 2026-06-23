@@ -20992,3 +20992,10 @@ trix-editor .attachment__metadata .attachment__size {
 .dropdown-menu > li:hover > .dropdown-submenu {
   display: block;
 }
+
+/* More spacious table rows for directory*/
+.table-spacious td,
+.table-spacious th {
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+}

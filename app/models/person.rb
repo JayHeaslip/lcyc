@@ -4,6 +4,7 @@ class Person < ApplicationRecord
   belongs_to :membership, foreign_key: "MembershipID", optional: true
   belongs_to :committee, optional: true
   has_one :user
+  has_one_attached :profile_picture
 
   validates_presence_of :LastName, :FirstName, :MemberType
   validates_format_of :BirthYear, with: /\A\d\d\d\d\z/, if: :validate_birthyear?

@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   get "unsubscribe/:id", to: "unsubscribe#show"
   put "unsubscribe/:id", to: "unsubscribe#update"
 
+  resources :directory, only: [:index, :show, :edit, :update], path: 'directory'
+  
   mount MissionControl::Jobs::Engine => "/jobs"
 
   resources :users do
