@@ -1,5 +1,4 @@
 class DirectoryController < ApplicationController
-
   def index
     @members = Person.members.where(MemberType: [ "Member", "Partner" ]).order(:LastName, :FirstName)
   end

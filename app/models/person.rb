@@ -104,6 +104,13 @@ class Person < ApplicationRecord
     end
   end
 
+  def display_photo
+    profile_picture.variant(
+      resize_to_limit: [400, 400],
+      format: :jpeg,
+      quality: 85).processed
+  end
+
   private_class_method
 
   def self.generate_hash(str)
