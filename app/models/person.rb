@@ -108,7 +108,7 @@ class Person < ApplicationRecord
     profile_picture.variant(
       resize_to_limit: [400, 400],
       format: :jpeg,
-      quality: 85).processed
+      quality: 85)&.processed
   end
 
   private_class_method
