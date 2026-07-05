@@ -161,36 +161,57 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const photoInput = document.getElementById('photo-upload');
+  const container = document.getElementById('photo-container-frame');
   const currentPhoto = document.getElementById('current-photo');
+  const placeholder = document.getElementById('photo-placeholder');
 
-  if (photoInput && currentPhoto) {
-    photoInput.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      
-      if (file) {
-        if (!file.type.startsWith('image/')) {
-          alert('Please select a valid image file.');
-          return;
-        }
-        if (file.size > 5 * 1024 * 1024) {
-          alert('File is too large. Maximum size is 5MB.');
-          return;
-        }
+  if (!photoInput || !container) {
+    console.warn('Photo upload elements not found');
+    return;
+  }
 
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          currentPhoto.src = event.target.result;
-        };
-        reader.readAsDataURL(file);
+  console.log('✅ Photo preview script initialized');
+
+  // Trigger file dialog when clicking the container (works with or without photo)
+  container.addEventListener('click', function() {
+    console.log('🖱️ Clicked photo area');
+    photoInput.click();
+  });
+
+  // Preview the selected image
+  photoInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File is too large. Maximum size is 5MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const imageDataUrl = event.target.result;
+
+      if (currentPhoto) {
+        // Case 1: Already had a photo → just update src
+        currentPhoto.src = imageDataUrl;
+      } else if (placeholder) {
+        // Case 2: No photo (placeholder) → replace with real image
+        const newImg = document.createElement('img');
+        newImg.src = imageDataUrl;
+        newImg.className = "w-100 h-100 object-cover";
+        newImg.alt = "New Profile Picture";
+        newImg.id = "current-photo";   // optional
+
+        placeholder.parentNode.replaceChild(newImg, placeholder);
+        console.log('✅ Placeholder replaced with preview image');
       }
-    });
-  }
-
-  if (currentPhoto) {
-    currentPhoto.style.cursor = 'pointer';
-    currentPhoto.addEventListener('click', function() {
-      photoInput.click();
-    });
-  }
+    };
+    reader.readAsDataURL(file);
+  });
 });
 </script>
