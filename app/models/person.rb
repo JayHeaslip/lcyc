@@ -106,7 +106,7 @@ class Person < ApplicationRecord
 
   def display_photo
     profile_picture.variant(
-      resize_to_limit: [400, 400],
+      resize_to_limit: [ 400, 400 ],
       format: :jpeg,
       quality: 85)&.processed
   end

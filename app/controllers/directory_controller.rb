@@ -1,7 +1,6 @@
 class DirectoryController < ApplicationController
+  before_action :check_person, only: [ :edit, :update ]
 
-  before_action :check_person, only: [:edit, :update]
-  
   def index
     @members = Person.members.where(MemberType: [ "Member", "Partner" ]).order(:LastName, :FirstName)
   end
