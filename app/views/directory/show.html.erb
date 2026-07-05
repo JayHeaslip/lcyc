@@ -95,4 +95,8 @@
       </div>
     </div>
   </div>
+  <% if Current.user.person == @person %>
+  <%= link_to "Edit", edit_directory_path(@person) %> |
+  <% end %>
+  <%= link_to "Back", directory_index_path %>
 </div>

@@ -10,7 +10,10 @@
 	</li>
 	<% if user_signed_in? && Current.user.role?('Member') %>
 	  <li class="nav-item">
-	    <a class="nav-link" href=<%= "#{membership_path(Current.user.membership)}" %>>My Club Info</a>
+	    <a class="nav-link" href=<%= "#{edit_directory_path(Current.user.person)}" %>>My Club Info</a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" href=<%= directory_index_path %>>Directory</a>
 	  </li>
         <% end %>
 	<% if user_signed_in? && Current.user.roles?(%w(Admin BOG Membership Harbormaster Communications Treasurer)) %>

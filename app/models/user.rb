@@ -86,6 +86,10 @@ class User < ApplicationRecord
     p&.membership&.id
   end
 
+  def person
+    Person.find_by(EmailAddress: email)
+  end
+
   private
 
   def downcase_email
