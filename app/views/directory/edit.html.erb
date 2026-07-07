@@ -1,21 +1,16 @@
 <div class="card-body p-4">
   <%= form_with(model: @person, url: directory_path(@person), method: :patch, class: "needs-validation", data: { turbo: false }) do |f| %>
     
-    <!-- Outer Row that separates Form fields (Left) from Photo (Right) -->
-    <div class="row g-4">
+    <div class="row g-4" data-controller="photo-preview">
 
-      <!-- Left Side: Main Content Form -->
       <div class="col-12 col-lg-8">
         
-        <!-- Name Header -->
         <h2 class="h4 fw-semibold text-dark mb-4">
           <%= "#{@person.FirstName} #{@person.LastName}" %>
         </h2>
 
-        <!-- Details Grid -->
         <div class="row g-3">
 
-          <!-- First Name -->
           <div class="col-12">
             <div class="row align-items-center">
               <div class="col-4 col-md-3">
@@ -30,7 +25,6 @@
             </div>
           </div>
 
-          <!-- Last Name -->
           <div class="col-12">
             <div class="row align-items-center">
               <div class="col-4 col-md-3">
@@ -45,7 +39,6 @@
             </div>
           </div>
 
-          <!-- Email -->
           <div class="col-12">
             <div class="row align-items-center">
               <div class="col-4 col-md-3">
@@ -57,7 +50,6 @@
             </div>
           </div>
 
-          <!-- Cell Phone -->
           <div class="col-12">
             <div class="row align-items-center">
               <div class="col-4 col-md-3">
@@ -69,7 +61,6 @@
             </div>
           </div>
 
-          <!-- Mailing Address -->
           <div class="col-12">
             <div class="row align-top">
               <div class="col-4 col-md-3 pt-2">
@@ -77,13 +68,11 @@
               </div>
               <div class="col-8 col-md-9">
                 <%= f.fields_for :membership, @person.membership do |m| %>
-                  <!-- Street Address -->
                   <div class="mb-3">
                     <%= m.label :StreetAddress, "Street Address", class: "form-label fw-medium text-muted small mb-1" %>
                     <%= m.text_field :StreetAddress, class: "form-control py-2", placeholder: "123 Main Street" %>
                   </div>
 
-                  <!-- City, State, ZIP -->
                   <div class="row g-2">
                     <div class="col-12 col-sm-6">
                       <%= m.label :City, "City", class: "form-label fw-medium text-muted small mb-1" %>
@@ -106,112 +95,65 @@
         </div>
       </div>
 
-      <!-- Photo Area - RIGHT SIDE -->
       <div class="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
-	<div class="text-center">
-	  <div class="border border-2 bg-black text-white d-flex align-items-center justify-content-center rounded mb-3"
+        <div class="text-center">
+          <div class="border border-2 bg-black text-white d-flex align-items-center justify-content-center rounded mb-3"
                style="width: 220px; height: 220px; font-size: 1.1rem; text-align: center; line-height: 1.3;">
-	    
-	    <!-- Put the ID on this frame wrapper so it ALWAYS exists in the DOM -->
-	    <div id="photo-container-frame" class="border border-2 border-light rounded overflow-hidden shadow-sm flex-shrink-0"
-		 style="width: 260px; height: 260px; cursor: pointer;">
+            
+            <div id="photo-container-frame" 
+                 data-photo-preview-target="container"
+                 data-action="click->photo-preview#triggerUpload"
+                 class="border border-2 border-light rounded overflow-hidden shadow-sm position-relative flex-shrink-0"
+                 style="width: 260px; height: 260px; cursor: pointer;">
               
-              <% if @person.display_photo.present? %>
-              <%= image_tag @person.display_photo,
-		  class: "w-100 h-100 object-cover",
-		  alt: "#{@person.FirstName} #{@person.LastName} Profile Picture",
-		  id: "current-photo" %>
+              <% if @person.profile_picture.present? %>
+                <%= image_tag @person.profile_picture,
+                    class: "w-100 h-100 object-cover",
+                    alt: "#{@person.FirstName} #{@person.LastName} Profile Picture",
+                    id: "current-photo" %>
               <% else %>
-              <!-- We add a placeholder image tag hidden by default, or just manipulate the HTML via JS -->
-              <div id="photo-placeholder" class="d-flex align-items-center justify-content-center h-100 bg-light text-muted">
-		<div class="text-center">
-		  <p class="mb-1">Photo</p>
-		  <p class="mb-1">Not</p>
-		  <p class="mb-0">Available</p>
-		</div>
-              </div>
+                <div id="photo-placeholder" class="d-flex align-items-center justify-content-center h-100 bg-light text-muted">
+                  <div class="text-center">
+                    <p class="mb-1">Photo</p>
+                    <p class="mb-1">Not</p>
+                    <p class="mb-0">Available</p>
+                  </div>
+                </div>
               <% end %>
               
-	    </div>
-	  </div>
-	  
-	  <!-- Photo Upload -->
-	  <div>
-	    <%= f.label :photo, "Click on photo to update", class: "btn btn-outline-primary btn-sm px-4 d-block mx-auto", id: "photo-label" %>
-	    <%= f.file_field :profile_picture, class: "d-none", accept: "image/jpeg,image/png,image/gif", id: "photo-upload" %>
-	    
-	    <div class="mt-2">
+              <button type="button" 
+                      id="remove-photo-btn"
+                      data-photo-preview-target="removeBtn"
+                      data-action="click->photo-preview#remove"
+                      class="btn btn-danger btn-sm position-absolute top-0 end-0 m-2"
+                      style="display: none; z-index: 10; width: 32px; height: 32px; padding: 0;">
+                ✕
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <%= f.label :profile_picture, "Click on photo to update", 
+                    class: "text-primary fw-medium small d-block text-center mb-2" %>
+            <%= f.file_field :profile_picture, 
+                    class: "d-none", 
+                    accept: "image/jpeg,image/png,image/gif", 
+                    id: "photo-upload",
+                    data: { photo_preview_target: "input", action: "change->photo-preview#preview" } %>
+            
+            <div class="mt-2">
               <small class="text-muted">JPG, PNG or GIF • Max 5MB</small>
-	    </div>
-	  </div>
-	</div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Bottom: Form Actions spanning across the full width -->
       <div class="col-12 mt-4 pt-3 border-top">
         <%= f.submit "Save Changes", class: "btn btn-primary px-4 me-2" %>
         <%= link_to "Cancel", directory_path(@person), class: "btn btn-outline-secondary px-4" %>
       </div>
-
+      <%= f.check_box :remove_photo, { style: "display: none;" }, "1", "0" %>
     </div>
   <% end %>
 </div>
-
-<!-- JavaScript for Instant Photo Preview -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const photoInput = document.getElementById('photo-upload');
-  const container = document.getElementById('photo-container-frame');
-  const currentPhoto = document.getElementById('current-photo');
-  const placeholder = document.getElementById('photo-placeholder');
-
-  if (!photoInput || !container) {
-    console.warn('Photo upload elements not found');
-    return;
-  }
-
-  console.log('✅ Photo preview script initialized');
-
-  // Trigger file dialog when clicking the container (works with or without photo)
-  container.addEventListener('click', function() {
-    console.log('🖱️ Clicked photo area');
-    photoInput.click();
-  });
-
-  // Preview the selected image
-  photoInput.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      alert('Please select a valid image file.');
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File is too large. Maximum size is 5MB.');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const imageDataUrl = event.target.result;
-
-      if (currentPhoto) {
-        // Case 1: Already had a photo → just update src
-        currentPhoto.src = imageDataUrl;
-      } else if (placeholder) {
-        // Case 2: No photo (placeholder) → replace with real image
-        const newImg = document.createElement('img');
-        newImg.src = imageDataUrl;
-        newImg.className = "w-100 h-100 object-cover";
-        newImg.alt = "New Profile Picture";
-        newImg.id = "current-photo";   // optional
-
-        placeholder.parentNode.replaceChild(newImg, placeholder);
-        console.log('✅ Placeholder replaced with preview image');
-      }
-    };
-    reader.readAsDataURL(file);
-  });
-});
-</script>
+`<
