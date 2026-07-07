@@ -6,10 +6,15 @@ class Person < ApplicationRecord
   has_one :user
   has_one_attached :profile_picture
 
+  validates :CellPhone, format: { with: /\A\d{10}\z/ }, allow_blank: true
+
   validates_presence_of :LastName, :FirstName, :MemberType
   validates_format_of :BirthYear, with: /\A\d\d\d\d\z/, if: :validate_birthyear?
   validates_format_of :EmailAddress, with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, if: proc { |p| !p.EmailAddress.blank? }
   validates_presence_of :Committee1, if: :validate_committee?
+  validates :HomePhone, format: { with: /\A\d{10}\z/ }, allow_blank: true
+  validates :CellPhone, format: { with: /\A\d{10}\z/ }, allow_blank: true
+  validates :WorkPhone, format: { with: /\A\d{10}\z/ }, allow_blank: true
 
   scope :members, -> { joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior', 'Affiliated')") }
   scope :active, -> { joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Honorary', 'Life', 'Senior')") }
@@ -117,4 +122,12 @@ class Person < ApplicationRecord
     string_to_hash = str + "weeble"
     Digest::SHA1.hexdigest(string_to_hash)
   end
+
+  private
+
+  def strip_phone_formatting
+    self.HomePhone = HomePhone.gsub(/\D/, "") if HomePhone.present?
+    self.CellPhone = HomePhone.gsub(/\D/, "") if CellPhone.present?
+    self.WorkPhone = HomePhone.gsub(/\D/, "") if WorkPhone.present?
+  end  
 end
