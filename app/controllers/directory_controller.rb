@@ -14,14 +14,15 @@ class DirectoryController < ApplicationController
 
   def update
     if params[:person][:remove_photo] == "1"
-      @person.profile_picture.purge_later   # or .purge if you want it immediate
+      @person.profile_picture.purge_later
+      params[:person].delete(:profile_picture)
     end
 
-    @person.update(person_params)
-    if @person.save
+    if @person.update(person_params)
       flash[:notice] = "Update successful."
       redirect_to directory_path(@person)
     else
+      Rails.logger.debug "Person validation failed: #{@person.errors.full_messages}"
       render :edit, status: :unprocessable_entity
     end
   end
