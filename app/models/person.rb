@@ -6,7 +6,7 @@ class Person < ApplicationRecord
   has_one :user
   has_one_attached :profile_picture
 
-  validates :CellPhone, format: { with: /\A\d{10}\z/ }, allow_blank: true
+  before_validation :strip_phone_formatting
 
   validates_presence_of :LastName, :FirstName, :MemberType
   validates_format_of :BirthYear, with: /\A\d\d\d\d\z/, if: :validate_birthyear?
@@ -126,8 +126,8 @@ class Person < ApplicationRecord
   private
 
   def strip_phone_formatting
-    self.HomePhone = HomePhone.gsub(/\D/, "") if HomePhone.present?
-    self.CellPhone = HomePhone.gsub(/\D/, "") if CellPhone.present?
-    self.WorkPhone = HomePhone.gsub(/\D/, "") if WorkPhone.present?
-  end  
+    self.HomePhone = self.HomePhone.gsub(/\D/, "") if self.HomePhone.present?
+    self.CellPhone = self.CellPhone.gsub(/\D/, "") if self.CellPhone.present?
+    self.WorkPhone = self.WorkPhone.gsub(/\D/, "") if self.WorkPhone.present?
+  end
 end

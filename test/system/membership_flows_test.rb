@@ -44,7 +44,7 @@ class MembershipTest < ApplicationSystemTestCase
     assert_text "Membership"
     assert_text "1 Maple St"
     assert_text "john@abc.com"
-    assert_text "802-878-1111"
+    assert_text "(802) 878-1111"
     assert_text "Doe boat"
   end
 end

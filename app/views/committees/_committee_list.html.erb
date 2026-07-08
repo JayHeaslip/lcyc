@@ -16,9 +16,9 @@
     <tr scope="row" %>
       <td><%= p.LastName %></td>
       <td><%= p.FirstName %></td>
-      <td><%= p.HomePhone %></td>
-      <td><%= p.WorkPhone %></td>
-      <td><%= p.CellPhone %></td>
+      <td><%= number_to_phone(p.HomePhone, area_code: true) %></td>
+      <td><%= number_to_phone(p.WorkPhone, area_code: true) %></td>
+      <td><%= number_to_phone(p.CellPhone, area_code: true) %></td>
       <td><%= p.EmailAddress %></td>
       <td><%= p.Committee1 %></td>
     </tr>

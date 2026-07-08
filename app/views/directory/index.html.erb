@@ -12,7 +12,7 @@
     <tr>
       <td><%= link_to "#{p.LastName}, #{p.FirstName}", directory_path(p) %></td>
       <td><%= link_to p.EmailAddress, "mailto:#{p.EmailAddress}" %></td>
-      <td><%= p.CellPhone %></td>
+      <td><%= number_to_phone(p.CellPhone, area_code: true) %></td>
     </tr>
     <% end %>
   </tbody>

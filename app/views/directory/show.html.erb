@@ -55,7 +55,7 @@
               <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Cell Phone</div>
             </div>
             <div class="col-8 col-md-9">
-              <div class="py-2 text-dark"><%= @person.CellPhone %></div>
+              <div class="py-2 text-dark"><%= number_to_phone(@person.CellPhone, area_code:true) %></div>
             </div>
           </div>
         </div>

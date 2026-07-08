@@ -96,9 +96,9 @@
 	<td><%= person.FirstName %></td>
 	<td><%= person.LastName %></td>
 	<td><%= person.MemberType %></td>
-	<td><%= person.HomePhone %></td>
-	<td><%= person.CellPhone %></td>
-	<td><%= person.WorkPhone %></td>
+	<td><%= number_to_phone(person.HomePhone, area_code: true) %></td>
+	<td><%= number_to_phone(person.CellPhone, area_code: true) %></td>
+	<td><%= number_to_phone(person.WorkPhone, area_code: true) %></td>
 	<td><%= person.EmailAddress %></td>
 	<td><%= person.Committee1 %></td>
 	<td><%= person.BirthYear %></td>

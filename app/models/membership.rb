@@ -188,7 +188,10 @@ class Membership < ApplicationRecord
   def member_info
     member = people.where('MemberType = "Member"').first
     if member
-      [ member.HomePhone, member.FirstName, member.WorkPhone, member.CellPhone, member.EmailAddress ]
+      [ ActiveSupport::NumberHelper.number_to_phone(member.HomePhone),
+        member.FirstName,
+        ActiveSupport::NumberHelper.number_to_phone(member.WorkPhone),
+        ActiveSupport::NumberHelper.number_to_phone(member.CellPhone), member.EmailAddress ]
     else
       logger.info "No member for #{id}, #{self.MailingName}"
       [ nil, nil, nil, nil, nil ]
@@ -198,7 +201,9 @@ class Membership < ApplicationRecord
   def partner_info
     p = people.where('MemberType = "Partner"').first
     if p
-      [ "#{p.FirstName}\t#{p.WorkPhone}\t#{p.CellPhone}\t#{p.EmailAddress}" ]
+      work_phone = ActiveSupport::NumberHelper.number_to_phone(p.WorkPhone)
+      cell_phone = ActiveSupport::NumberHelper.number_to_phone(p.CellPhone)
+      [ "#{p.FirstName}\t#{work_phone}\t#{cell_phone}\t#{p.EmailAddress}" ]
     else
       [ "" ]
     end

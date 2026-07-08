@@ -20568,6 +20568,30 @@
       </div>
     </div>`;
   }
+
+  // app/javascript/application.js
+  function applyPhoneMask(e2) {
+    const value = e2.target.value;
+    if (!value) return;
+    const phoneNumber = value.replace(/[^\d]/g, "");
+    const phoneNumberLength = phoneNumber.length;
+    if (phoneNumberLength < 4) {
+      e2.target.value = phoneNumber;
+    } else if (phoneNumberLength < 7) {
+      e2.target.value = `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+    } else {
+      e2.target.value = `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+    }
+  }
+  document.addEventListener("turbo:load", () => {
+    const phoneInputs = document.querySelectorAll("input[name*='HomePhone'], input[name*='CellPhone']");
+    phoneInputs.forEach((input) => {
+      if (input.value) {
+        applyPhoneMask({ target: input });
+      }
+      input.addEventListener("input", applyPhoneMask);
+    });
+  });
 })();
 /*! Bundled license information:
 

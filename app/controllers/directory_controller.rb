@@ -22,7 +22,7 @@ class DirectoryController < ApplicationController
       flash[:notice] = "Update successful."
       redirect_to directory_path(@person)
     else
-      Rails.logger.debug "Person validation failed: #{@person.errors.full_messages}"
+      flash[:error] = "Error: #{@person.errors.full_messages}"
       render :edit, status: :unprocessable_entity
     end
   end
