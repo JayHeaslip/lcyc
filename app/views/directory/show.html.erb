@@ -98,7 +98,7 @@
     </div>
   </div>
   
-  <% if Current.user.person == @person %>
+  <% if current_user.person == @person || current_user.admin? %>
     <%= link_to "Edit", edit_directory_path(@person) %> |
   <% end %>
   <%= link_to "Back", directory_index_path %>

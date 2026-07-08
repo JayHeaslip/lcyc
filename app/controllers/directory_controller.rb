@@ -35,7 +35,7 @@ class DirectoryController < ApplicationController
 
   def check_person
     @person = Person.find(params[:id])
-    if @person != Current.user.person
+    unless (@person == current_user.person) || (current_user.admin?)
       flash[:alert] = "You are not authorized to view the page you requested."
       redirect_to directory_index_path
     end
