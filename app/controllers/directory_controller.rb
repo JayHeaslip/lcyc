@@ -13,11 +13,11 @@ class DirectoryController < ApplicationController
   end
 
   def update
-    @person.update(person_params)
-    # Handle photo removal FIRST (before normal update)
     if params[:person][:remove_photo] == "1"
       @person.profile_picture.purge_later   # or .purge if you want it immediate
     end
+
+    @person.update(person_params)
     if @person.save
       flash[:notice] = "Update successful."
       redirect_to directory_path(@person)

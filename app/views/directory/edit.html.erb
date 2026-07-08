@@ -106,7 +106,7 @@
                  class="border border-2 border-light rounded overflow-hidden shadow-sm position-relative flex-shrink-0"
                  style="width: 260px; height: 260px; cursor: pointer;">
               
-              <% if @person.profile_picture.present? %>
+	      <% if @person.profile_picture.attached? && @person.profile_picture.persisted? %>
                 <%= image_tag @person.profile_picture,
                     class: "w-100 h-100 object-cover",
                     alt: "#{@person.FirstName} #{@person.LastName} Profile Picture",
