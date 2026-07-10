@@ -13890,21 +13890,24 @@
 
   // app/javascript/controllers/photo_preview_controller.js
   var photo_preview_controller_default = class extends Controller {
-    // Define targets to reference HTML elements directly without document.getElementById
-    static targets = ["input", "container", "removeBtn"];
+    static targets = ["input", "container", "removeBtn", "image", "placeholder", "removeCheckbox"];
     connect() {
       this.toggleRemoveButton();
     }
-    // Toggles visibility of the 'X' button depending on whether a photo exists
+    // Toggles visibility of the 'X' button depending on whether a valid image is shown
     toggleRemoveButton() {
       if (this.hasRemoveBtnTarget) {
-        const currentPhoto = this.element.querySelector("#current-photo");
-        this.removeBtnTarget.style.display = currentPhoto ? "block" : "none";
+        const hasImage = this.hasImageTarget && this.imageTarget.src !== "" && !this.imageTarget.src.endsWith("/") && !this.imageTarget.classList.contains("d-none");
+        this.removeBtnTarget.style.setProperty("display", hasImage ? "block" : "none", "important");
       }
     }
     // Action: Triggered when clicking the frame container
     triggerUpload(event) {
-      if (event.target === this.removeBtnTarget || event.target.closest("#remove-photo-btn")) return;
+      if (this.hasRemoveBtnTarget) {
+        if (event.target === this.removeBtnTarget || this.removeBtnTarget.contains(event.target)) {
+          return;
+        }
+      }
       this.inputTarget.click();
     }
     // Action: Triggered on file input change
@@ -13922,20 +13925,17 @@
       const reader = new FileReader();
       reader.onload = (e2) => {
         const imageDataUrl = e2.target.result;
-        const currentPhoto = this.element.querySelector("#current-photo");
-        const placeholder = this.element.querySelector("#photo-placeholder");
-        if (currentPhoto) {
-          currentPhoto.src = imageDataUrl;
-        } else if (placeholder) {
-          const newImg = document.createElement("img");
-          newImg.src = imageDataUrl;
-          newImg.className = "w-100 h-100 object-cover";
-          newImg.alt = "New Profile Picture";
-          newImg.id = "current-photo";
-          placeholder.parentNode.replaceChild(newImg, placeholder);
+        if (this.hasImageTarget) {
+          this.imageTarget.src = imageDataUrl;
+          this.imageTarget.classList.remove("d-none");
         }
-        const removeCheckbox = this.element.querySelector('input[name*="[remove_photo]"]');
-        if (removeCheckbox) removeCheckbox.value = "0";
+        if (this.hasPlaceholderTarget) {
+          this.placeholderTarget.classList.add("d-none");
+        }
+        if (this.hasRemoveCheckboxTarget) {
+          this.removeCheckboxTarget.value = "0";
+          this.removeCheckboxTarget.checked = false;
+        }
         this.toggleRemoveButton();
       };
       reader.readAsDataURL(file);
@@ -13943,26 +13943,18 @@
     // Action: Triggered on clicking 'X'
     remove(event) {
       event.stopPropagation();
-      const currentPhoto = this.element.querySelector("#current-photo");
-      if (currentPhoto) {
-        currentPhoto.remove();
+      if (this.hasImageTarget) {
+        this.imageTarget.src = "";
+        this.imageTarget.classList.add("d-none");
       }
-      if (!this.element.querySelector("#photo-placeholder")) {
-        const newPlaceholder = document.createElement("div");
-        newPlaceholder.id = "photo-placeholder";
-        newPlaceholder.className = "d-flex align-items-center justify-content-center h-100 bg-light text-muted";
-        newPlaceholder.innerHTML = `
-        <div class="text-center">
-          <p class="mb-1">Photo</p>
-          <p class="mb-1">Not</p>
-          <p class="mb-0">Available</p>
-        </div>
-      `;
-        this.containerTarget.appendChild(newPlaceholder);
+      if (this.hasPlaceholderTarget) {
+        this.placeholderTarget.classList.remove("d-none");
       }
       this.inputTarget.value = "";
-      const removeCheckbox = this.element.querySelector('input[name*="[remove_photo]"]');
-      if (removeCheckbox) removeCheckbox.value = "1";
+      if (this.hasRemoveCheckboxTarget) {
+        this.removeCheckboxTarget.value = "1";
+        this.removeCheckboxTarget.checked = true;
+      }
       this.toggleRemoveButton();
     }
   };

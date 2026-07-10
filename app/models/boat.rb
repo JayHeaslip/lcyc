@@ -2,6 +2,7 @@ require "csv"
 
 class Boat < ApplicationRecord
   has_and_belongs_to_many :memberships
+  has_one_attached :photo
   belongs_to :mooring, optional: true
   belongs_to :drysail, optional: true
 

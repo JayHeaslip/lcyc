@@ -72,11 +72,35 @@
           </div>
         </div>
         
+        <!-- Boat name -->
+        <div class="col-12">
+          <div class="row align-items-center">
+            <div class="col-4 col-md-3">
+              <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Boat Name</div>
+            </div>
+            <div class="col-8 col-md-9">
+              <div class="py-2 text-dark"><%= @boat&.Name %></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Boat Mfg/Type -->
+        <div class="col-12">
+          <div class="row align-items-center">
+            <div class="col-4 col-md-3">
+              <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Boat Mfg/Type</div>
+            </div>
+            <div class="col-8 col-md-9">
+              <div class="py-2 text-dark"><%= @boat&.Mfg_Size %></div>
+            </div>
+          </div>
+        </div>
+        
       </div>
     </div>
 
-    <!-- Photo Area -->
-    <div class="col-12 col-lg-4 d-flex justify-content-center justify-content-lg-end">
+    <!-- Profile Photo -->
+    <div class="col-12 col-lg-4 d-flex flex-column align-items-center align-items-lg-end gap-4">
       <div class="border border-2 border-secondary bg-light text-muted rounded overflow-hidden shadow-sm flex-shrink-0"
 	   style="width: 260px; height: 260px;"> 
 	
@@ -87,7 +111,7 @@
 	<% else %>
 	<div class="d-flex align-items-center justify-content-center h-100 text-center font-monospace lh-sm">
           <div>
-            <p class="mb-1 text-uppercase fw-semibold tracking-wide">Photo</p>
+            <p class="mb-1 text-uppercase fw-semibold tracking-wide">Profile Photo</p>
             <p class="mb-1 text-uppercase fw-semibold tracking-wide">Not</p>
             <p class="mb-0 text-uppercase fw-semibold tracking-wide">Available</p>
           </div>
@@ -95,6 +119,26 @@
 	<% end %>
 	
       </div>
+
+      <div class="border border-2 border-secondary bg-light text-muted rounded overflow-hidden shadow-sm flex-shrink-0"
+	   style="width: 260px; height: 260px;"> 
+	
+	<% if @boat&.photo&.attached? %>
+	<%= image_tag @boat.photo, 
+            class: "w-100 h-100 object-cover", 
+            alt: "#{@boat.Name} Photo" %>
+	<% else %>
+	<div class="d-flex align-items-center justify-content-center h-100 text-center font-monospace lh-sm">
+          <div>
+            <p class="mb-1 text-uppercase fw-semibold tracking-wide">Boat Photo</p>
+            <p class="mb-1 text-uppercase fw-semibold tracking-wide">Not</p>
+            <p class="mb-0 text-uppercase fw-semibold tracking-wide">Available</p>
+          </div>
+	</div>
+	<% end %>
+	
+      </div>
+      
     </div>
   </div>
   
