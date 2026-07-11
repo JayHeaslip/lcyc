@@ -1,1 +1,18 @@
-<%= render(partial: "user", object: @user, locals: {url: sign_up_path, new: true, button: "Register"}) %>
+<div class="container d-flex justify-content-center align-items-center my-5">
+  <div class="card shadow border-0 p-4 p-md-5 rounded-4" style="max-width: 650px; width: 100%;">
+    
+    <div class="text-center mb-4">
+      <h2 class="h3 fw-bold text-dark mb-1">Create Your Account</h2>
+    </div>
+
+    <%= render(partial: "user", object: @user, locals: { url: sign_up_path, new: true, button: "Register" }) %>
+    
+    <div class="text-center mt-4 pt-3 border-top">
+      <p class="text-muted small mb-0">
+        Already have an account? 
+        <%= link_to "Sign In", login_path, class: "text-primary text-decoration-none fw-semiboldms-1" %>
+      </p>
+    </div>
+
+  </div>
+</div>

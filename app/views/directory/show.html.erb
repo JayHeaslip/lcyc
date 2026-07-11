@@ -1,58 +1,67 @@
 <div class="card-body p-4">
   <div class="row g-4">
     
-    <!-- Main Content -->
     <div class="col-12 col-lg-8">
       
-      <!-- Name -->
-      <h2 class="h4 fw-semibold text-dark mb-4"><%= "#{@person.FirstName} #{@person.LastName}" %></h2>
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-3 border-bottom">
+        <h2 class="h4 fw-bold text-dark mb-0">
+          <%= "#{@person.FirstName} #{@person.LastName}" %>
+        </h2>
+        
+        <div class="d-flex gap-2">
+          <%= link_to directory_index_path, class: "btn btn-outline-secondary btn-sm px-3 rounded-pill d-inline-flex align-items-center" do %>
+            <span>Back</span>
+          <% end %>
+
+          <% if current_user.person == @person || current_user.admin? %>
+            <%= link_to edit_directory_path(@person), class: "btn btn-primary btn-sm px-3 rounded-pill d-inline-flex align-items-center shadow-sm" do %>
+              <span>Edit Profile</span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
       
-      <!-- Details -->
       <div class="row g-2">
         
-        <!-- First Name -->
         <div class="col-12">
           <div class="row align-items-center">
             <div class="col-4 col-md-3">
-              <div class="bg-light text-muted px-3 py-2 rounded fw-medium">First Name</div>
+              <div class="bg-light text-muted px-3 py-2 rounded fw-medium small">First Name</div>
             </div>
             <div class="col-8 col-md-9">
-              <div class="py-2 text-dark"><%= @person.FirstName %></div>
+              <div class="py-2 text-dark fw-semibold"><%= @person.FirstName %></div>
             </div>
           </div>
         </div>
         
-        <!-- Last Name -->
         <div class="col-12">
           <div class="row align-items-center">
             <div class="col-4 col-md-3">
-              <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Last Name</div>
+              <div class="bg-light text-muted px-3 py-2 rounded fw-medium small">Last Name</div>
             </div>
             <div class="col-8 col-md-9">
-              <div class="py-2 text-dark"><%= @person.LastName %></div>
+              <div class="py-2 text-dark fw-semibold"><%= @person.LastName %></div>
             </div>
           </div>
         </div>
         
-        <!-- Primary Email -->
         <div class="col-12">
           <div class="row align-items-center">
             <div class="col-4 col-md-3">
-              <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Email</div>
+              <div class="bg-light text-muted px-3 py-2 rounded fw-medium small">Email</div>
             </div>
             <div class="col-8 col-md-9">
               <div class="py-2">
-                <a href="mailto:#{@person.EmailAddress}" class="text-primary text-decoration-none"><%= @person.EmailAddress %></a>
+                <a href="mailto:#{@person.EmailAddress}" class="text-primary text-decoration-none fw-medium"><%= @person.EmailAddress %></a>
               </div>
             </div>
           </div>
         </div>
         
-        <!-- Primary Phone -->
         <div class="col-12">
           <div class="row align-items-center">
             <div class="col-4 col-md-3">
-              <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Cell Phone</div>
+              <div class="bg-light text-muted px-3 py-2 rounded fw-medium small">Cell Phone</div>
             </div>
             <div class="col-8 col-md-9">
               <div class="py-2 text-dark"><%= number_to_phone(@person.CellPhone, area_code:true) %></div>
@@ -60,11 +69,10 @@
           </div>
         </div>
 
-        <!-- Mailing Address -->
         <div class="col-12">
           <div class="row align-items-center">
             <div class="col-4 col-md-3">
-              <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Address</div>
+              <div class="bg-light text-muted px-3 py-2 rounded fw-medium small">Address</div>
             </div>
             <div class="col-8 col-md-9">
               <div class="py-2 text-dark"><%= address(@person.membership) %></div>
@@ -72,23 +80,21 @@
           </div>
         </div>
         
-        <!-- Boat name -->
         <div class="col-12">
           <div class="row align-items-center">
             <div class="col-4 col-md-3">
-              <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Boat Name</div>
+              <div class="bg-light text-muted px-3 py-2 rounded fw-medium small">Boat Name</div>
             </div>
             <div class="col-8 col-md-9">
-              <div class="py-2 text-dark"><%= @boat&.Name %></div>
+              <div class="py-2 text-dark text-uppercase font-monospace small tracking-wider fw-bold text-secondary"><%= @boat&.Name %></div>
             </div>
           </div>
         </div>
         
-        <!-- Boat Mfg/Type -->
         <div class="col-12">
           <div class="row align-items-center">
             <div class="col-4 col-md-3">
-              <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Boat Mfg/Type</div>
+              <div class="bg-light text-muted px-3 py-2 rounded fw-medium small">Boat Mfg/Type</div>
             </div>
             <div class="col-8 col-md-9">
               <div class="py-2 text-dark"><%= @boat&.Mfg_Size %></div>
@@ -99,51 +105,42 @@
       </div>
     </div>
 
-    <!-- Profile Photo -->
     <div class="col-12 col-lg-4 d-flex flex-column align-items-center align-items-lg-end gap-4">
-      <div class="border border-2 border-secondary bg-light text-muted rounded overflow-hidden shadow-sm flex-shrink-0"
-	   style="width: 260px; height: 260px;"> 
-	
-	<% if @person.profile_picture.attached? %>
-	<%= image_tag @person.profile_picture, 
-            class: "w-100 h-100 object-cover", 
-            alt: "#{@person.FirstName} #{@person.LastName} Profile Photo" %>
-	<% else %>
-	<div class="d-flex align-items-center justify-content-center h-100 text-center font-monospace lh-sm">
-          <div>
-            <p class="mb-1 text-uppercase fw-semibold tracking-wide">Profile Photo</p>
-            <p class="mb-1 text-uppercase fw-semibold tracking-wide">Not</p>
-            <p class="mb-0 text-uppercase fw-semibold tracking-wide">Available</p>
+      <div class="border border-light-subtle bg-light text-muted rounded-4 overflow-hidden shadow-sm flex-shrink-0"
+           style="width: 260px; height: 260px;"> 
+    
+        <% if @person.profile_picture.attached? %>
+          <%= image_tag @person.profile_picture, 
+                    class: "w-100 h-100 object-cover", 
+                    alt: "#{@person.FirstName} #{@person.LastName} Profile Photo" %>
+        <% else %>
+          <div class="d-flex align-items-center justify-content-center h-100 text-center font-monospace lh-sm text-secondary bg-body-tertiary">
+            <div>
+              <p class="mb-1 text-uppercase fw-semibold tracking-wide small">Profile Photo</p>
+              <p class="mb-0 text-muted small">Not Available</p>
+            </div>
           </div>
-	</div>
-	<% end %>
-	
+        <% end %>
+    
       </div>
 
-      <div class="border border-2 border-secondary bg-light text-muted rounded overflow-hidden shadow-sm flex-shrink-0"
-	   style="width: 260px; height: 260px;"> 
-	
-	<% if @boat&.photo&.attached? %>
-	<%= image_tag @boat.photo, 
-            class: "w-100 h-100 object-cover", 
-            alt: "#{@boat.Name} Photo" %>
-	<% else %>
-	<div class="d-flex align-items-center justify-content-center h-100 text-center font-monospace lh-sm">
-          <div>
-            <p class="mb-1 text-uppercase fw-semibold tracking-wide">Boat Photo</p>
-            <p class="mb-1 text-uppercase fw-semibold tracking-wide">Not</p>
-            <p class="mb-0 text-uppercase fw-semibold tracking-wide">Available</p>
+      <div class="border border-light-subtle bg-light text-muted rounded-4 overflow-hidden shadow-sm flex-shrink-0"
+           style="width: 260px; height: 260px;"> 
+    
+        <% if @boat&.photo&.attached? %>
+          <%= image_tag @boat.photo, 
+                    class: "w-100 h-100 object-cover", 
+                    alt: "#{@boat.Name} Photo" %>
+        <% else %>
+          <div class="d-flex align-items-center justify-content-center h-100 text-center font-monospace lh-sm text-secondary bg-body-tertiary">
+            <div>
+              <p class="mb-1 text-uppercase fw-semibold tracking-wide small">Boat Photo</p>
+              <p class="mb-0 text-muted small">Not Available</p>
+            </div>
           </div>
-	</div>
-	<% end %>
-	
+        <% end %>
+    
       </div>
-      
     </div>
   </div>
-  
-  <% if current_user.person == @person || current_user.admin? %>
-    <%= link_to "Edit", edit_directory_path(@person) %> |
-  <% end %>
-  <%= link_to "Back", directory_index_path %>
 </div>

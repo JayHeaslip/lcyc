@@ -1,9 +1,23 @@
-<div class="row mb-2" >
-  <%= form.label :password, class: "col-sm-2 col-form-label-sm" %>
-  <%= form.password_field :password, required: true, class: "col-sm-3" %>
+<div class="row g-3 max-width-form"> <div class="col-12">
+    <%= form.label :password, "New Password", class: "form-label fw-medium small text-muted" %>
+    <%= form.password_field :password, 
+        required: true, 
+        class: "form-control rounded-3", 
+        placeholder: "••••••••" %>
+  </div>
+
+  <div class="col-12">
+    <%= form.label :password_confirmation, "Confirm New Password", class: "form-label fw-medium small text-muted" %>
+    <%= form.password_field :password_confirmation, 
+        required: true, 
+        class: "form-control rounded-3", 
+        placeholder: "••••••••" %>
+  </div>
+
+  <div class="col-12 pt-2">
+    <div class="d-grid">
+      <%= form.submit "Update Password", class: "btn btn-primary btn-lg rounded-pill fw-semibold shadow-sm" %>
+    </div>
+  </div>
+
 </div>
-<div class="row mb-2" >
-  <%= form.label :password_confirmation, class: "col-sm-2 col-form-label-sm" %>
-  <%= form.password_field :password_confirmation, required: true, class: "col-sm-3" %>
-</div>
-<%= form.submit "Update Password", class: "btn btn-primary btn-block mt-2" %>

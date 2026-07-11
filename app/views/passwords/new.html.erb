@@ -1,16 +1,27 @@
-<%= form_with url: passwords_path do |f| %>
-  <div class="row ms-2">
-    <h4>Enter the email you use to sign in:</h4>
-  </div>
-  <div class="row ms-2">
-    <span class="has-float-label" >
-      <%= f.email_field :email, id: "email", class: "form-control" %>
-      <label for="email">Email</label>
-    </span>
-  </div>
-  <div class="row">
-    <div class="ms-3 mt-3 col-sm-10">
-      <%= f.submit "Submit", class: "btn btn-primary" %>
+<div class="container d-flex justify-content-center align-items-center my-5">
+  <div class="card shadow-sm border-0 p-4 rounded-3" style="max-width: 450px; width: 100%;">
+    
+    <div class="text-center mb-4">
+      <h4 class="fw-bold text-dark mb-2">Reset Password</h4>
+      <p class="text-muted small">Enter the email you use to sign in, and we'll send you a link to reset your password.</p>
     </div>
+
+    <%= form_with url: passwords_path, local: true do |f| %>
+      <!-- Floating Label Input Group -->
+      <div class="form-floating mb-3">
+        <%= f.email_field :email, 
+            id: "email", 
+            class: "form-control", 
+            placeholder: "name@example.com", 
+            required: true %>
+        <%= f.label :email, "Email Address" %>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="d-grid mt-4">
+        <%= f.submit "Send Reset Link", class: "btn btn-primary btn-lg rounded-pill fw-semibold shadow-sm" %>
+      </div>
+    <% end %>
+
   </div>
-<% end %>
+</div>

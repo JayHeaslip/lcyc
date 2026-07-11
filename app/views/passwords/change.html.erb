@@ -1,9 +1,32 @@
-<%= form_with url: change_password_path(@user), method: :post do |form| %>
-  <h4>Enter current password:</h4>
-  <div class="row mb-2" >
-    <%= form.label :current_password, class: "col-sm-2 col-form-label" %>
-    <%= form.password_field :current_password, required: true, class: "col-sm-3" %>
+<div class="container d-flex justify-content-center my-4">
+  <div class="card shadow-sm border-0 p-4 rounded-3" style="max-width: 500px; width: 100%;">
+    
+    <div class="mb-4">
+      <h3 class="h5 fw-bold text-dark mb-1">Password Update</h3>
+      <hr class="text-muted opacity-25 my-3">
+    </div>
+
+    <%= form_with url: change_password_path(@user), method: :post do |form| %>
+      <div class="row g-3">
+        
+        <div class="col-12 mb-2">
+          <span class="d-block fw-semibold text-dark small text-uppercase tracking-wider mb-2">Verification</span>
+          
+          <%= form.label :current_password, "Current Password", class: "form-label fw-medium small text-muted mb-1" %>
+          <%= form.password_field :current_password, 
+              required: true, 
+              class: "form-control rounded-3", 
+              placeholder: "••••••••" %>
+        </div>
+
+        <div class="col-12">
+          <span class="d-block fw-semibold text-dark small text-uppercase tracking-wider mb-2">New Credentials</span>
+          
+          <%= render "form", form: form %>
+        </div>
+
+      </div>
+    <% end %>
+
   </div>
-  <h4>Enter new password:</h4>
-  <%= render "form", form: form %>
-<% end %>
+</div>
