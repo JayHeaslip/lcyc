@@ -536,6 +536,7 @@ DEPENDENCIES
   google-cloud-storage
   image_processing (~> 1.2)
   jsbundling-rails
+  jwt
   listen
   matrix
   minitest

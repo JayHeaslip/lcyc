@@ -9,13 +9,17 @@
           <a class="nav-link active" href="/">Home</a>
 	</li>
 	<% if user_signed_in? && Current.user.role?('Member') %>
-	  <li class="nav-item">
-	    <a class="nav-link" href=<%= "#{edit_directory_path(Current.user.person)}" %>>My Club Info</a>
-	  </li>
-	  <li class="nav-item">
-	    <a class="nav-link" href=<%= directory_index_path %>>Directory</a>
-	  </li>
-        <% end %>
+	<%# Ensure the user actually has an associated person record before building the edit link %>
+	<% if Current.user.person.present? %>
+	<li class="nav-item">
+	  <a class="nav-link" href="<%= edit_directory_path(Current.user.person) %>">My Club Info</a>
+	</li>
+	<% end %>
+  
+	<li class="nav-item">
+	  <a class="nav-link" href="<%= directory_index_path %>">Directory</a>
+	</li>
+	<% end %>
         
         <% if user_signed_in? && Current.user.roles?(%w(Admin BOG Membership Harbormaster Communications Treasurer)) %>
           <li class="nav-item dropdown" data-controller="dropdown">

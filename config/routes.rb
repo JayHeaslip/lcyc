@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   post "login", to: "sessions#create"
   delete "logout", to: "sessions#destroy"
 
+  get 'sso/login', to: 'sso#handle_sso', as: :sso_login
+
   get "change_password", to: "passwords#change"
   post "change_password", to: "passwords#change"
 

@@ -3,6 +3,8 @@ ruby "3.4.8"
 
 gem "rails", "~> 8.1.1"
 gem "google-cloud-storage"
+# enable SSO from drupal
+gem "jwt" 
 
 # used to generate labels
 gem "prawn"
