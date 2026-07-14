@@ -69,10 +69,5 @@ class SsoController < ApplicationController
       Rails.logger.error "SSO Failure: Decode error. Details: #{e.message}"
       redirect_to login_path, alert: "Invalid token."
     end
-  ###rescue JWT::ExpiredSignature
-  ###    redirect_to login_path, alert: "The login link has expired. Please try clicking it again from the primary site."
-  ###  rescue JWT::DecodeError => e
-  ###    redirect_to login_path, alert: "Authentication failed: Invalid token."
-  ###  end
   end
 end
