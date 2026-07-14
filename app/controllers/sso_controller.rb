@@ -4,9 +4,6 @@ class SsoController < ApplicationController
   # so an unauthenticated visitor from Drupal can access it.
   skip_before_action :authenticate_user!, only: [:handle_sso]
   skip_before_action :check_authorization, only: [:handle_sso]
-  
-  # Prevent logged-in users from hitting it repeatedly 
-  before_action :redirect_if_authenticated, only: [:handle_sso]
 
   def handle_sso
     token = params[:token]
