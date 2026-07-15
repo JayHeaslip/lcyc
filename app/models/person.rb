@@ -16,6 +16,18 @@ class Person < ApplicationRecord
   validates :CellPhone, format: { with: /\A\d{10}\z/ }, allow_blank: true
   validates :WorkPhone, format: { with: /\A\d{10}\z/ }, allow_blank: true
 
+
+  scope :search_by_keyword, ->(query) {
+    return none if query.blank?
+    
+    q = "%#{query}%"
+    where(
+      "`#{table_name}`.`FirstName` LIKE :q OR " \
+      "`#{table_name}`.`LastName` LIKE :q OR " \
+      "`#{table_name}`.`EmailAddress` LIKE :q",
+      q: q
+    )
+  }
   scope :members, -> { joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Honorary', 'Inactive', 'Life', 'Senior', 'Affiliated')") }
   scope :active, -> { joins(:membership).where("memberships.Status in ('Active', 'Associate', 'Honorary', 'Life', 'Senior')") }
   scope :resigned, -> { joins(:membership).where("memberships.Status = 'Resigned'") }

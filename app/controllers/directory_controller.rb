@@ -3,6 +3,13 @@ class DirectoryController < ApplicationController
 
   def index
     @members = Person.members.where(MemberType: [ "Member", "Partner" ]).order(:LastName, :FirstName)
+
+    if params[:query].present?
+      @members = @members.search_by_keyword(params[:query])
+    end
+  
+    # Optional: Keep it sorted
+    @members = @members.order(:LastName, :FirstName)
   end
 
   def show
