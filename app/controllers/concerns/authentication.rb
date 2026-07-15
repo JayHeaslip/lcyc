@@ -4,7 +4,7 @@ module Authentication
   included do
     # Run authentication setup as a before_action
     before_action :restore_session
-    
+
     # Expose helper methods to your views
     helper_method :current_user, :user_signed_in?
   end
@@ -21,15 +21,15 @@ module Authentication
   def login(user)
     reset_session
     active_session = user.active_sessions.create!(
-      user_agent: request.user_agent, 
+      user_agent: request.user_agent,
       ip_address: request.ip
     )
     session[:current_active_session_id] = active_session.id
-    
+
     # Memoize so Current.user is instantly accessible without another DB query
-    Current.user = user 
+    Current.user = user
     @current_active_session = active_session
-    
+
     active_session
   end
 
@@ -91,7 +91,7 @@ module Authentication
       ActiveSession.find_by(id: session[:current_active_session_id])
     elsif cookies.encrypted[:remember_token].present?
       active_session = ActiveSession.find_by(remember_token: cookies.encrypted[:remember_token])
-      
+
       if active_session
         # If logging back in via cookie, re-establish the session cookie
         session[:current_active_session_id] = active_session.id

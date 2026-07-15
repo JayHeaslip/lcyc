@@ -19,7 +19,7 @@ class Person < ApplicationRecord
 
   scope :search_by_keyword, ->(query) {
     return none if query.blank?
-    
+
     q = "%#{query}%"
     where(
       "`#{table_name}`.`FirstName` LIKE :q OR " \
