@@ -13,8 +13,6 @@ class SsoController < ApplicationController
     end
 
     begin
-      should_verify_exp = !Rails.env.development?
-
       # Fetch the shared secret key from your DDEV environment / credentials
       secret_key = Rails.application.credentials.rails_sso_secret
       if secret_key.blank?
@@ -26,8 +24,7 @@ class SsoController < ApplicationController
       # Allows up to 3 minutes of server clock drift
       decoded_token = JWT.decode(token, secret_key, true, {
                                    algorithm: "HS256",
-                                   exp_leeway: 180,
-                                   verify_expiration: should_verify_exp
+                                   exp_leeway: 180
                                  })
 
       payload = decoded_token[0]
@@ -61,13 +58,12 @@ class SsoController < ApplicationController
       # Send them to the application dashboard or root
       redirect_to directory_index_path, notice: "Successfully authenticated from Drupal!"
 
-    # Temporary debug change in app/controllers/sso_controller.rb
     rescue JWT::ExpiredSignature => e
       Rails.logger.error "SSO Failure: Token has expired. #{e.message}"
-      redirect_to login_path, alert: "Expired link."
+      redirect_to root_path, alert: "Expired link."
     rescue JWT::DecodeError => e
       Rails.logger.error "SSO Failure: Decode error. Details: #{e.message}"
-      redirect_to login_path, alert: "Invalid token."
+      redirect_to root_path, alert: "Invalid token."
     end
   end
 end
