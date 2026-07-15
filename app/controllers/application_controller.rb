@@ -10,11 +10,11 @@ class ApplicationController < ActionController::Base
   private
 
   def check_authorization
-    if current_user.admin? || role_authorized?
+    if current_user&.admin? || role_authorized?
       true
     else
       flash[:alert] = "You are not authorized to view the page you requested."
-      redirect_to request.referer
+      redirect_back(fallback_location: root_path)
       false
     end
   end
