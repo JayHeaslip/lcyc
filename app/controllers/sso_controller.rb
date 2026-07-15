@@ -22,6 +22,7 @@ class SsoController < ApplicationController
 
       # Decode token and verify signature + expiration window
       # Allows up to 3 minutes of server clock drift
+      Rails.logger.info "Rails receive - now: #{Time.now.to_i} token: #{token}"
       decoded_token = JWT.decode(token, secret_key, true, {
                                    algorithm: "HS256",
                                    exp_leeway: 180
@@ -60,6 +61,7 @@ class SsoController < ApplicationController
 
     rescue JWT::ExpiredSignature => e
       Rails.logger.error "SSO Failure: Token has expired. #{e.message}"
+      Rails.logger.error "ExpiredSignature: #{e.message} | Current Rails time: #{Time.now.to_i}"
       redirect_to root_path, alert: "Expired link."
     rescue JWT::DecodeError => e
       Rails.logger.error "SSO Failure: Decode error. Details: #{e.message}"
