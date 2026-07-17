@@ -27,7 +27,7 @@ class DirectoryController < ApplicationController
   def update
     @person = Person.find(params[:id])
     @membership = @person.membership
-    
+
     if @membership.update(membership_params)
       redirect_to directory_path(@person), notice: "Directory profile updated."
     else
@@ -51,7 +51,7 @@ class DirectoryController < ApplicationController
       ]
     )
   end
-  
+
   def check_person
     @person = Person.find(params[:id])
     @boat = @person.membership.boats&.first
@@ -60,5 +60,4 @@ class DirectoryController < ApplicationController
       redirect_to directory_index_path
     end
   end
-
 end

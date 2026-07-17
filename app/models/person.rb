@@ -2,7 +2,7 @@ require "csv"
 
 class Person < ApplicationRecord
   attr_reader :remove_profile_picture
-  
+
   belongs_to :membership, foreign_key: "MembershipID", optional: true
   belongs_to :committee, optional: true
   has_one :user
@@ -153,5 +153,4 @@ class Person < ApplicationRecord
     self.CellPhone = self.CellPhone.gsub(/\D/, "") if self.CellPhone.present?
     self.WorkPhone = self.WorkPhone.gsub(/\D/, "") if self.WorkPhone.present?
   end
-
 end
