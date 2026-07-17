@@ -1,6 +1,8 @@
 require "csv"
 
 class Boat < ApplicationRecord
+  attr_reader :remove_photo
+  
   has_and_belongs_to_many :memberships
   has_one_attached :photo
   belongs_to :mooring, optional: true
@@ -13,6 +15,15 @@ class Boat < ApplicationRecord
 
   scope :active_members, -> { includes(:memberships).where(memberships: { Status: [ "Associate", "Active", "Senior" ] }) }
 
+  def remove_photo=(value)
+    @remove_photo = value
+    
+    # If the checkbox/hidden field was set to "1", purge the photo immediately
+    if value == "1" && photo.attached?
+      photo.purge_later
+    end
+  end
+  
   def name_or_mfg?
     if self.Name.blank? && self.Mfg_Size.blank?
       errors.add(:base, "You must specify either a Name or Mfg/Size")
@@ -83,4 +94,5 @@ class Boat < ApplicationRecord
       errors.add(:base, "Drysail spot not available for boat")
     end
   end
+
 end

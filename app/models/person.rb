@@ -1,6 +1,8 @@
 require "csv"
 
 class Person < ApplicationRecord
+  attr_reader :remove_profile_picture
+  
   belongs_to :membership, foreign_key: "MembershipID", optional: true
   belongs_to :committee, optional: true
   has_one :user
@@ -36,6 +38,15 @@ class Person < ApplicationRecord
 
   scope :valid_email, -> { where('subscribe_general is true and EmailAddress is not null and EmailAddress != ""') }
   scope :maillist, -> { where('subscribe_general is true and EmailAddress is not null and EmailAddress != "" and MemberType = "MailList"') }
+
+  def remove_profile_picture=(value)
+    @remove_profile_picture = value
+    logger.info "removing profile"
+    # If the checkbox/hidden field was set to "1", purge the photo immediately
+    if value == "1" && profile_picture.attached?
+      profile_picture.purge_later
+    end
+  end
 
   def validate_birthyear?
     self.MemberType == "Child"
@@ -142,4 +153,5 @@ class Person < ApplicationRecord
     self.CellPhone = self.CellPhone.gsub(/\D/, "") if self.CellPhone.present?
     self.WorkPhone = self.WorkPhone.gsub(/\D/, "") if self.WorkPhone.present?
   end
+
 end

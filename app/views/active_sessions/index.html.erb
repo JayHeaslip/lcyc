@@ -16,6 +16,9 @@
 	<td><%= session.updated_at %></td>
         <td><%= session.user_agent %></td>
         <td><%= session.ip_address %></td>
+	<td class="list-actions">
+          <%= link_to 'Remove', active_session_path(session, redirect_to: active_sessions_path), data: { turbo_method: 'delete', turbo_confirm: 'Are you sure?'} %>
+	</td>
       </tr>
     <% end %>
   </tbody>
