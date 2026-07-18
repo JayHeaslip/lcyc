@@ -12,7 +12,7 @@
 	<%# Ensure the user actually has an associated person record before building the edit link %>
 	<% if Current.user.person.present? %>
 	<li class="nav-item">
-	  <a class="nav-link" href="<%= edit_directory_path(Current.user.person) %>">My Club Info</a>
+	  <a class="nav-link" href="<%= directory_path(Current.user.person) %>">My Club Info</a>
 	</li>
 	<% end %>
   
