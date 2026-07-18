@@ -64,7 +64,11 @@
                 <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Committee</div>
               </div>
               <div class="col-8 col-md-9">
-		<%= p_form.collection_select :Committee1, Committee.order(:Name), :Name, :Name, class: "form-control" %>
+		 <input type="text"
+                       value="<%= @person.Committee1 %>"
+                       class="form-control py-2 bg-light"
+			readonly>
+		 <%# disable selection form p_form.collection_select :Committee1, Committee.order(:Name), :Name, :Name, class: "form-control" %>
               </div>
             </div>
           </div>
