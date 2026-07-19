@@ -44,7 +44,7 @@ class DirectoryController < ApplicationController
       :State,
       :Zip,
       people_attributes: [
-        :id, :FirstName, :LastName, :Committee1, :EmailAddress, :CellPhone, :profile_picture, :remove_profile_picture
+        :id, :FirstName, :LastName, :Committee1, :EmailAddress, :CellPhone, :HomePhone, :WorkPhone, :profile_picture, :remove_profile_picture
       ],
       boats_attributes: [
         :id, :Name, :Mfg_Size, :photo, :remove_photo
@@ -55,7 +55,7 @@ class DirectoryController < ApplicationController
   def check_person
     @person = Person.find(params[:id])
     @boat = @person.membership.boats&.first
-    unless (@person == current_user.person) || (current_user.admin?)
+    unless (@person.MembershipID == current_user.membership) || (current_user.admin?)
       flash[:alert] = "You are not authorized to view the page you requested."
       redirect_to directory_index_path
     end
