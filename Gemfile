@@ -42,6 +42,8 @@ gem "rack", ">= 3.1.18"
 gem "matrix"
 gem "csv"
 
+gem "propshaft"
+
 group :development, :test do
   # Call "byebug" anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [ :mri ]
