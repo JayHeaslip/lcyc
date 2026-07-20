@@ -42,6 +42,7 @@ set :keep_releases, 8
 
 # install in system directory to simplify things
 set :bundle_path, "/home/odziozo/.rvm/gems/ruby-3.4.8@global"
+set :bundle_version, 4
 
 # only restart delayed_job for production
 namespace :deploy do
