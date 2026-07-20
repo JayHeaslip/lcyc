@@ -22,6 +22,8 @@ Rails.application.routes.draw do
 
   resources :directory, only: [ :index, :show, :edit, :update ], path: "directory"
 
+  get "gallery", to: "gallery#index"
+
   mount MissionControl::Jobs::Engine => "/jobs"
 
   resources :users do

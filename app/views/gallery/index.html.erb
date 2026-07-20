@@ -1,0 +1,29 @@
+<div class="container my-4">
+  <h1 class="mb-4">People Gallery</h1>
+
+  <!-- Bootstrap grid row -->
+  <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
+    <% @people.each do |person| %>
+      <div class="col">
+        <div class="card h-100 text-center shadow-sm">
+          <% if person.profile_picture.attached? %>
+            <%= image_tag person.profile_picture.variant(resize_to_fill: [300, 300]), 
+                          class: "card-img-top object-fit-cover", 
+                          style: "height: 180px;", 
+                          alt: person.try(:name) || "Profile picture" %>
+          <% else %>
+            <div class="bg-light d-flex align-items-center justify-content-center text-muted" style="height: 180px;">
+              <small>No Image</small>
+            </div>
+          <% end %>
+
+          <div class="card-body p-2">
+            <p class="card-text fw-bold mb-0 text-truncate">
+              <%= link_to "#{person.FirstName} #{person.LastName}", directory_path(person) %>
+            </p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

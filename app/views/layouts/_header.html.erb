@@ -19,6 +19,10 @@
 	<li class="nav-item">
 	  <a class="nav-link" href="<%= directory_index_path %>">Directory</a>
 	</li>
+
+	<li class="nav-item">
+	  <a class="nav-link" href="<%= gallery_path %>">Gallery</a>
+	</li>
 	<% end %>
         
         <% if user_signed_in? && Current.user.roles?(%w(Admin BOG Membership Harbormaster Communications Treasurer)) %>
@@ -26,6 +30,7 @@
             <a class="nav-link dropdown-toggle" href="#" id="navbarMembershipDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Memberships</a>
             <ul class="dropdown-menu" aria-labelledby="navbarMembershipDropdown">
               <li><%= link_to "Directory", directory_index_path, class: "dropdown-item" %></li>
+              <li><%= link_to "Gallery", gallery_path, class: "dropdown-item" %></li>
               <li><%= link_to "Memberships", memberships_path, class: "dropdown-item" %></li>
               <li><%= link_to "New Membership", new_membership_path, class: "dropdown-item" %></li>
               <li><hr class="dropdown-divider"></li>
