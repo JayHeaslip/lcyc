@@ -34,8 +34,6 @@ gem "cssbundling-rails"
 
 gem "bootsnap", require: false
 
-gem "sassc-rails"
-
 # for QB interface
 gem "qbo_api", "~>3.0"
 gem "rack-oauth2"
