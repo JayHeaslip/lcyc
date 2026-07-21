@@ -1,30 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>LCYC</title>
+    <title>LCYC Administration</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= csrf_meta_tag %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= favicon_link_tag asset_path("favicon.png"), rel: "icon", type: "image/x-icon" %>
+    
+    <style>
+      :root {
+        --lcyc-blue: #003087;
+        --lcyc-red: #9b1c2c;
+      }
+      
+      .navbar {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .brand-header {
+        background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+        border-bottom: 4px solid var(--lcyc-red);
+      }
+      
+      #logo {
+        height: 60px;
+        width: auto;
+      }
+      
+      .nav-link {
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+      
+      .nav-link:hover {
+        color: var(--lcyc-blue) !important;
+        transform: translateY(-1px);
+      }
+      
+      .dropdown-menu {
+        border: none;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+      }
+      
+      .dropdown-item:hover {
+        background-color: #f1f3f5;
+      }
+    </style>
   </head>
-  <body>
+  <body class="bg-light">
     <%= render "layouts/header" %>
-    <div id="header" class="container-fluid mt-0 mb-1">
-      <div id="logo-title" class="row align-items-center">
-	<span>
-          <a id="logo-img" href="/" title="Home"><%= image_tag("logo8.png", alt: "LCYC", id: "logo") %></a>
-          <h1 id="site-name">
-            <a href="/" title="Home"><span class="text-nowrap">Lake Champlain Yacht Club Administration</span></a>
-          </h1>
-	</span>
+    
+    <!-- Main Content Area -->
+    <div class="container-fluid mt-4">
+      <div class="row">
+        <div class="col-12">
+          <%= flash_messages %>
+          <%= yield %>
+        </div>
       </div>
     </div>
-    <div class="container row mt-2">
-      <%= flash_messages %>
-      <%= yield %>
-    </div>
+
     <%= render "layouts/footer" %>
   </body>
 </html>

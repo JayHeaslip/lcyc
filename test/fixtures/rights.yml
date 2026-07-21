@@ -33,6 +33,21 @@ boat_update:
   controller: boats
   action: update
 
+boats_index:
+  name: BoatsController.index
+  controller: boats
+  action: index
+
+boat_show:
+  name: BoatsController.show
+  controller: boats
+  action: show
+
+boat_edit:
+  name: BoatsController.edit
+  controller: boats
+  action: edit
+
 membership_edit:
   name: MembershipsController.edit
   controller: memberships
