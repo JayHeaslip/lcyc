@@ -146,6 +146,20 @@ class Person < ApplicationRecord
     Digest::SHA1.hexdigest(string_to_hash)
   end
 
+  def partner
+    target_type = case self.MemberType
+    when "Member"  then "Partner"
+    when "Partner" then "Member"
+    end
+
+    return nil unless target_type
+
+    partner_person = membership.people.find_by(MemberType: target_type)
+    return nil unless partner_person
+
+    "#{partner_person.FirstName} #{partner_person.LastName}".strip
+end
+
   private
 
   def strip_phone_formatting

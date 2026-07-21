@@ -42,6 +42,21 @@
             </div>
           </div>
 	  
+          <!-- Partner (Read-only) -->
+          <div class="col-12">
+            <div class="row align-items-center">
+              <div class="col-4 col-md-3">
+                <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Partner</div>
+              </div>
+              <div class="col-8 col-md-9">
+                <input type="text"
+                       value="<%= @person.partner %>"
+                       class="form-control py-2 bg-light"
+                       readonly>
+              </div>
+            </div>
+          </div>
+
           <!-- Category (Read-only) -->
           <div class="col-12">
             <div class="row align-items-center">
@@ -51,6 +66,21 @@
               <div class="col-8 col-md-9">
                 <input type="text"
                        value="<%= @person.membership&.Status %>"
+                       class="form-control py-2 bg-light"
+                       readonly>
+              </div>
+            </div>
+          </div>
+
+          <!-- MemberSince (Read-only) -->
+          <div class="col-12">
+            <div class="row align-items-center">
+              <div class="col-4 col-md-3">
+                <div class="bg-light text-muted px-3 py-2 rounded fw-medium">Member Since</div>
+              </div>
+              <div class="col-8 col-md-9">
+                <input type="text"
+                       value="<%= @person.membership&.MemberSince %>"
                        class="form-control py-2 bg-light"
                        readonly>
               </div>
