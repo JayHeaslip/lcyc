@@ -35,7 +35,6 @@
     </div>
   </div>
 
-  <% if new || (Current.user && Current.user.admin?) %>
     <div class="row g-3 mb-3">
       <div class="col-12">
         <div class="form-floating">
@@ -44,6 +43,7 @@
         </div>
       </div>
       
+      <% if new || (Current.user && Current.user.admin?) %>
       <div class="col-12 col-md-6">
         <div class="form-floating">
           <%= f.password_field :password, value: nil, id: "password", class: "form-control rounded-3", placeholder: "••••••••" %>

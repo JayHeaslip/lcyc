@@ -4,7 +4,7 @@ class UserTest < ActiveSupport::TestCase
   include ActionMailer::TestHelper
 
   setup do
-    @user = User.new(firstname: "bob", lastname: "bob", email: "unique_email@example.com", password: "password", password_confirmation: "password", role: roles(:member))
+    @user = User.new(firstname: "bob", lastname: "bob", email: "unique_email@example.com", password: "password", password_confirmation: "password", role: roles(:Member))
   end
 
   test "should be valid" do
@@ -26,7 +26,7 @@ class UserTest < ActiveSupport::TestCase
   test "email should be saved as lowercase" do
     email = "unique_email@example.com"
 
-    @user = User.new(firstname: "bob", lastname: "bob", email: email.upcase, password: "password", password_confirmation: "password", role: roles(:member))
+    @user = User.new(firstname: "bob", lastname: "bob", email: email.upcase, password: "password", password_confirmation: "password", role: roles(:Member))
     @user.save!
 
     assert_equal email.downcase, @user.email
@@ -76,13 +76,13 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test ".confirm! should return false if already confirmed" do
-    @confirmed_user = User.new(email: "unique_email@example.com", password: "password", password_confirmation: "password", confirmed_at: Time.current, role: roles(:member))
+    @confirmed_user = User.new(email: "unique_email@example.com", password: "password", password_confirmation: "password", confirmed_at: Time.current, role: roles(:Member))
 
     assert_not @confirmed_user.confirm!
   end
 
   test ".confirm! should set confirmed_at" do
-    @unconfirmed_user = User.create!(firstname: "jim", lastname: "jim", email: "unique_email@example.com", password: "password", password_confirmation: "password", role: roles(:member))
+    @unconfirmed_user = User.create!(firstname: "jim", lastname: "jim", email: "unique_email@example.com", password: "password", password_confirmation: "password", role: roles(:Member))
 
     freeze_time do
       @unconfirmed_user.confirm!

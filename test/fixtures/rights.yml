@@ -1,103 +1,344 @@
-password_change:
-  name: PasswordsController.change
-  controller: passwords
-  action: change
-
-user_show:
-  name: UsersController.show
-  controller: users
-  action: show
-
-user_edit:
-  name: UsersController.edit
-  controller: users
-  action: edit
-
-user_update:
-  name: UsersController.update
-  controller: users
-  action: update
-
-user_create:
+UsersController_create:
   name: UsersController.create
   controller: users
   action: create
-
-user_destroy:
+UsersController_index:
+  name: UsersController.index
+  controller: users
+  action: index
+UsersController_update:
+  name: UsersController.update
+  controller: users
+  action: update
+UsersController_rmrole:
+  name: UsersController.rmrole
+  controller: users
+  action: rmrole
+UsersController_show:
+  name: UsersController.show
+  controller: users
+  action: show
+UsersController_new:
+  name: UsersController.new
+  controller: users
+  action: new
+UsersController_edit:
+  name: UsersController.edit
+  controller: users
+  action: edit
+UsersController_destroy:
   name: UsersController.destroy
   controller: users
   action: destroy
-
-boat_update:
-  name: BoatsController.create
-  controller: boats
-  action: update
-
-boats_index:
-  name: BoatsController.index
-  controller: boats
+WaitListEntriesController_create:
+  name: WaitListEntriesController.create
+  controller: wait_list_entries
+  action: create
+WaitListEntriesController_mooring_update:
+  name: WaitListEntriesController.mooring_update
+  controller: wait_list_entries
+  action: mooring_update
+WaitListEntriesController_index:
+  name: WaitListEntriesController.index
+  controller: wait_list_entries
   action: index
-
-boat_show:
-  name: BoatsController.show
-  controller: boats
-  action: show
-
-boat_edit:
-  name: BoatsController.edit
-  controller: boats
-  action: edit
-
-membership_edit:
-  name: MembershipsController.edit
+WaitListEntriesController_new:
+  name: WaitListEntriesController.new
+  controller: wait_list_entries
+  action: new
+WaitListEntriesController_assign:
+  name: WaitListEntriesController.assign
+  controller: wait_list_entries
+  action: assign
+WaitListEntriesController_destroy:
+  name: WaitListEntriesController.destroy
+  controller: wait_list_entries
+  action: destroy
+MembershipsController_create:
+  name: MembershipsController.create
   controller: memberships
-  action: edit
-  
-membership_update:
+  action: create
+MembershipsController_save_association:
+  name: MembershipsController.save_association
+  controller: memberships
+  action: save_association
+MembershipsController_labels:
+  name: MembershipsController.labels
+  controller: memberships
+  action: labels
+MembershipsController_download_labels:
+  name: MembershipsController.download_labels
+  controller: memberships
+  action: download_labels
+MembershipsController_index:
+  name: MembershipsController.index
+  controller: memberships
+  action: index
+MembershipsController_update:
   name: MembershipsController.update
   controller: memberships
   action: update
-  
-person_destroy:
-  name: PeopleController.destroy
-  controller: people
-  action: destroy
-  
-member_show:
+MembershipsController_show:
   name: MembershipsController.show
   controller: memberships
   action: show
-
-summary_report:
-  name: ReportsController.summary
-  controller: reports
-  action: summary
-
-history_report:
-  name: ReportsController.history
-  controller: reports
-  action: history
-
-moorings_report:
-  name: ReportsController.moorings
-  controller: reports
-  action: moorings
-
-edit_log_info_emails:
-  name: LogInfoEmailsController.edit
-  controller: log_info_emails
+MembershipsController_new:
+  name: MembershipsController.new
+  controller: memberships
+  action: new
+MembershipsController_edit:
+  name: MembershipsController.edit
+  controller: memberships
   action: edit
-
-update_log_info_emails:
-  name: LogInfoEmailsController.update
-  controller: log_info_emails
+MembershipsController_associate:
+  name: MembershipsController.associate
+  controller: memberships
+  action: associate
+MembershipsController_download_spreadsheet:
+  name: MembershipsController.download_spreadsheet
+  controller: memberships
+  action: download_spreadsheet
+MembershipsController_unassign:
+  name: MembershipsController.unassign
+  controller: memberships
+  action: unassign
+MembershipsController_spreadsheets:
+  name: MembershipsController.spreadsheets
+  controller: memberships
+  action: spreadsheets
+MembershipsController_destroy:
+  name: MembershipsController.destroy
+  controller: memberships
+  action: destroy
+BoatsController_save_association:
+  name: BoatsController.save_association
+  controller: boats
+  action: save_association
+BoatsController_index:
+  name: BoatsController.index
+  controller: boats
+  action: index
+BoatsController_update:
+  name: BoatsController.update
+  controller: boats
   action: update
-
-new_mailing:
+BoatsController_show:
+  name: BoatsController.show
+  controller: boats
+  action: show
+BoatsController_edit:
+  name: BoatsController.edit
+  controller: boats
+  action: edit
+BoatsController_associate:
+  name: BoatsController.associate
+  controller: boats
+  action: associate
+BoatsController_destroy:
+  name: BoatsController.destroy
+  controller: boats
+  action: destroy
+PeopleController_destroy:
+  name: PeopleController.destroy
+  controller: people
+  action: destroy
+MailingsController_create:
+  name: MailingsController.create
+  controller: mailings
+  action: create
+MailingsController_index:
+  name: MailingsController.index
+  controller: mailings
+  action: index
+MailingsController_update:
+  name: MailingsController.update
+  controller: mailings
+  action: update
+MailingsController_show:
+  name: MailingsController.show
+  controller: mailings
+  action: show
+MailingsController_new:
   name: MailingsController.new
   controller: mailings
   action: new
-  
-
-
-
+MailingsController_edit:
+  name: MailingsController.edit
+  controller: mailings
+  action: edit
+MailingsController_send_email:
+  name: MailingsController.send_email
+  controller: mailings
+  action: send_email
+MailingsController_destroy:
+  name: MailingsController.destroy
+  controller: mailings
+  action: destroy
+MembershipsController_wladd:
+  name: MembershipsController.wladd
+  controller: memberships
+  action: wladd
+MembershipsController_wl:
+  name: MembershipsController.wl
+  controller: memberships
+  action: wl
+MembershipsController_initiation_report:
+  name: MembershipsController.initiation_report
+  controller: memberships
+  action: initiation_report
+MembershipsController_unassign_drysail:
+  name: MembershipsController.unassign_drysail
+  controller: memberships
+  action: unassign_drysail
+QuickbooksController_new:
+  name: QuickbooksController.new
+  controller: quickbooks
+  action: new
+QuickbooksController_connect:
+  name: QuickbooksController.connect
+  controller: quickbooks
+  action: connect
+QuickbooksController_invoices:
+  name: QuickbooksController.invoices
+  controller: quickbooks
+  action: invoices
+QuickbooksController_generate_invoices:
+  name: QuickbooksController.generate_invoices
+  controller: quickbooks
+  action: generate_invoices
+WaitListEntriesController_update:
+  name: WaitListEntriesController.update
+  controller: wait_list_entries
+  action: update
+WaitListEntriesController_edit:
+  name: WaitListEntriesController.edit
+  controller: wait_list_entries
+  action: edit
+CommitteesController_download:
+  name: CommitteesController.download
+  controller: committees
+  action: download
+CommitteesController_download_all:
+  name: CommitteesController.download_all
+  controller: committees
+  action: download_all
+CommitteesController_list:
+  name: CommitteesController.list
+  controller: committees
+  action: list
+CommitteesController_select:
+  name: CommitteesController.select
+  controller: committees
+  action: select
+DrysailsController_index:
+  name: DrysailsController.index
+  controller: drysails
+  action: index
+DrysailsController_assign:
+  name: DrysailsController.assign
+  controller: drysails
+  action: assign
+DrysailsController_update:
+  name: DrysailsController.update
+  controller: drysails
+  action: update
+MooringsController_index:
+  name: MooringsController.index
+  controller: moorings
+  action: index
+MooringsController_unassigned:
+  name: MooringsController.unassigned
+  controller: moorings
+  action: unassigned
+PeopleController_show:
+  name: PeopleController.show
+  controller: people
+  action: show
+ReportsController_summary:
+  name: ReportsController.summary
+  controller: reports
+  action: summary
+ReportsController_history:
+  name: ReportsController.history
+  controller: reports
+  action: history
+ReportsController_moorings:
+  name: ReportsController.moorings
+  controller: reports
+  action: moorings
+LogInfoEmailsController_update:
+  name: LogInfoEmailsController.update
+  controller: log_info_emails
+  action: update
+LogInfoEmailsController_edit:
+  name: LogInfoEmailsController.edit
+  controller: log_info_emails
+  action: edit
+BoatsController_rmboat:
+  name: BoatsController.rmboat
+  controller: boats
+  action: rmboat
+RolesController_index:
+  name: RolesController.index
+  controller: roles
+  action: index
+RolesController_edit:
+  name: RolesController.edit
+  controller: roles
+  action: edit
+RolesController_show:
+  name: RolesController.show
+  controller: roles
+  action: show
+RolesController_update:
+  name: RolesController.update
+  controller: roles
+  action: update
+ReportsController_subscription_list:
+  name: ReportsController.subscription_list
+  controller: reports
+  action: subscription_list
+ReportsController_associates:
+  name: ReportsController.associates
+  controller: reports
+  action: associates
+FeesController_show:
+  name: FeesController.show
+  controller: fees
+  action: show
+FeesController_edit:
+  name: FeesController.edit
+  controller: fees
+  action: edit
+FeesController_update:
+  name: FeesController.update
+  controller: fees
+  action: update
+DirectoryController_show:
+  name: DirectoryController.show
+  controller: directory
+  action: show
+DirectoryController_index:
+  name: DirectoryController.index
+  controller: directory
+  action: index
+DirectoryController_edit:
+  name: DirectoryController.edit
+  controller: directory
+  action: edit
+DirectoryController_update:
+  name: DirectoryController.update
+  controller: directory
+  action: update
+UsersController_destroy_all_sessions:
+  name: UsersController.destroy_all_sessions
+  controller: users
+  action: destroy_all_sessions
+GalleryController_index:
+  name: GalleryController.index
+  controller: gallery
+  action: index
+SsoController_handle_sso:
+  name: SsoController.handle_sso
+  controller: sso
+  action: handle_sso

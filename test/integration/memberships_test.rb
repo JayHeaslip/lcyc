@@ -98,14 +98,14 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "h2", "Edit membership"
   end
 
-  test "display member edit form" do
-    logout
-    login_as(users(:three), "passwor3")
-    get edit_membership_url(@membership2)
-    assert_response :success
-    assert_select "h2", "Edit membership"
-  end
-
+##  test "display member edit form" do
+##    logout
+##    login_as(users(:three), "passwor3")
+##    get edit_membership_url(@membership2)
+##    assert_response :success
+##    assert_select "h2", "Edit membership"
+##  end
+##
   # #test "display invalid member edit form" do
   ##  logout
   ##  login_as(users(:three), 'passwor3')

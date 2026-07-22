@@ -4,8 +4,8 @@ class RolesIntegrationTest < ActionDispatch::IntegrationTest
   setup do
     admin = users(:one)
     login_as(admin, "aqswde12$$")
-    @role = roles(:member)
-    @right = rights(:user_destroy)
+    @role = roles(:Member)
+    @right = rights(:UsersController_destroy)
   end
 
   test "get_index" do

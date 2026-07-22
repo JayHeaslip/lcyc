@@ -1,24 +1,143 @@
-admin:
+---
+Admin:
   name: Admin
-
-member:
-  name: Member
-  rights: [user_show, user_edit, user_update, user_create, password_change, boat_update, membership_edit, membership_update, person_destroy]
-
+  parent: nil
 BOG:
   name: BOG
-  rights: [user_create, user_destroy, summary_report, history_report, moorings_report, edit_log_info_emails, update_log_info_emails,
-  boats_index, boat_show, boat_edit]
-
-membership:
-  name: Membership
-  rights: [boat_update, membership_edit, membership_update, person_destroy]
-
-nonmember:
+  parent: nil
+  rights:
+  - BoatsController_index
+  - BoatsController_show
+  - CommitteesController_download
+  - CommitteesController_download_all
+  - CommitteesController_list
+  - CommitteesController_select
+  - DirectoryController_edit
+  - DirectoryController_index
+  - DirectoryController_show
+  - DirectoryController_update
+  - DrysailsController_index
+  - GalleryController_index
+  - MailingsController_create
+  - MailingsController_destroy
+  - MailingsController_edit
+  - MailingsController_index
+  - MailingsController_new
+  - MailingsController_send_email
+  - MailingsController_show
+  - MailingsController_update
+  - MembershipsController_download_labels
+  - MembershipsController_download_spreadsheet
+  - MembershipsController_index
+  - MembershipsController_initiation_report
+  - MembershipsController_labels
+  - MembershipsController_show
+  - MembershipsController_spreadsheets
+  - MooringsController_index
+  - MooringsController_unassigned
+  - PeopleController_show
+  - ReportsController_associates
+  - ReportsController_history
+  - ReportsController_moorings
+  - ReportsController_subscription_list
+  - ReportsController_summary
+  - UsersController_index
+  - UsersController_show
+  - WaitListEntriesController_index
+Member:
+  name: Member
+  parent: nil
+  rights:
+  - BoatsController_associate
+  - BoatsController_destroy
+  - BoatsController_edit
+  - BoatsController_rmboat
+  - BoatsController_save_association
+  - BoatsController_show
+  - BoatsController_update
+  - DirectoryController_edit
+  - DirectoryController_index
+  - DirectoryController_show
+  - DirectoryController_update
+  - GalleryController_index
+  - MembershipsController_show
+  - PeopleController_destroy
+  - PeopleController_show
+  - UsersController_edit
+  - UsersController_show
+  - UsersController_update
+Non-member:
   name: Non-member
-
-communication:
-  name: Communication
-  rights: [new_mailing]
+  parent: nil
+  rights:
+  - UsersController_show
+Harbormaster:
+  name: Harbormaster
   parent: BOG
-  
+  rights:
+  - BoatsController_associate
+  - BoatsController_destroy
+  - BoatsController_edit
+  - BoatsController_rmboat
+  - BoatsController_save_association
+  - BoatsController_update
+  - DrysailsController_assign
+  - DrysailsController_update
+  - MembershipsController_associate
+  - MembershipsController_edit
+  - MembershipsController_save_association
+  - MembershipsController_unassign
+  - MembershipsController_unassign_drysail
+  - MembershipsController_update
+  - WaitListEntriesController_assign
+  - WaitListEntriesController_create
+  - WaitListEntriesController_destroy
+  - WaitListEntriesController_edit
+  - WaitListEntriesController_mooring_update
+  - WaitListEntriesController_new
+  - WaitListEntriesController_update
+Membership:
+  name: Membership
+  parent: BOG
+  rights:
+  - BoatsController_associate
+  - BoatsController_destroy
+  - BoatsController_edit
+  - BoatsController_rmboat
+  - BoatsController_save_association
+  - BoatsController_update
+  - DirectoryController_edit
+  - DirectoryController_index
+  - DirectoryController_show
+  - DirectoryController_update
+  - MembershipsController_associate
+  - MembershipsController_create
+  - MembershipsController_destroy
+  - MembershipsController_edit
+  - MembershipsController_new
+  - MembershipsController_save_association
+  - MembershipsController_update
+  - MembershipsController_wl
+  - MembershipsController_wladd
+  - PeopleController_destroy
+  - QuickbooksController_connect
+  - QuickbooksController_generate_invoices
+  - QuickbooksController_invoices
+  - QuickbooksController_new
+  - WaitListEntriesController_create
+  - WaitListEntriesController_destroy
+  - WaitListEntriesController_new
+Communications:
+  name: Communications
+  parent: BOG
+  rights:
+  - LogInfoEmailsController_edit
+  - LogInfoEmailsController_update
+Treasurer:
+  name: Treasurer
+  parent: BOG
+  rights:
+  - QuickbooksController_connect
+  - QuickbooksController_generate_invoices
+  - QuickbooksController_invoices
+  - QuickbooksController_new

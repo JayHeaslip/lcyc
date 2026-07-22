@@ -12,7 +12,7 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
       password: "password",
       password_confirmation: "password",
       confirmed_at: Time.now,
-      role_id: roles(:member).id
+      role_id: roles(:Member).id
     }
 
     # exists in people but not in users
@@ -24,7 +24,7 @@ class UsersControllerTest1 < ActionDispatch::IntegrationTest
       password_confirmation: "password",
       role_id: roles(:BOG).id
     }
-    @role = roles(:member)
+    @role = roles(:Member)
     @bog = roles(:BOG)
 
     @admin = Role.find_by_name("Admin")

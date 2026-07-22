@@ -4,6 +4,8 @@ class MembershipsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @membership = memberships(:member2)
     @user = users(:three)
+    @user.role = roles(:Membership)
+    @user.save
     login_as @user, "passwor3"
   end
 

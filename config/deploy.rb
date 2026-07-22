@@ -35,7 +35,7 @@ set :default_env, { path: "/home/odziozo/.nvm/versions/node/v18.15.0/bin:$PATH" 
 # set :local_user, -> { `git config user.name`.chomp }
 
 # Default value for keep_releases is 5
-set :keep_releases, 8
+set :keep_releases, 10
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
@@ -44,16 +44,18 @@ set :keep_releases, 8
 set :bundle_path, "/home/odziozo/.rvm/gems/ruby-3.4.8@global"
 set :bundle_version, 4
 
-# only restart delayed_job for production
 namespace :deploy do
-  after :finishing, :synchronize do
-    on primary fetch(:app) do
+  desc "Run custom db/data synchronization"
+  task :synchronize do
+    on primary fetch(:migration_role) do
       within release_path do
         with rails_env: fetch(:rails_env) do
           info "Executing synchronize"
-          execute :rake, :synchronize
+          execute :rake, "db:synchronize" # Ensure task name matches your rake task
         end
       end
     end
   end
 end
+
+after 'deploy:published', 'deploy:synchronize'
