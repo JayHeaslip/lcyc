@@ -141,3 +141,6 @@ Treasurer:
   - QuickbooksController_generate_invoices
   - QuickbooksController_invoices
   - QuickbooksController_new
+  - FeesController_show
+  - FeesController_edit
+  - FeesController_update

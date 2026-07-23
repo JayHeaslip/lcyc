@@ -14,6 +14,7 @@ class FeesController < ApplicationController
       flash[:notice] = "Successfully updated fees."
       redirect_to fee_path
     else
+      Rails.logger.error "Validation failed: #{@fee.errors.full_messages}"
       render :edit, status: :unprocessable_entity
     end
   end

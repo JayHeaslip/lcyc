@@ -28,5 +28,4 @@ class BoatsControllerTest < ActionDispatch::IntegrationTest
     get edit_boat_url(@boat)
     assert_response :ok
   end
-
 end

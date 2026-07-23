@@ -58,6 +58,8 @@ group :development, :test do
   gem "rubocop-rails"
   gem "rubocop-capybara"
   gem "rubocop-rails-omakase"
+  gem "rails-controller-testing"
+  gem "debug"
 end
 
 group :development do

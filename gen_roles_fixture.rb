@@ -1,10 +1,10 @@
 require 'yaml'
 
-o = File.open("roles.yml","w")
+o = File.open("roles.yml", "w")
 
 yaml_data = Role.all.each_with_object({}) do |role, hash|
   # Use role.name or role.name.downcase depending on your key preference
-  key = role.name 
+  key = role.name
 
   role_data = {
     'name' => role.name

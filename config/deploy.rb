@@ -35,7 +35,7 @@ set :default_env, { path: "/home/odziozo/.nvm/versions/node/v18.15.0/bin:$PATH" 
 # set :local_user, -> { `git config user.name`.chomp }
 
 # Default value for keep_releases is 5
-set :keep_releases, 10
+set :keep_releases, 20
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
@@ -58,4 +58,4 @@ namespace :deploy do
   end
 end
 
-after 'deploy:published', 'deploy:synchronize'
+after "deploy:published", "deploy:synchronize"

@@ -6,6 +6,14 @@ bob:
   membership: member1
   Committee1: Boats
 
+sue:  
+  MemberType: Partner
+  LastName: sue
+  FirstName: sue
+  EmailAddress: sue@abc.com
+  membership: member1
+  Committee1: Boats
+
 jim:  
   MemberType: Member
   LastName: jim

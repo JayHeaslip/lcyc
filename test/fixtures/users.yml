@@ -76,3 +76,10 @@ no_member_email:
   confirmed_at: <%= Time.now %>
   role: Admin
 
+treasurer:
+  firstname: dave
+  lastname: dave
+  email: dave@abc.info
+  password_digest: <%= BCrypt::Password.create('treasurer') %>
+  confirmed_at: <%= Time.now %>
+  role: Treasurer
