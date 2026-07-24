@@ -53,4 +53,10 @@ class ActionDispatch::IntegrationTest
   def logout
     delete logout_path
   end
+
+  def save_and_open_page
+    path = Rails.root.join("tmp", "screenshot_#{Time.now.to_i}.html")
+    File.write(path, response.body)
+    system("xdg-open #{path}") # Opens in default browser (macOS). Use 'xdg-open' for Linux.
+  end
 end

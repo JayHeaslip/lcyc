@@ -2,8 +2,8 @@ require "test_helper"
 
 class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   setup do
-    admin = users(:one)
-    login_as(admin, "aqswde12$$")
+    @admin = users(:one)
+    login_as(@admin, "aqswde12$$")
     @membership = memberships(:member1)
     @membership2 = memberships(:member2)
     @membership3 = memberships(:member3)
@@ -17,13 +17,14 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "get_index" do
+  test "get index" do
     get memberships_url
+    #save_and_open_page
     assert_response :success
-    assert_select "p", "Total : 12"
+    assert_select "p", "Total : 13"
   end
 
-  test "show_membership" do
+  test "show membership" do
     get membership_url(@membership3), headers: { HTTP_REFERER: memberships_url }
     assert_response :success
     assert_select "tr td", "Mailing Name:"
@@ -36,60 +37,72 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "h2", "New membership"
   end
 
-  test "create " do
-    post memberships_url, params: { membership:
-                                     { LastName: "Doe_unique",
-                                      MailingName: "Doe",
-                                      StreetAddress: "123 Oak St",
-                                      City: "Burlington",
-                                      State: "VT",
-                                      Zip: "05401",
-                                      MemberSince: "2018",
-                                      Status: "Active",
-                                      active_date: "01-01-2018",
-                                      people_attributes: [ { FirstName: "John", LastName: "Doe",
-                                                           Committee1: "Boats", MemberType: "Member" } ] } }
+  test "create membership" do
+    assert_difference("Membership.count", 1) do
+      post memberships_url, params: {
+        membership: {
+          LastName: "Doe_unique",
+          MailingName: "Doe",
+          StreetAddress: "123 Oak St",
+          City: "Burlington",
+          State: "VT",
+          Zip: "05401",
+          MemberSince: "2018",
+          Status: "Active",
+          active_date: "01-01-2018",
+          people_attributes: [ { FirstName: "John", LastName: "Doe", Committee1: "Boats", MemberType: "Member" } ]
+        }
+      }
+    end
 
-    @m = Membership.find_by_LastName("Doe_unique")
-    assert_redirected_to wl_membership_url(@m)
-    assert_equal flash[:success], "Membership was successfully created."
+    m = Membership.find_by(LastName: "Doe_unique")
+    assert_redirected_to wl_membership_url(m)
+    assert_equal "Membership was successfully created.", flash[:success]
   end
 
-  test "create bad " do
-    post memberships_url, params: { membership:
-                                     { LastName: "Doe",
-                                      MailingName: "Doe",
-                                      StreetAddress: "123 Oak St",
-                                      City: "Burlington",
-                                      State: "VT",
-                                      Zip: "05401",
-                                      MemberSince: "2018",
-                                      Status: "Active",
-                                      people_attributes: [ { FirstName: "John", LastName: "Doe",
-                                                           Committee1: "Boats", MemberType: "Partner" } ] } }
+  test "create bad membership" do
+    assert_no_difference("Membership.count") do
+      post memberships_url, params: {
+        membership: {
+          LastName: "Doe",
+          MailingName: "Doe",
+          StreetAddress: "123 Oak St",
+          City: "Burlington",
+          State: "VT",
+          Zip: "05401",
+          MemberSince: "2018",
+          Status: "Active",
+          people_attributes: [ { FirstName: "John", LastName: "Doe", Committee1: "Boats", MemberType: "Partner" } ]
+        }
+      }
+    end
 
-    assert_response 422
+    assert_response :unprocessable_entity
     assert_select "h2", "New membership"
   end
 
-  test "create with rejected boat " do
-    post memberships_url, params: { membership:
-                                     { LastName: "Doe_unique",
-                                      MailingName: "Doe",
-                                      StreetAddress: "123 Oak St",
-                                      City: "Burlington",
-                                      State: "VT",
-                                      Zip: "05401",
-                                      MemberSince: "2018",
-                                      Status: "Active",
-                                      active_date: "01-01-2018",
-                                      people_attributes: [ { FirstName: "John", LastName: "Doe",
-                                                           Committee1: "Boats", MemberType: "Member" } ],
-                                      boat_attributes: [ { Name: "Testing", Mfg_Size: "", Type: "Sail" } ] } }
+  test "create with rejected boat" do
+    assert_difference("Membership.count", 1) do
+      post memberships_url, params: {
+        membership: {
+          LastName: "Doe_unique",
+          MailingName: "Doe",
+          StreetAddress: "123 Oak St",
+          City: "Burlington",
+          State: "VT",
+          Zip: "05401",
+          MemberSince: "2018",
+          Status: "Active",
+          active_date: "01-01-2018",
+          people_attributes: [ { FirstName: "John", LastName: "Doe", Committee1: "Boats", MemberType: "Member" } ],
+          boat_attributes: [ { Name: "Testing", Mfg_Size: "", Type: "Sail" } ]
+        }
+      }
+    end
 
-    @m = Membership.find_by_LastName("Doe_unique")
-    assert_redirected_to wl_membership_url(@m)
-    assert_equal flash[:success], "Membership was successfully created."
+    m = Membership.find_by(LastName: "Doe_unique")
+    assert_redirected_to wl_membership_url(m)
+    assert_equal "Membership was successfully created.", flash[:success]
   end
 
   test "display edit form" do
@@ -98,75 +111,60 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     assert_select "h2", "Edit membership"
   end
 
-##  test "display member edit form" do
-##    logout
-##    login_as(users(:three), "passwor3")
-##    get edit_membership_url(@membership2)
-##    assert_response :success
-##    assert_select "h2", "Edit membership"
-##  end
-##
-  # #test "display invalid member edit form" do
-  ##  logout
-  ##  login_as(users(:three), 'passwor3')
-  ##  get edit_membership_url(@membership)
-  ##  assert_redirected_to root_path
-  ##  assert_equal flash[:error], "You are not authorized to view the page you requested."
-  # #end
-
   test "update membership" do
-    patch membership_url(@membership),
-      params: { membership:
-                 {
-                   LastName: "Bob",
-                   StreetAddress: "123 Main St",
-                   City: "Burlington",
-                   State: "VT",
-                   Zip: "05401",
-                   MemberSince: "1974",
-                   Status: "Active",
-                   active_date: "01-01-1974",
-                   people_attributes: [ { FirstName: "Jill", LastName: "Doe",
-                                        Committee1: "Dock", MemberType: "Partner" } ]
+    patch membership_url(@membership), params: {
+      membership: {
+        LastName: "Bob",
+        StreetAddress: "123 Main St",
+        City: "Burlington",
+        State: "VT",
+        Zip: "05401",
+        MemberSince: "1974",
+        Status: "Active",
+        active_date: "01-01-1974",
+        people_attributes: [ { FirstName: "Jill", LastName: "Doe", Committee1: "Dock", MemberType: "Partner" } ]
+      }
+    }
 
-                 } }
-    assert_redirected_to membership_url(@membership.id)
-    assert_equal flash[:success], "Membership was successfully updated."
+    assert_redirected_to membership_url(@membership)
+    assert_equal "Membership was successfully updated.", flash[:success]
+    assert_equal "Bob", @membership.reload.LastName
   end
 
-  test "bad membership" do
-    patch membership_url(@membership),
-      params: { membership:
-                 {
-                   LastName: "Bob",
-                   StreetAddress: "123 Main St",
-                   City: "Burlington",
-                   State: "",
-                   Zip: "05401",
-                   MemberSince: "1974",
-                   Status: "Active"
-                 } }
+  test "bad membership update" do
+    patch membership_url(@membership), params: {
+      membership: {
+        LastName: "Bob",
+        StreetAddress: "123 Main St",
+        City: "Burlington",
+        State: "",
+        Zip: "05401",
+        MemberSince: "1974",
+        Status: "Active"
+      }
+    }
+
     assert_response :unprocessable_entity
   end
 
   test "update membership from active to senior" do
-    patch membership_url(memberships(:paid)),
-      params: { membership:
-                 {
-                   LastName: "Bob",
-                   StreetAddress: "123 Main St",
-                   City: "Burlington",
-                   State: "VT",
-                   Zip: "05401",
-                   MemberSince: "1974",
-                   Status: "Senior",
-                   people_attributes: [ { FirstName: "Jill", LastName: "Doe",
-                                        Committee1: "Dock", MemberType: "Partner" } ]
+    paid_membership = memberships(:paid)
+    patch membership_url(paid_membership), params: {
+      membership: {
+        LastName: "Bob",
+        StreetAddress: "123 Main St",
+        City: "Burlington",
+        State: "VT",
+        Zip: "05401",
+        MemberSince: "1974",
+        Status: "Senior",
+        people_attributes: [ { FirstName: "Jill", LastName: "Doe", Committee1: "Dock", MemberType: "Partner" } ]
+      }
+    }
 
-                 } }
-    assert_redirected_to membership_url(memberships(:paid))
-    assert_equal flash[:alert], "Mooring removed due to membership category update."
-    assert_equal flash[:success], "Membership was successfully updated."
+    assert_redirected_to membership_url(paid_membership)
+    assert_equal "Mooring removed due to membership category update.", flash[:alert]
+    assert_equal "Membership was successfully updated.", flash[:success]
   end
 
   test "wait list add" do
@@ -176,22 +174,25 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
 
   test "remove last membership from boat" do
     delete rmboat_membership_boat_url(@membership, @boat2), headers: { HTTP_REFERER: root_url }
-    assert flash[:notice] = "#{@membership.LastName} removed from boat, boat deleted."
+    assert_equal "#{@membership.LastName} removed from boat, boat deleted.", flash[:notice]
     assert_redirected_to root_url
   end
 
   test "remove a moored boat with multiple owners from membership that owns the mooring" do
-    @membership = memberships(:member3)
-    @boat = boats(:boat4)
-    delete rmboat_membership_boat_url(@membership, @boat), headers: { HTTP_REFERER: root_url }
-    assert flash[:notice] = "#{@membership.LastName} removed from boat"
+    membership = memberships(:member3)
+    boat = boats(:boat4)
+
+    delete rmboat_membership_boat_url(membership, boat), headers: { HTTP_REFERER: root_url }
+    assert_equal "#{membership.LastName} removed from boat", flash[:notice]
     assert_redirected_to root_url
   end
 
   test "delete membership" do
-    delete membership_url(@membership)
+    assert_difference("Membership.count", -1) do
+      delete membership_url(@membership)
+    end
     assert_redirected_to memberships_url
-    assert_equal flash[:success], "Membership was successfully deleted."
+    assert_equal "Membership was successfully deleted.", flash[:success]
   end
 
   test "associate a boat form" do
@@ -201,11 +202,10 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "save boat association" do
-    @boat3 = boats(:boat3)
-    patch save_association_membership_url(@membership),
-      params: { membership: { boats: @boat3.id }, id: @membership.id }
-    assert_redirected_to membership_url(@membership.id)
-    assert_equal flash[:notice], "Saved association."
+    boat3 = boats(:boat3)
+    patch save_association_membership_url(@membership), params: { membership: { boats: boat3.id } }
+    assert_redirected_to membership_url(@membership)
+    assert_equal "Saved association.", flash[:notice]
   end
 
   test "show label form" do
@@ -293,27 +293,26 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   test "inactive returning to active wl date" do
-    @inactive = memberships(:inactive)
-    patch membership_url(@inactive),
-      params: { membership:
-                  {
-                    Status: "Active"
-
-                  } }
-    assert_redirected_to membership_url(@inactive.id)
-    assert_equal flash[:alert], "For members returning to Active status from Inactive status, if adding to the waitlist, the waitlist date should be the day payment is received for the return to Active."
-    assert_equal flash[:success], "Membership was successfully updated."
+    inactive = memberships(:inactive)
+    patch membership_url(inactive), params: { membership: { Status: "Active" } }
+    assert_redirected_to membership_url(inactive)
+    assert_equal "For members returning to Active status from Inactive status, if adding to the waitlist, the waitlist date should be the day payment is received for the return to Active.", flash[:alert]
+    assert_equal "Membership was successfully updated.", flash[:success]
   end
 
   test "delete membership with one boat" do
-    delete membership_url(@membership3)
-    assert_equal flash[:success], "Membership was successfully deleted."
+    assert_difference("Membership.count", -1) do
+      delete membership_url(@membership3)
+    end
+    assert_equal "Membership was successfully deleted.", flash[:success]
     assert_redirected_to memberships_path
   end
 
   test "delete membership with more than one boat" do
-    delete membership_url(@membership10)
-    assert_equal flash[:success], "Membership was successfully deleted."
+    assert_difference("Membership.count", -1) do
+      delete membership_url(@membership10)
+    end
+    assert_equal "Membership was successfully deleted.", flash[:success]
     assert_redirected_to memberships_path
   end
 end

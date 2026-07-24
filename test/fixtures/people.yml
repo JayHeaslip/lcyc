@@ -167,6 +167,13 @@ rick:
   membership: member11
   Committee1: Docks
 
+harry:
+  MemberType: Member
+  LastName: Harry
+  FirstName: Rick
+  membership: associate
+  Committee1: Docks
+
 bobsmith:
   MemberType: Member
   LastName: Smith

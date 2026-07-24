@@ -19,7 +19,6 @@ class QuickbooksController < ApplicationController
   end
 
   def new
-    # :nocov:
     if params[:code].present?
       state = params[:state]
       error = params[:error]
@@ -41,7 +40,7 @@ class QuickbooksController < ApplicationController
           )
 
           flash[:notice] = "QuickBooks connected successfully."
-          redirect_to invoices_path
+          redirect_to invoices_quickbooks_path
         else
           flash[:alert] = "Something went wrong. Try the process again."
           redirect_to root_path
@@ -51,7 +50,6 @@ class QuickbooksController < ApplicationController
         redirect_to root_path
       end
     end
-    # :nocov:
   end
 
   def invoices

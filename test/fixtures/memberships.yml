@@ -182,3 +182,13 @@ inactive:
   Status: 'Inactive'
   MemberSince: 2001
   active_date: '2001-02-02'
+
+associate:
+  LastName: 'MemA'
+  MailingName: ' MemAss '
+  StreetAddress: ' 123 Maple St '
+  City: ' Shelburne '
+  State: 'V '
+  Zip: ' 05482 '
+  application_date: 02-03-2018
+  Status: 'Active'

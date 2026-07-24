@@ -1,4 +1,4 @@
-# app/jobs/send_bulk_announcement_job.rb
+# app/jobs/send_bulk_loginfo_job.rb
 require "net/smtp"  # Ensure this is loaded
 
 class SendBulkLoginfoJob < ApplicationJob
@@ -16,12 +16,12 @@ class SendBulkLoginfoJob < ApplicationJob
 
     # If there are more people left, schedule the next batch in 30 seconds
     if remaining_ids.any?
-      SendBulkLogInfoJob.set(wait: 30.seconds).perform_later(
+      SendBulkLoginfoJob.set(wait: 30.seconds).perform_later(
         remaining_ids,
         url_options,
         batch_size
       )
-      Rails.logger.info("Scheduled next batch for Mailing #{mailing_id}. Remaining: #{remaining_ids.count}")
+      Rails.logger.info("Scheduled next batch for Log info mailing. Remaining: #{remaining_ids.count}")
     else
       Rails.logger.info("Bulk mailing completed for Log info mailing")
     end
