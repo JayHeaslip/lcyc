@@ -83,3 +83,19 @@ treasurer:
   password_digest: <%= BCrypt::Password.create('treasurer') %>
   confirmed_at: <%= Time.now %>
   role: Treasurer
+
+communications:
+  firstname: com
+  lastname: user
+  email: comuser@abc.info
+  password_digest: <%= BCrypt::Password.create('communications') %>
+  confirmed_at: <%= Time.now %>
+  role: Communications
+
+non_member:
+  firstname: non
+  lastname: member
+  email: nonmem@abc.info
+  password_digest: <%= BCrypt::Password.create('nonmem') %>
+  confirmed_at: <%= Time.now %>
+  role: Admin  

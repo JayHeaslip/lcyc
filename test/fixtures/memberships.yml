@@ -192,3 +192,13 @@ associate:
   Zip: ' 05482 '
   application_date: 02-03-2018
   Status: 'Active'
+
+commem:
+  LastName: 'MemC'
+  MailingName: ' MemCom '
+  StreetAddress: ' 124 Maple St '
+  City: ' Shelburne '
+  State: 'V '
+  Zip: ' 05482 '
+  application_date: 02-03-2018
+  Status: 'Active'

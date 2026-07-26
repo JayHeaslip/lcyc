@@ -180,3 +180,11 @@ bobsmith:
   FirstName: Bob
   membership: member6
   Committee1: Docks
+
+comuser:
+  MemberType: Member
+  LastName: user
+  FirstName: com
+  EmailAddress: comuser@abc.info
+  membership: commem
+  Committee1: Docks

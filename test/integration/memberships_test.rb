@@ -21,7 +21,7 @@ class MembershipsIntegrationTest < ActionDispatch::IntegrationTest
     get memberships_url
     #save_and_open_page
     assert_response :success
-    assert_select "p", "Total : 13"
+    assert_select "p", "Total : 14"
   end
 
   test "show membership" do

@@ -70,7 +70,7 @@ class MailingsIntegrationTest < ActionDispatch::IntegrationTest
     # Optional: inspect the enqueued job's arguments if you want deeper assertions
     enqueued_job = enqueued_jobs.last
     assert_equal @mailing.id, enqueued_job[:args][0]  # mailing_id first
-    assert_equal 12, enqueued_job[:args][1].size      # person_ids array length matches your 12
+    assert_equal 13, enqueued_job[:args][1].size      # person_ids array length matches your 13
 
     assert_redirected_to mailings_url
   end

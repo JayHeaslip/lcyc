@@ -14,10 +14,8 @@ class LogInfoEmailsController < ApplicationController
       flash[:notice] = "Log info emails sent."
       redirect_to root_url
     else
-      # :nocov:
       set_loginfo_variables
       render :edit, status: :unprocessable_entity
-      # :nocov:
     end
   end
 
@@ -28,7 +26,7 @@ class LogInfoEmailsController < ApplicationController
   end
 
   def set_loginfo_variables
-    @m = Person.find_by(EmailAddress: current_user.email).membership
+    @m = Person.find_by(EmailAddress: current_user.email)&.membership
     @m = Membership.find(407) if @m.nil?
     @boat_info = @m.boat_info
     @member_info = @m.member_info
