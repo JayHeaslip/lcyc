@@ -8,8 +8,8 @@ class SendBulkAnnouncementJobTest < ActiveJob::TestCase
     @mailing = mailings(:one) rescue Mailing.create!(subject: "Test Bulk Mail")
     @person1 = people(:bob)
     @person2 = people(:jim)
-    
-    @person_ids = [@person1.id, @person2.id]
+
+    @person_ids = [ @person1.id, @person2.id ]
     @url_options = { host: "example.com", protocol: "https" }
 
     # Setup dummy SMTP config in case test environment lacks it
@@ -35,7 +35,7 @@ class SendBulkAnnouncementJobTest < ActiveJob::TestCase
     stub_smtp_connection do
       assert_enqueued_with(
         job: SendBulkAnnouncementJob,
-        args: [@mailing.id, (21..50).to_a, @url_options, 20],
+        args: [ @mailing.id, (21..50).to_a, @url_options, 20 ],
         at: 30.seconds.from_now
       ) do
         SendBulkAnnouncementJob.perform_now(@mailing.id, large_list, @url_options, 20)
@@ -46,7 +46,7 @@ class SendBulkAnnouncementJobTest < ActiveJob::TestCase
   test "does not enqueue further jobs when recipient list is exhausted" do
     stub_smtp_connection do
       assert_no_enqueued_jobs(only: SendBulkAnnouncementJob) do
-        SendBulkAnnouncementJob.perform_now(@mailing.id, [@person1.id], @url_options, 20)
+        SendBulkAnnouncementJob.perform_now(@mailing.id, [ @person1.id ], @url_options, 20)
       end
     end
   end
@@ -59,17 +59,17 @@ class SendBulkAnnouncementJobTest < ActiveJob::TestCase
     # Dummy Mail Message mock
     mock_mail = Struct.new(:encoded, :from, :destinations).new(
       "Subject: Test\n\nHello",
-      ["sender@example.com"],
-      ["bob@example.com"]
+      [ "sender@example.com" ],
+      [ "bob@example.com" ]
     )
 
     # Mock smtp connection object yield block parameter
     mock_conn = Minitest::Mock.new
-    mock_conn.expect :send_message, nil, [mock_mail.encoded, "sender@example.com", ["bob@example.com"]]
+    mock_conn.expect :send_message, nil, [ mock_mail.encoded, "sender@example.com", [ "bob@example.com" ] ]
 
     stub_smtp_connection(connection_mock: mock_conn) do
       AnnouncementMailer.stub :mailing, mock_mail do
-        SendBulkAnnouncementJob.perform_now(@mailing.id, [@person1.id], @url_options, 20)
+        SendBulkAnnouncementJob.perform_now(@mailing.id, [ @person1.id ], @url_options, 20)
       end
     end
 
@@ -78,17 +78,17 @@ class SendBulkAnnouncementJobTest < ActiveJob::TestCase
 
   test "skips non-existent person IDs gracefully" do
     non_existent_id = 999_999
-    ids_with_missing = [non_existent_id, @person1.id]
+    ids_with_missing = [ non_existent_id, @person1.id ]
 
     mock_mail = Struct.new(:encoded, :from, :destinations).new(
       "Subject: Test",
-      ["sender@example.com"],
-      ["bob@example.com"]
+      [ "sender@example.com" ],
+      [ "bob@example.com" ]
     )
 
     # Expect send_message to be called ONLY ONCE for @person1.id
     mock_conn = Minitest::Mock.new
-    mock_conn.expect :send_message, nil, [mock_mail.encoded, "sender@example.com", ["bob@example.com"]]
+    mock_conn.expect :send_message, nil, [ mock_mail.encoded, "sender@example.com", [ "bob@example.com" ] ]
 
     stub_smtp_connection(connection_mock: mock_conn) do
       AnnouncementMailer.stub :mailing, mock_mail do
@@ -112,7 +112,7 @@ class SendBulkAnnouncementJobTest < ActiveJob::TestCase
     Rails.logger.stub :error, ->(msg) { logger_output.puts(msg) } do
       stub_smtp_connection(connection_mock: mock_conn) do
         assert_nothing_raised do
-          SendBulkAnnouncementJob.perform_now(@mailing.id, [@person1.id], @url_options, 20)
+          SendBulkAnnouncementJob.perform_now(@mailing.id, [ @person1.id ], @url_options, 20)
         end
       end
     end

@@ -28,13 +28,12 @@ class ProcessSingleInvoiceJobTest < ActiveJob::TestCase
   end
 
   test "performs successfully and creates invoice in QBO" do
-    Membership.stub :dues, 500, [@membership] do
+    Membership.stub :dues, 500, [ @membership ] do
       @membership.stub :calculate_mooring_fee, 150 do
         @membership.stub :calculate_mooring_replacement_fee, 0 do
           @membership.stub :calculate_drysail_fee, 0 do
             @membership.stub :calculate_initiation_installment, 0 do
               @membership.stub :calculate_docks_assessment, 0 do
-                
                 expected_payload = {
                   CustomerRef: { value: @customer_id },
                   AllowOnlineACHPayment: true,
@@ -56,18 +55,18 @@ class ProcessSingleInvoiceJobTest < ActiveJob::TestCase
                     }
                   ]
                 }
-                
+
                 # Note the keyword argument `payload:` passed outside the positional args array:
-                @mock_api.expect :create, { "Id" => "101" }, [:invoice], payload: expected_payload
-                
+                @mock_api.expect :create, { "Id" => "101" }, [ :invoice ], payload: expected_payload
+
                 QuickbooksConfig.stub :first, @config do
                   @config.stub :api_client, @mock_api do
-                    Membership.stub :find, @membership, [@membership.id] do
+                    Membership.stub :find, @membership, [ @membership.id ] do
                       ProcessSingleInvoiceJob.perform_now(@membership.id, @customer_id, @item_map)
                     end
                   end
                 end
-                
+
                 assert @mock_api.verify
               end
             end

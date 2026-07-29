@@ -83,7 +83,7 @@ class SsoControllerTest < ActionDispatch::IntegrationTest
       email: "existing@example.com",
       firstname: "Existing",
       lastname: "User",
-      password: 'abcdefg',
+      password: "abcdefg",
       role: @role
     )
 

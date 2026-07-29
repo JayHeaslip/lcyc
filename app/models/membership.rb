@@ -2,6 +2,7 @@ require "csv"
 
 class Membership < ApplicationRecord
   @@current_year = Time.now.year
+  @@flash_message = ""
 
   before_destroy :destroy_boats
   has_many :people, foreign_key: "MembershipID", dependent: :destroy

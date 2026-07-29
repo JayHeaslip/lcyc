@@ -59,10 +59,10 @@ class UpdateMembersJobTest < ActiveJob::TestCase
   # ==========================================
 
   test "creates customer in QBO when member does not exist in QBO" do
-    @mock_api.expect :all, [], [:customer]
-    @mock_api.expect :create, { "Id" => "qbo_1" }, [:customer], payload: @expected_payload
+    @mock_api.expect :all, [], [ :customer ]
+    @mock_api.expect :create, { "Id" => "qbo_1" }, [ :customer ], payload: @expected_payload
 
-    stub_job_dependencies([@member]) do
+    stub_job_dependencies([ @member ]) do
       UpdateMembersJob.perform_now
     end
 
@@ -70,12 +70,12 @@ class UpdateMembersJobTest < ActiveJob::TestCase
   end
 
   test "rescues and logs QboApi::BadRequest on creation error without failing job" do
-    @mock_api.expect :all, [], [:customer]
+    @mock_api.expect :all, [], [ :customer ]
     @mock_api.expect(:create, nil) do |*_args, **_kwargs|
       raise QboApi::BadRequest.new({})
     end
 
-    stub_job_dependencies([@member]) do
+    stub_job_dependencies([ @member ]) do
       assert_nothing_raised do
         UpdateMembersJob.perform_now
       end
@@ -89,9 +89,9 @@ class UpdateMembersJobTest < ActiveJob::TestCase
   # ==========================================
 
   test "skips update when customer details are completely unchanged" do
-    @mock_api.expect :all, [@matching_qb_customer], [:customer]
+    @mock_api.expect :all, [ @matching_qb_customer ], [ :customer ]
 
-    stub_job_dependencies([@member]) do
+    stub_job_dependencies([ @member ]) do
       UpdateMembersJob.perform_now
     end
 
@@ -144,10 +144,10 @@ class UpdateMembersJobTest < ActiveJob::TestCase
   private
 
   def assert_trigges_update(qbo_customer)
-    @mock_api.expect :all, [qbo_customer], [:customer]
-    @mock_api.expect :update, { "Id" => qbo_customer["Id"] }, [:customer], id: qbo_customer["Id"], payload: @expected_payload
+    @mock_api.expect :all, [ qbo_customer ], [ :customer ]
+    @mock_api.expect :update, { "Id" => qbo_customer["Id"] }, [ :customer ], id: qbo_customer["Id"], payload: @expected_payload
 
-    stub_job_dependencies([@member]) do
+    stub_job_dependencies([ @member ]) do
       UpdateMembersJob.perform_now
     end
 
@@ -156,8 +156,8 @@ class UpdateMembersJobTest < ActiveJob::TestCase
 
   def assert_retried_on_exception(exception)
     @mock_api.expect(:all, nil) { raise exception }
-    
-    stub_job_dependencies([@member]) do
+
+    stub_job_dependencies([ @member ]) do
       assert_enqueued_with(job: UpdateMembersJob) do
         job = UpdateMembersJob.new
         job.stub(:determine_delay, 5) do # <-- Replaces job.executions = 1
@@ -169,7 +169,7 @@ class UpdateMembersJobTest < ActiveJob::TestCase
 
   def stub_job_dependencies(members_list, &block)
     mock_relation = Minitest::Mock.new
-    mock_relation.expect :includes, members_list, [:people]
+    mock_relation.expect :includes, members_list, [ :people ]
 
     Membership.stub :members, Membership do
       Membership.stub :where, mock_relation do

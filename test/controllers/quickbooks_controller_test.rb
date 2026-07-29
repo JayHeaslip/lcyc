@@ -57,7 +57,7 @@ class QuickbooksControllerTest < ActionDispatch::IntegrationTest
     )
 
     mock_client = Minitest::Mock.new
-    mock_client.expect :authorization_code=, nil, ["valid_code"]
+    mock_client.expect :authorization_code=, nil, [ "valid_code" ]
     mock_client.expect :access_token!, mock_token_resp
 
     mock_config_instance = Minitest::Mock.new
@@ -89,7 +89,7 @@ class QuickbooksControllerTest < ActionDispatch::IntegrationTest
     matching_state = session[:state]
 
     mock_client = Minitest::Mock.new
-    mock_client.expect :authorization_code=, nil, ["invalid_code"]
+    mock_client.expect :authorization_code=, nil, [ "invalid_code" ]
     mock_client.expect :access_token!, nil
 
     mock_config_instance = Minitest::Mock.new
@@ -139,7 +139,7 @@ class QuickbooksControllerTest < ActionDispatch::IntegrationTest
   test "invoices action cleans up leading and trailing whitespace on memberships" do
     # Ensure this member matches Membership.billed_members scope
     member = memberships(:member1)
-    
+
     # Use fields with plenty of VARCHAR capacity (avoiding State VARCHAR(2) limits)
     member.update_columns(
       MailingName: "  Jane Doe  ",
@@ -165,7 +165,7 @@ class QuickbooksControllerTest < ActionDispatch::IntegrationTest
       post generate_invoices_quickbooks_path, params: { test: "true" }
     end
 
-    assert_enqueued_with(job: InvoiceBatchManagerJob, args: ["true"])
+    assert_enqueued_with(job: InvoiceBatchManagerJob, args: [ "true" ])
     assert_redirected_to root_path
     assert_equal "Generating invoices, check quickbooks in about 15 minutes", flash[:notice]
   end

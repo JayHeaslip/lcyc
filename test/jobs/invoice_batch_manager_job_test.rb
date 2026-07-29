@@ -31,28 +31,26 @@ class InvoiceBatchManagerJobTest < ActiveJob::TestCase
   end
 
   test "enqueues ProcessSingleInvoiceJob for filtered members in test mode" do
-    members_relation = [@member_1]
+    members_relation = [ @member_1 ]
 
     # Mock QBO query for Item IDs
-    @mock_api.expect :query, @qbo_items_response, ["SELECT Id, Name FROM Item"]
+    @mock_api.expect :query, @qbo_items_response, [ "SELECT Id, Name FROM Item" ]
 
     # Mock QBO query for Customer lookup
     customer_query = "SELECT Id FROM Customer WHERE DisplayName = '#{@member_1.MailingName.gsub("'", "\\\\'")}'"
-    @mock_api.expect :query, [{ "Id" => "qbo_cust_123" }], [customer_query]
+    @mock_api.expect :query, [ { "Id" => "qbo_cust_123" } ], [ customer_query ]
 
     QuickbooksConfig.stub :first, @config do
       @config.stub :api_client, @mock_api do
-        Membership.stub :where, members_relation, [{ id: [64, 345] }] do
-          
+        Membership.stub :where, members_relation, [ { id: [ 64, 345 ] } ] do
           # Verify that ProcessSingleInvoiceJob is enqueued with expected args
           assert_enqueued_with(
             job: ProcessSingleInvoiceJob,
-            args: [@member_1.id, "qbo_cust_123", @item_map],
+            args: [ @member_1.id, "qbo_cust_123", @item_map ],
             queue: "invoices"
           ) do
             InvoiceBatchManagerJob.perform_now(true) # test = true
           end
-
         end
       end
     end
@@ -62,21 +60,19 @@ class InvoiceBatchManagerJobTest < ActiveJob::TestCase
 
   test "logs warning and skips enqueuing when QBO customer is not found" do
     # Mock QBO query for Item IDs
-    @mock_api.expect :query, @qbo_items_response, ["SELECT Id, Name FROM Item"]
+    @mock_api.expect :query, @qbo_items_response, [ "SELECT Id, Name FROM Item" ]
 
     # Mock QBO query returning no results for Customer lookup
     customer_query = "SELECT Id FROM Customer WHERE DisplayName = '#{@member_1.MailingName.gsub("'", "\\\\'")}'"
-    @mock_api.expect :query, [], [customer_query]
+    @mock_api.expect :query, [], [ customer_query ]
 
     QuickbooksConfig.stub :first, @config do
       @config.stub :api_client, @mock_api do
-        Membership.stub :where, [@member_1], [{ id: [64, 345] }] do
-          
+        Membership.stub :where, [ @member_1 ], [ { id: [ 64, 345 ] } ] do
           # Ensure NO child jobs get enqueued
           assert_no_enqueued_jobs(only: ProcessSingleInvoiceJob) do
             InvoiceBatchManagerJob.perform_now(true)
           end
-
         end
       end
     end
@@ -85,10 +81,10 @@ class InvoiceBatchManagerJobTest < ActiveJob::TestCase
   end
 
   test "handles QboApi::BadRequest when looking up customer" do
-    @mock_api.expect :query, @qbo_items_response, ["SELECT Id, Name FROM Item"]
+    @mock_api.expect :query, @qbo_items_response, [ "SELECT Id, Name FROM Item" ]
 
     customer_query = "SELECT Id FROM Customer WHERE DisplayName = '#{@member_1.MailingName.gsub("'", "\\\\'")}'"
-    
+
     # Pass a block to expect — Minitest executes this block when @mock_api.query is called
     @mock_api.expect(:query, nil) do |q|
       raise QboApi::BadRequest.new({})
@@ -96,14 +92,12 @@ class InvoiceBatchManagerJobTest < ActiveJob::TestCase
 
     QuickbooksConfig.stub :first, @config do
       @config.stub :api_client, @mock_api do
-        Membership.stub :where, [@member_1], [{ id: [64, 345] }] do
-          
+        Membership.stub :where, [ @member_1 ], [ { id: [ 64, 345 ] } ] do
           assert_no_enqueued_jobs(only: ProcessSingleInvoiceJob) do
             assert_nothing_raised do
               InvoiceBatchManagerJob.perform_now(true)
             end
           end
-
         end
       end
     end

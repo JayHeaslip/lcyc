@@ -3,7 +3,7 @@ require "test_helper"
 class GalleryControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:three)
-    login_as(@user, 'passwor3')
+    login_as(@user, "passwor3")
     @person1 = people(:jim)
     @person2 = people(:bob)
     @person_without_photo = people(:jill)
@@ -26,6 +26,6 @@ class GalleryControllerTest < ActionDispatch::IntegrationTest
     refute_includes assigns(:people), @person_without_photo
 
     # Verifies ordering: Adams (Bob) should come before Zimmerman (Alice)
-    assert_equal [@person2, @person1], assigns(:people).to_a
+    assert_equal [ @person2, @person1 ], assigns(:people).to_a
   end
 end

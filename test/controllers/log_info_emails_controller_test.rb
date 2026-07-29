@@ -26,7 +26,7 @@ class LogInfoEmailsControllerTest < ActionDispatch::IntegrationTest
   # ==========================================
 
   test "should display edit form when logged in as member" do
-    login_as @communications_user,'communications'
+    login_as @communications_user, "communications"
     get edit_log_info_email_path
     assert_response :success
   end
@@ -35,7 +35,7 @@ class LogInfoEmailsControllerTest < ActionDispatch::IntegrationTest
     # User whose email does not exist in Person table
     non_member_user = users(:non_member)
 
-    login_as non_member_user,'nonmem'
+    login_as non_member_user, "nonmem"
     get edit_log_info_email_path
     assert_response :success
   end
@@ -45,7 +45,7 @@ class LogInfoEmailsControllerTest < ActionDispatch::IntegrationTest
   # ==========================================
 
   test "send log info emails test mode enqueues job for current user membership" do
-    login_as @communications_user, 'communications'
+    login_as @communications_user, "communications"
 
     assert_enqueued_with(job: SendBulkLoginfoJob) do
       patch log_info_email_path(1), params: {
@@ -59,7 +59,7 @@ class LogInfoEmailsControllerTest < ActionDispatch::IntegrationTest
 
     # Check the actual enqueued job arguments directly from the queue helper
     enqueued_job = enqueued_jobs.last
-    assert_equal [@membership.id], enqueued_job[:args].first
+    assert_equal [ @membership.id ], enqueued_job[:args].first
 
     assert_redirected_to root_url
     assert_equal "Log info emails sent.", flash[:notice]
@@ -69,7 +69,7 @@ class LogInfoEmailsControllerTest < ActionDispatch::IntegrationTest
   test "send log info emails test mode falls back to membership 407 when user has no person record" do
     non_member_user = users(:non_member)
 
-    login_as non_member_user,'nonmem'
+    login_as non_member_user, "nonmem"
 
     assert_enqueued_with(job: SendBulkLoginfoJob) do
       patch log_info_email_path(1), params: {
@@ -82,7 +82,7 @@ class LogInfoEmailsControllerTest < ActionDispatch::IntegrationTest
     end
 
     enqueued_job = enqueued_jobs.last
-    assert_equal [407], enqueued_job[:args].first
+    assert_equal [ 407 ], enqueued_job[:args].first
 
     assert_redirected_to root_url
     assert_equal "Log info emails sent.", flash[:notice]
@@ -93,7 +93,7 @@ class LogInfoEmailsControllerTest < ActionDispatch::IntegrationTest
   # ==========================================
 
   test "send log info emails enqueues job for all active member ids" do
-    login_as @communications_user,'communications'
+    login_as @communications_user, "communications"
 
     expected_ids = Membership.members.ids
 
@@ -119,7 +119,7 @@ class LogInfoEmailsControllerTest < ActionDispatch::IntegrationTest
   # ==========================================
 
   test "renders edit with status 422 when log info email update fails" do
-    login_as @communications_user,'communications'
+    login_as @communications_user, "communications"
 
 
     # Assuming LogInfoEmail validates presence of subject or body

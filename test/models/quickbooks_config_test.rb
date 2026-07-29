@@ -46,7 +46,7 @@ class QuickbooksConfigTest < ActiveSupport::TestCase
 
     # Mock OAuth2 client
     mock_oauth_client = Minitest::Mock.new
-    mock_oauth_client.expect :refresh_token=, nil, ["valid_refresh_token"]
+    mock_oauth_client.expect :refresh_token=, nil, [ "valid_refresh_token" ]
     mock_oauth_client.expect :access_token!, mock_response
 
     @config.stub :oauth2_client, mock_oauth_client do

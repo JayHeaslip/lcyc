@@ -125,7 +125,7 @@ class Person < ApplicationRecord
 
   def self.committee_spreadsheet(people)
     CSV.generate(col_sep: ",") do |csv|
-      csv << %w[FirstName LastName HomePhone WorkPhone CellPhone EmailAddress Committee]
+      csv << %w[LastName FirstName HomePhone WorkPhone CellPhone EmailAddress Committee]
       people.each do |p|
         csv << [ p.LastName, p.FirstName, p.HomePhone, p.WorkPhone, p.CellPhone, p.EmailAddress, p.Committee1 ]
       end
