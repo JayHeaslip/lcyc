@@ -20,9 +20,11 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
 
-        <li class="nav-item">
-          <a class="nav-link <%= request.path == '/' ? 'active fw-semibold' : '' %>" href="/">Home</a>
-        </li>
+        <% if user_signed_in? %>
+            <li class="nav-item">
+               <a class="nav-link <%= request.path == '/' ? 'active fw-semibold' : '' %>" href="/">Home</a>
+            </li>
+        <% end %>
 
         <% if user_signed_in? && Current.user.role?('Member') %>
           <% if Current.user.person.present? %>

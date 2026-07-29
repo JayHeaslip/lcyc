@@ -54,15 +54,15 @@
     <%= render "layouts/header" %>
     
     <!-- Main Content Area -->
-    <div class="container-fluid mt-4">
+    <div class="container-fluid mt-4 my-5 px-4 px-md-5">
       <div class="row">
-        <div class="col-12">
-          <%= flash_messages %>
-          <%= yield %>
-        </div>
+	<div class="col-12">
+	  <%= flash_messages %>
+	  <%= yield %>
+	</div>
       </div>
     </div>
-
+    
     <%= render "layouts/footer" %>
   </body>
 </html>
