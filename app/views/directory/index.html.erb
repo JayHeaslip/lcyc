@@ -1,4 +1,4 @@
-<div class="ms-4">
+<div>
   <h2>Membership Directory</h2>
   <%= form_with url: directory_index_path, method: :get, local: true, class: "row g-3 my-3" do |f| %>
   <div class="col-auto">
@@ -14,23 +14,25 @@
     <% end %>
   </div>
   <% end %>
-    
-  <table class="table table-sm table-striped table-spacious">
-    <thead class="thead-light">
-      <tr>
-	<th>Name</th>
-	<th>Email</th>
-	<th>Cell Phone</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @members.each do |p| %>
-      <tr>
-	<td><%= link_to "#{p.LastName}, #{p.FirstName}", directory_path(p) %></td>
-	<td><%= link_to p.EmailAddress, "mailto:#{p.EmailAddress}" %></td>
-	<td><%= number_to_phone(p.CellPhone, area_code: true) %></td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
+
+  <div class="table-responsive" style="overflow-x: scroll;">    
+    <table class="table table-sm table-striped" style="min-width: 600px;">
+      <thead class="thead-light">
+	<tr>
+	  <th>Name</th>
+	  <th>Email</th>
+	  <th>Cell Phone</th>
+	</tr>
+      </thead>
+      <tbody>
+	<% @members.each do |p| %>
+	<tr>
+	  <td><%= link_to "#{p.LastName}, #{p.FirstName}", directory_path(p) %></td>
+	  <td><%= link_to p.EmailAddress, "mailto:#{p.EmailAddress}" %></td>
+	  <td><%= number_to_phone(p.CellPhone, area_code: true) %></td>
+	</tr>
+	<% end %>
+      </tbody>
+    </table>
+  </div>
 </div>

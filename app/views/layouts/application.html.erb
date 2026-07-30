@@ -7,7 +7,7 @@
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
-    <%= favicon_link_tag asset_path("favicon.png"), rel: "icon", type: "image/x-icon" %>
+    <%= favicon_link_tag asset_path("favicon.png"), rel: "icon", type: "image/png" %>
     
     <style>
       :root {
@@ -54,7 +54,7 @@
     <%= render "layouts/header" %>
     
     <!-- Main Content Area -->
-    <div class="container-fluid mt-4 my-5 px-4 px-md-5">
+    <div class="container-fluid px-4 my-5 pt-4 pt-md-3">
       <div class="row">
 	<div class="col-12">
 	  <%= flash_messages %>
