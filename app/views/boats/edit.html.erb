@@ -1,81 +1,134 @@
 <%= form_with model: @boat do |f| %>
-<% if @boat.errors.any? %>
-<div id="error_explanation">
-  <h3><%= pluralize(@boat.errors.count, "error") %>
-    prohibited this boat from being saved:</h3>
+<div class="card shadow-sm border-0">
   
-  <ul>
-    <% @boat.errors.full_messages.each do |message| %>
-    <li><%= message %></li>
+  <%# Form Header %>
+  <div class="card-header bg-white py-3 border-bottom">
+    <div class="d-flex align-items-center justify-content-between">
+      <div>
+        <h4 class="mb-0 fw-bold text-dark">
+          <i class="bi bi-water me-2 text-primary"></i>
+          <%= @boat.persisted? ? "Edit #{@boat.Name.presence || 'Boat'}" : "New Boat Record" %>
+        </h4>
+        <small class="text-muted">Manage vessel parameters, specs, and assignment locations.</small>
+      </div>
+      <% if @boat.persisted? %>
+      <span class="badge bg-light text-dark border">
+        ID: <%= @boat.id %>
+      </span>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card-body p-4">
+    
+    <%# Error Block %>
+    <% if @boat.errors.any? %>
+    <div class="alert alert-danger mb-4" role="alert">
+      <h5 class="alert-heading fw-bold mb-2">
+        <%= pluralize(@boat.errors.count, "error") %> prohibited this boat from being saved:
+      </h5>
+      <ul class="mb-0 ps-3">
+        <% @boat.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
     <% end %>
-  </ul>
+
+    <%# Line 1: Name & Manufacturer %>
+    <div class="row g-3 mb-3">
+      <div class="col-md-6">
+        <span class="has-float-label">
+          <%= f.text_field :Name, id: :Name, class: "form-control", placeholder: " " %>
+          <label for="Name">Boat Name</label>
+        </span>
+      </div>
+
+      <div class="col-md-6">
+        <span class="has-float-label">
+          <%= f.text_field :Mfg_Size, id: :Mfg_Size, class: "form-control", placeholder: " " %>
+          <label for="Mfg_Size">Manufacturer / Size</label>
+        </span>
+      </div>
+    </div>
+
+    <%# Line 2: Type, Length, Draft (Horizontally Aligned) %>
+    <div class="row g-3 mb-3 align-items-end">
+      <div class="col-md-4">
+        <span class="has-float-label">
+          <%= f.select :Type, %w{Sail Power}, { include_blank: "Select..." }, { class: "form-select", id: :Type } %>
+          <label for="Type">Type</label>
+        </span>
+      </div>
+
+      <div class="col-md-4">
+        <span class="has-float-label">
+          <%= f.text_field :Length, id: :Length, class: "form-control", placeholder: " " %>
+          <label for="Length">Length (ft)</label>
+        </span>
+      </div>
+
+      <div class="col-md-4">
+        <span class="has-float-label">
+          <%= f.text_field :Draft, id: :Draft, class: "form-control", placeholder: " " %>
+          <label for="Draft">Draft (ft)</label>
+        </span>
+      </div>
+    </div>
+
+    <%# Line 3: Class, PHRF, Sail # %>
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <span class="has-float-label">
+          <%= f.text_field :Class, id: :Class, class: "form-control", placeholder: " " %>
+          <label for="Class">Class</label>
+        </span>
+      </div>
+
+      <div class="col-md-4">
+        <span class="has-float-label">
+          <%= f.text_field :PHRF, id: :PHRF, class: "form-control", placeholder: " " %>
+          <label for="PHRF">PHRF</label>
+        </span>
+      </div>
+
+      <div class="col-md-4">
+        <span class="has-float-label">
+          <%= f.text_field :sail_num, id: :sail_num, class: "form-control", placeholder: " " %>
+          <label for="sail_num">Sail #</label>
+        </span>
+      </div>
+    </div>
+
+    <hr class="my-4 text-muted">
+
+    <%# Line 4: Location & Status Badges %>
+    <div class="row g-3 align-items-end">
+      <div class="col-md-4">
+        <span class="has-float-label">
+          <%= f.select :location, ['Mooring', 'Parking Lot'], { include_blank: "Select Location..." }, { class: "form-select", id: :location } %>
+          <label for="location">Location</label>
+        </span>
+      </div>
+
+      <div class="col-md-8 d-flex gap-3">
+        <div class="p-2 bg-light rounded border text-secondary flex-fill text-center">
+          <small class="d-block text-uppercase fw-bold text-muted fs-7">Mooring Assignment</small>
+          <span class="fw-semibold text-dark"><%= @boat.mooring_id.presence || "None" %></span>
+        </div>
+        <div class="p-2 bg-light rounded border text-secondary flex-fill text-center">
+          <small class="d-block text-uppercase fw-bold text-muted fs-7">Drysail Space</small>
+          <span class="fw-semibold text-dark"><%= @boat.drysail_id.presence || "None" %></span>
+        </div>
+      </div>
+    </div>
+
+    <%# Action Bar %>
+    <div class="mt-4 pt-3 border-top d-flex align-items-center justify-content-between">
+      <%= link_to "Cancel", boats_path, class: "btn btn-outline-secondary px-3" if respond_to?(:boats_path) %>
+      <%= f.submit "Save Changes", class: "btn btn-primary px-4 fw-semibold ms-auto" %>
+    </div>
+
+  </div>
 </div>
-<% end %>
-<div class="boat">
-  <div class="row align-items-center">
-    <div class="col-sm-2">
-      <span class="has-float-label">
-	<%= f.text_field :Mfg_Size, id: :Mfg_Size, class: "form-control", placeholder: " " %>
-	<label for="Mfg_Size">Mfg/Size</label>
-      </span>
-    </div>
-    <label for="Type" class="col-auto col-form-label pt-0">Type:</label>
-    <div class="col-sm-1">
-      <%= f.select :Type, %w{Sail Power}, {include_blank: true} %>
-    </div>
-    <div class="col-sm-2">
-      <span class="has-float-label">
-	<%= f.text_field :Name, id: :Name, class: "form-control", placeholder: " " %>
-	<label for="Name">Name</label>
-      </span>
-    </div>
-    <div class="col-sm-1">
-      <span class="has-float-label">
-	<%= f.text_field :Length, id: :Length, class: "form-control", placeholder: " " %>
-	<label for="Length">Length</label>
-      </span>
-    </div>
-    <div class="col-sm-1 mb-1">
-      <span class="has-float-label">
-	<%= f.text_field :Draft, id: :Draft, class: "form-control", placeholder: " " %>
-	<label  for="Draft">Draft</label>
-      </span>
-    </div>
-  </div>
-  <div class="row align-items-center">
-    <div class="col-sm-2">
-      <span class="has-float-label">
-	<%= f.text_field :Class, id: :Class, class: "form-control", placeholder: " " %>
-	<label for="Class">Class</label>
-      </span>
-    </div>
-    <div class="col-sm-2">
-      <span class="has-float-label">
-	<%= f.text_field :PHRF, id: :Class, class: "form-control", placeholder: " " %>
-	<label for="PHRF">PHRF</label>
-      </span>
-    </div>
-    <div class="col-sm-1">
-      <span class="has-float-label">
-	<%= f.text_field :sail_num, id: :sail_num, class: "form-control", placeholder: " " %>
-	<label for="sail_num">Sail#</label>
-      </span>
-    </div>
-    <label for="location" class="col-auto col-form-label pt-0">Location:</label>
-    <div class="col-auto">
-      <%= f.select :location, ['Mooring', 'Parking Lot'], {include_blank: true} %>
-    </div>
-    <div class="col-sm-2">
-      Mooring #<%= @boat.mooring_id %>
-    </div>
-    <div class="col-sm-2">
-      Drysail #<%= @boat.drysail_id %>
-    </div>
-    <hr>
-  </div>
-  <div class="row mt-3">
-  <div class="col-sm-3">
-      <%= f.submit "Update", class: "btn btn-primary" %>
-    </div>
-  </div>
 <% end %>

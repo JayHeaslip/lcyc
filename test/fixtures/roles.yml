@@ -18,6 +18,7 @@ BOG:
   - DirectoryController_update
   - DrysailsController_index
   - GalleryController_index
+  - BoatGalleryController_index
   - MailingsController_create
   - MailingsController_destroy
   - MailingsController_edit
@@ -60,6 +61,7 @@ Member:
   - DirectoryController_show
   - DirectoryController_update
   - GalleryController_index
+  - BoatGalleryController_index
   - MembershipsController_show
   - PeopleController_destroy
   - PeopleController_show

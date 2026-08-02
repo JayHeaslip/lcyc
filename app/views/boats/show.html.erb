@@ -1,5 +1,21 @@
 <div>
-  <h3>Boat</h3>
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4 pb-3 border-bottom">
+    <h2 class="h4 fw-bold text-dark mb-0">
+      <%= @boat.Name %>
+    </h2>
+    
+    <div class="d-flex gap-2">
+      <%= link_to request.referer, class: "btn btn-outline-secondary btn-sm px-3 rounded-pill d-inline-flex align-items-center" do %>
+      <span>Back</span>
+      <% end %>
+      
+      <% if current_user.roles?(['Harbormaster','BOG', 'Admin']) %>
+      <%= link_to edit_boat_path(@boat), class: "btn btn-primary btn-sm px-3 rounded-pill d-inline-flex align-items-center shadow-sm" do %>
+      <span>Edit Boat</span>
+      <% end %>
+      <% end %>
+    </div>
+  </div>
   <hr>
   <table class="table table-sm">
     <tbody>
@@ -29,9 +45,6 @@
       </tr>
     </tbody>
   </table>
-  <p>
-    <%= link_to 'Edit Boat', edit_boat_path(@boat) %>
-  </p>
   <% if not @boat.memberships.empty? %>
   <h3>Memberships</h3>
   <hr>
@@ -47,15 +60,19 @@
       <tr>
 	<td><%= link_to membership.LastName, membership %></td>
 	<td><%= membership.MailingName %></td>
+	<% if current_user.roles?(['Harbormaster','BOG', 'Admin']) %>
 	<td class="list-actions">
           <%= link_to "Remove Association", rmboat_membership_boat_path(membership, @boat), data: {turbo_confirm: "Are you sure?", turbo_method: :delete } %>
 	</td>
+	<% end %>
       </tr>
       <% end %>
     </tbody>
   </table>
   <% end %>
+  <% if current_user.roles?(['Harbormaster','BOG', 'Admin']) %>
   <p>
     <%= link_to 'Associate with a membership', associate_boat_path(@boat) %>
   </p>
+  <% end %>
 </div>

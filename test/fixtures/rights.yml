@@ -338,6 +338,10 @@ GalleryController_index:
   name: GalleryController.index
   controller: gallery
   action: index
+BoatGalleryController_index:
+  name: BoatGalleryController.index
+  controller: boat_gallery
+  action: index
 SsoController_handle_sso:
   name: SsoController.handle_sso
   controller: sso
