@@ -2,6 +2,18 @@
   <h2>Initiation installments due</h2>
   <p><b>Note: This indicates the season (billed the previous December) in which an initiation installment will be due. This does not track status of payments, this is done in Quickbooks</b></p>
 
+  <%= form_with url: initiation_report_memberships_path, method: :get, local: true, class: "row g-3 my-3" do |f| %>
+  <div class="col-auto">
+    <%= hidden_field_tag :all, true %>
+  </div>
+  <div class="col-auto">
+    <p>Click All to include preceding years.</p>
+    <%= f.submit "All", class: "btn btn-primary" %>
+    <% if params[:all].present? %>
+    <%= link_to "Current", initiation_report_memberships_path, class: "btn btn-outline-secondary" %>
+    <% end %>
+  </div>
+  <% end %>
   
 <p><b>Total : </b><%= @initiation_fee_due.length %></p>
 <table class="table table-sm table-striped">

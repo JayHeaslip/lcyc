@@ -171,7 +171,12 @@ class MembershipsController < ApplicationController
   end
 
   def initiation_report
-    installments = InitiationInstallment.includes(:membership).order(:year)
+    if params[:all].present?
+      installments = InitiationInstallment.includes(:membership).order(:year)
+    else
+      installments = InitiationInstallment.where("year >= ?", Time.current.year).includes(:membership).order(:year)
+    end
+
     @initiation_fee_due = []
     installments.each do |i|
       next if i.membership.Status != "Active" && i.membership.Status != "Associate"
