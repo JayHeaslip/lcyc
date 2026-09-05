@@ -8,7 +8,7 @@ class MembershipTest < ApplicationSystemTestCase
     click_on "Sign In"
     assert_current_path root_path, wait: 5
     click_on "Memberships"
-    click_on "New Membership"
+    click_on "New Membership", wait: 5
     fill_in "MembershipLastName", with: "Doe"
     fill_in "Mailing Name", with: "John Doe"
     fill_in "Street Address", with: "1 Maple St"
