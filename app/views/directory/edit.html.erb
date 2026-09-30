@@ -104,6 +104,7 @@
           </div>
 
           <!-- BirthYear -->
+          <% if current_user.membership == @person.MembershipID || current_user.BOG? || current_user.admin? %>
           <div class="col-12">
             <div class="row align-items-center">
               <div class="col-4 col-md-3">
@@ -117,6 +118,7 @@
               </div>
             </div>
           </div>
+	  <% end %>
 
           <!-- Email -->
           <div class="col-12">

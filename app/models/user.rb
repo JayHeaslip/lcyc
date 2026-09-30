@@ -17,6 +17,11 @@ class User < ApplicationRecord
     role?("Admin")
   end
 
+  def BOG?
+    role.name == "BOG" ||
+      role.parent&.name == "BOG"
+  end
+
   def self.authenticate_by(attributes)
     passwords, identifiers = attributes.to_h.partition do |name, _value|
       !has_attribute?(name) && has_attribute?("#{name}_digest")
