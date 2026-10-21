@@ -8,7 +8,7 @@ class MembershipsController < ApplicationController
     @status_options = %w[Accepted Active Associate Honorary Inactive Life Resigned Senior]
     params[:status] ||= [ "Active", "Associate", "Honorary", "Life", "Senior" ]
     @memberships = filter_memberships(params)
-    @memberships = @memberships.order(sort_column + " " + sort_direction)
+    @memberships = @memberships.order(sort_column => sort_direction.to_sym)
     @lastname = params[:lastname]
     @selected_status = params[:status]
     @operator = params[:operator]

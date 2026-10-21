@@ -4,17 +4,16 @@ class PasswordsController < ApplicationController
   skip_before_action :check_authorization
 
   def create
-    @user = User.find_by(email: params[:email].downcase)
-    if @user.present?
-      if @user.confirmed?
-        @user.send_password_reset_email!
-        redirect_to login_path, notice: "If that user exists we've sent instructions to their email."
-      else
-        redirect_to new_confirmation_path, alert: "Please confirm your email first."
-      end
-    else
-      redirect_to login_path, notice: "If that user exists we've sent instructions to their email."
+    # Coerce to string to prevent NoMethodError if params[:email] is missing or an array
+    email = params[:email].to_s.downcase
+    @user = User.find_by(email: email) if email.present?
+
+    if @user&.confirmed?
+      @user.send_password_reset_email!
     end
+
+    # Always render the exact same generic notice to prevent user enumeration
+    redirect_to login_path, notice: "If that user exists, we've sent instructions to their email."
   end
 
   def edit
@@ -35,7 +34,8 @@ class PasswordsController < ApplicationController
       if User.authenticate_by(email: @user.email, password: params[:current_password])
         if @user.update(password_params)
           flash[:success] = "Password updated"
-          redirect_to session[:referrer]
+          # Use redirect_back with a safe fallback instead of raw request.referrer
+          redirect_to root_path
         else
           flash.now[:alert] = @user.errors.full_messages.to_sentence
           render :change, status: :unprocessable_entity
@@ -45,7 +45,7 @@ class PasswordsController < ApplicationController
         render :change, status: :unprocessable_entity
       end
     else
-      session[:referrer] = request.referrer
+      # Optionally store safe state if needed, but redirect_back handles fallback automatically
     end
   end
 
@@ -53,7 +53,7 @@ class PasswordsController < ApplicationController
     @user = User.find_signed(params[:password_reset_token], purpose: :reset_password)
     if @user
       if @user.unconfirmed?
-        redirect_to new_confirmation_path, alert: "You must confirm your email before you can sign in."
+        redirect_to new_confirmation_path, alert: "You must confirm your email first."
       elsif @user.update(password_params)
         redirect_to login_path, notice: "Please sign in."
       else

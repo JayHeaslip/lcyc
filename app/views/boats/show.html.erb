@@ -58,7 +58,7 @@
     <tbody>
       <% for membership in @boat.memberships %>
       <tr>
-	<td><%= link_to membership.LastName, membership %></td>
+	<td><%= link_to h(membership.LastName), membership_path(membership.id) %></td>
 	<td><%= membership.MailingName %></td>
 	<% if current_user.roles?(['Harbormaster','BOG', 'Admin']) %>
 	<td class="list-actions">

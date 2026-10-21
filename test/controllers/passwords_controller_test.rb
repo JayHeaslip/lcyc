@@ -128,8 +128,8 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
       email: @unconfirmed_user.email.upcase
     }
 
-    assert_redirected_to new_confirmation_path
-    assert_not_nil flash[:alert]
+    assert_redirected_to login_path
+    assert_equal flash[:notice], "If that user exists, we've sent instructions to their email."
   end
 
   test "should not send password reset mailer for unknown user" do
@@ -162,7 +162,7 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     }
 
     assert_redirected_to new_confirmation_path
-    assert_equal flash[:alert], "You must confirm your email before you can sign in."
+    assert_equal flash[:alert], "You must confirm your email first."
   end
 
   test "should handle update password request with invalid token" do

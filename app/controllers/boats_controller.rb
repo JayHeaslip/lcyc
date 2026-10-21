@@ -2,7 +2,7 @@ class BoatsController < ApplicationController
   helper_method :sort_column, :sort_direction
 
   def index
-    @boats = Boat.active_members.order("#{sort_column} #{sort_direction}")
+    @boats = Boat.active_members.order(sort_column => sort_direction.to_sym)
   end
 
   def show
