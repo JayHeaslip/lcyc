@@ -925,15 +925,17 @@
     }, "");
   }
   function uuid() {
-    if (globalThis.crypto?.randomUUID) {
-      return globalThis.crypto.randomUUID();
-    }
-    const bytes = new Uint8Array(16);
-    globalThis.crypto.getRandomValues(bytes);
-    bytes[6] = bytes[6] & 15 | 64;
-    bytes[8] = bytes[8] & 63 | 128;
-    const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
-    return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+    return Array.from({ length: 36 }).map((_2, i2) => {
+      if (i2 == 8 || i2 == 13 || i2 == 18 || i2 == 23) {
+        return "-";
+      } else if (i2 == 14) {
+        return "4";
+      } else if (i2 == 19) {
+        return (Math.floor(Math.random() * 4) + 8).toString(16);
+      } else {
+        return Math.floor(Math.random() * 16).toString(16);
+      }
+    }).join("");
   }
   function getAttribute(attributeName, ...elements) {
     for (const value of elements.map((element) => element?.getAttribute(attributeName))) {
