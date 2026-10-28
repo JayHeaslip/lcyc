@@ -33,7 +33,7 @@ module ApplicationHelper
       "https://github.com/JayHeaslip/lcyc/commit/#{GIT_REVISION}",
       target: "_blank",
       rel: "noopener",
-      class: ""text-decoration-none text-secondary"
+      class: "text-decoration-none text-secondary"
     )
   end
 end
