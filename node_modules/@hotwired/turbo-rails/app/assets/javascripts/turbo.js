@@ -1,5 +1,5 @@
 /*!
-Turbo 8.0.21
+Turbo 8.0.23
 Copyright © 2026 37signals LLC
  */
 const FrameLoadingStyle = {
@@ -4565,7 +4565,7 @@ const deprecatedLocationPropertyDescriptors = {
 
 const session = new Session(recentRequests);
 
-const {cache: cache, navigator: navigator} = session;
+const {cache: cache, navigator: sessionNavigator} = session;
 
 function start() {
   session.start();
@@ -4616,14 +4616,14 @@ function morphTurboFrameElements(currentFrame, newFrame) {
 
 var Turbo = Object.freeze({
   __proto__: null,
-  navigator: navigator,
-  session: session,
-  cache: cache,
   PageRenderer: PageRenderer,
   PageSnapshot: PageSnapshot,
   FrameRenderer: FrameRenderer,
   fetch: fetchWithTurboHeaders,
   config: config,
+  session: session,
+  cache: cache,
+  navigator: sessionNavigator,
   start: start,
   registerAdapter: registerAdapter,
   visit: visit,
@@ -5365,7 +5365,7 @@ var Turbo$1 = Object.freeze({
   morphChildren: morphChildren,
   morphElements: morphElements,
   morphTurboFrameElements: morphTurboFrameElements,
-  navigator: navigator,
+  navigator: sessionNavigator,
   registerAdapter: registerAdapter,
   renderStreamMessage: renderStreamMessage,
   session: session,
