@@ -1,11 +1,11 @@
-revision_file = Rails.root.join('REVISION')
+revision_file = Rails.root.join("REVISION")
 
 GIT_REVISION = if revision_file.exist?
                  revision_file.read.strip
-               else
+else
                  begin
                    `git rev-parse HEAD`.strip
                  rescue
-                   'development'
+                   "development"
                  end
-               end
+end

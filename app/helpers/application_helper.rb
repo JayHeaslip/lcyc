@@ -22,11 +22,11 @@ module ApplicationHelper
   end
 
   def short_app_revision
-    GIT_REVISION == 'development' ? 'dev' : GIT_REVISION[0..6]
+    GIT_REVISION == "development" ? "dev" : GIT_REVISION[0..6]
   end
 
   def github_commit_link
-    return unless GIT_REVISION.present? && GIT_REVISION != 'development'
+    return unless GIT_REVISION.present? && GIT_REVISION != "development"
 
     link_to(
       short_app_revision,
