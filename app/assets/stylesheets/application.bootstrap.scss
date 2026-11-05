@@ -1,6 +1,7 @@
-@import 'bootstrap/scss/bootstrap';
-@import 'bootstrap-icons/font/bootstrap-icons';
-@import 'float-label';
+@use 'bootstrap/scss/bootstrap';
+@use 'bootstrap-icons/font/bootstrap-icons';
+@use 'float-label';
+@use "trix";
 
 html {
 position: relative;
@@ -213,14 +214,13 @@ hr {
 }
 
 .bg-BOG {
-    background-color: $gray-200;
+    background-color: bootstrap.$gray-200;
 }
 
 .bg-Membership {
-    background-color: $gray-500;
+    background-color: bootstrap.$gray-500;
 }
 
-@import "trix";
 
 .trix-content .attachment-gallery > action-text-attachment,
 .trix-content .attachment-gallery > .attachment {
