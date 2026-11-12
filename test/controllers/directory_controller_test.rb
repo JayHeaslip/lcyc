@@ -61,7 +61,6 @@ class DirectoryControllerTest < ActionDispatch::IntegrationTest
     get edit_directory_url(@person)
 
     assert_response :success
-    assert_equal "You are not authorized to view the page you requested.", flash[:alert]
 
     assert_equal @other_user.person.id, assigns(:person).id
   end

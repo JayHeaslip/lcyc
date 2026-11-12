@@ -53,7 +53,6 @@ class DirectoryController < ApplicationController
     @person = Person.find(params[:id])
     @boat = @person.membership.boats&.first
     unless (@person.MembershipID == current_user.membership) || (current_user.admin?)
-      flash[:alert] = "You are not authorized to view the page you requested."
       if current_user.person
         @person = current_user.person
       else
