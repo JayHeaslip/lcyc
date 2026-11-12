@@ -30,7 +30,7 @@ class SsoControllerTest < ActionDispatch::IntegrationTest
   # --- 2. JIT PROVISIONING BRANCHES ---
 
   test "should create a new user with full name (JIT) and log them in" do
-    payload = { email: "jane.doe@example.com", name: "Jane Doe" }
+    payload = { email: "jane.doe@example.com", name: "Jane Doe", return_to: "/directory" }
     token = generate_jwt(payload, @secret)
 
     Rails.application.credentials.stub(:rails_sso_secret, @secret) do
@@ -45,7 +45,7 @@ class SsoControllerTest < ActionDispatch::IntegrationTest
     assert_equal @role, user.role
 
     assert_redirected_to directory_index_path
-    assert_equal "Successfully authenticated from Drupal!", flash[:notice]
+    assert_equal "Successfully logged in via SSO.", flash[:notice]
   end
 
   test "should handle single-word names correctly when provisioning user" do
@@ -87,7 +87,7 @@ class SsoControllerTest < ActionDispatch::IntegrationTest
       role: @role
     )
 
-    payload = { email: existing_user.email, name: "Existing User" }
+    payload = { email: existing_user.email, name: "Existing User", return_to: "/directory" }
     token = generate_jwt(payload, @secret)
 
     Rails.application.credentials.stub(:rails_sso_secret, @secret) do
@@ -97,7 +97,7 @@ class SsoControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to directory_index_path
-    assert_equal "Successfully authenticated from Drupal!", flash[:notice]
+    assert_equal "Successfully logged in via SSO.", flash[:notice]
   end
 
   # --- 3. JWT EXCEPTIONS & EXPIRATION ---
@@ -117,7 +117,7 @@ class SsoControllerTest < ActionDispatch::IntegrationTest
 
   test "should allow tokens within the 180-second leeway window" do
     # Payload expired 2 minutes ago (within 180s leeway)
-    payload = { email: "leeway@example.com", exp: 2.minutes.ago.to_i }
+    payload = { email: "leeway@example.com", exp: 2.minutes.ago.to_i, return_to: "/directory" }
     token = generate_jwt(payload, @secret)
 
     Rails.application.credentials.stub(:rails_sso_secret, @secret) do

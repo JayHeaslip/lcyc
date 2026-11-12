@@ -28,7 +28,7 @@ class SsoController < ApplicationController
                                    exp_leeway: 180
                                  })
 
-      payload = decoded_token[0]
+     payload = decoded_token[0]
 
       email = payload["email"]
       name = payload["name"]
@@ -56,8 +56,17 @@ class SsoController < ApplicationController
       login(user)
       # -----------------------------------------
 
-      # Send them to the application dashboard or root
-      redirect_to directory_index_path, notice: "Successfully authenticated from Drupal!"
+      # Send them to the requested path
+      requested_path = payload["return_to"]
+      logger.info "requested path #{requested_path}"
+
+      # Security check: Ensure it starts with '/' to prevent external open redirects
+      safe_redirect_path = if requested_path.present? && requested_path.start_with?("/")
+                             requested_path
+      else
+                             root_path
+      end
+      redirect_to safe_redirect_path, notice: "Successfully logged in via SSO."
 
     rescue JWT::ExpiredSignature => e
       Rails.logger.error "SSO Failure: Token has expired. #{e.message}"

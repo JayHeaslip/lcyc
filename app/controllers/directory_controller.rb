@@ -1,5 +1,5 @@
 class DirectoryController < ApplicationController
-  before_action :check_person, only: [ :edit, :update ]
+  before_action :check_person, only: [ :show, :edit, :update ]
 
   def index
     @members = Person.members.where(MemberType: [ "Member", "Partner" ]).order(:LastName, :FirstName)
@@ -13,19 +13,16 @@ class DirectoryController < ApplicationController
   end
 
   def show
-    @person = Person.find(params[:id])
     @boat = @person.membership&.boats.first
   end
 
   def edit
-    @person = Person.find(params[:id])
     @membership = @person.membership
 
     @membership.boats.build if @membership.boats.empty?
   end
 
   def update
-    @person = Person.find(params[:id])
     @membership = @person.membership
 
     if @membership.update(membership_params)
@@ -57,7 +54,11 @@ class DirectoryController < ApplicationController
     @boat = @person.membership.boats&.first
     unless (@person.MembershipID == current_user.membership) || (current_user.admin?)
       flash[:alert] = "You are not authorized to view the page you requested."
-      redirect_to directory_index_path
+      if current_user.person
+        @person = current_user.person
+      else
+        redirect_to directory_index_path
+      end
     end
   end
 end
