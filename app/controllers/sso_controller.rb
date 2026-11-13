@@ -33,7 +33,6 @@ class SsoController < ApplicationController
       email = payload["email"]
       name = payload["name"]
 
-      logger.info "User email is #{email}"
       # Just-In-Time (JIT) provisioning using your explicit User model rules
       user = User.find_or_create_by!(email: email) do |u|
         if name.present?
@@ -58,7 +57,7 @@ class SsoController < ApplicationController
 
       # Send them to the requested path
       requested_path = payload["return_to"]
-      logger.info "requested path #{requested_path}"
+      session[:authenticated_via_sso] = true
 
       # Security check: Ensure it starts with '/' to prevent external open redirects
       safe_redirect_path = if requested_path.present? && requested_path.start_with?("/")

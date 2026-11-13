@@ -55,14 +55,21 @@ class DirectoryControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should handle SSO authenticated requests" do
+    sso_login_as(@other_user, return_to: directory_path(@person))
+
+    assert_redirected_to directory_path(@person)
+
+    follow_redirect!
+    assert_response :success
+    # Verify SSO forces the person to the logged-in user's profile
+    assert_equal @other_user.person.id, assigns(:person).id
+  end
+
   test "should deny unauthorized user from editing another profile" do
     login_as(@other_user, "passwor3")
-
     get edit_directory_url(@person)
-
-    assert_response :success
-
-    assert_equal @other_user.person.id, assigns(:person).id
+    assert_redirected_to directory_index_path
   end
 
   # --- 4. Update Action Tests ---

@@ -1,7 +1,8 @@
 class DirectoryController < ApplicationController
-  before_action :check_person, only: [ :show, :edit, :update ]
+  before_action :check_person, only: [ :edit, :update ]
 
   def index
+    session[:authenticated_via_sso] = false
     @members = Person.members.where(MemberType: [ "Member", "Partner" ]).order(:LastName, :FirstName)
 
     if params[:query].present?
@@ -13,6 +14,19 @@ class DirectoryController < ApplicationController
   end
 
   def show
+    @person = if session[:authenticated_via_sso]
+                current_user.person
+    else
+                Person.find(params[:id])
+    end
+
+    return redirect_to(directory_index_path) unless @person
+
+    # Ensure SSO users see the URL for their own profile
+    if session[:authenticated_via_sso] && params[:id].to_s != @person.id.to_s
+      return redirect_to(directory_path(@person))
+    end
+
     @boat = @person.membership&.boats.first
   end
 
@@ -27,6 +41,7 @@ class DirectoryController < ApplicationController
 
     if @membership.update(membership_params)
       redirect_to directory_path(@person), notice: "Directory profile updated."
+      session[:authenticated_via_sso] = false
     else
       render :edit, status: :unprocessable_entity
     end
@@ -52,12 +67,9 @@ class DirectoryController < ApplicationController
   def check_person
     @person = Person.find(params[:id])
     @boat = @person.membership.boats&.first
-    unless (@person.MembershipID == current_user.membership) || (current_user.admin?)
-      if current_user.person
-        @person = current_user.person
-      else
-        redirect_to directory_index_path
-      end
+    unless @person&.MembershipID == current_user.membership || current_user.admin?
+      flash[:alert] = "You are not authorized to view the page you requested."
+      redirect_to directory_index_path
     end
   end
 end

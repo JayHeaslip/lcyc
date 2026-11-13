@@ -40,6 +40,23 @@ class ActiveSupport::TestCase
     }
   end
 
+  def sso_login_as(user, return_to: root_path)
+    secret = Rails.application.credentials.rails_sso_secret
+
+    token = JWT.encode(
+      {
+        email: user.email,
+        name: "#{user.firstname} #{user.lastname}",
+        return_to: return_to,
+        exp: 5.minutes.from_now.to_i
+      },
+      secret,
+      "HS256"
+    )
+
+    get sso_login_path, params: { token: token }
+  end
+
   def logout
     session.delete(:current_active_session_id)
   end
