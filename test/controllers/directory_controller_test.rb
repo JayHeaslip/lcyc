@@ -61,7 +61,7 @@ class DirectoryControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to directory_path(@person)
 
     follow_redirect!
-    assert_response :success
+    assert_redirected_to directory_path(@other_person)
     # Verify SSO forces the person to the logged-in user's profile
     assert_equal @other_user.person.id, assigns(:person).id
   end

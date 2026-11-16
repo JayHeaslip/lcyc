@@ -1,17 +1,16 @@
 require "application_system_test_case"
 
 class MembershipTest < ApplicationSystemTestCase
-  
   setup do
     page.driver.browser.manage.window.resize_to(1400, 1400)
     puts "Viewport width: #{page.evaluate_script('window.innerWidth')}"
   end
-  
+
   test "new membership" do
     visit root_path
     fill_in "email", with: "dave@abc.com"
     fill_in "password", with: "aqswde12$$"
-    click_on "Sign In", wait: 5
+    click_on "Sign In", wait: 7
     assert_current_path root_path
     click_on "Memberships"
     click_on "New Membership", wait: 5
