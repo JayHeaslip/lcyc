@@ -19,8 +19,12 @@ namespace :chores do
     chore("Daily") do
       user, _, db, home = get_db_config
 
-      # clear sessions older than 24 hours
-      # ActiveRecord::SessionStore::Session.delete_all ['updated_at < ?', 24.hours.ago]
+      # Clear old active sessions in batches (adjust days as needed)
+      cutoff_date = 30.days.ago
+      ActiveSession.where("updated_at < ?", cutoff_date).in_batches(of: 1000) do |relation|
+        deleted_count = relation.delete_all
+        puts "Deleted #{deleted_count} active session records."
+      end
 
       # backup the database and mail a copy to my gmail account
       # verbose(false)
