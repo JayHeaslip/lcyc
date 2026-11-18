@@ -8,10 +8,15 @@ class QuickbooksController < ApplicationController
   before_action :check_qb_connection, only: [ :invoices, :generate_invoices ]
   before_action :cleanup, only: [ :invoices ]
 
-
   def connect
     session[:state] = SecureRandom.uuid
-    client = QuickbooksConfig.new.oauth2_client
+    
+    # Grabs the correct redirect_uri (localhost for dev, live URL for staging/prod)
+    redirect_uri = Rails.application.credentials.dig(Rails.env.to_sym, :REDIRECT_URI)
+
+    client = ::QB_OAUTH2_CONSUMER.dup # duplicate to safely assign request-specific attrs
+    client.redirect_uri = redirect_uri
+
     redirect_to client.authorization_uri(
                   scope: "com.intuit.quickbooks.accounting",
                   state: session[:state]
@@ -22,15 +27,17 @@ class QuickbooksController < ApplicationController
     if params[:code].present?
       state = params[:state]
       error = params[:error]
-      code = params[:code]
+      code  = params[:code]
 
       if state == session[:state]
-        client = QuickbooksConfig.new.oauth2_client
+        redirect_uri = Rails.application.credentials.dig(Rails.env.to_sym, :REDIRECT_URI)
+        
+        client = ::QB_OAUTH2_CONSUMER.dup
+        client.redirect_uri = redirect_uri
         client.authorization_code = code
 
-        # Exchange code for access token
+        # Exchange code for access token using rack-oauth2
         if (resp = client.access_token!)
-          # --- MODIFICATION HERE: Save to DB instead of session ---
           config = QuickbooksConfig.first_or_initialize
           config.update!(
             access_token: resp.access_token,
@@ -46,7 +53,7 @@ class QuickbooksController < ApplicationController
           redirect_to root_path
         end
       else
-        flash[:alert] = "Error: #{error}"
+        flash[:alert] = "Error: #{error || 'State mismatch.'}"
         redirect_to root_path
       end
     end
