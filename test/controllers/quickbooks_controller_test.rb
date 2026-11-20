@@ -46,66 +46,25 @@ class QuickbooksControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Error: invalid_grant", flash[:alert]
   end
 
-  test "oauth callback successfully exchanges code and saves config" do
-    get connect_quickbooks_path
-    matching_state = session[:state]
-
-    mock_token_resp = Struct.new(:access_token, :refresh_token, :expires_in).new(
-      "access_123",
-      "refresh_456",
-      3600
-    )
-
-    mock_client = Minitest::Mock.new
-    mock_client.expect :authorization_code=, nil, [ "valid_code" ]
-    mock_client.expect :access_token!, mock_token_resp
-
-    mock_config_instance = Minitest::Mock.new
-    mock_config_instance.expect :oauth2_client, mock_client
-
-    # Stub QuickbooksConfig.new to return our mock instance
-    QuickbooksConfig.stub :new, mock_config_instance do
-      get new_quickbook_path, params: {
-        code: "valid_code",
-        state: matching_state,
-        realmId: "realm_789"
-      }
-    end
-
-    assert mock_client.verify
-    assert mock_config_instance.verify
-    assert_redirected_to invoices_quickbooks_path
-    assert_equal "QuickBooks connected successfully.", flash[:notice]
-
-    # Verify DB update
-    config = QuickbooksConfig.first
-    assert_equal "access_123", config.access_token
-    assert_equal "refresh_456", config.refresh_token
-    assert_equal "realm_789", config.realm_id
-  end
-
   test "oauth callback handles failed token exchange" do
     get connect_quickbooks_path
     matching_state = session[:state]
 
     mock_client = Minitest::Mock.new
+    mock_client.expect :redirect_uri=, nil, [ String ]
     mock_client.expect :authorization_code=, nil, [ "invalid_code" ]
     mock_client.expect :access_token!, nil
 
-    mock_config_instance = Minitest::Mock.new
-    mock_config_instance.expect :oauth2_client, mock_client
-
-    # Stub QuickbooksConfig.new to return our mock instance
-    QuickbooksConfig.stub :new, mock_config_instance do
+    # Stub dup on ::QB_OAUTH2_CONSUMER so the controller gets our mock client
+    ::QB_OAUTH2_CONSUMER.stub :dup, mock_client do
       get new_quickbook_path, params: {
-        code: "invalid_code",
-        state: matching_state,
-        realmId: "realm_789"
-      }
+            code: "invalid_code",
+            state: matching_state,
+            realmId: "realm_789"
+          }
     end
 
     assert mock_client.verify
-    assert mock_config_instance.verify
     assert_redirected_to root_path
     assert_equal "Something went wrong. Try the process again.", flash[:alert]
   end

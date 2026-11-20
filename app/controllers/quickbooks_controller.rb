@@ -10,7 +10,7 @@ class QuickbooksController < ApplicationController
 
   def connect
     session[:state] = SecureRandom.uuid
-    
+
     # Grabs the correct redirect_uri (localhost for dev, live URL for staging/prod)
     redirect_uri = Rails.application.credentials.dig(Rails.env.to_sym, :REDIRECT_URI)
 
@@ -31,7 +31,7 @@ class QuickbooksController < ApplicationController
 
       if state == session[:state]
         redirect_uri = Rails.application.credentials.dig(Rails.env.to_sym, :REDIRECT_URI)
-        
+
         client = ::QB_OAUTH2_CONSUMER.dup
         client.redirect_uri = redirect_uri
         client.authorization_code = code

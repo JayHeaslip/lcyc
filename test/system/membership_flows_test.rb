@@ -2,7 +2,6 @@ require "application_system_test_case"
 
 class MembershipTest < ApplicationSystemTestCase
   setup do
-    page.driver.browser.manage.window.resize_to(1400, 1400)
     puts "Viewport width: #{page.evaluate_script('window.innerWidth')}"
   end
 

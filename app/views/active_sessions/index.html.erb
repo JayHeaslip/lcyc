@@ -12,7 +12,7 @@
   <tbody>
     <% for session in @active_sessions %>
       <tr scope="row">
-	<td><%= User.find(session.user_id)&.email %></td>
+	<td><%= session.user&.email %></td>
 	<td><%= session.updated_at %></td>
         <td><%= session.user_agent %></td>
         <td><%= session.ip_address %></td>

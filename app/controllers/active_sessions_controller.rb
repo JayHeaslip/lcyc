@@ -3,7 +3,7 @@ class ActiveSessionsController < ApplicationController
   skip_before_action :check_authorization
 
   def index
-    @active_sessions = ActiveSession.all
+    @active_sessions = ActiveSession.includes(:user).order(:'users.email', :updated_at)
   end
 
   def destroy
